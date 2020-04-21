@@ -19,7 +19,7 @@
       nzMode="inline"
       [nzInlineCollapsed]="isCollapsed"
     >
-      <li *ngFor="let menuitem of dashboardSidebar" nz-submenu nzOpen [nzTitle]="menuitem.title" [nzIcon]="menuitem.icon">
+      <li *ngFor="let menuitem of dashboardSidebar" nz-submenu nzClose [nzTitle]="menuitem.title" [nzIcon]="menuitem.icon">
         <ul *ngFor="let subitem of menuitem.subMenus">
           <li nz-menu-item nzMatchRouter>
             <a [routerLink]="subitem.link">{{subitem.title}}</a>

@@ -9,7 +9,11 @@ export class WelcomeComponent implements OnInit {
 
   constructor() { }
 
+  count = 0
   ngOnInit() {
+    setInterval(()=>{
+      this.count++;
+    }, 1000)
   }
 
 }

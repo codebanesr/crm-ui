@@ -9,32 +9,23 @@ export default ()=> {
             subMenus: [
                 {
                     title: "1st link",
-                    show: true
+                    show: true,
+                    link: "www.google.com"
                 },{
                     title: "2nd link",
-                    show: true
+                    show: true,
+                    link: "www.youtube.com"
+                },
+                {
+                    title: "3rd link",
+                    show: true,
+                    link: "www.facebook.com"
+                },{
+                    title: "4th link",
+                    show: true,
+                    link: "www.something.com"
                 }
             ]
-        },{
-            title: "Welcome 2",
-            icon: "dashboard",
-            open: false,
-            hasChildren: true,
-            show: true,
-            subMenus: [{
-                title: "3rd link",
-                show: true
-            },{
-                title: "4th link",
-                show: true
-            }]
-        },{
-            title: "Welcome 2",
-            open: true,
-            icon: "dashboard",
-            hasChildren: true,
-            show: true,
-            subMenus: []
         }
     ]
 }
