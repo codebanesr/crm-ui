@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import dashboardSidebar from 'src/menus/dashboard-sidebar';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   isCollapsed = false;
+  objectKeys = Object.keys;
+  dashboardSidebar = dashboardSidebar()
 }
