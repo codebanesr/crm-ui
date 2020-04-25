@@ -1,3 +1,4 @@
+import {routePoints} from '../menus/routes';
 export default ()=> {
     return [
         {
@@ -8,22 +9,23 @@ export default ()=> {
             open: false,
             subMenus: [
                 {
-                    title: "1st link",
+                    title: "Users",
                     show: true,
-                    link: "www.google.com"
+                    link: routePoints.USERS
                 },{
-                    title: "2nd link",
+                    title: "Leads",
                     show: true,
-                    link: "www.youtube.com"
+                    link: routePoints.LEADS
                 },
                 {
-                    title: "3rd link",
+                    title: "Tickets",
                     show: true,
-                    link: "www.facebook.com"
-                },{
-                    title: "4th link",
+                    link: routePoints.TICKETS
+                },
+                {  
+                    title: "Uploads",
                     show: true,
-                    link: "www.something.com"
+                    link: routePoints.UPLOADS
                 }
             ]
         }
