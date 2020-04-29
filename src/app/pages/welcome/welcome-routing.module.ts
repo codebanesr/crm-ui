@@ -9,6 +9,7 @@ import { UsersComponent } from './users/users.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { LeadCreateComponent } from './lead-create/lead-create.component';
 import { TicketCreateComponent } from './ticket-create/ticket-create.component';
+import { AlarmsComponent } from '../alarms/alarms.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path: routePoints.UPLOADS, component: UploadsComponent},
   {path: routePoints.USER_CREATE, component: UserCreateComponent},
   {path: routePoints.LEAD_CREATE, component: LeadCreateComponent},
-  {path: routePoints.TICKET_CREATE, component: TicketCreateComponent}
+  {path: routePoints.TICKET_CREATE, component: TicketCreateComponent},
+  {path: routePoints.ALARMS, component: AlarmsComponent}
 ];
 
 @NgModule({

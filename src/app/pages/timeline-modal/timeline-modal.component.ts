@@ -16,10 +16,10 @@ export class TimelineModalComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-
-  }
-  showModal(): void {
     this.isVisible = true;
+  }
+
+  showModal(): void {
   }
 
   handleOk(): void {

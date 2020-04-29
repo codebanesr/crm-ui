@@ -4,7 +4,7 @@ export default ()=> {
         {
             title: "Welcome",
             icon: "dashboard",
-            show: true, 
+            show: true,
             hasChildren: true,
             open: false,
             subMenus: [
@@ -22,11 +22,16 @@ export default ()=> {
                     show: true,
                     link: routePoints.TICKETS
                 },
-                {  
+                {
                     title: "Uploads",
                     show: true,
                     link: routePoints.UPLOADS
-                }
+                },
+                {
+                  title: "Alarms",
+                  show: true,
+                  link: routePoints.ALARMS
+              }
             ]
         }
     ]

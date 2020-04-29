@@ -5,5 +5,6 @@ export const routePoints = {
     LEAD_CREATE: "lead/create",
     TICKETS: "tickets",
     TICKET_CREATE: "ticket/create",
-    UPLOADS: "uploads"
+    UPLOADS: "uploads",
+    ALARMS: "alarm"
 }

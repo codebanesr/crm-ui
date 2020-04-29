@@ -13,6 +13,7 @@ import { WelcomeComponent } from './welcome.component';
 import { RouterModule } from '@angular/router';
 import { DemoNgZorroAntdModule } from './antd.module';
 import { TimelineModalComponent } from '../timeline-modal/timeline-modal.component';
+import { AlarmsComponent } from '../alarms/alarms.component';
 
 
 
@@ -35,6 +36,7 @@ import { TimelineModalComponent } from '../timeline-modal/timeline-modal.compone
     TicketCreateComponent,
     UserCreateComponent,
     TimelineModalComponent,
+    AlarmsComponent,
   ],
   exports: [WelcomeComponent],
 })
