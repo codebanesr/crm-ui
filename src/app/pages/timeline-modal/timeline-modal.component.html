@@ -1,0 +1,11 @@
+<button nz-button [nzType]="'primary'" (click)="showModal()"><span>Show Modal</span></button>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Ticker Transition History" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <nz-timeline nzMode="alternate">
+    <ng-container *ngFor="let element of timelineData">
+      <nz-timeline-item [nzDot]="element.timer ? dotTemplate: null" [nzColor]="element.color">{{element.text}}</nz-timeline-item>
+    </ng-container>
+  </nz-timeline>
+  <ng-template #dotTemplate>
+    <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
+  </ng-template>
+</nz-modal>

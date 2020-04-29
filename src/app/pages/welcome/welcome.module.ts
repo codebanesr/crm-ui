@@ -12,6 +12,7 @@ import { WelcomeRoutingModule } from './welcome-routing.module';
 import { WelcomeComponent } from './welcome.component';
 import { RouterModule } from '@angular/router';
 import { DemoNgZorroAntdModule } from './antd.module';
+import { TimelineModalComponent } from '../timeline-modal/timeline-modal.component';
 
 
 
@@ -33,6 +34,7 @@ import { DemoNgZorroAntdModule } from './antd.module';
     LeadCreateComponent,
     TicketCreateComponent,
     UserCreateComponent,
+    TimelineModalComponent,
   ],
   exports: [WelcomeComponent],
 })
