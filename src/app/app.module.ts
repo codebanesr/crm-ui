@@ -14,7 +14,8 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
-
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './reducers/counter.reducer';
 
 registerLocaleData(en);
 
@@ -30,7 +31,8 @@ registerLocaleData(en);
     NzMenuModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    StoreModule.forRoot({ count: counterReducer })
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
