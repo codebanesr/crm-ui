@@ -6,7 +6,7 @@ export default ()=> {
             icon: "dashboard",
             show: true,
             hasChildren: true,
-            open: false,
+            open: open,
             subMenus: [
                 {
                     title: "Users",

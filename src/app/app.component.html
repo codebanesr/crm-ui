@@ -8,7 +8,7 @@
     [nzTrigger]="null"
   >
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
+      <a href="#" target="_blank">
         <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
         <h1>Molecule</h1>
       </a>
@@ -19,7 +19,7 @@
       nzMode="inline"
       [nzInlineCollapsed]="isCollapsed"
     >
-      <li *ngFor="let menuitem of dashboardSidebar" nz-submenu nzClose [nzTitle]="menuitem.title" [nzIcon]="menuitem.icon">
+      <li *ngFor="let menuitem of dashboardSidebar" nz-submenu [nzOpen]="menuitem.open" [nzTitle]="menuitem.title" [nzIcon]="menuitem.icon">
         <ul *ngFor="let subitem of menuitem.subMenus">
           <li nz-menu-item nzMatchRouter>
             <a routerLink="welcome/{{subitem.link}}">{{subitem.title}}</a>
