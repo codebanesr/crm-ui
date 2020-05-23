@@ -6,5 +6,5 @@ export const routePoints = {
     TICKETS: "tickets",
     TICKET_CREATE: "ticket/create",
     UPLOADS: "uploads",
-    ALARMS: "alarm"
+    ALARMS: "alarm",
 }

@@ -18,6 +18,7 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+
   login(email: string, password: string) {
     return this.http.post<any>(`${environment.apiUrl}/auth/login`, { email, password })
       .pipe(map(user => {
@@ -26,6 +27,27 @@ export class AuthenticationService {
         this.currentUserSubject.next(user);
         return user;
       }));
+  }
+
+
+  resetPassword(email: string) {
+    return this.http.post<any>(`${environment.apiUrl}/auth/login`, { email })
+    .pipe(map(user => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return user;
+    }));
+  }
+
+  signup(email: string, password: string, confirmPassword: string) {
+    return this.http.post<any>(`${environment.apiUrl}/auth/login`, { email, password, confirmPassword })
+    .pipe(map(user => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return user;
+    }));
   }
 
   logout() {
