@@ -16,6 +16,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { LoginComponent } from './login/login.component';
 import { DemoNgZorroAntdModule } from './pages/welcome/antd.module';
+import { authInterceptorProviders } from '../helpers/auth.interceptor';
 
 
 registerLocaleData(en);
@@ -23,7 +24,7 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,
@@ -37,7 +38,7 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [{ provide: NZ_I18N, useValue: en_US }, authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

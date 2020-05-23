@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { DemoNgZorroAntdModule } from './antd.module';
 import { TimelineModalComponent } from '../timeline-modal/timeline-modal.component';
 import { AlarmsComponent } from '../alarms/alarms.component';
+import { authInterceptorProviders } from 'src/helpers/auth.interceptor';
 
 
 
@@ -39,5 +40,6 @@ import { AlarmsComponent } from '../alarms/alarms.component';
     AlarmsComponent,
   ],
   exports: [WelcomeComponent],
+  providers: [authInterceptorProviders],
 })
 export class WelcomeModule {}

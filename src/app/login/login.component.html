@@ -1,16 +1,23 @@
 <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
   <!-- <nz-page-header nzTitle="Log in to molecule" style="margin: 0 auto;"></nz-page-header> -->
-  <nz-form-item>
+  <nz-form-item *ngIf="fieldsToShow.username">
     <nz-form-control nzErrorTip="Please input your username!">
       <nz-input-group nzPrefixIcon="user">
-        <input type="text" nz-input formControlName="userName" placeholder="Username" />
+        <input type="text" nz-input formControlName="username" placeholder="Username" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
+  <nz-form-item *ngIf="fieldsToShow.password">
     <nz-form-control nzErrorTip="Please input your Password!">
       <nz-input-group nzPrefixIcon="lock">
         <input type="password" nz-input formControlName="password" placeholder="Password" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="fieldsToShow.confirmPassword">
+    <nz-form-control nzErrorTip="Please confirm your Password!">
+      <nz-input-group nzPrefixIcon="lock">
+        <input type="password" nz-input formControlName="confirmPassword" placeholder="Confirm Password" />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
@@ -21,9 +28,9 @@
       </label>
     </div>
     <div nz-col [nzSpan]="12">
-      <a class="login-form-forgot">Forgot password</a>
+      <a (click)="this.onFormTypeChange(formView.reset)" class="login-form-forgot">Forgot password</a>
     </div>
   </div>
-  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
-  Or <a> register now! </a>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">{{buttonText}}</button>
+  Or <a (click)="this.onFormTypeChange(nextAction)"> {{nextAction}} </a>
 </form>
