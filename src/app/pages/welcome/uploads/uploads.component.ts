@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UploadChangeParam } from 'ng-zorro-antd/upload';
+import { CustomerService } from 'src/app/customer.service';
 
 @Component({
   selector: 'app-uploads',
@@ -9,7 +10,7 @@ import { UploadChangeParam } from 'ng-zorro-antd/upload';
 })
 export class UploadsComponent  {
 
-  constructor(private msg: NzMessageService) {}
+  constructor(private msg: NzMessageService, private customerService: CustomerService){}
 
   handleChange({ file, fileList }: UploadChangeParam): void {
     const status = file.status;
