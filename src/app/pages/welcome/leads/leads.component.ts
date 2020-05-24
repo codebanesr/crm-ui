@@ -1,36 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-
-
-interface ItemData {
-  name: string;
-  age: number | string;
-  address: string;
-  checked: boolean;
-  expand: boolean;
-  description: string;
-  disabled?: boolean;
-}
-
-interface Setting {
-  bordered: boolean;
-  loading: boolean;
-  pagination: boolean;
-  sizeChanger: boolean;
-  title: boolean;
-  header: boolean;
-  footer: boolean;
-  expandable: boolean;
-  checkbox: boolean;
-  fixHeader: boolean;
-  noResult: boolean;
-  ellipsis: boolean;
-  simple: boolean;
-  size: string;
-  tableScroll: string;
-  tableLayout: string;
-  position: string;
-}
+import { LeadsService } from 'src/app/leads.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
 
 
 @Component({
@@ -38,112 +9,98 @@ interface Setting {
   templateUrl: './leads.component.html',
   styleUrls: ['./leads.component.scss']
 })
-export class LeadsComponent implements OnInit {
-  settingForm: FormGroup;
-  listOfData: ItemData[] = [];
-  displayData: ItemData[] = [];
-  allChecked = false;
-  indeterminate = false;
-  fixedColumn = false;
-  scrollX: string | null = null;
-  scrollY: string | null = null;
-  settingValue: Setting;
+export class LeadsComponent implements OnInit{
+  constructor(private msg: NzMessageService, private leadsService: LeadsService) {
 
-  constructor(private formBuilder: FormBuilder) {}
-
-  currentPageDataChange($event: ItemData[]): void {
-    this.displayData = $event;
-    this.refreshStatus();
   }
 
-  refreshStatus(): void {
-    const validData = this.displayData.filter(value => !value.disabled);
-    const allChecked = validData.length > 0 && validData.every(value => value.checked === true);
-    const allUnChecked = validData.every(value => !value.checked);
-    this.allChecked = allChecked;
-    this.indeterminate = !allChecked && !allUnChecked;
+  page: number = 1;
+  perPage: number = 15;
+
+  listOfColumns: ColumnItem[]
+  ngOnInit() {
+    this.listOfColumns = listOfColumns;
+    this.generateData();
   }
 
-  checkAll(value: boolean): void {
-    this.displayData.forEach(data => {
-      if (!data.disabled) {
-        data.checked = value;
-      }
+  listOfData: DataItem[] = [];
+
+  generateData() {
+    this.leadsService.getLeads(1, 20, "sortField", "sortOrder").subscribe((response: any)=>{
+      this.msg.info("Retrieved some leads");
+      response.forEach((row: any)=>{
+        this.listOfData.push({
+          name: row.customer.name,
+          email: row.customer.email,
+          phonenumber: row.customer.phoneNumber,
+          amount: row.amount,
+          followUpDate: row.followUpDate,
+          description: row.notes[0].content,
+        });
+      })
+    }, error=>{
+      this.msg.error("Some error occured while fetching leads");
     });
-    this.refreshStatus();
   }
 
-  generateData(): ItemData[] {
-    const data = [];
-    for (let i = 1; i <= 100; i++) {
-      data.push({
-        name: 'John Brown',
-        age: `${i}2`,
-        address: `New York No. ${i} Lake Park`,
-        description: `My name is John Brown, I am ${i}2 years old, living in New York No. ${i} Lake Park.`,
-        checked: false,
-        expand: false
-      });
-    }
-    return data;
+
+  trackByName(_: number, item: ColumnItem): string {
+    return item.name;
   }
 
-  visible = false;
-  searchValue = ""
-  ngOnInit(): void {
-    this.settingForm = this.formBuilder.group({
-      bordered: false,
-      loading: true,
-      pagination: true,
-      sizeChanger: true,
-      title: true,
-      header: true,
-      footer: true,
-      expandable: true,
-      checkbox: true,
-      fixHeader: false,
-      noResult: true,
-      ellipsis: false,
-      simple: false,
-      size: 'small',
-      tableScroll: 'scroll',
-      tableLayout: 'auto',
-      position: 'bottom'
-    });
-
-    // api call simulation
-    setTimeout(()=>{
-      this.settingForm.controls.loading.setValue(false);
-    }, 1000);
-
-
-    this.settingValue = this.settingForm.value;
-    this.settingForm.valueChanges.subscribe(value => (this.settingValue = value));
-    this.settingForm.get('tableScroll')!.valueChanges.subscribe(scroll => {
-      this.fixedColumn = scroll === 'fixed';
-      this.scrollX = scroll === 'scroll' || scroll === 'fixed' ? '100vw' : null;
-    });
-    this.settingForm.get('fixHeader')!.valueChanges.subscribe(fixed => {
-      this.scrollY = fixed ? '240px' : null;
-    });
-    this.settingForm.get('noResult')!.valueChanges.subscribe(empty => {
-      if (empty) {
-        this.listOfData = [];
+  sortByAge(): void {
+    this.listOfColumns.forEach(item => {
+      if (item.name === 'Age') {
+        item.sortOrder = 'descend';
       } else {
-        this.listOfData = this.generateData();
+        item.sortOrder = null;
       }
     });
-    this.listOfData = this.generateData();
+  }
+
+  resetFilters(): void {
+    this.listOfColumns.forEach(item => {
+      if (item.name === 'Name') {
+        item.listOfFilter = [
+          { text: 'Joe', value: 'Joe' },
+          { text: 'Jim', value: 'Jim' }
+        ];
+      } else if (item.name === 'Address') {
+        item.listOfFilter = [
+          { text: 'London', value: 'London' },
+          { text: 'Sidney', value: 'Sidney' }
+        ];
+      }
+    });
+  }
+
+  resetSortAndFilters(): void {
+    this.listOfColumns.forEach(item => {
+      item.sortOrder = null;
+    });
+    this.resetFilters();
   }
 
 
-  search(): void {
-    this.visible = false;
-    console.log("Search called");
+
+  onPageIndexChange(page: number) {
+    this.page = page;
+    this.generateData();
   }
 
-  reset(): void {
-    this.searchValue = '';
-    this.search();
+  onPageSizeChange(perPage: number){
+    this.perPage = perPage;
+    this.generateData();
   }
 }
+
+
+
+
+
+
+
+
+
+
+

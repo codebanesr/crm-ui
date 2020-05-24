@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlarmData } from 'src/interfaces/alarms';
+import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
+import { TicketsService } from 'src/app/tickets.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-tickets',
@@ -7,61 +11,95 @@ import { AlarmData } from 'src/interfaces/alarms';
   styleUrls: ['./tickets.component.scss']
 })
 export class TicketsComponent implements OnInit {
+  constructor(
+    private msg: NzMessageService,
+    private ticketsService: TicketsService,
+    private router: Router,
+  ) {}
 
-  constructor() { }
+  listOfColumns: ColumnItem[]
+  ngOnInit() {
+    this.listOfColumns = listOfColumns;
+    this.generateData();
 
-  timelineData = [
-    {text: "Network problems being solved 2015-09-01", color: "red"},
-    {text: "Create a services site 2015-09-01", color: "green", timer: "true"},
-    {text: "Network problems being solved 2015-09-01", color: "red"},
-    {text: "Technical testing 2015-09-01", color: "yellow"}
-  ]
-
-  editCache: { [key: string]: { edit: boolean; data: AlarmData } } = {};
-  listOfData: AlarmData[] = [];
-
-  startEdit(id: string): void {
-    this.editCache[id].edit = true;
   }
 
-  cancelEdit(id: string): void {
-    const index = this.listOfData.findIndex(item => item.id === id);
-    this.editCache[id] = {
-      data: { ...this.listOfData[index] },
-      edit: false
-    };
-  }
+  listOfData: DataItem[] = [];
+  page: number = 1;
+  perPage: number = 15;
 
-  showHistory(id: number) {
-    this.timelineData = [...this.timelineData];
-  }
-
-  saveEdit(id: string): void {
-    const index = this.listOfData.findIndex(item => item.id === id);
-    Object.assign(this.listOfData[index], this.editCache[id].data);
-    this.editCache[id].edit = false;
-  }
-
-  updateEditCache(): void {
-    this.listOfData.forEach(item => {
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
+  generateData() {
+    this.ticketsService.getAllTickets(this.page, this.perPage).subscribe((response: any) => {
+      this.msg.info("Retrieved some leads");
+      response.forEach((row: any) => {
+        this.listOfData.push({
+          _id: row._id,
+          name: row.customer.name,
+          email: row.customer.email,
+          phoneNumber: row.customer.phoneNumber,
+          assignedTo: row.assignedTo,
+          description: row.changeHistory.changeType,
+          createdAt: row.createdAt
+        });
+      })
+    }, error => {
+      this.msg.error("Some error occured while fetching leads");
     });
   }
 
-  ngOnInit(): void {
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        id: `${i}`,
-        name: `Edrward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`
-      });
-    }
-    this.listOfData = data;
-    this.updateEditCache();
+
+  trackByName(_: number, item: ColumnItem): string {
+    return item.name;
+  }
+
+  sortByAge(): void {
+    this.listOfColumns.forEach(item => {
+      if (item.name === 'Age') {
+        item.sortOrder = 'descend';
+      } else {
+        item.sortOrder = null;
+      }
+    });
+  }
+
+  resetFilters(): void {
+    this.listOfColumns.forEach(item => {
+      if (item.name === 'Name') {
+        item.listOfFilter = [
+          { text: 'Joe', value: 'Joe' },
+          { text: 'Jim', value: 'Jim' }
+        ];
+      } else if (item.name === 'Address') {
+        item.listOfFilter = [
+          { text: 'London', value: 'London' },
+          { text: 'Sidney', value: 'Sidney' }
+        ];
+      }
+    });
+  }
+
+  resetSortAndFilters(): void {
+    this.listOfColumns.forEach(item => {
+      item.sortOrder = null;
+    });
+    this.resetFilters();
+  }
+
+
+  onPageIndexChange(page: number) {
+    this.page = page;
+    this.generateData();
+  }
+
+  onPageSizeChange(perPage: number){
+    this.perPage = perPage;
+    this.generateData();
+  }
+
+
+
+  updateTicket(data) {
+    console.log(data)
+    this.router.navigate(['welcome', "ticket", "create"], { queryParams: { id: data._id } });
   }
 }
