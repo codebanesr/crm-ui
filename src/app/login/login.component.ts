@@ -6,9 +6,6 @@ import { Router } from '@angular/router';
 
 import {routePoints} from '../../menus/routes';
 
-
-
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
