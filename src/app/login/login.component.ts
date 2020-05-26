@@ -62,6 +62,7 @@ export class LoginComponent implements OnInit {
       this.msg.success("Successfully Logged In");
       this.router.navigate(["welcome", routePoints.LEADS]);
     }, (error: Error)=>{
+      console.log(error);
       this.msg.error("Incorrect username or password");
     })
   }

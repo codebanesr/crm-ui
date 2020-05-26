@@ -77,7 +77,7 @@
   <nz-form-item nz-row class="register-area">
     <nz-form-control [nzSpan]="14" [nzOffset]="6">
       <label nz-checkbox formControlName="agree">
-        <span>I have read the <a>agreement</a></span>
+        <span>Check this for <a>customer</a></span>
       </label>
     </nz-form-control>
   </nz-form-item>
@@ -87,3 +87,6 @@
     </nz-form-control>
   </nz-form-item>
 </form>
+
+
+<label nz-checkbox [(ngModel)]="client">Checkbox</label>
