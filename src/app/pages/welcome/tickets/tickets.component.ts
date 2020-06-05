@@ -34,11 +34,11 @@ export class TicketsComponent implements OnInit {
       response.forEach((row: any) => {
         this.listOfData.push({
           _id: row._id,
-          name: row.customer.name,
-          email: row.customer.email,
-          phoneNumber: row.customer.phoneNumber,
+          name: row.nickname,
+          email: row.email,
+          phoneNumber: row.phoneNumber,
           assignedTo: row.assignedTo,
-          description: row.changeHistory.changeType,
+          description: "rewrite change history",
           createdAt: row.createdAt
         });
       })
@@ -79,7 +79,7 @@ export class TicketsComponent implements OnInit {
   }
 
 
-  createLead() {
+  createTicket() {
     this.router.navigate(['welcome', "ticket", "create"]);
   }
 

@@ -55,6 +55,7 @@ export class LeadCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
+      _id: [null, [Validators.required]],
       email: [null, [Validators.email, Validators.required]],
       nickname: [null, [Validators.required]],
       phoneNumberPrefix: ['+91'],

@@ -2,8 +2,8 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="leadId">Lead Id</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Id is required">
-      <input nz-input formControlName="leadId" id="leadId" (input)="onLeadChange($event)" [nzAutocomplete]="auto"/>
-      <nz-autocomplete [nzDataSource]="options" nzBackfill #auto></nz-autocomplete>
+      <input nz-input formControlName="leadId" id="leadId" [nzAutocomplete]="auto"/>
+      <nz-autocomplete [nzDataSource]="options" nzBackfill #auto (selectionChange)="fetchSelectedLead($event)"></nz-autocomplete>
     </nz-form-control>
   </nz-form-item>
 

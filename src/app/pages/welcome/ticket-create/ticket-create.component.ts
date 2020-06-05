@@ -28,29 +28,28 @@ export class TicketCreateComponent implements OnInit {
     this.initForm();
     this.subscribeToQueryParamChange();
 
-    this.subscribeToFormValueChanges();
+    this.subscribeToLeadIdChange();
   }
 
 
   subscribeToQueryParamChange(){
     const {id} = this.activatedRouter.snapshot.queryParams;
+    if(!id) return;
+
     this.ticketId = id;
-    this.ticketService.getTicketById(id).subscribe((data:any)=>{
-      this.validateForm.patchValue({
-        leadId: data.leadId,
-        email: data.customer.email,
-        phoneNumber: data.customer.phoneNumber,
-        phoneNumberPrefix: data.customer.phoneNumberPrefix,
-        nickname: data.customer.name,
-        assignedTo: data.assignedTo,
-        review: data.review,
-        followUp: data.followUp,
-        agree: data.agree,
-        status: data.status
-      });
+    this.ticketService.getTicketById(id).subscribe((ticket:any)=>{
+      this.patchTicketToLead(ticket);
     }, error=>{
       this.msg.error("Failed to fetch data for ticket id ", id);
     })
+  }
+
+
+  patchTicketToLead(ticket) {
+    console.log("patch called")
+    this.validateForm.patchValue({
+
+    });
   }
 
   initForm() {
@@ -69,18 +68,26 @@ export class TicketCreateComponent implements OnInit {
   }
 
 
-  subscribeToFormValueChanges() {
+  subscribeToLeadIdChange() {
     this.validateForm.get('leadId').valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(change=>{
         console.log(change);
-        this.ticketService.suggestLead()
+        this.ticketService.suggestLead(change).subscribe((suggestedLeads: any[])=>{
+          this.options = suggestedLeads.map(lead=>lead._id)
+        })
       })
   }
 
-  onLeadChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.options = value ? [value, value + value, value + value + value] : [];
+  fetchSelectedLead(event) {
+    this.ticketService.getTicketByLeadId(event.nzValue).subscribe((lead: any)=>{
+      this.validateForm.patchValue({
+        email: lead.email,
+        nickname: lead.nickname,
+        phoneNumberPrefix: lead.phoneNumberPrefix,
+        phoneNumber: lead.phoneNumber
+      })
+    });
   }
 
 

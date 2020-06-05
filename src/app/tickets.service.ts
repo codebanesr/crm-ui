@@ -21,13 +21,17 @@ export class TicketsService {
     return this.http.get(`${environment.apiUrl}/ticket/${ticketId}`);
   }
 
+  getTicketByLeadId(leadId: string) {
+    return this.http.get(`${environment.apiUrl}/ticket/lead/${leadId}`);
+  }
+
 
   updateTicket(ticket, ticketId: string) {
     return this.http.put(`${environment.apiUrl}/ticket/${ticketId}`, ticket);
   }
 
 
-  suggestLead() {
-
+  suggestLead(leadId) {
+    return this.http.get(`${environment.apiUrl}/ticket/suggest/${leadId}`);
   }
 }
