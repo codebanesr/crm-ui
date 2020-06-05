@@ -78,6 +78,11 @@ export class TicketsComponent implements OnInit {
     });
   }
 
+
+  createLead() {
+    this.router.navigate(['welcome', "ticket", "create"]);
+  }
+
   resetSortAndFilters(): void {
     this.listOfColumns.forEach(item => {
       item.sortOrder = null;

@@ -65,4 +65,5 @@ export class LeadCreateComponent implements OnInit {
       status: ["NEW", [Validators.required]],
     });
   }
+
 }

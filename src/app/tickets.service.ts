@@ -25,4 +25,9 @@ export class TicketsService {
   updateTicket(ticket, ticketId: string) {
     return this.http.put(`${environment.apiUrl}/ticket/${ticketId}`, ticket);
   }
+
+
+  suggestLead() {
+
+  }
 }

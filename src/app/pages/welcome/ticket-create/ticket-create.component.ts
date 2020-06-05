@@ -4,6 +4,7 @@ import { LeadsService } from 'src/app/leads.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { TicketsService } from 'src/app/tickets.service';
 import { ActivatedRoute } from '@angular/router';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ticket-create',
@@ -24,6 +25,35 @@ export class TicketCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
+    this.subscribeToQueryParamChange();
+
+    this.subscribeToFormValueChanges();
+  }
+
+
+  subscribeToQueryParamChange(){
+    const {id} = this.activatedRouter.snapshot.queryParams;
+    this.ticketId = id;
+    this.ticketService.getTicketById(id).subscribe((data:any)=>{
+      this.validateForm.patchValue({
+        leadId: data.leadId,
+        email: data.customer.email,
+        phoneNumber: data.customer.phoneNumber,
+        phoneNumberPrefix: data.customer.phoneNumberPrefix,
+        nickname: data.customer.name,
+        assignedTo: data.assignedTo,
+        review: data.review,
+        followUp: data.followUp,
+        agree: data.agree,
+        status: data.status
+      });
+    }, error=>{
+      this.msg.error("Failed to fetch data for ticket id ", id);
+    })
+  }
+
+  initForm() {
     this.validateForm = this.fb.group({
       leadId: [null, [Validators.required]],
       email: [null, [Validators.email, Validators.required]],
@@ -36,27 +66,17 @@ export class TicketCreateComponent implements OnInit {
       agree: [false],
       status: ["NEW", [Validators.required]],
     });
-    this.activatedRouter.queryParams.subscribe(data=>{
-      this.ticketId = data.id;
-      this.ticketService.getTicketById(data.id).subscribe((data:any)=>{
-        this.validateForm.patchValue({
-          leadId: data.leadId,
-          email: data.customer.email,
-          phoneNumber: data.customer.phoneNumber,
-          phoneNumberPrefix: data.customer.phoneNumberPrefix,
-          nickname: data.customer.name,
-          assignedTo: data.assignedTo,
-          review: data.review,
-          followUp: data.followUp,
-          agree: data.agree,
-          status: data.status
-        });
-      }, error=>{
-        this.msg.error("Failed to fetch data for ticket id ", data.id);
-      })
-    })
   }
 
+
+  subscribeToFormValueChanges() {
+    this.validateForm.get('leadId').valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(change=>{
+        console.log(change);
+        this.ticketService.suggestLead()
+      })
+  }
 
   onLeadChange(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
@@ -84,6 +104,7 @@ export class TicketCreateComponent implements OnInit {
       this.msg.error("Something went wrong while adding ticket");
     });
   }
+
 
 
   updateTicket() {
