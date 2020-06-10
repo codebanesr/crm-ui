@@ -1,15 +1,23 @@
-<nz-upload
-nzType="drag"
-[nzMultiple]="true"
-nzName="file"
-nzAction="http://localhost:3000/customer/many"
-(nzChange)="handleChange($event)"
->
-<p class="ant-upload-drag-icon">
-  <i nz-icon nzType="inbox"></i>
-</p>
-<p class="ant-upload-text">Click or drag file to this area to upload</p>
-<p class="ant-upload-hint">
-  Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
-</p>
-</nz-upload>
+<div class="gutter-example">
+  <div nz-row [nzGutter]="[hGutter, vGutter]">
+    <div nz-col class="gutter-row" [nzSpan]="24 / count" *ngFor="let element of array">
+      <div class="grid-config">
+        <nz-upload
+          nzType="drag"
+          [nzMultiple]="true"
+          nzName="file"
+          nzAction="{{element.url}}"
+          (nzChange)="handleChange($event)"
+          >
+          <p class="ant-upload-drag-icon">
+            <i nz-icon nzType="inbox"></i>
+          </p>
+          <p class="ant-upload-text">Click or drag {{element.name}} file</p>
+          <p class="ant-upload-hint">
+            Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+          </p>
+        </nz-upload>
+      </div>
+    </div>
+  </div>
+</div>

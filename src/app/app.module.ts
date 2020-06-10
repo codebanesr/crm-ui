@@ -17,7 +17,10 @@ import en from '@angular/common/locales/en';
 import { LoginComponent } from './login/login.component';
 import { DemoNgZorroAntdModule } from './pages/welcome/antd.module';
 import { authInterceptorProviders } from '../helpers/auth.interceptor';
-
+import { CustomerCreateComponent } from './customer-create/customer-create.component';
+import { FormlyModule } from '@ngx-formly/core';
+import {FormlyNgZorroAntdModule} from '@ngx-formly/ng-zorro-antd';
+import { CustomersComponent } from './customers/customers.component';
 
 registerLocaleData(en);
 
@@ -25,10 +28,16 @@ registerLocaleData(en);
   declarations: [
     AppComponent,
     LoginComponent,
+    CustomerCreateComponent,
+    CustomersComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,
+    FormlyNgZorroAntdModule,
     ReactiveFormsModule,
+    FormlyModule.forRoot({
+      validationMessages: [{ name: 'required', message: 'This field is required' }],
+    }),
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     IconsProviderModule,

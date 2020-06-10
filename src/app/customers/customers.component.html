@@ -1,0 +1,4 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="compress">
+  <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form" nz-form nzLayout="vertical"></formly-form>
+  <button type="submit" nz-button nzType="primary" [disabled]="!form.valid">Submit</button>
+</form>

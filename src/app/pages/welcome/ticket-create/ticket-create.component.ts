@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { LeadsService } from 'src/app/leads.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { TicketsService } from 'src/app/tickets.service';
 import { ActivatedRoute } from '@angular/router';
@@ -47,9 +46,7 @@ export class TicketCreateComponent implements OnInit {
 
   patchTicketToLead(ticket) {
     console.log("patch called")
-    this.validateForm.patchValue({
-
-    });
+    this.validateForm.patchValue(ticket);
   }
 
   initForm() {

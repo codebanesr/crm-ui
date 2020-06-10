@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {FormlyModule} from '@ngx-formly/core';
 import { LeadCreateComponent } from './lead-create/lead-create.component';
 import { LeadsComponent } from './leads/leads.component';
 import { TicketCreateComponent } from './ticket-create/ticket-create.component';
@@ -15,7 +16,6 @@ import { DemoNgZorroAntdModule } from './antd.module';
 import { TimelineModalComponent } from '../timeline-modal/timeline-modal.component';
 import { AlarmsComponent } from '../alarms/alarms.component';
 import { authInterceptorProviders } from 'src/helpers/auth.interceptor';
-
 
 
 @NgModule({

@@ -10,6 +10,8 @@ import { UserCreateComponent } from './user-create/user-create.component';
 import { LeadCreateComponent } from './lead-create/lead-create.component';
 import { TicketCreateComponent } from './ticket-create/ticket-create.component';
 import { AlarmsComponent } from '../alarms/alarms.component';
+import { CustomerCreateComponent } from 'src/app/customer-create/customer-create.component';
+import { CustomersComponent } from 'src/app/customers/customers.component';
 
 
 const routes: Routes = [
@@ -21,7 +23,9 @@ const routes: Routes = [
   {path: routePoints.USER_CREATE, component: UserCreateComponent},
   {path: routePoints.LEAD_CREATE, component: LeadCreateComponent},
   {path: routePoints.TICKET_CREATE, component: TicketCreateComponent},
-  {path: routePoints.ALARMS, component: AlarmsComponent}
+  {path: routePoints.ALARMS, component: AlarmsComponent},
+  {path: "customer-create", component: CustomerCreateComponent},
+  {path: "customer/show", component: CustomersComponent}
 ];
 
 @NgModule({
