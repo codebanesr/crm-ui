@@ -16,6 +16,8 @@ import { DemoNgZorroAntdModule } from './antd.module';
 import { TimelineModalComponent } from '../timeline-modal/timeline-modal.component';
 import { AlarmsComponent } from '../alarms/alarms.component';
 import { authInterceptorProviders } from 'src/helpers/auth.interceptor';
+import { CampaignComponent } from './campaign/campaign.component';
+import { CreateCampaignComponent } from './create-campaign/create-campaign.component';
 
 
 @NgModule({
@@ -38,6 +40,8 @@ import { authInterceptorProviders } from 'src/helpers/auth.interceptor';
     UserCreateComponent,
     TimelineModalComponent,
     AlarmsComponent,
+    CampaignComponent,
+    CreateCampaignComponent,
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],

@@ -18,9 +18,9 @@ import { LoginComponent } from './login/login.component';
 import { DemoNgZorroAntdModule } from './pages/welcome/antd.module';
 import { authInterceptorProviders } from '../helpers/auth.interceptor';
 import { CustomerCreateComponent } from './customer-create/customer-create.component';
-import { FormlyModule } from '@ngx-formly/core';
-import {FormlyNgZorroAntdModule} from '@ngx-formly/ng-zorro-antd';
 import { CustomersComponent } from './customers/customers.component';
+import { OverviewComponent } from './overview/overview.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 registerLocaleData(en);
 
@@ -30,14 +30,12 @@ registerLocaleData(en);
     LoginComponent,
     CustomerCreateComponent,
     CustomersComponent,
+    OverviewComponent,
   ],
   imports: [
+    NgxChartsModule,
     DemoNgZorroAntdModule,
-    FormlyNgZorroAntdModule,
     ReactiveFormsModule,
-    FormlyModule.forRoot({
-      validationMessages: [{ name: 'required', message: 'This field is required' }],
-    }),
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     IconsProviderModule,

@@ -1,0 +1,57 @@
+<div class="table-operations">
+  <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group nzPrefixIcon="user">
+          <input nz-input formControlName="handlerEmail" [nzAutocomplete]="auto">
+          <nz-autocomplete [nzDataSource]="handlerEmailOpts" #auto></nz-autocomplete>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+
+    <nz-form-item>
+      <nz-form-control>
+        <nz-select nzMode="multiple" nzPlaceHolder="Select campaigns" formControlName="campaigns" style="width: 200px;">
+          <nz-option nzLabel="Windows" nzValue="windows"></nz-option>
+          <nz-option nzLabel="Apple" nzValue="apple"></nz-option>
+          <nz-option nzLabel="Android" nzValue="android"></nz-option>
+        </nz-select>
+      </nz-form-control>
+
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary" [disabled]="!validateForm.valid">Search</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>
+<nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed" [nzPageSize]="perPage"	[nzShowPagination]="false">
+  <thead>
+    <tr>
+      <th *ngFor="let column of listOfColumns; trackBy: trackByName">
+        {{ column.name }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of filterTable.data">
+      <td>{{ data.handler }}</td>
+      <td>{{ data.interval | date }}</td>
+      <td>{{ data.type }}</td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<div class="pagination-block">
+  <nz-pagination
+    [nzPageIndex]="page"
+    [nzTotal]="500"
+    nzShowSizeChanger
+    [nzPageSize]="perPage"
+    (nzPageSizeChange)="onPageSizeChange($event)"
+    (nzPageIndexChange)="onPageIndexChange($event)"
+  ></nz-pagination>
+</div>

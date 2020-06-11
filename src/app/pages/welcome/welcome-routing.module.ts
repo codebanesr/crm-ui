@@ -12,6 +12,9 @@ import { TicketCreateComponent } from './ticket-create/ticket-create.component';
 import { AlarmsComponent } from '../alarms/alarms.component';
 import { CustomerCreateComponent } from 'src/app/customer-create/customer-create.component';
 import { CustomersComponent } from 'src/app/customers/customers.component';
+import { OverviewComponent } from 'src/app/overview/overview.component';
+import { CampaignComponent } from './campaign/campaign.component';
+import { CreateCampaignComponent } from './create-campaign/create-campaign.component';
 
 
 const routes: Routes = [
@@ -25,7 +28,10 @@ const routes: Routes = [
   {path: routePoints.TICKET_CREATE, component: TicketCreateComponent},
   {path: routePoints.ALARMS, component: AlarmsComponent},
   {path: "customer-create", component: CustomerCreateComponent},
-  {path: "customer/show", component: CustomersComponent}
+  {path: "customer/show", component: CustomersComponent},
+  {path: "overview", component: OverviewComponent},
+  {path: "campaigns", component: CampaignComponent},
+  {path: "create/campaign", component: CreateCampaignComponent}
 ];
 
 @NgModule({

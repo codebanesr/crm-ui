@@ -30,7 +30,7 @@ export class UploadsComponent  {
   hGutter = 16;
   vGutter = 16;
   count = 3;
-  array = [{
+  array1 = [{
     name: "customer",
     url: "http://localhost:3000/customer/many?type=customer"
   }, {
@@ -41,8 +41,14 @@ export class UploadsComponent  {
     url: "http://localhost:3000/customer/many?type=ticket"
   }]
 
+
+  array2 = [{
+    name: "campaign",
+    url: "http://localhost:3000/customer/many?type=campaign"
+  }]
+
   reGenerateArray(count: number): void {
-    this.array = new Array(count);
+
   }
 
 }

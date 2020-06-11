@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormlyFieldConfig} from '@ngx-formly/core';
-import {FormGroup} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-customer-create',
@@ -8,55 +7,46 @@ import {FormGroup} from '@angular/forms';
   styleUrls: ['./customer-create.component.scss']
 })
 export class CustomerCreateComponent implements OnInit {
+  validateForm!: FormGroup;
 
-  constructor() { }
+  submitForm(): void {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
+  }
 
-  form: FormGroup;
-  model: any;
-  fields: FormlyFieldConfig[];
+  updateConfirmValidator(): void {
+    /** wait for refresh value */
+    Promise.resolve().then(() => this.validateForm.controls.checkPassword.updateValueAndValidity());
+  }
+
+  confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value !== this.validateForm.controls.password.value) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  };
+
+  getCaptcha(e: MouseEvent): void {
+    e.preventDefault();
+  }
+
+  constructor(private fb: FormBuilder) {}
+
   ngOnInit(): void {
-    this.form = new FormGroup({});
-    this.model = { email: 'email@gmail.com' };
-    this.fields = [
-      {
-        key: 'Select',
-        type: 'select',
-        templateOptions: {
-          label: 'Select',
-          placeholder: 'Placeholder',
-          description: 'Description',
-          required: true,
-          options: [
-            { value: 1, label: 'Option 1' },
-            { value: 2, label: 'Option 2' },
-            { value: 3, label: 'Option 3' },
-            { value: 4, label: 'Option 4' },
-          ],
-        },
-      },
-      {
-        key: 'select_multi',
-        type: 'select',
-        templateOptions: {
-          label: 'Select Multiple',
-          placeholder: 'Placeholder',
-          description: 'Description',
-          required: true,
-          multiple: true,
-          selectAllOption: 'Select All',
-          options: [
-            { value: 1, label: 'Option 1' },
-            { value: 2, label: 'Option 2' },
-            { value: 3, label: 'Option 3' },
-            { value: 4, label: 'Option 4' },
-          ],
-        },
-      },
-    ];
+    this.validateForm = this.fb.group({
+      email: [null, [Validators.email, Validators.required]],
+      password: [null, [Validators.required]],
+      checkPassword: [null, [Validators.required, this.confirmationValidator]],
+      nickname: [null, [Validators.required]],
+      phoneNumberPrefix: ['+86'],
+      phoneNumber: [null, [Validators.required]],
+      website: [null, [Validators.required]],
+      captcha: [null, [Validators.required]],
+      agree: [false]
+    });
   }
-
-  submit(model) {
-    console.log(model);
-  }
-
 }

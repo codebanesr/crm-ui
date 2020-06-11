@@ -1,0 +1,43 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
+      <nz-radio-group formControlName="type" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="Lead Generation">Lead Generation</label>
+        <label nz-radio-button nzValue="Custom Workflow">Custom Workflow</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
+      <input placeholder="input here" nz-input formControlName="email" (input)="onInput($event)" [nzAutocomplete]="auto" />
+      <nz-autocomplete [nzDataSource]="options" nzBackfill #auto></nz-autocomplete>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Interval</nz-form-label>
+    <nz-form-control [nzSpan]="12">
+      <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Comment</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
+      <textarea formControlName="comment" nz-input rows="2" placeholder="write any thing"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
+      <button nz-button (click)="resetForm($event)">Reset</button>
+    </nz-form-control>
+  </nz-form-item>
+
+</form>
