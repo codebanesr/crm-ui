@@ -13,9 +13,7 @@
     <nz-form-item>
       <nz-form-control>
         <nz-select nzMode="multiple" nzPlaceHolder="Select campaigns" formControlName="campaigns" style="width: 200px;">
-          <nz-option nzLabel="Windows" nzValue="windows"></nz-option>
-          <nz-option nzLabel="Apple" nzValue="apple"></nz-option>
-          <nz-option nzLabel="Android" nzValue="android"></nz-option>
+          <nz-option *ngFor="let co of campaignOpts" [nzLabel]="co" [nzValue]="co"></nz-option>
         </nz-select>
       </nz-form-control>
 

@@ -14,16 +14,18 @@ export class CampaignService {
   getCampaigns(
     pageIndex: number,
     pageSize: number,
+    filters: any,
     sortField: string | null,
     sortOrder: string | null,
   ) {
-    let params = new HttpParams()
-    .append('page', `${pageIndex}`)
-    .append('perPage', `${pageSize}`)
-    .append('sortField', `${sortField}`)
-    .append('sortOrder', `${sortOrder}`);
-
-    return this.http.get("http://testingdomain.com:3000/campaign", {params});
+    let body = {
+      pageIndex,
+      pageSize,
+      filters,
+      sortField: sortField,
+      sortOrder: sortOrder
+    }
+    return this.http.post("http://testingdomain.com:3000/campaign/get", body);
   }
 
 
@@ -31,5 +33,10 @@ export class CampaignService {
     let params = new HttpParams()
       .append('partialEmail', `${partialEmail}`)
     return this.http.get("http://testingdomain.com:3000/campaign/autocomplete/suggestEmails", {params});
+  }
+
+
+  getAllCampaignTypes() {
+    return this.http.get("http://testingdomain.com:3000/campaign/autocomplete/suggestTypes");
   }
 }
