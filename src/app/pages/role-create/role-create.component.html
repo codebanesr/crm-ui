@@ -1,0 +1,31 @@
+<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="createNewRole()">
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input Role Name!">
+      <nz-input-group>
+        <input type="text" nz-input formControlName="label" placeholder="Enter name for new role" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control nzErrorTip="System identifiable Value!">
+      <nz-input-group>
+        <input type="text" nz-input formControlName="value" placeholder="Enter system identifiable value"/>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-select
+      [nzMaxTagCount]="3"
+      [nzMaxTagPlaceholder]="tagPlaceHolder"
+      nzMode="multiple"
+      nzPlaceHolder="Please select"
+      formControlName="permissions"
+    >
+      <nz-option *ngFor="let item of listOfOption" [nzLabel]="item.label" [nzValue]="item"></nz-option>
+    </nz-select>
+  </nz-form-item>
+  <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Create New Role</button>
+</form>

@@ -1,0 +1,43 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="4" nzRequired nzFor="name">Label</nz-form-label>
+    <nz-form-control [nzSpan]="8" nzErrorTip="Please enter permission label">
+      <input type="text" nz-input formControlName="label" placeholder="Enter Label" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="4" nzFor="nickname" [nzRequired]="validateForm.get('required')?.value">Value</nz-form-label>
+    <nz-form-control [nzSpan]="8" nzErrorTip="Please enter permission value">
+      <input type="text" nz-input formControlName="value" placeholder="Please input your nickname" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="8" [nzOffset]="4">
+      <label nz-checkbox formControlName="checked">Set on initialization</label>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="8" [nzOffset]="4">
+      <button nz-button nzType="primary">Set New</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+
+<nz-divider nzText="Permissions currently available in system" nzOrientation="left"></nz-divider>
+<nz-table #sortTable [nzData]="listOfData" nzTableLayout="fixed" [nzScroll]="{ x: '1000px', y: '240px' }">
+  <thead>
+    <tr>
+      <th *ngFor="let column of listOfColumn">{{ column.title }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of sortTable.data">
+      <td>{{ data.label }}</td>
+      <td>{{ data.value }}</td>
+      <td>{{ data.checked }}</td>
+      <td>{{ data._id }}</td>
+    </tr>
+  </tbody>
+</nz-table>

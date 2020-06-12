@@ -18,6 +18,9 @@ import { AlarmsComponent } from '../alarms/alarms.component';
 import { authInterceptorProviders } from 'src/helpers/auth.interceptor';
 import { CampaignComponent } from './campaign/campaign.component';
 import { CreateCampaignComponent } from './create-campaign/create-campaign.component';
+import { RoleComponent } from '../role/role.component';
+import { PermissionsComponent } from '../permissions/permissions.component';
+import { RoleCreateComponent } from '../role-create/role-create.component';
 
 
 @NgModule({
@@ -42,6 +45,9 @@ import { CreateCampaignComponent } from './create-campaign/create-campaign.compo
     AlarmsComponent,
     CampaignComponent,
     CreateCampaignComponent,
+    RoleComponent,
+    PermissionsComponent,
+    RoleCreateComponent,
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],

@@ -15,6 +15,9 @@ import { CustomersComponent } from 'src/app/customers/customers.component';
 import { OverviewComponent } from 'src/app/overview/overview.component';
 import { CampaignComponent } from './campaign/campaign.component';
 import { CreateCampaignComponent } from './create-campaign/create-campaign.component';
+import { RoleComponent } from '../role/role.component';
+import { PermissionsComponent } from '../permissions/permissions.component';
+import { RoleCreateComponent } from '../role-create/role-create.component';
 
 
 const routes: Routes = [
@@ -31,7 +34,10 @@ const routes: Routes = [
   {path: "customer/show", component: CustomersComponent},
   {path: "overview", component: OverviewComponent},
   {path: "campaigns", component: CampaignComponent},
-  {path: "create/campaign", component: CreateCampaignComponent}
+  {path: "create/campaign", component: CreateCampaignComponent},
+  {path: "role", component: RoleComponent},
+  {path: "permission", component: PermissionsComponent},
+  {path: "create/role", component: RoleCreateComponent},
 ];
 
 @NgModule({
