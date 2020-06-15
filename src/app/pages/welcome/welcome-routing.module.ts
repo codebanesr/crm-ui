@@ -20,30 +20,159 @@ import { PermissionsComponent } from '../permissions/permissions.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 
-
 const routes: Routes = [
-  { path: '', component: WelcomeComponent },
-  {path: routePoints.USERS, component: UsersComponent},
-  { path: routePoints.LEADS, component: LeadsComponent},
-  {path: routePoints.TICKETS, component: TicketsComponent},
-  {path: routePoints.UPLOADS, component: UploadsComponent},
-  {path: routePoints.USER_CREATE, component: UserCreateComponent},
-  {path: routePoints.LEAD_CREATE, component: LeadCreateComponent},
-  {path: routePoints.TICKET_CREATE, component: TicketCreateComponent},
-  {path: routePoints.ALARMS, component: AlarmsComponent},
-  {path: "customer-create", component: CustomerCreateComponent},
-  {path: "customer/show", component: CustomersComponent},
-  {path: "overview", component: OverviewComponent},
-  {path: "campaigns", component: CampaignComponent},
-  {path: "create/campaign", component: CreateCampaignComponent},
-  {path: "role", component: RoleComponent},
-  {path: "permission", component: PermissionsComponent},
-  {path: "create/role", component: RoleCreateComponent},
-  {path: "agent/actions", component: AdminActionsComponent},
+  {
+    path: '',
+    data: { breadcrumb: 'overview'},
+    component: OverviewComponent,
+  },
+  {
+    path: routePoints.USERS,
+    data: {
+      breadcrumb: 'users',
+    },
+    children: [
+      {
+        path: '',
+        component: UsersComponent,
+      },
+      {
+        path: "create",
+        component: UserCreateComponent,
+        data: {
+          breadcrumb: 'create-user',
+        },
+      },
+    ],
+  },
+  {
+    path: routePoints.LEADS,
+    data: {
+      breadcrumb: 'leads',
+    },
+    children: [
+      {
+        path: '',
+        component: LeadsComponent,
+      },
+      {
+        path: 'create',
+        component: LeadCreateComponent,
+        data: {
+          breadcrumb: 'create',
+        },
+      },
+    ],
+  },
+  {
+    path: routePoints.TICKETS,
+    data: {
+      breadcrumb: 'tickets',
+    },
+    children: [
+      {
+        path: '',
+        component: TicketsComponent,
+      },
+      {
+        path: 'create',
+        component: TicketCreateComponent,
+        data: {
+          breadcrumb: 'create',
+        },
+      },
+    ],
+  },
+  {
+    path: routePoints.UPLOADS,
+    component: UploadsComponent,
+    data: {
+      breadcrumb: 'uploads',
+    },
+  },
+  {
+    path: routePoints.ALARMS,
+    component: AlarmsComponent,
+    data: {
+      breadcrumb: 'alarms',
+    },
+  },
+  {
+    path: 'customers',
+    component: CustomersComponent,
+    data: {
+      breadcrumb: 'show-customers',
+    },
+    children: [
+      {
+        path: 'create',
+        component: CustomerCreateComponent,
+        data: {
+          breadcrumb: 'create-customer',
+        },
+      },
+    ],
+  },
+  {
+    path: 'overview',
+    component: OverviewComponent,
+    data: {
+      breadcrumb: 'overview',
+    },
+  },
+  {
+    path: 'campaigns',
+    children: [
+      {
+        path: '',
+        component: CampaignComponent,
+        data: {
+          breadcrumb: 'campaigns',
+        },
+      },
+      {
+        path: 'create',
+        component: CreateCampaignComponent,
+        data: {
+          breadcrumb: 'create-campaigns',
+        },
+      },
+    ],
+  },
+  {
+    path: 'role',
+    component: RoleComponent,
+    data: {
+      breadcrumb: 'roles',
+    },
+    children: [
+      {
+        path: 'create',
+        component: RoleCreateComponent,
+        data: {
+          breadcrumb: 'create-role',
+        },
+      },
+    ],
+  },
+  {
+    path: 'permission',
+    component: PermissionsComponent,
+    data: {
+      breadcrumb: 'permissions',
+    },
+  },
+  {
+    path: 'agent/actions',
+    component: AdminActionsComponent,
+    data: {
+      breadcrumb: 'actions',
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class WelcomeRoutingModule { }
+export class WelcomeRoutingModule {}

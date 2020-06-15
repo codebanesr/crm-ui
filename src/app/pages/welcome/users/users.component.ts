@@ -48,9 +48,7 @@ export class UsersComponent implements OnInit {
       this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
     }
 
-    createUserRoute: String;
     ngOnInit(): void {
-      this.createUserRoute = `/welcome/${routePoints.USER_CREATE}`;
       this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
     }
 

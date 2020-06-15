@@ -80,7 +80,7 @@ export class TicketsComponent implements OnInit {
 
 
   createTicket() {
-    this.router.navigate(['welcome', "ticket", "create"]);
+    this.router.navigate(['welcome', "tickets", "create"]);
   }
 
   resetSortAndFilters(): void {
@@ -105,6 +105,6 @@ export class TicketsComponent implements OnInit {
 
   updateTicket(data) {
     console.log(data)
-    this.router.navigate(['welcome', "ticket", "create"], { queryParams: { id: data._id } });
+    this.router.navigate(['welcome', "tickets", "create"], { queryParams: { id: data._id } });
   }
 }

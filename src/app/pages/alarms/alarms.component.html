@@ -1,11 +1,34 @@
 <button nz-button nzType="primary" (click)="open()">Advanced Filters</button>
-<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Basic Drawer" (nzOnClose)="close()">
-  <p>Some contents...</p>
-  <p>Some contents...</p>
-  <p>Some contents...</p>
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters" (nzOnClose)="close()" nzWidth="300px">
+  <form nz-form [formGroup]="filterForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="handlerEmail">Handler Email</nz-form-label>
+      <nz-form-control [nzSpan]="24">
+        <input type="text" nz-input formControlName="handlerEmail" placeholder="Please input your name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzFor="dateRange">Date Range</nz-form-label>
+      <nz-form-control [nzSpan]="24">
+        <nz-range-picker formControlName="dateRange"></nz-range-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzFor="moduleTypes">Module Types</nz-form-label>
+      <nz-select
+      [nzMaxTagCount]="3"
+      [nzMaxTagPlaceholder]="tagPlaceHolder"
+      nzMode="multiple"
+      nzPlaceHolder="Please select"
+      formControlName="moduleTypes"
+    >
+      <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+    </nz-select>
+    </nz-form-item>
+    <button nz-button nzType="primary">Submit</button>
+  </form>
 </nz-drawer>
-
-
 
 
 <nz-table #editRowTable nzBordered [nzData]="listOfData" nzTableLayout="fixed">
@@ -30,3 +53,6 @@
     </tr>
   </tbody>
 </nz-table>
+
+
+<ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>

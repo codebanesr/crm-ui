@@ -3,6 +3,7 @@ import { LeadsService } from 'src/app/leads.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -14,17 +15,25 @@ export class LeadsComponent implements OnInit{
   constructor(
     private msg: NzMessageService,
     private leadsService: LeadsService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {
 
   }
 
   page: number = 1;
   perPage: number = 15;
+  tagPlaceHolder = 3
 
   listOfColumns: ColumnItem[]
+  listOfOption: any[] = []
+  visible: boolean;
+  placement = "right";
   ngOnInit() {
+    this.visible = false;
+    this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.listOfColumns = listOfColumns;
+    this.initFilterForm();
     this.generateData();
   }
 
@@ -49,7 +58,7 @@ export class LeadsComponent implements OnInit{
   }
 
   createLead() {
-    this.router.navigate(['welcome', 'lead', 'create']);
+    this.router.navigate(['welcome', 'leads', 'create']);
   }
 
 
@@ -101,6 +110,31 @@ export class LeadsComponent implements OnInit{
     this.perPage = perPage;
     this.generateData();
   }
+
+
+
+  open(): void {
+    this.visible = true;
+  }
+
+  close(): void {
+    this.visible = false;
+  }
+
+
+
+  filterForm: FormGroup
+  initFilterForm() {
+    this.filterForm = this.fb.group({
+      handlerEmail: [null],
+      dateRange: [null],
+      moduleTypes: []
+    });
+  }
+  submitForm() {
+    console.log(this.filterForm.value);
+  }
+
 }
 
 
