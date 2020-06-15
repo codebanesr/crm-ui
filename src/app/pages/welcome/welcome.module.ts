@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {FormlyModule} from '@ngx-formly/core';
 import { LeadCreateComponent } from './lead-create/lead-create.component';
 import { LeadsComponent } from './leads/leads.component';
 import { TicketCreateComponent } from './ticket-create/ticket-create.component';
@@ -21,6 +20,7 @@ import { CreateCampaignComponent } from './create-campaign/create-campaign.compo
 import { RoleComponent } from '../role/role.component';
 import { PermissionsComponent } from '../permissions/permissions.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
+import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 
 
 @NgModule({
@@ -48,6 +48,7 @@ import { RoleCreateComponent } from '../role-create/role-create.component';
     RoleComponent,
     PermissionsComponent,
     RoleCreateComponent,
+    AdminActionsComponent,
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],

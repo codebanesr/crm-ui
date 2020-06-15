@@ -18,6 +18,7 @@ import { CreateCampaignComponent } from './create-campaign/create-campaign.compo
 import { RoleComponent } from '../role/role.component';
 import { PermissionsComponent } from '../permissions/permissions.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
+import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 
 
 const routes: Routes = [
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: "role", component: RoleComponent},
   {path: "permission", component: PermissionsComponent},
   {path: "create/role", component: RoleCreateComponent},
+  {path: "agent/actions", component: AdminActionsComponent},
 ];
 
 @NgModule({
