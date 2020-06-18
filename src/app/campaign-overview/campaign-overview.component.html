@@ -1,0 +1,10 @@
+<div nz-row>
+  <div nz-col nzSpan="24"
+    #campaignChart
+    echarts
+    [options]="chartOption"
+    class="demo-chart"
+    (chartInit)="onChartInit($event)"
+  >
+  </div>
+</div>

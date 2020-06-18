@@ -15,20 +15,19 @@ export class AgentService {
     private sanitizer: DomSanitizer
   ) { }
 
-  listAgentActions(skip: number) {
-    return this.http.get(`${environment.apiUrl}/agent/listActions?skip=${skip}`);
+  listAgentActions(skip: number, fileType?: string) {
+    let url = `${environment.apiUrl}/agent/listActions?skip=${skip}`;
+    if(fileType) {
+      url+=`&fileType=${fileType}`;
+    }
+    return this.http.get(url);
   }
-
-
 
   fileUrl: any;
-  downloadExcelFile(location: string) {
-
+  downloadExcelFile(location: string, fileName:string = "unnamed") {
     this.http.get(`${environment.apiUrl}/agent/download?location=${location}`, { responseType: 'arraybuffer' }).subscribe((data: any)=>{
       const blob = new Blob([data], { type: 'application/octet-stream' });
-
-      saveAs(blob, "some.xlsx");
+      saveAs(blob, fileName+".xlsx");
     })
   }
-
 }

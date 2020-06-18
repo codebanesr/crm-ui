@@ -1,5 +1,5 @@
+<nz-divider nzType="vertical" nzText="New Campaign"></nz-divider>
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
-
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
     <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
@@ -7,10 +7,9 @@
         <label nz-radio-button nzValue="Lead Generation">Lead Generation</label>
         <label nz-radio-button nzValue="Custom Workflow">Custom Workflow</label>
       </nz-radio-group>
+      <a nz-button nzType="link" (click)="open()"><i nz-icon nzType="setting" nzTheme="outline"></i></a>
     </nz-form-control>
   </nz-form-item>
-
-
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
     <nz-form-control [nzSpan]="12" nzHasFeedback>
@@ -37,7 +36,15 @@
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
       <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
       <button nz-button (click)="resetForm($event)">Reset</button>
+      <nz-upload nzAction="http://localhost:3000/customer/many?type=campaignSchema&schemaName=core">
+        <button nz-button><i nz-icon nzType="upload"></i> + Campaign</button>
+      </nz-upload>
     </nz-form-control>
   </nz-form-item>
-
 </form>
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="300px" nzPlacement="right" nzTitle="Uploaded Campaign Files" (nzOnClose)="close()">
+  <ng-container *ngFor="let upload of recentUploads">
+    <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a>
+  </ng-container>
+</nz-drawer>

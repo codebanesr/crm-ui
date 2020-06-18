@@ -1,8 +1,4 @@
 <div class="table-operations">
-  <button nz-button (click)="resetFilters()">Clear filters</button>
-  <button nz-button (click)="resetSortAndFilters()">
-    Clear filters and sorters
-  </button>
   <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced Filters</button>
 
   <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i> Lead</button>
@@ -17,28 +13,21 @@
   <thead>
     <tr>
       <th
-        *ngFor="let column of listOfColumns; trackBy: trackByName"
-        [(nzSortOrder)]="column.sortOrder"
-        [nzSortFn]="column.sortFn"
-        [nzFilters]="column.listOfFilter"
-        [nzFilterFn]="column.filterFn"
+        *ngFor="let column of listOfColumns"
       >
-        {{ column.name }}
+        {{ typeDict[column.name].label }}
       </th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of filterTable.data">
-      <td>{{ data.name }}</td>
-      <td>{{ data.email }}</td>
-      <td>{{ data.phonenumber }}</td>
-      <td>{{ data.amount }}</td>
-      <td>{{ data.followUpDate | date }}</td>
-      <td>{{ data.description }}</td>
+      <td *ngFor="let key of objectkeys(data)">
+        <!-- {{ data[key] }} -->
+        {{typeDict[key].type === 'date' ? (data[key] | date) : (data[key])}}
+      </td>
     </tr>
   </tbody>
 </nz-table>
-
 
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters" (nzOnClose)="close()" nzWidth="300px">
   <form nz-form [formGroup]="filterForm" nzLayout="vertical" (ngSubmit)="submitForm()">
@@ -69,4 +58,6 @@
     </nz-form-item>
     <button nz-button nzType="primary">Submit</button>
   </form>
+  <nz-divider nzText="Fields To Show"></nz-divider>
+  <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
 </nz-drawer>

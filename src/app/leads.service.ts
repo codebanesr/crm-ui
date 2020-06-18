@@ -10,22 +10,17 @@ export class LeadsService {
 
   constructor(private http: HttpClient) { }
 
-  getLeads(
-    pageIndex: number,
-    pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-  ): Observable<{ results: any[] }> {
-    let params = new HttpParams()
-      .append('page', `${pageIndex}`)
-      .append('perPage', `${pageSize}`)
-      .append('sortField', `${sortField}`)
-      .append('sortOrder', `${sortOrder}`);
-    return this.http.get<{ results: any[] }>(`${environment.apiUrl}/lead`, { params });
+  getLeads(options): Observable<{ results: any[] }> {
+    return this.http.post<{ results: any[] }>(`${environment.apiUrl}/lead`,  options);
   }
 
   addLead(body) {
     return this.http.post(`${environment.apiUrl}/lead`, body);
+  }
+
+
+  getAllLeadColumns() {
+    return this.http.get(`${environment.apiUrl}/lead/getAllLeadColumns`);
   }
 
 

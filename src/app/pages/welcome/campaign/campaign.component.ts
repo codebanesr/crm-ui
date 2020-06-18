@@ -9,6 +9,7 @@ import { CampaignService } from '../campaign.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { UploadChangeParam } from 'ng-zorro-antd/upload';
 
 interface DataItem {
   handler: string;

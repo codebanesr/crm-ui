@@ -20,7 +20,12 @@ import { authInterceptorProviders } from '../helpers/auth.interceptor';
 import { CustomerCreateComponent } from './customer-create/customer-create.component';
 import { CustomersComponent } from './customers/customers.component';
 import { OverviewComponent } from './overview/overview.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+/** use custom build, this will import everything */
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
+import { CampaignOverviewComponent } from './campaign-overview/campaign-overview.component';
+
 
 registerLocaleData(en);
 
@@ -31,10 +36,13 @@ registerLocaleData(en);
     CustomerCreateComponent,
     CustomersComponent,
     OverviewComponent,
+    CampaignOverviewComponent,
   ],
   imports: [
-    NgxChartsModule,
     DemoNgZorroAntdModule,
+    NgxEchartsModule.forRoot({
+      echarts,
+    }),
     ReactiveFormsModule,
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,

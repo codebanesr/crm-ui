@@ -19,12 +19,20 @@ import { RoleComponent } from '../role/role.component';
 import { PermissionsComponent } from '../permissions/permissions.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
+import { CampaignOverviewComponent } from 'src/app/campaign-overview/campaign-overview.component';
 
 const routes: Routes = [
   {
     path: '',
     data: { breadcrumb: 'overview'},
     component: OverviewComponent,
+  },
+  {
+    path: 'campaign-overview',
+    component: CampaignOverviewComponent,
+    data: {
+      breadcrumb: 'campaign-overview'
+    }
   },
   {
     path: routePoints.USERS,
