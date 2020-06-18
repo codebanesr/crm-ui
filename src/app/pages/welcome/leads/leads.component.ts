@@ -3,7 +3,7 @@ import { LeadsService } from 'src/app/leads.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ILeadColumn } from './lead.interface';
 
 
@@ -32,7 +32,6 @@ export class LeadsComponent implements OnInit{
   ngOnInit() {
     this.visible = false;
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
-    this.initFilterForm();
     this.getData();
     this.getAllLeadColumns();
   }
@@ -67,6 +66,7 @@ export class LeadsComponent implements OnInit{
 
       // for tables
       this.typeDict = Object.assign({}, ...this.showCols.map((x) => ({[x.value]: x})));
+      this.initFilterForm();
     })
   }
 
@@ -86,11 +86,12 @@ export class LeadsComponent implements OnInit{
 
   filterForm: FormGroup
   initFilterForm() {
-    this.filterForm = this.fb.group({
-      handlerEmail: [null],
-      dateRange: [null],
-      moduleTypes: []
-    });
+    this.filterForm = this.fb.group({});
+    let formControls = {};
+    Object.keys(this.typeDict).forEach(internalField => {
+      formControls[internalField] = [null]
+    })
+    this.filterForm = this.fb.group(formControls);
   }
   submitForm() {
     console.log(this.filterForm.value);
