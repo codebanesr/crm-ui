@@ -42,7 +42,7 @@ export class LeadsComponent implements OnInit{
 
 
   // showCols: this.showCols.filter(cols=>cols.checked).map(col=>col.value)
-  leadOptions: {page: number, perPage: number, showCols?: string[]} = { page: this.page || 1, perPage: this.perPage || 1 };
+  leadOptions: { page: number, perPage: number, showCols?: string[], searchTerm: string } = { page: this.page || 1, perPage: this.perPage || 1, searchTerm: "" };
   getData() {
     this.leadsService.getLeads(this.leadOptions).subscribe((response: any)=>{
       this.msg.info("Retrieved some leads");
@@ -99,7 +99,7 @@ export class LeadsComponent implements OnInit{
   rerenderCols() {
     this.leadOptions.showCols = this.showCols.filter(col=>col.checked).map(col=>col.value);
 
-    this.getData()
+    this.getData();
   }
 
   onPageIndexChange(page: number) {
@@ -118,6 +118,16 @@ export class LeadsComponent implements OnInit{
 
   close(): void {
     this.visible = false;
+  }
+
+  handleSearchTerm() {
+    this.getData();
+  }
+
+
+
+  takeActions(event) {
+    console.log(event);
   }
 }
 

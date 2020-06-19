@@ -6,9 +6,8 @@
     </nz-form-control>
   </nz-form-item>
 
-
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">{{typeDict["email"].label}}</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
       <input nz-input formControlName="email" id="email" />
     </nz-form-control>
@@ -16,7 +15,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nickname" nzRequired>
       <span>
-        Nickname
+        {{typeDict["nickname"].label | titlecase}}
         <i nz-icon nz-tooltip nzTitle="What do you want other to call you" nzType="question-circle" nzTheme="outline"></i>
       </span>
     </nz-form-label>
@@ -25,7 +24,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>{{typeDict["phoneNumber"].label}}</nz-form-label>
     <nz-form-control
       [nzSm]="14"
       [nzXs]="24"
@@ -46,7 +45,7 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>Lead Amount</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>{{typeDict["amount"].label}}</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
       <input nz-input type="number" formControlName="amount" id="amount" />
     </nz-form-control>
@@ -55,7 +54,7 @@
 
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>{{typeDict["status"].label}}</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
       <nz-select formControlName="status" class="">
         <nz-option nzLabel="New" nzValue="NEW"></nz-option>
@@ -66,9 +65,8 @@
     </nz-form-control>
   </nz-form-item>
 
-
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Follow Up</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>{{typeDict["followUp"].label}}</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please enter a followUp date">
       <nz-date-picker formControlName="followUp"></nz-date-picker>
     </nz-form-control>

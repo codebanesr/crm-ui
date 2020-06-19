@@ -3,6 +3,7 @@ import { routePoints } from 'src/menus/routes';
 import { User } from '../../../../interfaces/user';
 import { UsersService } from 'src/app/service/users.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 })
 export class UsersComponent implements OnInit {
 
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService, private nzContextMenuService: NzContextMenuService) { }
 
   total = 1;
     listOfRandomUser: User[] = [];
@@ -32,10 +33,10 @@ export class UsersComponent implements OnInit {
       filter: Array<{ key: string; value: string[] }>
     ): void {
       this.loading = true;
-      this.usersService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe(data => {
+      this.usersService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe((data: any) => {
         this.loading = false;
         this.total = 200; // mock the total data here
-        this.listOfRandomUser = data.results;
+        this.listOfRandomUser = data;
       });
     }
 
@@ -48,8 +49,31 @@ export class UsersComponent implements OnInit {
       this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
     }
 
+    managers: any;
     ngOnInit(): void {
       this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
+      this.usersService.getManagersForReassignment("manager").subscribe(data=>{
+        this.managers = data;
+      }, error=> {
+        console.log(error)
+      })
     }
 
+
+    takeActions(action) {
+      console.log(action)
+    }
+
+    closeMenu(): void {
+      this.nzContextMenuService.close();
+    }
+
+
+    reassignToUser(newManager, user) {
+      this.usersService.assignManager(newManager, user).subscribe(result=>{
+        console.log(result);
+      }, error=> {
+        console.log(error);
+      })
+    }
 }

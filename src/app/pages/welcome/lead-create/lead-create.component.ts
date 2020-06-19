@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LeadsService } from 'src/app/leads.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ILeadColumn } from '../leads/lead.interface';
 
 
 @Component({
@@ -11,12 +12,19 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class LeadCreateComponent implements OnInit {
 
+  typeDict: { [key: string]: { label: string, value: string, type: string, checked: boolean } };
   validateForm!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private leadService: LeadsService,
     private msg: NzMessageService
-  ) {}
+  ) { }
+
+
+  ngOnInit(): void {
+    this.initForm();
+    this.mapLabelValues();
+  }
 
   submitForm(): void {
     for (const i in this.validateForm.controls) {
@@ -25,14 +33,15 @@ export class LeadCreateComponent implements OnInit {
     }
 
 
-    this.leadService.addLead(this.validateForm.value).subscribe(data=>{
+    this.leadService.addLead(this.validateForm.value).subscribe(data => {
       console.log(data);
       this.msg.success("Successfully added Lead");
-    }, error=>{
+    }, error => {
       this.msg.error("Something went wrong while adding lead");
       console.log(error);
     });
   }
+
 
   updateConfirmValidator(): void {
     /** wait for refresh value */
@@ -53,7 +62,7 @@ export class LeadCreateComponent implements OnInit {
   //   return {};
   // }
 
-  ngOnInit(): void {
+  initForm() {
     this.validateForm = this.fb.group({
       _id: [null, [Validators.required]],
       email: [null, [Validators.email, Validators.required]],
@@ -67,4 +76,20 @@ export class LeadCreateComponent implements OnInit {
     });
   }
 
+  mapLabelValues() {
+    let showCols: any[] = [];
+    this.leadService.getAllLeadColumns().subscribe((mSchema: { paths: ILeadColumn[] }) => {
+      mSchema.paths.forEach((path: ILeadColumn) => {
+        showCols.push({
+          label: path.readableField,
+          value: path.internalField,
+          checked: path.checked,
+          type: path.type
+        })
+      });
+
+      // for tables
+      this.typeDict = Object.assign({}, ...showCols.map((x) => ({ [x.value]: x })));
+    })
+  }
 }

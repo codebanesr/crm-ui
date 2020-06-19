@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../interfaces/user';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -29,6 +30,16 @@ export class UsersService {
         params = params.append(filter.key, value);
       });
     });
-    return this.http.get<{ results: User[] }>(`${this.randomUserUrl}`, { params });
+    return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user/allUsers`, { params });
+  }
+
+
+  getManagersForReassignment(type="manager") {
+    return this.http.get(`${environment.apiUrl}/user/managersForReassignment?type=${type}`);
+  }
+
+
+  assignManager(newManager, user) {
+    return this.http.post(`${environment.apiUrl}/user/assignManager`, {newManager, user});
   }
 }

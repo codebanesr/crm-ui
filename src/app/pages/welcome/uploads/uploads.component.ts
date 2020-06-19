@@ -45,6 +45,10 @@ export class UploadsComponent  {
   array2 = [{
     name: "campaign",
     url: "http://localhost:3000/customer/many?type=campaign"
+  },
+  {
+    name: "users",
+    url: "http://localhost:3000/user/many"
   }]
 
   reGenerateArray(count: number): void {
