@@ -33,7 +33,7 @@ export class LeadsComponent implements OnInit{
     this.visible = false;
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initFilterForm();
-    this.getData();
+    this.rerenderCols();
     this.getAllLeadColumns();
   }
 
@@ -54,6 +54,7 @@ export class LeadsComponent implements OnInit{
   }
 
   typeDict: {[key: string]: {label: string, value: string, type: string, checked: boolean}};
+  dataLoaded: boolean = false;
   getAllLeadColumns() {
     this.leadsService.getAllLeadColumns().subscribe((mSchema: {paths: ILeadColumn[]})=>{
       mSchema.paths.forEach((path: ILeadColumn)=>{

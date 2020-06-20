@@ -11,9 +11,10 @@
 <nz-table
   #filterTable
   [nzData]="listOfData"
-  nzTableLayout="fixed"
+  nzTableLayout="scroll"
   (nzPageIndexChange)="onPageIndexChange($event)"
   (nzPageSizeChange)="onPageSizeChange($event)"
+  *ngIf="listOfData.length > 0"
 >
   <thead>
     <tr>
