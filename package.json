@@ -26,6 +26,8 @@
     "@angular/router": "~9.1.0",
     "@ngrx/store": "^9.1.0",
     "@nguniversal/express-engine": "^9.1.1",
+    "@ngx-formly/core": "^5.7.2",
+    "@ngx-formly/ng-zorro-antd": "0.0.1",
     "@types/file-saver": "^2.0.1",
     "echarts": "^4.8.0",
     "express": "^4.15.2",

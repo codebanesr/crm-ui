@@ -21,6 +21,9 @@ import { RoleComponent } from '../role/role.component';
 import { PermissionsComponent } from '../permissions/permissions.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyNgZorroAntdModule } from '@ngx-formly/ng-zorro-antd';
+import { FormlyDatePicker } from 'src/app/custom-templates/date-picker';
 
 
 @NgModule({
@@ -30,7 +33,14 @@ import { AdminActionsComponent } from '../admin-actions/admin-actions.component'
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    DemoNgZorroAntdModule
+    DemoNgZorroAntdModule,
+    FormlyNgZorroAntdModule,
+    FormlyModule.forRoot({
+      validationMessages: [{ name: 'required', message: 'This field is required' }],
+      types: [
+        { name: 'datePicker', component: FormlyDatePicker }
+      ]
+    }),
   ],
   declarations: [
     WelcomeComponent,
@@ -49,6 +59,7 @@ import { AdminActionsComponent } from '../admin-actions/admin-actions.component'
     PermissionsComponent,
     RoleCreateComponent,
     AdminActionsComponent,
+    FormlyDatePicker
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],

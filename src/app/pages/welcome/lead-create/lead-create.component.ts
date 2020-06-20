@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { LeadsService } from 'src/app/leads.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ILeadColumn } from '../leads/lead.interface';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+
 
 
 @Component({
@@ -27,6 +29,7 @@ export class LeadCreateComponent implements OnInit {
   }
 
   submitForm(): void {
+    console.log(this.model, this.validateForm.value);
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
@@ -62,18 +65,28 @@ export class LeadCreateComponent implements OnInit {
   //   return {};
   // }
 
+  model: any;
+  fields: FormlyFieldConfig[]
   initForm() {
-    this.validateForm = this.fb.group({
-      _id: [null, [Validators.required]],
-      email: [null, [Validators.email, Validators.required]],
-      nickname: [null, [Validators.required]],
-      phoneNumberPrefix: ['+91'],
-      phoneNumber: [null, [Validators.required]],
-      amount: [null, [Validators.required]],
-      followUp: [null, [Validators.required]],
-      agree: [false],
-      status: ["NEW", [Validators.required]],
-    });
+    this.validateForm = new FormGroup({});
+    this.model = {};
+    this.fields = [];
+
+    let res = []
+    this.leadService.getAllLeadColumns().subscribe((results: any) => {
+      results.paths.forEach(path=>{
+        res.push({
+          key: path.internalField,
+          type: path.type === 'date'? 'datePicker': 'input',
+          templateOptions: {
+            label: path.readableField,
+            placeholder: path.readableField,
+            required: true,
+          }
+        })
+      })
+      this.fields = res;
+    })
   }
 
   mapLabelValues() {
