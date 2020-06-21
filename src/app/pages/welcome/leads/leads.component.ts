@@ -5,7 +5,7 @@ import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ILeadColumn } from './lead.interface';
-
+import {FormlyFieldConfig} from '@ngx-formly/core';
 
 @Component({
   selector: 'app-leads',
@@ -129,6 +129,39 @@ export class LeadsComponent implements OnInit{
 
   takeActions(event) {
     console.log(event);
+  }
+
+
+  isVisible = false;
+  showEmailModal(): void {
+    this.initEmailForm();
+    this.isVisible = true;
+  }
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+  }
+
+
+  emailForm: FormGroup;
+  emailModel;
+  emailFields:FormlyFieldConfig[];
+  initEmailForm() {
+    this.emailForm = this.fb.group({
+      subject: [null],
+      text: [null],
+      attachments: [null]
+    });
+  }
+
+  submitEmailForm(model) {
+    console.log(model);
   }
 }
 

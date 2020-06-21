@@ -1,26 +1,21 @@
 <div class="table-operations">
-  <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced Filters</button>
-  <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i> Lead</button>
-  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px;" (change)="handleSearchTerm()">
-    <input type="text" nz-input placeholder="input search text" [(ngModel)]="leadOptions.searchTerm"/>
+  <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
+    Filters</button>
+  <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
+    Lead</button>
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px;"
+    (change)="handleSearchTerm()">
+    <input type="text" nz-input placeholder="input search text" [(ngModel)]="leadOptions.searchTerm" />
   </nz-input-group>
   <ng-template #suffixIconButton>
     <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
   </ng-template>
 </div>
-<nz-table
-  #filterTable
-  [nzData]="listOfData"
-  nzTableLayout="scroll"
-  (nzPageIndexChange)="onPageIndexChange($event)"
-  (nzPageSizeChange)="onPageSizeChange($event)"
-  *ngIf="listOfData.length > 0"
->
+<nz-table #filterTable [nzData]="listOfData" nzTableLayout="scroll" (nzPageIndexChange)="onPageIndexChange($event)"
+  (nzPageSizeChange)="onPageSizeChange($event)" *ngIf="listOfData.length > 0">
   <thead>
     <tr>
-      <th
-        *ngFor="let column of listOfColumns"
-      >
+      <th *ngFor="let column of listOfColumns">
         {{ typeDict[column.name].label }}
       </th>
       <th>Actions</th>
@@ -35,13 +30,14 @@
       <td class="actions">
         <i nz-icon nzType="api" nzTheme="fill" (click)="takeActions('assign')"></i> &nbsp;
         <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history')"></i> &nbsp;
-        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign')"></i>
+        <i nz-icon nzType="idcard" nzTheme="outline" (click)="showEmailModal()"></i>
       </td>
     </tr>
   </tbody>
 </nz-table>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters" (nzOnClose)="close()" nzWidth="300px">
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
+  (nzOnClose)="close()" nzWidth="300px">
   <form nz-form [formGroup]="filterForm" nzLayout="vertical" (ngSubmit)="submitForm()">
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzRequired nzFor="handlerEmail">Handler Email</nz-form-label>
@@ -58,18 +54,44 @@
 
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzFor="moduleTypes">Module Types</nz-form-label>
-      <nz-select
-      [nzMaxTagCount]="3"
-      [nzMaxTagPlaceholder]="tagPlaceHolder"
-      nzMode="multiple"
-      nzPlaceHolder="Please select"
-      formControlName="moduleTypes"
-    >
-      <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
-    </nz-select>
+      <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+        nzPlaceHolder="Please select" formControlName="moduleTypes">
+        <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+      </nz-select>
     </nz-form-item>
     <button nz-button nzType="primary">Submit</button>
   </form>
   <nz-divider nzText="Fields To Show"></nz-divider>
   <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
 </nz-drawer>
+
+
+
+<!-- form will adjust according to the modal size so let everything be at 24 grid size -->
+<nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="emailForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+      <nz-form-control [nzSm]="24" [nzXs]="24">
+        <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+      <nz-form-control [nzSm]="24" [nzXs]="24">
+        <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="subject"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
+      <nz-form-control [nzSm]="24" [nzXs]="24">
+        <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+          nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
+          <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+        </nz-select>
+        <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>
