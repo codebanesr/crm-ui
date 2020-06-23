@@ -3,9 +3,11 @@ import { LeadsService } from 'src/app/leads.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ILeadColumn } from './lead.interface';
 import {FormlyFieldConfig} from '@ngx-formly/core';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { UsersService } from 'src/app/service/users.service';
 
 @Component({
   selector: 'app-leads',
@@ -16,8 +18,10 @@ export class LeadsComponent implements OnInit{
   constructor(
     private msg: NzMessageService,
     private leadsService: LeadsService,
+    private nzContextMenuService: NzContextMenuService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private usersService: UsersService
   ) {}
 
   page: number = 1;
@@ -29,12 +33,24 @@ export class LeadsComponent implements OnInit{
   listOfOption: any[] = []
   visible: boolean;
   placement = "right";
+  managers: any;
+  isTimelineModalVisible = false;
   ngOnInit() {
     this.visible = false;
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initFilterForm();
     this.rerenderCols();
     this.getAllLeadColumns();
+    this.initRightClickActions();
+  }
+
+
+  initRightClickActions() {
+    this.usersService.getUsers(0, 20, "abc", "asc").subscribe(data=>{
+      this.managers = data;
+    }, error=> {
+      console.log(error)
+    })
   }
 
   listOfData: DataItem[] = [];
@@ -127,13 +143,14 @@ export class LeadsComponent implements OnInit{
 
 
 
-  takeActions(event) {
-    console.log(event);
+  showLeadHistory(lead) {
+    this.isTimelineModalVisible = true;
   }
 
 
   isVisible = false;
-  showEmailModal(): void {
+  showEmailModal(customerData): void {
+    console.log(customerData)
     this.initEmailForm();
     this.isVisible = true;
   }
@@ -162,6 +179,52 @@ export class LeadsComponent implements OnInit{
 
   submitEmailForm(model) {
     console.log(model);
+  }
+
+
+  contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
+    this.nzContextMenuService.create($event, menu);
+  }
+
+  closeMenu(): void {
+    this.nzContextMenuService.close();
+  }
+
+
+  reassignLead(newManager: any) {
+    console.log(this.selectedLead, newManager);
+    this.leadsService.reassignLead(this.selectedLead.email, newManager.email, this.selectedLead).subscribe(result => {
+      this.msg.success("Successfully reassigned lead");
+    }, error => {
+      this.msg.error(error.error);
+    })
+  }
+
+
+  selectedLead: any;
+  isReassignmentModalVisible;
+  selectedManager: FormControl;
+  openReassignModal(leadData) {
+    this.selectedLead = leadData;
+    this.selectedManager = new FormControl(null);
+    this.selectedManager.valueChanges.subscribe(data=>{
+      console.log(data);
+    })
+    this.isReassignmentModalVisible = true;
+    // now show managers on modal, wait for a manager to click and send for reassignment also set the typings file now, its required
+  }
+
+
+  handleReassignmentCancel() {
+    this.isReassignmentModalVisible = false;
+  }
+
+  handleTimelineClose() {
+    this.isTimelineModalVisible = false;
+  }
+
+  handleReassignmentSubmit () {
+
   }
 }
 

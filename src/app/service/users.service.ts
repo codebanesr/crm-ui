@@ -18,28 +18,29 @@ export class UsersService {
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
-    filters: Array<{ key: string; value: string[] }>
+    filters?: Array<{ key: string; value: string[] }>
   ): Observable<{ results: User[] }> {
     let params = new HttpParams()
       .append('page', `${pageIndex}`)
       .append('results', `${pageSize}`)
       .append('sortField', `${sortField}`)
       .append('sortOrder', `${sortOrder}`);
-    filters.forEach(filter => {
-      filter.value.forEach(value => {
-        params = params.append(filter.key, value);
-      });
-    });
+    // filters.forEach(filter => {
+    //   filter.value.forEach(value => {
+    //     params = params.append(filter.key, value);
+    //   });
+    // });
     return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user/allUsers`, { params });
   }
 
 
-  getManagersForReassignment(type="manager") {
-    return this.http.get(`${environment.apiUrl}/user/managersForReassignment?type=${type}`);
+  getManagersForReassignment() {
+    return this.http.get(`${environment.apiUrl}/user/managersForReassignment`);
   }
 
 
   assignManager(newManager, user) {
     return this.http.post(`${environment.apiUrl}/user/assignManager`, {newManager, user});
   }
+
 }

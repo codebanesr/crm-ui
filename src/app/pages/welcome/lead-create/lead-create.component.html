@@ -1,6 +1,118 @@
-<form [formGroup]="validateForm" (ngSubmit)="submitForm()" class="leadCreateForm">
-  <formly-form nz-form nzLayout="vertical" [form]="validateForm" [model]="model" [fields]="fields"></formly-form>
-  <button nz-button nzType="primary" type="submit">
-    Submit
-  </button>
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Lead Id</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="_id" id="_id" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Customer's Email</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+      <input nz-input formControlName="customerEmail" id="customerEmail" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="First Name" nzRequired>
+      <span>
+        First Name
+        <i nz-icon nz-tooltip nzTitle="What do you want other to call you" nzType="question-circle" nzTheme="outline"></i>
+      </span>
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input first name!">
+      <input nz-input id="firstName" formControlName="firstName" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="First Name" nzRequired>
+      <span>
+        Last Name
+      </span>
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input id="firstName" formControlName="lastName" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Company Name" nzRequired>
+      Company Name
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input id="firstName" formControlName="companyName" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
+    <nz-form-control
+      [nzSm]="14"
+      [nzXs]="24"
+      [nzValidateStatus]="validateForm.controls['phoneNumber']"
+      nzErrorTip="Please input your phone number!"
+    >
+      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
+        <ng-template #addOnBeforeTemplate>
+          <nz-select formControlName="phoneNumberPrefix" class="phone-select">
+            <nz-option nzLabel="+91" nzValue="+91"></nz-option>
+            <nz-option nzLabel="+86" nzValue="+86"></nz-option>
+            <nz-option nzLabel="+87" nzValue="+87"></nz-option>
+          </nz-select>
+        </ng-template>
+        <input formControlName="phoneNumber" id="'phoneNumber'" nz-input />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>Lead Amount</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input type="number" formControlName="amount" id="amount" />
+    </nz-form-control>
+  </nz-form-item>
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Follow Up</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please enter a followUp date">
+      <nz-date-picker formControlName="followUp"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Lead Status</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-select formControlName="leadStatus">
+        <nz-option nzLabel="New" nzValue="NEW"></nz-option>
+        <nz-option nzLabel="Call" nzValue="CALL"></nz-option>
+        <nz-option nzLabel="Interaction" nzValue="INTERACTION"></nz-option>
+        <nz-option nzLabel="Documenting" nzValue="DOCUMENTING"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Address</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="address"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Remarks</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please enter a followUp date">
+      <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="remarks"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+
+  <nz-form-item nz-row class="register-area">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary">Submit</button>
+    </nz-form-control>
+  </nz-form-item>
 </form>

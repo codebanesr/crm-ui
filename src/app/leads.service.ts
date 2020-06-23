@@ -11,7 +11,7 @@ export class LeadsService {
   constructor(private http: HttpClient) { }
 
   getLeads(options): Observable<{ results: any[] }> {
-    return this.http.post<{ results: any[] }>(`${environment.apiUrl}/lead`,  options);
+    return this.http.post<{ results: any[] }>(`${environment.apiUrl}/lead/findAll`,  options);
   }
 
   addLead(body) {
@@ -31,5 +31,10 @@ export class LeadsService {
 
   getLeadById(leadId: string) {
     return this.http.get(`${environment.apiUrl}/lead/${leadId}`)
+  }
+
+
+  reassignLead(oldUserEmail, newUserEmail, lead) {
+    return this.http.post(`${environment.apiUrl}/lead/reassignLead`, {oldUserEmail, newUserEmail, lead});
   }
 }

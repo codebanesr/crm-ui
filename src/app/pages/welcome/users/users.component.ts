@@ -52,7 +52,7 @@ export class UsersComponent implements OnInit {
     managers: any;
     ngOnInit(): void {
       this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
-      this.usersService.getManagersForReassignment("manager").subscribe(data=>{
+      this.usersService.getManagersForReassignment().subscribe(data=>{
         this.managers = data;
       }, error=> {
         console.log(error)

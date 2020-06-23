@@ -16,22 +16,37 @@
   <thead>
     <tr>
       <th *ngFor="let column of listOfColumns">
-        {{ typeDict[column.name].label }}
+        {{ typeDict[column.name]?.label }}
       </th>
-      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of filterTable.data">
+    <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)">
       <td *ngFor="let key of objectkeys(data)">
         <!-- {{ data[key] }} -->
-        {{typeDict[key].type === 'date' ? (data[key] | date) : (data[key])}}
+        {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
       </td>
-      <td class="actions">
-        <i nz-icon nzType="api" nzTheme="fill" (click)="takeActions('assign')"></i> &nbsp;
-        <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history')"></i> &nbsp;
-        <i nz-icon nzType="idcard" nzTheme="outline" (click)="showEmailModal()"></i>
-      </td>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
+        <ul nz-menu>
+          <li nz-menu-item (click)="openReassignModal(data)">Reassign</li>
+          <li nz-menu-item (click)="showLeadHistory(data)">Show history</li>
+          <li nz-menu-item nzDisabled>disabled menu item</li>
+          <li nz-submenu nzTitle="Email/Message">
+            <ul>
+              <li nz-menu-item (click)="showEmailModal(data)">Send Email</li>
+              <li nz-menu-item>4th menu item</li>
+            </ul>
+          </li>
+          <li nz-submenu nzTitle="Move To">
+            <ul>
+              <li nz-menu-item>Created</li>
+              <li nz-menu-item>Won</li>
+              <li nz-menu-item>Lost</li>
+            </ul>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
     </tr>
   </tbody>
 </nz-table>
@@ -80,7 +95,8 @@
     <nz-form-item>
       <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
       <nz-form-control [nzSm]="24" [nzXs]="24">
-        <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="subject"></textarea>
+        <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+          formControlName="subject"></textarea>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -94,4 +110,37 @@
       </nz-form-control>
     </nz-form-item>
   </form>
+</nz-modal>
+
+
+<!-- reassignment modal -->
+<nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
+  (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user">
+  <input nz-input placeholder="small size" nzSize="small" [formControl]="selectedManager" />
+
+  <nz-list nzItemLayout="horizontal" [nzLoading]="false">
+    <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
+      <nz-list-item-meta [nzDescription]="manager.email">
+      </nz-list-item-meta>
+    </nz-list-item>
+    <nz-list-empty *ngIf="!managers || managers.length === 0"></nz-list-empty>
+  </nz-list>
+  <div *nzModalFooter></div>
+</nz-modal>
+
+
+
+<!-- timeline modal-->
+<nz-modal [(nzVisible)]="isTimelineModalVisible"
+  (nzOnCancel)="handleTimelineClose()"
+  nzTitle="Lead History"
+>
+<nz-timeline>
+  <nz-timeline-item *ngFor="let note of selectedLead?.history">
+    {{note}}
+  </nz-timeline-item>
+</nz-timeline>
+<ng-template #dotTemplate>
+  <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
+</ng-template>
 </nz-modal>
