@@ -1,4 +1,3 @@
-<nz-divider nzType="vertical" nzText="New Campaign"></nz-divider>
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
@@ -11,10 +10,13 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
+    <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
     <nz-form-control [nzSpan]="12" nzHasFeedback>
-      <input placeholder="input here" nz-input formControlName="email" (input)="onInput($event)" [nzAutocomplete]="auto" />
-      <nz-autocomplete [nzDataSource]="options" nzBackfill #auto></nz-autocomplete>
+      <input placeholder="input here" nz-input formControlName="campaignName" [nzAutocomplete]="auto" />
+      <!-- <nz-autocomplete [nzDataSource]="options" nzBackfill #auto></nz-autocomplete> -->
+      <nz-autocomplete #auto>
+        <nz-auto-option *ngFor="let option of options" [nzValue]="option?.type">{{option?.type}}</nz-auto-option>
+      </nz-autocomplete>
     </nz-form-control>
   </nz-form-item>
 
@@ -36,9 +38,10 @@
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
       <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
       <button nz-button (click)="resetForm($event)">Reset</button>
-      <nz-upload nzAction="http://localhost:3000/customer/many?type=campaignSchema&schemaName=core">
-        <button nz-button><i nz-icon nzType="upload"></i> + Campaign</button>
-      </nz-upload>
+
+
+      <button nz-button nzType="primary" nzSize="large"><i nz-icon nzType="download"></i>Download</button>
+      <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" />
     </nz-form-control>
   </nz-form-item>
 </form>

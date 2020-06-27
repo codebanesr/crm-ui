@@ -4,10 +4,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { ILeadColumn } from './lead.interface';
+import { ILeadColumn, Setting } from './lead.interface';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { UsersService } from 'src/app/service/users.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-leads',
@@ -35,10 +36,14 @@ export class LeadsComponent implements OnInit{
   placement = "right";
   managers: any;
   isTimelineModalVisible = false;
+
+
+  settingValue!: Setting;
+  settingForm: FormGroup;
   ngOnInit() {
     this.visible = false;
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
-    this.initFilterForm();
+    this.initSettingForm();
     this.rerenderCols();
     this.getAllLeadColumns();
     this.initRightClickActions();
@@ -58,7 +63,7 @@ export class LeadsComponent implements OnInit{
 
 
   // showCols: this.showCols.filter(cols=>cols.checked).map(col=>col.value)
-  leadOptions: { page: number, perPage: number, showCols?: string[], searchTerm: string } = { page: this.page || 1, perPage: this.perPage || 1, searchTerm: "" };
+  leadOptions: { page: number, perPage: number, showCols?: string[], searchTerm: string, filters?: any } = { page: this.page || 1, perPage: this.perPage || 1, searchTerm: "", filters: {} };
   getData() {
     this.leadsService.getLeads(this.leadOptions).subscribe((response: any)=>{
       this.msg.info("Retrieved some leads");
@@ -101,16 +106,32 @@ export class LeadsComponent implements OnInit{
   }
 
 
+  listOfSwitch = [
+    { name: 'Ticket', formControlName: 'ticket' },
+    { name: 'Lead', formControlName: 'lead' },
+    { name: 'Archived', formControlName: 'archived' },
+    { name: 'Assigned', formControlName: 'assigned'},
+  ];
+
   filterForm: FormGroup
-  initFilterForm() {
-    this.filterForm = this.fb.group({
+  initSettingForm() {
+    this.settingForm = this.fb.group({
+      ticket: [false],
+      lead: [true],
+      archived: [false],
+      assigned: [true],
       handlerEmail: [null],
       dateRange: [null],
       moduleTypes: []
     });
-  }
-  submitForm() {
-    console.log(this.filterForm.value);
+    this.settingValue = this.settingForm.value;
+    this.settingForm.valueChanges
+    .pipe(debounceTime(300), distinctUntilChanged())
+    .subscribe(value =>  {
+      this.settingValue = value;
+      this.leadOptions.filters = {...this.leadOptions.filters, ...this.settingForm.value};
+      this.getData();
+    });
   }
 
   rerenderCols() {
@@ -142,9 +163,17 @@ export class LeadsComponent implements OnInit{
   }
 
 
-
+  selectedLeadHistory: any;
   showLeadHistory(lead) {
-    this.isTimelineModalVisible = true;
+    let externalId = lead?.externalId;
+    this.selectedLead = lead;
+    this.leadsService.getHistoryForLead(externalId).subscribe(selectedLeadHistory=>{
+      this.selectedLeadHistory = selectedLeadHistory;
+      this.isTimelineModalVisible = true;
+    }, error=>{
+      this.selectedLeadHistory = undefined;
+      this.msg.error(error.message + " : "+ lead.externalId);
+    });
   }
 
 

@@ -45,6 +45,7 @@
               <li nz-menu-item>Lost</li>
             </ul>
           </li>
+          <li nz-menu-item (click)="open()">Advanced Filters</li>
         </ul>
       </nz-dropdown-menu>
     </tr>
@@ -52,8 +53,8 @@
 </nz-table>
 
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
-  (nzOnClose)="close()" nzWidth="300px">
-  <form nz-form [formGroup]="filterForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+  (nzOnClose)="close()" nzWidth="350px">
+  <form nz-form [formGroup]="settingForm" nzLayout="vertical">
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzRequired nzFor="handlerEmail">Handler Email</nz-form-label>
       <nz-form-control [nzSpan]="24">
@@ -74,7 +75,13 @@
         <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
       </nz-select>
     </nz-form-item>
-    <button nz-button nzType="primary">Submit</button>
+  </form>
+
+  <form nz-form nzLayout="inline" [formGroup]="settingForm!">
+    <nz-form-item *ngFor="let switch of listOfSwitch">
+      <nz-form-label> {{ switch.name }} </nz-form-label>
+      <nz-form-control><nz-switch [formControlName]="switch.formControlName"></nz-switch></nz-form-control>
+    </nz-form-item>
   </form>
   <nz-divider nzText="Fields To Show"></nz-divider>
   <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
@@ -84,7 +91,7 @@
 
 <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
 <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-  <form nz-form [formGroup]="emailForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+  <form nz-form [formGroup]="emailForm" nzLayout="vertical">
     <nz-form-item>
       <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
       <nz-form-control [nzSm]="24" [nzXs]="24">
@@ -133,14 +140,19 @@
 <!-- timeline modal-->
 <nz-modal [(nzVisible)]="isTimelineModalVisible"
   (nzOnCancel)="handleTimelineClose()"
-  nzTitle="Lead History"
+  nzTitle="History for Lead {{selectedLead?.externalId}}"
 >
-<nz-timeline>
-  <nz-timeline-item *ngFor="let note of selectedLead?.history">
-    {{note}}
-  </nz-timeline-item>
-</nz-timeline>
+  <nz-timeline *ngIf = "selectedLeadHistory?.history?.length > 0; else empty">
+    <nz-timeline-item *ngFor="let element of selectedLeadHistory?.history">
+      {{element.note}}
+    </nz-timeline-item>
+  </nz-timeline>
+</nz-modal>
+
 <ng-template #dotTemplate>
   <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
 </ng-template>
-</nz-modal>
+
+<ng-template #empty>
+  <nz-empty></nz-empty>
+</ng-template>

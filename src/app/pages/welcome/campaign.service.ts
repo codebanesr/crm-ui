@@ -36,7 +36,16 @@ export class CampaignService {
   }
 
 
-  getAllCampaignTypes() {
-    return this.http.get("http://testingdomain.com:3000/campaign/autocomplete/suggestTypes");
+  getAllCampaignTypes(hint?: string | undefined) {
+    return this.http.get(`http://testingdomain.com:3000/campaign/autocomplete/suggestTypes?hint=${hint}`);
+  }
+
+
+  public uploadCampaign(formData) {
+
+    return this.http.post<any>(`http://testingdomain.com:3000/campaign`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    });
   }
 }
