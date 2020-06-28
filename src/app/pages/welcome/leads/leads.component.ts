@@ -9,6 +9,7 @@ import {FormlyFieldConfig} from '@ngx-formly/core';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { UsersService } from 'src/app/service/users.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 @Component({
   selector: 'app-leads',
@@ -63,7 +64,7 @@ export class LeadsComponent implements OnInit{
 
 
   // showCols: this.showCols.filter(cols=>cols.checked).map(col=>col.value)
-  leadOptions: { page: number, perPage: number, showCols?: string[], searchTerm: string, filters?: any } = { page: this.page || 1, perPage: this.perPage || 1, searchTerm: "", filters: {} };
+  leadOptions: { page: number, perPage: number, showCols?: string[], searchTerm: string, filters?: any } = { page: this.page || 1, perPage: this.perPage || 1, searchTerm: "", filters: { assigned: true } };
   getData() {
     this.leadsService.getLeads(this.leadOptions).subscribe((response: any)=>{
       this.msg.info("Retrieved some leads");
@@ -74,11 +75,13 @@ export class LeadsComponent implements OnInit{
     });
   }
 
-  typeDict: {[key: string]: {label: string, value: string, type: string, checked: boolean}};
+  typeDict: { [key: string]: { label: string, value: string, type: string, checked: boolean } };
   dataLoaded: boolean = false;
   getAllLeadColumns() {
-    this.leadsService.getAllLeadColumns().subscribe((mSchema: {paths: ILeadColumn[]})=>{
-      mSchema.paths.forEach((path: ILeadColumn)=>{
+    this.loading = true;
+    this.leadsService.getAllLeadColumns().subscribe((mSchema: { paths: ILeadColumn[] }) => {
+      this.loading = false;
+      mSchema.paths.forEach((path: ILeadColumn) => {
         this.showCols.push({
           label: path.readableField,
           value: path.internalField,
@@ -88,7 +91,9 @@ export class LeadsComponent implements OnInit{
       });
 
       // for tables
-      this.typeDict = Object.assign({}, ...this.showCols.map((x) => ({[x.value]: x})));
+      this.typeDict = Object.assign({}, ...this.showCols.map((x) => ({ [x.value]: x })));
+    }, error => {
+      this.loading = false;
     })
   }
 
@@ -110,7 +115,7 @@ export class LeadsComponent implements OnInit{
     { name: 'Ticket', formControlName: 'ticket' },
     { name: 'Lead', formControlName: 'lead' },
     { name: 'Archived', formControlName: 'archived' },
-    { name: 'Assigned', formControlName: 'assigned'},
+    { name: 'Assigned', formControlName: 'assigned' },
   ];
 
   filterForm: FormGroup
@@ -126,27 +131,22 @@ export class LeadsComponent implements OnInit{
     });
     this.settingValue = this.settingForm.value;
     this.settingForm.valueChanges
-    .pipe(debounceTime(300), distinctUntilChanged())
-    .subscribe(value =>  {
-      this.settingValue = value;
-      this.leadOptions.filters = {...this.leadOptions.filters, ...this.settingForm.value};
-      this.getData();
-    });
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(value => {
+        this.settingValue = value;
+        this.leadOptions.filters = { ...this.leadOptions.filters, ...this.settingForm.value };
+        this.getData();
+      });
   }
 
   rerenderCols() {
-    this.leadOptions.showCols = this.showCols.filter(col=>col.checked).map(col=>col.value);
+    this.leadOptions.showCols = this.showCols.filter(col => col.checked).map(col => col.value);
 
     this.getData();
   }
 
   onPageIndexChange(page: number) {
     this.page = page;
-    this.getData();
-  }
-
-  onPageSizeChange(perPage: number){
-    this.perPage = perPage;
     this.getData();
   }
 
@@ -167,12 +167,12 @@ export class LeadsComponent implements OnInit{
   showLeadHistory(lead) {
     let externalId = lead?.externalId;
     this.selectedLead = lead;
-    this.leadsService.getHistoryForLead(externalId).subscribe(selectedLeadHistory=>{
+    this.leadsService.getHistoryForLead(externalId).subscribe(selectedLeadHistory => {
       this.selectedLeadHistory = selectedLeadHistory;
       this.isTimelineModalVisible = true;
-    }, error=>{
+    }, error => {
       this.selectedLeadHistory = undefined;
-      this.msg.error(error.message + " : "+ lead.externalId);
+      this.msg.error(error.message + " : " + lead.externalId);
     });
   }
 
@@ -197,7 +197,7 @@ export class LeadsComponent implements OnInit{
 
   emailForm: FormGroup;
   emailModel;
-  emailFields:FormlyFieldConfig[];
+  emailFields: FormlyFieldConfig[];
   initEmailForm() {
     this.emailForm = this.fb.group({
       subject: [null],
@@ -236,7 +236,7 @@ export class LeadsComponent implements OnInit{
   openReassignModal(leadData) {
     this.selectedLead = leadData;
     this.selectedManager = new FormControl(null);
-    this.selectedManager.valueChanges.subscribe(data=>{
+    this.selectedManager.valueChanges.subscribe(data => {
       console.log(data);
     })
     this.isReassignmentModalVisible = true;
@@ -252,8 +252,25 @@ export class LeadsComponent implements OnInit{
     this.isTimelineModalVisible = false;
   }
 
-  handleReassignmentSubmit () {
+  handleReassignmentSubmit() {
 
+  }
+
+
+  total: number = 1000;
+  loading = false;
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    console.log(params);
+    const { pageSize, pageIndex, sort, filter } = params;
+    const currentSort = sort.find(item => item.value !== null);
+    const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || null;
+
+
+
+    this.leadOptions.perPage = pageSize;
+    this.leadOptions.page = pageIndex;
+    this.getData();
   }
 }
 

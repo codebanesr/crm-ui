@@ -11,7 +11,7 @@ export class LeadsService {
   constructor(private http: HttpClient) { }
 
   getLeads(options): Observable<{ results: any[] }> {
-    return this.http.post<{ results: any[] }>(`${environment.apiUrl}/lead/findAll`,  options);
+    return this.http.post<{ results: any[] }>(`${environment.apiUrl}/lead/findAll`, options);
   }
 
   addLead(body) {
@@ -35,7 +35,7 @@ export class LeadsService {
 
 
   reassignLead(oldUserEmail, newUserEmail, lead) {
-    return this.http.post(`${environment.apiUrl}/lead/reassignLead`, {oldUserEmail, newUserEmail, lead});
+    return this.http.post(`${environment.apiUrl}/lead/reassignLead`, { oldUserEmail, newUserEmail, lead });
   }
 
 

@@ -11,8 +11,8 @@
     <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
   </ng-template>
 </div>
-<nz-table #filterTable [nzData]="listOfData" nzTableLayout="scroll" (nzPageIndexChange)="onPageIndexChange($event)"
-  (nzPageSizeChange)="onPageSizeChange($event)" *ngIf="listOfData.length > 0">
+<nz-table #filterTable [nzData]="listOfData" nzTableLayout="scroll" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
+[nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="listOfData.length > 0">
   <thead>
     <tr>
       <th *ngFor="let column of listOfColumns">
