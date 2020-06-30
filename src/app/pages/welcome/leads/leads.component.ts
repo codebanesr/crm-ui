@@ -17,6 +17,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
   styleUrls: ['./leads.component.scss']
 })
 export class LeadsComponent implements OnInit{
+  setOfCheckedId = new Set<string>();
   constructor(
     private msg: NzMessageService,
     private leadsService: LeadsService,
@@ -33,6 +34,7 @@ export class LeadsComponent implements OnInit{
   showCols = [];
   listOfColumns: ColumnItem[]
   listOfOption: any[] = []
+
   visible: boolean;
   placement = "right";
   managers: any;
@@ -41,6 +43,10 @@ export class LeadsComponent implements OnInit{
 
   settingValue!: Setting;
   settingForm: FormGroup;
+  indeterminate = false;
+  checked = false;
+  listOfCurrentPageData: any[] = [];
+
   ngOnInit() {
     this.visible = false;
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
@@ -48,6 +54,37 @@ export class LeadsComponent implements OnInit{
     this.rerenderCols();
     this.getAllLeadColumns();
     this.initRightClickActions();
+  }
+
+
+
+  onItemChecked(id: string, checked: boolean): void {
+    console.log(id);
+    this.updateCheckedSet(id, checked);
+    this.refreshCheckedStatus();
+  }
+
+
+  updateCheckedSet(id: string, checked: boolean): void {
+    if (checked) {
+      this.setOfCheckedId.add(id);
+    } else {
+      this.setOfCheckedId.delete(id);
+    }
+  }
+
+
+  onAllChecked(checked: boolean): void {
+    if(checked)
+      this.listOfData.forEach((data:any)=>this.setOfCheckedId.add(data.externalId))
+    else
+      this.setOfCheckedId = new Set<string>();
+    this.refreshCheckedStatus();
+  }
+
+
+  refreshCheckedStatus(): void {
+    this.checked = this.listOfData.every(({ externalId }) => this.setOfCheckedId.has(externalId));
   }
 
 
@@ -233,7 +270,7 @@ export class LeadsComponent implements OnInit{
   selectedLead: any;
   isReassignmentModalVisible;
   selectedManager: FormControl;
-  openReassignModal(leadData) {
+  openReassignModal(leadData, bulkReassign: boolean = false) {
     this.selectedLead = leadData;
     this.selectedManager = new FormControl(null);
     this.selectedManager.valueChanges.subscribe(data => {

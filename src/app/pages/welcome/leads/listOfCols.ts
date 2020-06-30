@@ -9,6 +9,7 @@ export interface ColumnItem {
 }
 
 export interface DataItem {
+  externalId: string;
   name: string;
   email: string;
   phonenumber: string;

@@ -15,6 +15,7 @@
 [nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="listOfData.length > 0">
   <thead>
     <tr>
+      <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
       <th *ngFor="let column of listOfColumns">
         {{ typeDict[column.name]?.label }}
       </th>
@@ -22,6 +23,10 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)">
+      <td
+        [nzChecked]="setOfCheckedId.has(data.externalId)"
+        (nzCheckedChange)="onItemChecked(data.externalId, $event)"
+      ></td>
       <td *ngFor="let key of objectkeys(data)">
         <!-- {{ data[key] }} -->
         {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
@@ -30,6 +35,7 @@
       <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
         <ul nz-menu>
           <li nz-menu-item (click)="openReassignModal(data)">Reassign</li>
+          <li nz-menu-item (click)="openReassignModal(data, true)">Bulk Reassign</li>
           <li nz-menu-item (click)="showLeadHistory(data)">Show history</li>
           <li nz-menu-item nzDisabled>disabled menu item</li>
           <li nz-submenu nzTitle="Email/Message">
