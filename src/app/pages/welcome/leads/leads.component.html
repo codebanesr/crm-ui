@@ -91,6 +91,14 @@
   </form>
   <nz-divider nzText="Fields To Show"></nz-divider>
   <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
+
+
+  <nz-divider nzText="Leads By Status"></nz-divider>
+  <nz-descriptions nzLayout="vertical">
+    <ng-container *ngFor="let outer of basicOverview?.result">
+      <nz-descriptions-item nzColumn="24"	[nzTitle]="outer?._id">{{outer?.count}}</nz-descriptions-item>
+    </ng-container>
+  </nz-descriptions>
 </nz-drawer>
 
 

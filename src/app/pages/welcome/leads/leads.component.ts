@@ -54,6 +54,7 @@ export class LeadsComponent implements OnInit{
     this.rerenderCols();
     this.getAllLeadColumns();
     this.initRightClickActions();
+    this.getBasicOverview();
   }
 
 
@@ -308,6 +309,17 @@ export class LeadsComponent implements OnInit{
     this.leadOptions.perPage = pageSize;
     this.leadOptions.page = pageIndex;
     this.getData();
+  }
+
+
+
+  basicOverview: any;
+  getBasicOverview() {
+    this.leadsService.getBasicOverview().subscribe(basicOverview=>{
+      this.basicOverview = basicOverview;
+    }, error=>{
+      console.log(error.messsage)
+    })
   }
 }
 

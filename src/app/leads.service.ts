@@ -42,4 +42,9 @@ export class LeadsService {
   getHistoryForLead(externalId) {
     return this.http.get(`${environment.apiUrl}/lead/getLeadHistoryById/${externalId}`);
   }
+
+
+  getBasicOverview() {
+    return this.http.get(`${environment.apiUrl}/lead/basicOverview`);
+  }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { filter } from 'rxjs/operators';
 
 
 
@@ -40,12 +42,20 @@ export class CampaignService {
     return this.http.get(`http://testingdomain.com:3000/campaign/autocomplete/suggestTypes?hint=${hint}`);
   }
 
+  getAllEmailTemplates() {
+    return this.http.get(`${environment.apiUrl}/lead/getAllEmailTemplates`);
+  }
 
-  public uploadCampaign(formData) {
+  createEmailTemplate(emailTemplate) {
+    return this.http.post(`${environment.apiUrl}/lead/getAllEmailTemplates`, emailTemplate);
+  }
 
-    return this.http.post<any>(`http://testingdomain.com:3000/campaign`, formData, {
-      reportProgress: true,
-      observe: 'events'
+  handleFilesUpload(formData) {
+    const req = new HttpRequest('POST', `${environment.apiUrl}/lead/saveAttachments`, formData, {
+      // reportProgress: true
     });
+    return this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
   }
 }

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators, FormArray } from '@angular/forms';
 import { AgentService } from 'src/app/agent.service';
 import { CampaignService } from '../campaign.service';
 import { distinctUntilChanged, debounceTime, map, catchError } from 'rxjs/operators';
-import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { of } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzUploadListComponent } from 'ng-zorro-antd/upload';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzDropdownMenuComponent, NzContextMenuService } from 'ng-zorro-antd/dropdown';
 
 @Component({
   selector: 'app-create-campaign',
@@ -17,7 +19,9 @@ export class CreateCampaignComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private agentService: AgentService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private msg: NzMessageService,
+    private nzContextMenuService: NzContextMenuService
   ) {}
 
   inputValue?: string;
@@ -100,29 +104,112 @@ export class CreateCampaignComponent implements OnInit {
     this.agentService.downloadExcelFile(upload.filePath);
   }
 
+  emailForm: FormGroup;
+  emailModel;
+  initEmailForm() {
+    this.emailForm = this.fb.group({
+      subject: [null],
+      text: [null]
+    });
+  }
 
-  uploadFile(file) {
+  isEmailTplVisible = false;
+  showEmailTplModal() {
+    this.isEmailTplVisible = true
+  }
+  handleEmailTplCancel() {
+    this.isEmailTplVisible = false;
+  }
+
+  handleEmailTplOk() {
+    // handle submit events here
+  }
+
+  uploading = false;
+  fileList: NzUploadListComponent[] = [];
+
+
+  beforeUpload = (file: NzUploadListComponent): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
+
+
+  uploadedFilesMetadata: any;
+  handleUpload(): void {
     const formData = new FormData();
-    formData.append('file', file.data);
-    file.inProgress = true;
-    this.campaignService.uploadCampaign(formData).pipe(
-      map(event => {
-        switch (event.type) {
-          case HttpEventType.UploadProgress:
-            file.progress = Math.round(event.loaded * 100 / event.total);
-            break;
-          case HttpEventType.Response:
-            return event;
+    // tslint:disable-next-line:no-any
+    this.fileList.forEach((file: any) => {
+      formData.append('files[]', file);
+    });
+    this.uploading = true;
+    // You can use any AJAX library you like
+    this.campaignService.handleFilesUpload(formData)
+      .subscribe((response: any) => {
+          this.uploading = false;
+          this.fileList = [];
+          this.msg.success('upload successfully.');
+          this.uploadedFilesMetadata = response.body?.files;
+        },
+        () => {
+          this.uploading = false;
+          this.msg.error('upload failed.');
         }
-      }),
-      catchError((error: HttpErrorResponse) => {
-        file.inProgress = false;
-        return of(`${file.data.name} upload failed.`);
-      })).subscribe((event: any) => {
-        if (typeof (event) === 'object') {
-          console.log(event.body);
+      );
+  }
+
+
+  demoDispositionNodes = [
+    {
+      title: 'parent 1',
+      key: '100',
+      expanded: true,
+      children: [
+        {
+          title: 'parent 1-0',
+          key: '1001',
+          expanded: true,
+          children: [
+            { title: 'leaf', key: '10010', isLeaf: true },
+            { title: 'leaf', key: '10011', isLeaf: true },
+            { title: 'leaf', key: '10012', isLeaf: true }
+          ]
+        },
+        {
+          title: 'parent 1-1',
+          key: '1002',
+          children: [{ title: 'leaf', key: '10020', isLeaf: true }]
+        },
+        {
+          title: 'parent 1-2',
+          key: '1003',
+          children: [
+            { title: 'leaf', key: '10030', isLeaf: true },
+            { title: 'leaf', key: '10031', isLeaf: true }
+          ]
         }
-      });
+      ]
+    }
+  ];
+  isDispositionVisible = false;
+  showDispositionTplModal() {
+    this.isDispositionVisible = true
+  }
+  handleDispositionCancel() {
+    this.isDispositionVisible = false;
+  }
+
+  handleDispositionOk() {
+    // handle submit events here
+  }
+
+  nzEvent(event: NzFormatEmitEvent): void {
+    console.log(event);
+  }
+
+  contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
+    this.nzContextMenuService.create($event, menu);
+    console.log($event);
   }
 
 }

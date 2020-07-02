@@ -40,14 +40,82 @@
       <button nz-button (click)="resetForm($event)">Reset</button>
 
 
-      <button nz-button nzType="primary" nzSize="large"><i nz-icon nzType="download"></i>Download</button>
+      <button nz-button nzType="primary" nzSize="medium"><i nz-icon nzType="download"></i>Download</button>
       <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" />
     </nz-form-control>
   </nz-form-item>
 </form>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="300px" nzPlacement="right" nzTitle="Uploaded Campaign Files" (nzOnClose)="close()">
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="300px" nzPlacement="right" nzTitle="Advanced Options" (nzOnClose)="close()">
+  <ng-container>
+    <button nz-button [nzType]="'primary'" (click)="showEmailTplModal()"><span>+ Email Template</span></button>
+    <nz-modal nzWidth="700" [(nzVisible)]="isEmailTplVisible" nzTitle="Add Email Template Here" (nzOnCancel)="handleEmailTplCancel()" (nzOnOk)="handleEmailTplOk()">
+      <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzXs]="24">
+            <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzXs]="24">
+            <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+              formControlName="subject"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" nzName="files">
+          <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+        </nz-upload>
+      </form>
+
+      <div *nzModalFooter>
+        <button nz-button [nzType]="'danger'">Submit without attachments</button>
+        <button
+          nz-button
+          [nzType]="'primary'"
+          [nzLoading]="uploading"
+          (click)="handleUpload()"
+          [disabled]="fileList.length == 0"
+          style="margin-top: 16px"
+        >
+          {{ uploading ? 'Uploading' : 'Use Attachments' }}
+        </button>
+      </div>
+    </nz-modal>
+
+
+
+    <!-- Modal for disposition -->
+    <button nz-button [nzType]="'secondary'" (click)="showDispositionTplModal()"><span>+ Disposition</span></button>
+    <nz-modal nzWidth="500" [(nzVisible)]="isDispositionVisible" nzTitle="Disposition" (nzOnCancel)="handleDispositionCancel()" (nzOnOk)="handleDispositionOk()">
+      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine (nzClick)="nzEvent($event)" (contextmenu)="contextMenu($event, menu)"> </nz-tree>
+    </nz-modal>
+  </ng-container>
+
+  <nz-divider nzText="Recently uploaded files"></nz-divider>
   <ng-container *ngFor="let upload of recentUploads">
-    <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a>
+  <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a>
   </ng-container>
 </nz-drawer>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item>1st menu item</li>
+    <li nz-menu-item>2nd menu item</li>
+    <li nz-menu-item nzDisabled>disabled menu item</li>
+    <li nz-submenu nzTitle="sub menu">
+      <ul>
+        <li nz-menu-item>3rd menu item</li>
+        <li nz-menu-item>4th menu item</li>
+      </ul>
+    </li>
+    <li nz-submenu nzDisabled nzTitle="disabled sub menu">
+      <ul>
+        <li nz-menu-item>3rd menu item</li>
+        <li nz-menu-item>4th menu item</li>
+      </ul>
+    </li>
+  </ul>
+</nz-dropdown-menu>
