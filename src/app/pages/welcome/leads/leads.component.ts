@@ -10,6 +10,7 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
 import { UsersService } from 'src/app/service/users.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { CampaignService } from '../campaign.service';
 
 @Component({
   selector: 'app-leads',
@@ -24,7 +25,8 @@ export class LeadsComponent implements OnInit{
     private nzContextMenuService: NzContextMenuService,
     private router: Router,
     private fb: FormBuilder,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private campaignService: CampaignService
   ) {}
 
   page: number = 1;
@@ -51,10 +53,12 @@ export class LeadsComponent implements OnInit{
     this.visible = false;
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initSettingForm();
+    this.initEmailForm();
     this.rerenderCols();
     this.getAllLeadColumns();
     this.initRightClickActions();
     this.getBasicOverview();
+    this.initEtAutocomplete();
   }
 
 
@@ -218,7 +222,6 @@ export class LeadsComponent implements OnInit{
   isVisible = false;
   showEmailModal(customerData): void {
     console.log(customerData)
-    this.initEmailForm();
     this.isVisible = true;
   }
 
@@ -231,23 +234,6 @@ export class LeadsComponent implements OnInit{
     console.log('Button cancel clicked!');
     this.isVisible = false;
   }
-
-
-  emailForm: FormGroup;
-  emailModel;
-  emailFields: FormlyFieldConfig[];
-  initEmailForm() {
-    this.emailForm = this.fb.group({
-      subject: [null],
-      text: [null],
-      attachments: [null]
-    });
-  }
-
-  submitEmailForm(model) {
-    console.log(model);
-  }
-
 
   contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
     this.nzContextMenuService.create($event, menu);
@@ -321,6 +307,52 @@ export class LeadsComponent implements OnInit{
       console.log(error.messsage)
     })
   }
+
+
+
+  selectedEmailTemplate : any;
+  populateEmailModal(event) {
+    console.log(typeof event, event.nzValue);
+    this.selectedEmailTemplate = event.nzValue;
+
+    this.attachments = this.selectedEmailTemplate.attachments;
+    this.emailForm.patchValue({
+      subject: this.selectedEmailTemplate.subject,
+      content: this.selectedEmailTemplate.content,
+    });
+  }
+
+
+  emailTemplates: any;
+  etFormControl = new FormControl([null]);
+  attachments: any[] = [];
+  initEtAutocomplete() {
+    this.etFormControl.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe((searchTerm)=>{
+      this.campaignService.getAllEmailTemplates({campaign: searchTerm}).subscribe((emailTemplates: any) => {
+        this.emailTemplates = emailTemplates;
+      });
+    });
+  }
+
+
+  emailForm: FormGroup;
+  emailModel;
+  emailFields: FormlyFieldConfig[];
+  initEmailForm() {
+    this.emailForm = this.fb.group({
+      subject: [null],
+      content: [null],
+      attachments: [null]
+    });
+  }
+
+  submitEmailForm(model) {
+    console.log(model);
+  }
+
 }
 
 

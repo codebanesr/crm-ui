@@ -117,7 +117,7 @@ export class CreateCampaignComponent implements OnInit {
   emailForm: FormGroup;
   initEmailForm() {
     this.emailForm = this.fb.group({
-      campaigns: [null],
+      campaign: [null],
       subject: [null],
       content: [null]
     });
@@ -228,7 +228,7 @@ export class CreateCampaignComponent implements OnInit {
 
   campaignOptions: any = [];
   fillCampaignOpts() {
-    this.emailForm.get('campaigns')
+    this.emailForm.get('campaign')
       .valueChanges
       .pipe(
         debounceTime(300),

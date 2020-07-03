@@ -107,6 +107,16 @@
 <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
   <form nz-form [formGroup]="emailForm" nzLayout="vertical">
     <nz-form-item>
+      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
+      <input placeholder="Select Campaign" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
+      <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
+        <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
+          {{ et.subject }}
+        </nz-auto-option>
+      </nz-autocomplete>
+    </nz-form-item>
+
+    <nz-form-item>
       <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
       <nz-form-control [nzSm]="24" [nzXs]="24">
         <input nz-input placeholder="Write the subject of email" formControlName="subject" />
@@ -117,7 +127,7 @@
       <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
       <nz-form-control [nzSm]="24" [nzXs]="24">
         <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-          formControlName="subject"></textarea>
+          formControlName="content"></textarea>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -125,7 +135,7 @@
       <nz-form-control [nzSm]="24" [nzXs]="24">
         <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
           nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-          <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+          <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment"></nz-option>
         </nz-select>
         <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
       </nz-form-control>
@@ -137,7 +147,7 @@
 <!-- reassignment modal -->
 <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
   (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user">
-  <input nz-input placeholder="small size" nzSize="small" [formControl]="selectedManager" />
+  <input nz-input placeholder="small size" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
 
   <nz-list nzItemLayout="horizontal" [nzLoading]="false">
     <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">

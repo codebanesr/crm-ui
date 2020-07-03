@@ -53,7 +53,7 @@
 
         <nz-form-item>
           <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
-          <input placeholder="Select Campaign" nz-input formControlName="campaigns" [nzAutocomplete]="autob" />
+          <input placeholder="Select Campaign" nz-input formControlName="campaign" [nzAutocomplete]="autob" />
           <nz-autocomplete #autob>
             <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.type" [nzLabel]="co.type">
               {{ co.type }}
