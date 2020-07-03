@@ -15,7 +15,7 @@ import { NzDropdownMenuComponent, NzContextMenuService } from 'ng-zorro-antd/dro
   styleUrls: ['./create-campaign.component.scss']
 })
 export class CreateCampaignComponent implements OnInit {
-  validateForm: FormGroup;
+  campaignForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private agentService: AgentService,
@@ -30,13 +30,14 @@ export class CreateCampaignComponent implements OnInit {
   hint: string|undefined;
   type: string;
   ngOnInit(){
-    this.initForm();
+    this.initCampaignForm();
+    this.initEmailForm();
     this.agentService.listAgentActions(0, "campaignSchema").subscribe((list: any)=>{
       this.recentUploads = list;
     }, error=>{
       console.log(error);
     });
-    this.validateForm.get('type').valueChanges.subscribe(data=>console.log(data));
+    this.campaignForm.get('type').valueChanges.subscribe(data=>console.log(data));
 
     this.suggestCampaignNames();
   }
@@ -50,8 +51,8 @@ export class CreateCampaignComponent implements OnInit {
     })
   }
 
-  initForm() {
-    this.validateForm = this.fb.group({
+  initCampaignForm() {
+    this.campaignForm = this.fb.group({
       campaignName: ['', [Validators.required]],
       comment: [''],
       type: ['Lead Generation'],
@@ -60,7 +61,7 @@ export class CreateCampaignComponent implements OnInit {
 
 
 
-    this.validateForm.get("campaignName").valueChanges
+    this.campaignForm.get("campaignName").valueChanges
     .pipe(debounceTime(500), distinctUntilChanged())
     .subscribe(hint => {
       this.hint = hint
@@ -70,19 +71,28 @@ export class CreateCampaignComponent implements OnInit {
 
 
   submitForm(value: { userName: string; email: string; password: string; confirm: string; comment: string }): void {
-    for (const key in this.validateForm.controls) {
-      this.validateForm.controls[key].markAsDirty();
-      this.validateForm.controls[key].updateValueAndValidity();
+    for (const key in this.campaignForm.controls) {
+      this.campaignForm.controls[key].markAsDirty();
+      this.campaignForm.controls[key].updateValueAndValidity();
     }
     console.log(value);
   }
 
+
+  submitEmailForm() {
+    this.campaignService.handleEmailTemplateUpload({...this.emailForm.value, attachments: this.attachments}).subscribe((success: any)=>{
+      this.msg.success(success);
+    }, error=>{
+      this.msg.error(error.message);
+    });
+  }
+
   resetForm(e: MouseEvent): void {
     e.preventDefault();
-    this.validateForm.reset();
-    for (const key in this.validateForm.controls) {
-      this.validateForm.controls[key].markAsPristine();
-      this.validateForm.controls[key].updateValueAndValidity();
+    this.campaignForm.reset();
+    for (const key in this.campaignForm.controls) {
+      this.campaignForm.controls[key].markAsPristine();
+      this.campaignForm.controls[key].updateValueAndValidity();
     }
   }
 
@@ -105,12 +115,14 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   emailForm: FormGroup;
-  emailModel;
   initEmailForm() {
     this.emailForm = this.fb.group({
+      campaigns: [null],
       subject: [null],
-      text: [null]
+      content: [null]
     });
+
+    this.fillCampaignOpts();
   }
 
   isEmailTplVisible = false;
@@ -135,7 +147,7 @@ export class CreateCampaignComponent implements OnInit {
   };
 
 
-  uploadedFilesMetadata: any;
+  attachments: any;
   handleUpload(): void {
     const formData = new FormData();
     // tslint:disable-next-line:no-any
@@ -148,8 +160,9 @@ export class CreateCampaignComponent implements OnInit {
       .subscribe((response: any) => {
           this.uploading = false;
           this.fileList = [];
-          this.msg.success('upload successfully.');
-          this.uploadedFilesMetadata = response.body?.files;
+          this.msg.success('Attachments uploaded successfully.');
+          this.attachments = response.body?.files;
+          this.submitEmailForm();
         },
         () => {
           this.uploading = false;
@@ -212,4 +225,19 @@ export class CreateCampaignComponent implements OnInit {
     console.log($event);
   }
 
+
+  campaignOptions: any = [];
+  fillCampaignOpts() {
+    this.emailForm.get('campaigns')
+      .valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      ).subscribe(hint=>{
+        this.campaignService.getAllCampaignTypes(hint).subscribe(options => {
+          this.campaignOptions = options
+          console.log(this.campaignOptions);
+        });
+      });
+  }
 }

@@ -58,4 +58,9 @@ export class CampaignService {
       .request(req)
       .pipe(filter(e => e instanceof HttpResponse))
   }
+
+
+  handleEmailTemplateUpload(emailTemplate) {
+    return this.http.post(`${environment.apiUrl}/lead/createEmailTemplate`, emailTemplate);
+  }
 }

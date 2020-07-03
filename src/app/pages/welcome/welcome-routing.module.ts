@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { WelcomeComponent } from './welcome.component';
 import { LeadsComponent } from './leads/leads.component';
 import { TicketsComponent } from './tickets/tickets.component';
 import { routePoints } from '../../../menus/routes';
