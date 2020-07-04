@@ -148,8 +148,13 @@ export class LeadsComponent implements OnInit{
     })
   }
 
-  createLead(data?: any) {
+  createLead() {
     this.router.navigate(['welcome', 'leads', 'create']);
+  }
+
+
+  updateLead(data) {
+    this.router.navigate(['welcome', 'leads', 'create'], {queryParams: {id: data.externalId}});
   }
 
 

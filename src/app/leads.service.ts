@@ -47,4 +47,8 @@ export class LeadsService {
   getBasicOverview() {
     return this.http.get(`${environment.apiUrl}/lead/basicOverview`);
   }
+
+  suggestLead(leadId) {
+    return this.http.get(`${environment.apiUrl}/lead/suggest/${leadId}`);
+  }
 }

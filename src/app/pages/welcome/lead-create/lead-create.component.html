@@ -1,49 +1,37 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
   <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="externalId">Lead Id</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Id is required">
+      <input nz-input formControlName="externalId" id="externalId" [nzAutocomplete]="auto"/>
+      <nz-autocomplete [nzDataSource]="leadOptions" nzBackfill #auto (selectionChange)="fetchSelectedLead($event)"></nz-autocomplete>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Lead Id</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <input nz-input formControlName="_id" id="_id" />
     </nz-form-control>
   </nz-form-item>
 
+
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Customer's Email</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-      <input nz-input formControlName="customerEmail" id="customerEmail" />
+      <input nz-input formControlName="email" id="email" />
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="First Name" nzRequired>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nickname" nzRequired>
       <span>
-        First Name
+        Nickname
         <i nz-icon nz-tooltip nzTitle="What do you want other to call you" nzType="question-circle" nzTheme="outline"></i>
       </span>
     </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input first name!">
-      <input nz-input id="firstName" formControlName="firstName" />
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your nickname!">
+      <input nz-input id="nickname" formControlName="nickname" />
     </nz-form-control>
   </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="First Name" nzRequired>
-      <span>
-        Last Name
-      </span>
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-input id="firstName" formControlName="lastName" />
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="Company Name" nzRequired>
-      Company Name
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-input id="firstName" formControlName="companyName" />
-    </nz-form-control>
-  </nz-form-item>
-
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
     <nz-form-control
@@ -67,8 +55,22 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>Lead Amount</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
       <input nz-input type="number" formControlName="amount" id="amount" />
+    </nz-form-control>
+  </nz-form-item>
+
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
+      <nz-select formControlName="status" class="">
+        <nz-option nzLabel="New" nzValue="NEW"></nz-option>
+        <nz-option nzLabel="Call" nzValue="CALL"></nz-option>
+        <nz-option nzLabel="Interaction" nzValue="INTERACTION"></nz-option>
+        <nz-option nzLabel="Documenting" nzValue="DOCUMENTING"></nz-option>
+      </nz-select>
     </nz-form-control>
   </nz-form-item>
 
@@ -80,39 +82,16 @@
     </nz-form-control>
   </nz-form-item>
 
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Lead Status</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-select formControlName="leadStatus">
-        <nz-option nzLabel="New" nzValue="NEW"></nz-option>
-        <nz-option nzLabel="Call" nzValue="CALL"></nz-option>
-        <nz-option nzLabel="Interaction" nzValue="INTERACTION"></nz-option>
-        <nz-option nzLabel="Documenting" nzValue="DOCUMENTING"></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Address</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="address"></textarea>
-    </nz-form-control>
-  </nz-form-item>
-
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Remarks</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please enter a followUp date">
-      <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }" formControlName="remarks"></textarea>
-    </nz-form-control>
-  </nz-form-item>
-
-
   <nz-form-item nz-row class="register-area">
     <nz-form-control [nzSpan]="14" [nzOffset]="6">
-      <button nz-button nzType="primary">Submit</button>
+      <label nz-checkbox formControlName="agree">
+        <span>I have read the <a>agreement</a></span>
+      </label>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item nz-row class="register-area">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary">Register</button>
     </nz-form-control>
   </nz-form-item>
 </form>
