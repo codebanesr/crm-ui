@@ -30,7 +30,7 @@ export class LeadsService {
 
 
   getLeadById(leadId: string) {
-    return this.http.get(`${environment.apiUrl}/lead/${leadId}`)
+    return this.http.get(`${environment.apiUrl}/lead/${leadId}`);
   }
 
 

@@ -60,7 +60,27 @@ export class CampaignService {
   }
 
 
+
+  handleMultipleLeadFileUpload(formData) {
+    const req = new HttpRequest('POST', `${environment.apiUrl}/lead/uploadMultipleLeadFiles`, formData, {
+      // reportProgress: true
+    });
+    return this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
+  }
+
   handleEmailTemplateUpload(emailTemplate) {
     return this.http.post(`${environment.apiUrl}/lead/createEmailTemplate`, emailTemplate);
+  }
+
+
+  uploadCampaignFile(formData) {
+    const req = new HttpRequest('POST', `${environment.apiUrl}/campaign/config/upload`, formData, {
+      // reportProgress: true
+    });
+    return this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
   }
 }

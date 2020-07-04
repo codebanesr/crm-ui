@@ -1,14 +1,18 @@
-<form nz-form [formGroup]="campaignForm" (ngSubmit)="submitForm(campaignForm.value)">
+<form nz-form>
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
     <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
-      <nz-radio-group formControlName="type" nzButtonStyle="solid">
+      <nz-radio-group [(ngModel)]="tabSelected" [ngModelOptions]="{standalone: true}" (ngModelChange)="handleFormTypeChange($event)"	nzButtonStyle="solid">
         <label nz-radio-button nzValue="Lead Generation">Lead Generation</label>
         <label nz-radio-button nzValue="Custom Workflow">Custom Workflow</label>
       </nz-radio-group>
       <a nz-button nzType="link" (click)="open()"><i nz-icon nzType="setting" nzTheme="outline"></i></a>
     </nz-form-control>
   </nz-form-item>
+</form>
+
+
+<form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
     <nz-form-control [nzSpan]="12" nzHasFeedback>
@@ -35,12 +39,34 @@
 
   <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
-      <button nz-button nzType="primary" [disabled]="!campaignForm.valid">Submit</button>
+      <button nz-button nzType="primary" [disabled]="!campaignForm.valid" (click)=submitForm(campaignForm.value)>Submit</button>
       <button nz-button (click)="resetForm($event)">Reset</button>
 
 
-      <button nz-button nzType="primary" nzSize="medium"><i nz-icon nzType="download"></i>Download</button>
-      <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" />
+      <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files">
+        <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+
+<form nz-form [formGroup]="campaignConfigForm" *ngIf="tabSelected === 'Custom Workflow'">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
+      <input placeholder="input here" nz-input formControlName="name" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <button nz-button nzType="primary" [disabled]="!campaignConfigForm.valid" (click)=submitCcForm(campaignConfigForm.value)>Submit</button>
+      <button nz-button (click)="resetForm($event)">Reset</button>
+      <nz-upload [(nzFileList)]="configFiles" [nzBeforeUpload]="beforeCcUpload" [nzMultiple]=true nzName="file">
+        <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+      </nz-upload>
     </nz-form-control>
   </nz-form-item>
 </form>

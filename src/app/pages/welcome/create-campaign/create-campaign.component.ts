@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { AgentService } from 'src/app/agent.service';
 import { CampaignService } from '../campaign.service';
 import { distinctUntilChanged, debounceTime, map, catchError } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { NzDropdownMenuComponent, NzContextMenuService } from 'ng-zorro-antd/dro
 })
 export class CreateCampaignComponent implements OnInit {
   campaignForm: FormGroup;
+  campaignConfigForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private agentService: AgentService,
@@ -29,8 +30,13 @@ export class CreateCampaignComponent implements OnInit {
   recentUploads: string[] = [];
   hint: string|undefined;
   type: string;
+
+  tabSelected: string = "Lead Generation"
+  configFiles: NzUploadListComponent[] = [];
   ngOnInit(){
+    this.configFiles = [];
     this.initCampaignForm();
+    this.initCampaignConfigForm();
     this.initEmailForm();
     this.agentService.listAgentActions(0, "campaignSchema").subscribe((list: any)=>{
       this.recentUploads = list;
@@ -42,6 +48,12 @@ export class CreateCampaignComponent implements OnInit {
     this.suggestCampaignNames();
   }
 
+
+  initCampaignConfigForm() {
+    this.campaignConfigForm = this.fb.group({
+      name: new FormControl(null, [Validators.required])
+    });
+  }
 
   suggestCampaignNames(hint = undefined) {
     this.campaignService.getAllCampaignTypes(hint).subscribe((campaignOpts: any[])=>{
@@ -76,8 +88,17 @@ export class CreateCampaignComponent implements OnInit {
       this.campaignForm.controls[key].updateValueAndValidity();
     }
     console.log(value);
+
+    if (this.campaignForm.valid) {
+      this.handleLeadFilesUpload();
+    }
   }
 
+  submitCcForm(somedata) {
+    if(this.campaignConfigForm.valid) {
+      this.handleCcFileUpload();
+    }
+  }
 
   submitEmailForm() {
     this.campaignService.handleEmailTemplateUpload({...this.emailForm.value, attachments: this.attachments}).subscribe((success: any)=>{
@@ -146,6 +167,37 @@ export class CreateCampaignComponent implements OnInit {
     return false;
   };
 
+  leadFileList: NzUploadListComponent[] = [];
+  beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
+    this.leadFileList = this.leadFileList.concat(file);
+    return false;
+  }
+
+  beforeCcUpload = (file: NzUploadListComponent):boolean => {
+    this.configFiles = this.configFiles.concat(file);
+    return false;
+  }
+
+  handleLeadFilesUpload() {
+    const formData = new FormData();
+    this.leadFileList.forEach((file: any) => {
+      formData.append('files[]', file);
+    });
+    this.uploading = true;
+    formData.append("campaignInfo", JSON.stringify(this.campaignForm.value));
+    // You can use any AJAX library you like
+    this.campaignService.handleMultipleLeadFileUpload(formData)
+      .subscribe((response: any) => {
+          this.uploading = false;
+          this.leadFileList = [];
+          this.msg.success('Lead Files uploaded successfully.');
+        },
+        () => {
+          this.uploading = false;
+          this.msg.error('Lead files could not be uploaded.');
+        }
+      );
+  }
 
   attachments: any;
   handleUpload(): void {
@@ -171,6 +223,19 @@ export class CreateCampaignComponent implements OnInit {
       );
   }
 
+
+  handleCcFileUpload() {
+    const formData = new FormData();
+    formData.append("file", this.configFiles[0] as any);
+    formData.append("campaignConfigInfo", JSON.stringify(this.campaignConfigForm.value));
+
+
+    this.campaignService.uploadCampaignFile(formData).subscribe(result=>{
+      console.log(result);
+    }, error=>{
+      console.log(error);
+    })
+  }
 
   demoDispositionNodes = [
     {
@@ -239,5 +304,10 @@ export class CreateCampaignComponent implements OnInit {
           console.log(this.campaignOptions);
         });
       });
+  }
+
+
+  handleFormTypeChange(event) {
+    console.log(event, this.tabSelected);
   }
 }
