@@ -148,11 +148,17 @@ const routes: Routes = [
   },
   {
     path: 'role',
-    component: RoleComponent,
     data: {
       breadcrumb: 'roles',
     },
     children: [
+      {
+        path: 'list',
+        component: RoleComponent,
+        data: {
+          breadcrumb: 'list-roles'
+        }
+      },
       {
         path: 'create',
         component: RoleCreateComponent,

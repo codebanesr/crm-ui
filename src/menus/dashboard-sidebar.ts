@@ -65,5 +65,25 @@ export default () => {
         },
       ]
     },
+
+    {
+      title: "ROLE",
+      icon: "radar-chart",
+      show: true,
+      hasChildren: true,
+      open: true,
+      subMenus: [
+        {
+          title: "role",
+          show: true,
+          link: routePoints.ROLE
+        },
+        {
+          title: "Create",
+          show: true,
+          link: routePoints.ROLE_CREATE
+        }
+      ]
+    },
   ]
 }

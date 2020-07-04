@@ -9,5 +9,8 @@ export const routePoints = {
     ALARMS: "alarm",
     LIST_CAMPAIGN: "campaigns/list",
     CREATE_CAMPAIGN: "campaigns/create",
-    OVERVIEW: "overview"
+    OVERVIEW: "overview",
+    ROLE: "role/list",
+    ROLE_CREATE: "role/create",
+    PERMISSION: "permission"
 }
