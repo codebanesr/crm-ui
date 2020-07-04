@@ -7,29 +7,22 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Lead Id</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-input formControlName="_id" id="_id" />
-    </nz-form-control>
-  </nz-form-item>
-
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="address">Address</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-      <input nz-input formControlName="email" id="email" />
+      <input nz-input formControlName="address" id="address" />
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nickname" nzRequired>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstName" nzRequired>
       <span>
-        Nickname
+        firstName
         <i nz-icon nz-tooltip nzTitle="What do you want other to call you" nzType="question-circle" nzTheme="outline"></i>
       </span>
     </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your nickname!">
-      <input nz-input id="nickname" formControlName="nickname" />
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your firstName!">
+      <input nz-input id="firstName" formControlName="firstName" />
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -63,9 +56,9 @@
 
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="status" nzRequired>Status</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="leadStatus" nzRequired>Lead Status</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
-      <nz-select formControlName="status" class="">
+      <nz-select formControlName="leadStatus" class="">
         <nz-option nzLabel="New" nzValue="NEW"></nz-option>
         <nz-option nzLabel="Call" nzValue="CALL"></nz-option>
         <nz-option nzLabel="Interaction" nzValue="INTERACTION"></nz-option>
@@ -82,16 +75,4 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item nz-row class="register-area">
-    <nz-form-control [nzSpan]="14" [nzOffset]="6">
-      <label nz-checkbox formControlName="agree">
-        <span>I have read the <a>agreement</a></span>
-      </label>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item nz-row class="register-area">
-    <nz-form-control [nzSpan]="14" [nzOffset]="6">
-      <button nz-button nzType="primary">Register</button>
-    </nz-form-control>
-  </nz-form-item>
 </form>

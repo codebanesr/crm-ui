@@ -7,7 +7,7 @@ export const routePoints = {
     TICKET_CREATE: "ticket/create",
     UPLOADS: "uploads",
     ALARMS: "alarm",
-    LIST_CAMPAIGN: "campaigns",
-    CREATE_CAMPAIGN: "create/campaign",
+    LIST_CAMPAIGN: "campaigns/list",
+    CREATE_CAMPAIGN: "campaigns/create",
     OVERVIEW: "overview"
 }

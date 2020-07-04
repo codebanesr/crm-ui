@@ -54,27 +54,6 @@ export class LeadCreateComponent implements OnInit {
   }
 
   initForm() {
-    // this.validateForm = this.fb.group({
-    //   externalId: [null, [Validators.required]],
-    //   email: [null, [Validators.required]],
-    //   nickname: [null, Validators.required],
-    //   nickname: [null, Validators.required],
-    //   firstName: [null, Validators.required],
-    //   lastName: [null, [Validators.required]],
-    //   customerEmail: [null, [Validators.email]],
-    //   phoneNumberPrefix: ['+91'],
-    //   leadStatus: [null],
-    //   phoneNumber: [null, [Validators.required]],
-    //   amount: [0, [Validators.required]],
-    //   companyName: [null],
-    //   followUp: [null, [Validators.required]],
-    //   address: [null, [Validators.required]],
-    //   review: [null, [Validators.required]],
-    //   status: ["NEW", [Validators.required]],
-    //   agree: [null, [Validators.required]],
-    // });
-
-
     this.validateForm = this.fb.group({
       _id: [null],
       externalId: [null, [Validators.required]],
@@ -112,10 +91,24 @@ export class LeadCreateComponent implements OnInit {
   fetchSelectedLead(event) {
     this.leadsService.getLeadById(event.nzValue).subscribe((lead: any) => {
       this.validateForm.patchValue({
+        _id: lead._id,
+        externalId: lead.externalId,
+        address: lead.address,
+        amount: lead.amount,
+        companyName: lead.companyName,
+        createdAt: lead.createdAt,
+        customerEmail: lead.customerEmail,
         email: lead.email,
-        nickname: lead.nickname,
+        firstName: lead.firstName,
+        followUp: lead.followUp,
+        lastName: lead.lastName,
+        leadStatus: lead.leadStatus,
+        phoneNumber: lead.phoneNumber,
         phoneNumberPrefix: lead.phoneNumberPrefix,
-        phoneNumber: lead.phoneNumber
+        product: lead.product,
+        remarks: lead.remarks,
+        source: lead.source,
+        updatedAt: lead.updatedAt,
       });
     });
   }
@@ -165,7 +158,7 @@ export class LeadCreateComponent implements OnInit {
 
   typeDict: { [key: string]: { label: string, value: string, type: string, checked: boolean } };
   dataLoaded: boolean = false;
-  showCols: any;
+  showCols: any[] = [];
   mapInternalToReadableFields() {
     this.leadsService.getAllLeadColumns().subscribe((mSchema: { paths: ILeadColumn[] }) => {
       mSchema.paths.forEach((path: ILeadColumn) => {

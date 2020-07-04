@@ -131,7 +131,7 @@ const routes: Routes = [
     path: 'campaigns',
     children: [
       {
-        path: '',
+        path: 'list',
         component: CampaignComponent,
         data: {
           breadcrumb: 'campaigns',
