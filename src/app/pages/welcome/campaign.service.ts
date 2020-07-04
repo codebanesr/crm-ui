@@ -27,19 +27,19 @@ export class CampaignService {
       sortField: sortField,
       sortOrder: sortOrder
     }
-    return this.http.post("http://testingdomain.com:3000/campaign/get", body);
+    return this.http.post(`${environment.apiUrl}/campaign/get`, body);
   }
 
 
   getHandlerEmailHints(partialEmail: string) {
     let params = new HttpParams()
       .append('partialEmail', `${partialEmail}`)
-    return this.http.get("http://testingdomain.com:3000/campaign/autocomplete/suggestEmails", {params});
+    return this.http.get(`${environment.apiUrl}/campaign/autocomplete/suggestEmails`, {params});
   }
 
 
   getAllCampaignTypes(hint?: string | undefined) {
-    return this.http.get(`http://testingdomain.com:3000/campaign/autocomplete/suggestTypes?hint=${hint}`);
+    return this.http.get(`${environment.apiUrl}/campaign/autocomplete/suggestTypes?hint=${hint}`);
   }
 
   getAllEmailTemplates(props: {campaign: string}) {

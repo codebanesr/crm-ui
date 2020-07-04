@@ -13,7 +13,7 @@ export class CustomerService {
   uploadCustomers(file: File) {
     const fd = new FormData();
     fd.append('customers', file);
-    return this.http.post("http://localhost:3000/customer/many", fd);
+    return this.http.post("http://35.154.8.217:5182/customer/many", fd);
   }
 }
 

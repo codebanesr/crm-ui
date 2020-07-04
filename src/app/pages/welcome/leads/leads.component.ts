@@ -148,7 +148,7 @@ export class LeadsComponent implements OnInit{
     })
   }
 
-  createLead() {
+  createLead(data?: any) {
     this.router.navigate(['welcome', 'leads', 'create']);
   }
 

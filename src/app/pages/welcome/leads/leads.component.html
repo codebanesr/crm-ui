@@ -22,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)">
+    <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)" (click)="createLead(data)">
       <td
         [nzChecked]="setOfCheckedId.has(data.externalId)"
         (nzCheckedChange)="onItemChecked(data.externalId, $event)"
