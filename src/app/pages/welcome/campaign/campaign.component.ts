@@ -7,15 +7,17 @@ import {
 } from 'ng-zorro-antd/table';
 import { CampaignService } from '../campaign.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { UploadChangeParam } from 'ng-zorro-antd/upload';
 import { Router } from '@angular/router';
+import { NzUploadListComponent } from 'ng-zorro-antd/upload';
 
 interface DataItem {
-  handler: string;
-  interval: string;
-  type: string;
+  createdBy: string;
+  startDate: string;
+  endDate: string;
+  campaignName: string;
+  _id: string;
 }
 
 interface ColumnItem {
@@ -63,7 +65,8 @@ export class CampaignComponent implements OnInit {
       console.log(error);
     })
   }
-  listOfColumns: ColumnItem[] = [{name: 'handler'},{name: 'interval'},{name: 'type'}];
+  listOfColumns: ColumnItem[] = [{ name: 'Campaign Name' }, { name: 'Created By' }, { name: 'Start Date' }, { name: 'End Date' }];
+
   listOfData: DataItem[] = [];
 
   trackByName(_: number, item: ColumnItem): string {
@@ -98,8 +101,8 @@ export class CampaignComponent implements OnInit {
     this.campaignService
       .getCampaigns(this.page, this.perPage, this.filters, null, null)
       .subscribe(
-        (data: DataItem[]) => {
-          this.listOfData = data;
+        (data: any[]) => {
+          this.processData(data);
         },
         (error) => {
           this.msg.error(error.message);
@@ -107,6 +110,18 @@ export class CampaignComponent implements OnInit {
       );
   }
 
+  processData(data: any) {
+    this.listOfData = [];
+    for (let d of data) {
+      this.listOfData.push({
+        startDate: d.interval[0],
+        endDate: d.interval[1],
+        createdBy: d.createdBy,
+        campaignName: d.campaignName,
+        _id: d._id
+      })
+    }
+  }
   validateForm!: FormGroup;
 
   submitForm(): void {
@@ -116,7 +131,42 @@ export class CampaignComponent implements OnInit {
 
 
   // welcome/campaigns/create
+  activeCampaign: any;
+  markActiveCampaign(event: Event, data) {
+    event.stopImmediatePropagation();
+    this.activeCampaign = data;
+
+  }
   gotoDetailedView(data: any) {
     this.router.navigate(['welcome', 'campaigns', 'create'], { queryParams: { id: data._id } });
+  }
+
+  uploading = false;
+  leadFileList: NzUploadListComponent[] = [];
+  handleLeadFilesUpload() {
+    const formData = new FormData();
+    this.leadFileList.forEach((file: any) => {
+      formData.append('files[]', file);
+    });
+
+    formData.append("campaignName", this.activeCampaign.campaignName);
+    this.uploading = true;
+    // You can use any AJAX library you like
+    this.campaignService.uploadMultipleLeadFiles(formData)
+      .subscribe((response: any) => {
+          this.uploading = false;
+          this.leadFileList = [];
+          this.msg.success('Lead Files uploaded successfully.');
+        },
+        () => {
+          this.uploading = false;
+          this.msg.error('Lead files could not be uploaded.');
+        }
+      );
+  }
+
+  beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
+    this.leadFileList = this.leadFileList.concat(file);
+    return false;
   }
 }

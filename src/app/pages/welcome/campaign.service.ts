@@ -61,7 +61,17 @@ export class CampaignService {
 
 
 
-  handleMultipleLeadFileUpload(formData) {
+  createCampaignAndDisposition(formData) {
+    const req = new HttpRequest('POST', `${environment.apiUrl}/campaign/createCampaignAndDisposition`, formData, {
+      // reportProgress: true
+    });
+    return this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
+  }
+
+
+  uploadMultipleLeadFiles(formData) {
     const req = new HttpRequest('POST', `${environment.apiUrl}/lead/uploadMultipleLeadFiles`, formData, {
       // reportProgress: true
     });

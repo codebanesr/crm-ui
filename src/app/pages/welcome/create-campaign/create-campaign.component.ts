@@ -25,7 +25,6 @@ export class CreateCampaignComponent implements OnInit {
     private activatedRouter: ActivatedRoute
   ) {}
   campaignForm: FormGroup;
-  campaignConfigForm: FormGroup;
 
 
   renameText: string;
@@ -50,20 +49,15 @@ export class CreateCampaignComponent implements OnInit {
   uploading = false;
   fileList: NzUploadListComponent[] = [];
 
-  leadFileList: NzUploadListComponent[] = [];
-
   attachments: any;
   demoDispositionNodes: any[] = []
 
 
   campaignOptions: any = [];
   ngOnInit(){
-    this.configFiles = [];
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
 
-
-    this.initCampaignConfigForm();
     this.initEmailForm();
 
     // this should be replaced
@@ -80,10 +74,12 @@ export class CreateCampaignComponent implements OnInit {
 
 
   campaignId: string;
+  submitText: string = "+ Create";
   subscribeToQueryParamChange(){
     const { id } = this.activatedRouter.snapshot.queryParams;
     if (!id) { return; }
 
+    this.submitText = 'Update';
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe((campaign: any) => {
       this.patchCompainValues(campaign);
@@ -106,11 +102,7 @@ export class CreateCampaignComponent implements OnInit {
       console.log("Error while calling initDispositionCore", error.message)
     })
   }
-  initCampaignConfigForm() {
-    this.campaignConfigForm = this.fb.group({
-      name: new FormControl(null, [Validators.required])
-    });
-  }
+
 
   suggestCampaignNames(hint = undefined) {
     this.campaignService.getAllCampaignTypes(hint).subscribe((campaignOpts: any[])=>{
@@ -125,7 +117,7 @@ export class CreateCampaignComponent implements OnInit {
       campaignName: ['', [Validators.required]],
       comment: [''],
       type: ['Lead Generation'],
-      interval: [[]],
+      interval: [[], [Validators.required]],
     });
 
 
@@ -139,7 +131,7 @@ export class CreateCampaignComponent implements OnInit {
   }
 
 
-  submitForm(value: { userName: string; email: string; password: string; confirm: string; comment: string }): void {
+  submitForm(value: any): void {
     for (const key in this.campaignForm.controls) {
       this.campaignForm.controls[key].markAsDirty();
       this.campaignForm.controls[key].updateValueAndValidity();
@@ -147,13 +139,7 @@ export class CreateCampaignComponent implements OnInit {
     console.log(value);
 
     if (this.campaignForm.valid) {
-      this.handleLeadFilesUpload();
-    }
-  }
-
-  submitCcForm(somedata) {
-    if(this.campaignConfigForm.valid) {
-      this.handleCcFileUpload();
+      this.handleCampaignConfigFileUpload();
     }
   }
 
@@ -237,28 +223,25 @@ export class CreateCampaignComponent implements OnInit {
     this.fileList = this.fileList.concat(file);
     return false;
   };
-  beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
-    this.leadFileList = this.leadFileList.concat(file);
-    return false;
+
+  campaignFiles: any[] = [];
+  captureCampaignConfigFile(event) {
+    this.campaignFiles = event.target.files;
   }
 
-  beforeCcUpload = (file: NzUploadListComponent):boolean => {
-    this.configFiles = this.configFiles.concat(file);
-    return false;
-  }
 
-  handleLeadFilesUpload() {
+  handleCampaignConfigFileUpload() {
     const formData = new FormData();
-    this.leadFileList.forEach((file: any) => {
-      formData.append('files[]', file);
-    });
     this.uploading = true;
+
+    console.log(this.campaignFiles)
+    formData.append('campaignFile', this.campaignFiles[0]);
     formData.append('campaignInfo', JSON.stringify(this.campaignForm.value));
+    formData.append('dispositionData', JSON.stringify(this.demoDispositionNodes));
     // You can use any AJAX library you like
-    this.campaignService.handleMultipleLeadFileUpload(formData)
+    this.campaignService.createCampaignAndDisposition(formData)
       .subscribe((response: any) => {
           this.uploading = false;
-          this.leadFileList = [];
           this.msg.success('Lead Files uploaded successfully.');
         },
         () => {
@@ -267,6 +250,8 @@ export class CreateCampaignComponent implements OnInit {
         }
       );
   }
+
+
   handleUpload(): void {
     const formData = new FormData();
     // tslint:disable-next-line:no-any
@@ -290,19 +275,6 @@ export class CreateCampaignComponent implements OnInit {
       );
   }
 
-
-  handleCcFileUpload() {
-    const formData = new FormData();
-    formData.append('file', this.configFiles[0] as any);
-    formData.append('campaignConfigInfo', JSON.stringify(this.campaignConfigForm.value));
-
-
-    this.campaignService.uploadCampaignFile(formData).subscribe(result=>{
-      console.log(result);
-    }, error=>{
-      console.log(error);
-    })
-  }
   showDispositionTplModal() {
     this.isDispositionVisible = true;
   }

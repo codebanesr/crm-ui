@@ -32,13 +32,25 @@
       <th *ngFor="let column of listOfColumns; trackBy: trackByName">
         {{ column.name }}
       </th>
+
+      <th>
+        Actions
+      </th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let data of filterTable.data" (click)="gotoDetailedView(data)">
-      <td>{{ data.handler }}</td>
-      <td>{{ data.interval | date }}</td>
-      <td>{{ data.type }}</td>
+      <td>{{ data.campaignName }}</td>
+      <td>{{ data.createdBy }}</td>
+      <td>{{ data.startDate | date }}</td>
+      <td>{{ data.endDate | date }}</td>
+      <td (click)="markActiveCampaign($event, data)">
+
+        <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files">
+          <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+          <button nz-button nz-primary (click)="handleLeadFilesUpload(); $event.stopPropagation()">go</button>
+        </nz-upload>
+      </td>
     </tr>
   </tbody>
 </nz-table>

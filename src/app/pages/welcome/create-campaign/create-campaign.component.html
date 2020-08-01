@@ -1,4 +1,14 @@
+
+<!-- The upper tab for choice of lead upload -->
 <form nz-form>
+  <nz-alert
+  nzType="warning"
+  nzMessage="Warning"
+  nzDescription="Please upload documents wisely, don't proceed without proper understanding of this space"
+>
+</nz-alert>
+
+<br>
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
     <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
@@ -12,6 +22,8 @@
 </form>
 
 
+
+<!-- campaign for creating new campaign and upload tab for uploading campaign config -->
 <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
   <nz-form-item>
     <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
@@ -44,39 +56,30 @@
   </nz-form-item>
 
 
-
   <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
-      <button nz-button nzType="primary" [disabled]="!campaignForm.valid" (click)=submitForm(campaignForm.value)>Submit</button>
+      <input type="file" id="myFile" name="filename" (change)="captureCampaignConfigFile($event)" />
 
-
-      <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files">
-        <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
-      </nz-upload>
+      <button nz-button nzType="primary" [disabled]="!campaignForm.valid" (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
     </nz-form-control>
   </nz-form-item>
 </form>
+<!-- campaign form ends here -->
+
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item (click)="deleteNode()">Delete This</li>
+    <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
+    <li nz-menu-item (click)="addParentNode()">Added Parent</li>
+    <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText"/>
+  </ul>
+</nz-dropdown-menu>
 
 
 
-<form nz-form [formGroup]="campaignConfigForm" *ngIf="tabSelected === 'Custom Workflow'">
-  <nz-form-item>
-    <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
-    <nz-form-control [nzSpan]="12" nzHasFeedback>
-      <input placeholder="input here" nz-input formControlName="name" />
-    </nz-form-control>
-  </nz-form-item>
 
-  <nz-form-item>
-    <nz-form-control [nzOffset]="7" [nzSpan]="12">
-      <button nz-button nzType="primary" [disabled]="!campaignConfigForm.valid" (click)=submitCcForm(campaignConfigForm.value)>Submit</button>
-      <nz-upload [(nzFileList)]="configFiles" [nzBeforeUpload]="beforeCcUpload" [nzMultiple]=true nzName="file">
-        <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
-      </nz-upload>
-    </nz-form-control>
-  </nz-form-item>
-</form>
-
+<!-- Email form below inside drawer -->
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="300px" nzPlacement="right" nzTitle="Advanced Options" (nzOnClose)="close()">
   <ng-container>
     <button nz-button [nzType]="'primary'" (click)="showEmailTplModal()"><span>+ Email Template</span></button>
@@ -134,12 +137,3 @@
   <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a>
   </ng-container>
 </nz-drawer>
-
-<nz-dropdown-menu #menu="nzDropdownMenu">
-  <ul nz-menu>
-    <li nz-menu-item (click)="deleteNode()">Delete This</li>
-    <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
-    <li nz-menu-item (click)="addParentNode()">Added Parent</li>
-    <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText"/>
-  </ul>
-</nz-dropdown-menu>
