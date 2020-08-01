@@ -10,6 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { UploadChangeParam } from 'ng-zorro-antd/upload';
+import { Router } from '@angular/router';
 
 interface DataItem {
   handler: string;
@@ -34,7 +35,8 @@ export class CampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private msg: NzMessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) { }
 
   campaignOpts: string[];
@@ -110,5 +112,11 @@ export class CampaignComponent implements OnInit {
   submitForm(): void {
     this.filters = this.validateForm.value;
     this.getCampaigns();
+  }
+
+
+  // welcome/campaigns/create
+  gotoDetailedView(data: any) {
+    this.router.navigate(['welcome', 'campaigns', 'create'], { queryParams: { id: data._id } });
   }
 }

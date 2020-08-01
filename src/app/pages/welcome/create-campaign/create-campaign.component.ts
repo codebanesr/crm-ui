@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzUploadListComponent } from 'ng-zorro-antd/upload';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AgentService } from 'src/app/agent.service';
 import { CampaignService } from '../campaign.service';
-import { distinctUntilChanged, debounceTime, map, catchError } from 'rxjs/operators';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadListComponent } from 'ng-zorro-antd/upload';
-import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
-import { NzDropdownMenuComponent, NzContextMenuService } from 'ng-zorro-antd/dropdown';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-create-campaign',
@@ -15,30 +16,59 @@ import { NzDropdownMenuComponent, NzContextMenuService } from 'ng-zorro-antd/dro
   styleUrls: ['./create-campaign.component.scss']
 })
 export class CreateCampaignComponent implements OnInit {
-  campaignForm: FormGroup;
-  campaignConfigForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private agentService: AgentService,
     private campaignService: CampaignService,
     private msg: NzMessageService,
-    private nzContextMenuService: NzContextMenuService
+    private nzContextMenuService: NzContextMenuService,
+    private activatedRouter: ActivatedRoute
   ) {}
+  campaignForm: FormGroup;
+  campaignConfigForm: FormGroup;
 
+
+  renameText: string;
   inputValue?: string;
+  isDispositionVisible = false;
   options: string[] = [];
   recentUploads: string[] = [];
   hint: string|undefined;
   type: string;
 
-  tabSelected: string = "Lead Generation"
+  tabSelected: string = 'Lead Generation'
   configFiles: NzUploadListComponent[] = [];
+
+
+
+  visible = false;
+
+  emailForm: FormGroup;
+
+  isEmailTplVisible = false;
+
+  uploading = false;
+  fileList: NzUploadListComponent[] = [];
+
+  leadFileList: NzUploadListComponent[] = [];
+
+  attachments: any;
+  demoDispositionNodes: any[] = []
+
+
+  campaignOptions: any = [];
   ngOnInit(){
     this.configFiles = [];
     this.initCampaignForm();
+    this.subscribeToQueryParamChange();
+
+
     this.initCampaignConfigForm();
     this.initEmailForm();
-    this.agentService.listAgentActions(0, "campaignSchema").subscribe((list: any)=>{
+
+    // this should be replaced
+    this.initDispositionCore('core');
+    this.agentService.listAgentActions(0, 'campaignSchema').subscribe((list: any)=>{
       this.recentUploads = list;
     }, error=>{
       console.log(error);
@@ -49,6 +79,33 @@ export class CreateCampaignComponent implements OnInit {
   }
 
 
+  campaignId: string;
+  subscribeToQueryParamChange(){
+    const { id } = this.activatedRouter.snapshot.queryParams;
+    if (!id) { return; }
+
+    this.campaignId = id;
+    this.campaignService.getCampaignById(id).subscribe((campaign: any) => {
+      this.patchCompainValues(campaign);
+    }, error => {
+      this.msg.error('Failed to fetch data for ticket id ', id);
+    });
+  }
+
+  patchCompainValues(campaign: any) {
+    console.log(this.campaignForm.value);
+    console.log("received from server", campaign)
+    this.campaignForm.patchValue(campaign);
+  }
+
+
+  initDispositionCore(campaignId: string) {
+    this.campaignService.getDisposition(campaignId).subscribe((data: any) => {
+      this.demoDispositionNodes = data.options;
+    }, error => {
+      console.log("Error while calling initDispositionCore", error.message)
+    })
+  }
   initCampaignConfigForm() {
     this.campaignConfigForm = this.fb.group({
       name: new FormControl(null, [Validators.required])
@@ -73,7 +130,7 @@ export class CreateCampaignComponent implements OnInit {
 
 
 
-    this.campaignForm.get("campaignName").valueChanges
+    this.campaignForm.get('campaignName').valueChanges
     .pipe(debounceTime(500), distinctUntilChanged())
     .subscribe(hint => {
       this.hint = hint
@@ -108,18 +165,39 @@ export class CreateCampaignComponent implements OnInit {
     });
   }
 
-  resetForm(e: MouseEvent): void {
-    e.preventDefault();
-    this.campaignForm.reset();
-    for (const key in this.campaignForm.controls) {
-      this.campaignForm.controls[key].markAsPristine();
-      this.campaignForm.controls[key].updateValueAndValidity();
-    }
+
+  activeContext: NzFormatEmitEvent;
+  nodeActions(ev: NzFormatEmitEvent) {
+    this.activeContext = ev;
+    console.log('activeContext', ev);
   }
 
 
+  addLeafNode() {
+    this.activeContext.node.addChildren([
+      {
+        "title" : "New Leaf",
+        "key" : this.campaignService.getUniqueKey(),
+        "isLeaf" : true
+      }
+    ])
+  }
 
-  visible = false;
+
+  addParentNode() {
+    this.activeContext.node.addChildren([
+      {
+        "title" : "New Parent",
+        "key" : this.campaignService.getUniqueKey(),
+        "isLeaf" : false
+      }
+    ])
+  }
+
+
+  deleteNode() {
+    this.activeContext.node.remove();
+  }
 
   open(): void {
     this.visible = true;
@@ -134,8 +212,6 @@ export class CreateCampaignComponent implements OnInit {
   handleClick(upload) {
     this.agentService.downloadExcelFile(upload.filePath);
   }
-
-  emailForm: FormGroup;
   initEmailForm() {
     this.emailForm = this.fb.group({
       campaign: [null],
@@ -145,8 +221,6 @@ export class CreateCampaignComponent implements OnInit {
 
     this.fillCampaignOpts();
   }
-
-  isEmailTplVisible = false;
   showEmailTplModal() {
     this.isEmailTplVisible = true
   }
@@ -158,16 +232,11 @@ export class CreateCampaignComponent implements OnInit {
     // handle submit events here
   }
 
-  uploading = false;
-  fileList: NzUploadListComponent[] = [];
-
 
   beforeUpload = (file: NzUploadListComponent): boolean => {
     this.fileList = this.fileList.concat(file);
     return false;
   };
-
-  leadFileList: NzUploadListComponent[] = [];
   beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
     this.leadFileList = this.leadFileList.concat(file);
     return false;
@@ -184,7 +253,7 @@ export class CreateCampaignComponent implements OnInit {
       formData.append('files[]', file);
     });
     this.uploading = true;
-    formData.append("campaignInfo", JSON.stringify(this.campaignForm.value));
+    formData.append('campaignInfo', JSON.stringify(this.campaignForm.value));
     // You can use any AJAX library you like
     this.campaignService.handleMultipleLeadFileUpload(formData)
       .subscribe((response: any) => {
@@ -198,8 +267,6 @@ export class CreateCampaignComponent implements OnInit {
         }
       );
   }
-
-  attachments: any;
   handleUpload(): void {
     const formData = new FormData();
     // tslint:disable-next-line:no-any
@@ -226,8 +293,8 @@ export class CreateCampaignComponent implements OnInit {
 
   handleCcFileUpload() {
     const formData = new FormData();
-    formData.append("file", this.configFiles[0] as any);
-    formData.append("campaignConfigInfo", JSON.stringify(this.campaignConfigForm.value));
+    formData.append('file', this.configFiles[0] as any);
+    formData.append('campaignConfigInfo', JSON.stringify(this.campaignConfigForm.value));
 
 
     this.campaignService.uploadCampaignFile(formData).subscribe(result=>{
@@ -236,42 +303,8 @@ export class CreateCampaignComponent implements OnInit {
       console.log(error);
     })
   }
-
-  demoDispositionNodes = [
-    {
-      title: 'parent 1',
-      key: '100',
-      expanded: true,
-      children: [
-        {
-          title: 'parent 1-0',
-          key: '1001',
-          expanded: true,
-          children: [
-            { title: 'leaf', key: '10010', isLeaf: true },
-            { title: 'leaf', key: '10011', isLeaf: true },
-            { title: 'leaf', key: '10012', isLeaf: true }
-          ]
-        },
-        {
-          title: 'parent 1-1',
-          key: '1002',
-          children: [{ title: 'leaf', key: '10020', isLeaf: true }]
-        },
-        {
-          title: 'parent 1-2',
-          key: '1003',
-          children: [
-            { title: 'leaf', key: '10030', isLeaf: true },
-            { title: 'leaf', key: '10031', isLeaf: true }
-          ]
-        }
-      ]
-    }
-  ];
-  isDispositionVisible = false;
   showDispositionTplModal() {
-    this.isDispositionVisible = true
+    this.isDispositionVisible = true;
   }
   handleDispositionCancel() {
     this.isDispositionVisible = false;
@@ -282,7 +315,8 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   nzEvent(event: NzFormatEmitEvent): void {
-    console.log(event);
+    console.log(event)
+    event.node.isExpanded = !event.node.isExpanded;
   }
 
   contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
@@ -291,7 +325,6 @@ export class CreateCampaignComponent implements OnInit {
   }
 
 
-  campaignOptions: any = [];
   fillCampaignOpts() {
     this.emailForm.get('campaign')
       .valueChanges
@@ -309,5 +342,12 @@ export class CreateCampaignComponent implements OnInit {
 
   handleFormTypeChange(event) {
     console.log(event, this.tabSelected);
+  }
+
+  rename() {
+    if (this.renameText) {
+      this.activeContext.node.title = this.renameText;
+      this.renameText = "";
+    }
   }
 }

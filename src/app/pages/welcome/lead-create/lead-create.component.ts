@@ -5,6 +5,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ILeadColumn } from '../leads/lead.interface';
+import { CampaignService } from '../campaign.service';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 
 @Component({
@@ -23,17 +26,37 @@ export class LeadCreateComponent implements OnInit {
     private fb: FormBuilder,
     private leadsService: LeadsService,
     private msg: NzMessageService,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private campaignService: CampaignService,
+    private nzContextMenuService: NzContextMenuService
   ) {}
 
+
+  demoDispositionNodes: any[] = []
   ngOnInit(): void {
     this.initForm();
     this.mapInternalToReadableFields();
     this.subscribeToQueryParamChange();
-
+    this.initDispositionCore('core');
     this.subscribeToLeadIdChange();
   }
 
+  nzEvent(event: NzFormatEmitEvent): void {
+    if (event.node.isLeaf) {
+      console.log("set this to formControl", event.node.origin.title);
+      this.validateForm.patchValue({ leadStatus: event.node.origin.title });
+    }
+    event.node.isExpanded = !event.node.isExpanded;
+  }
+
+  initDispositionCore(campaignId: string) {
+    this.campaignService.getDisposition(campaignId).subscribe((data: any) => {
+      console.log(data);
+      this.demoDispositionNodes = data.options;
+    }, error => {
+        console.log(error);
+    })
+  }
 
   subscribeToQueryParamChange(){
     const { id } = this.activatedRouter.snapshot.queryParams;
@@ -73,6 +96,7 @@ export class LeadCreateComponent implements OnInit {
       remarks: [null],
       source: [null],
       updatedAt: [null],
+      disposition: [null]
     });
   }
 
@@ -119,6 +143,7 @@ export class LeadCreateComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+
     if (!this.ticketId) {
       this.createTicket();
     }else{
@@ -138,7 +163,7 @@ export class LeadCreateComponent implements OnInit {
 
 
   updateTicket() {
-    this.leadsService.updateLead(this.validateForm.value, this.ticketId).subscribe(data => {
+    this.leadsService.updateLead(this.ticketId, this.validateForm.value).subscribe(data => {
       this.msg.success(`Successfully updated ticket with id ${this.ticketId}`);
     }, error => {
       this.msg.error(`Failed to update ticket with id ${this.ticketId}`);

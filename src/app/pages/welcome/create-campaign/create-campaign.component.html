@@ -39,8 +39,15 @@
 
   <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)"> </nz-tree>
+    </nz-form-control>
+  </nz-form-item>
+
+
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
       <button nz-button nzType="primary" [disabled]="!campaignForm.valid" (click)=submitForm(campaignForm.value)>Submit</button>
-      <button nz-button (click)="resetForm($event)">Reset</button>
 
 
       <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files">
@@ -63,7 +70,6 @@
   <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
       <button nz-button nzType="primary" [disabled]="!campaignConfigForm.valid" (click)=submitCcForm(campaignConfigForm.value)>Submit</button>
-      <button nz-button (click)="resetForm($event)">Reset</button>
       <nz-upload [(nzFileList)]="configFiles" [nzBeforeUpload]="beforeCcUpload" [nzMultiple]=true nzName="file">
         <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
       </nz-upload>
@@ -121,14 +127,6 @@
         </button>
       </div>
     </nz-modal>
-
-
-
-    <!-- Modal for disposition -->
-    <button nz-button [nzType]="'secondary'" (click)="showDispositionTplModal()"><span>+ Disposition</span></button>
-    <nz-modal nzWidth="500" [(nzVisible)]="isDispositionVisible" nzTitle="Disposition" (nzOnCancel)="handleDispositionCancel()" (nzOnOk)="handleDispositionOk()">
-      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine (nzClick)="nzEvent($event)" (contextmenu)="contextMenu($event, menu)"> </nz-tree>
-    </nz-modal>
   </ng-container>
 
   <nz-divider nzText="Recently uploaded files"></nz-divider>
@@ -139,20 +137,9 @@
 
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
-    <li nz-menu-item>1st menu item</li>
-    <li nz-menu-item>2nd menu item</li>
-    <li nz-menu-item nzDisabled>disabled menu item</li>
-    <li nz-submenu nzTitle="sub menu">
-      <ul>
-        <li nz-menu-item>3rd menu item</li>
-        <li nz-menu-item>4th menu item</li>
-      </ul>
-    </li>
-    <li nz-submenu nzDisabled nzTitle="disabled sub menu">
-      <ul>
-        <li nz-menu-item>3rd menu item</li>
-        <li nz-menu-item>4th menu item</li>
-      </ul>
-    </li>
+    <li nz-menu-item (click)="deleteNode()">Delete This</li>
+    <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
+    <li nz-menu-item (click)="addParentNode()">Added Parent</li>
+    <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText"/>
   </ul>
 </nz-dropdown-menu>

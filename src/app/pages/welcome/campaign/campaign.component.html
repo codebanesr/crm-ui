@@ -35,7 +35,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of filterTable.data">
+    <tr *ngFor="let data of filterTable.data" (click)="gotoDetailedView(data)">
       <td>{{ data.handler }}</td>
       <td>{{ data.interval | date }}</td>
       <td>{{ data.type }}</td>

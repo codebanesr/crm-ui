@@ -54,19 +54,15 @@
   </nz-form-item>
 
 
-
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="leadStatus" nzRequired>Lead Status</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
-      <nz-select formControlName="leadStatus" class="">
-        <nz-option nzLabel="New" nzValue="NEW"></nz-option>
-        <nz-option nzLabel="Call" nzValue="CALL"></nz-option>
-        <nz-option nzLabel="Interaction" nzValue="INTERACTION"></nz-option>
-        <nz-option nzLabel="Documenting" nzValue="DOCUMENTING"></nz-option>
-      </nz-select>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+      Lead Status
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-tag [nzColor]="'cyan'">{{this.validateForm.get('leadStatus').value}}</nz-tag>
+      <nz-tree [nzData]="demoDispositionNodes" nzBlockNode nzShowLine (nzClick)="nzEvent($event)"> </nz-tree>
     </nz-form-control>
   </nz-form-item>
-
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Follow Up</nz-form-label>
@@ -75,4 +71,8 @@
     </nz-form-control>
   </nz-form-item>
 
+  <button nz-button nzType="primary">Submit</button>
 </form>
+
+
+

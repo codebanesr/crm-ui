@@ -83,4 +83,17 @@ export class CampaignService {
       .request(req)
       .pipe(filter(e => e instanceof HttpResponse))
   }
+
+  getDisposition(campaignId: string) {
+    return this.http.get(`${environment.apiUrl}/campaign/disposition/${campaignId}`);
+  }
+
+  getUniqueKey() {
+    let uniqueId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    return uniqueId;
+  }
+
+  getCampaignById(campaignId: string) {
+    return this.http.get(`${environment.apiUrl}/campaign/${campaignId}`);
+  }
 }
