@@ -1,0 +1,48 @@
+<nz-radio-group [(ngModel)]="selectedDisposition" nzButtonStyle="solid" (ngModelChange)="dispositionTypeChange($event)">
+  <label nz-radio-button [nzValue]="disposition.value" *ngFor="let disposition of dispositionTypes">{{disposition.label}}</label>
+  <i nz-icon nzType="close-circle" nzTheme="fill" (click)="clearAllFilters()" style="cursor: pointer"></i>
+</nz-radio-group>
+
+<nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="handleModelChange($event)">
+  <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
+</nz-select>
+
+
+<nz-divider></nz-divider>
+<ng-container *ngIf="selectedLead">
+  <nz-descriptions nzTitle="Lead Info" nzBordered=true>
+    <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
+      <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+        <ng-container *ngIf="typeDict[leadKey].type == 'date'">
+          <nz-date-picker
+            [nzMode]="dateMode"
+            [(ngModel)]="selectedLead[leadKey]"
+            [nzDisabled]="isDisabled(leadKey)"
+            nzShowTime
+            (nzOnOpenChange)="handleDateOpenChange($event)"
+            (nzOnPanelChange)="handleDatePanelChange($event)"
+          >
+          </nz-date-picker>
+        </ng-container>
+
+        <ng-container *ngIf="typeDict[leadKey].type == 'number'">
+          <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"/>
+        </ng-container>
+
+        <ng-container *ngIf="typeDict[leadKey].type == 'string'">
+          <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
+        </ng-container>
+      </nz-descriptions-item>
+    </ng-container>
+    <nz-descriptions-item nzTitle="Disposition">
+      <nz-tree [nzData]="demoDispositionNodes" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
+    </nz-descriptions-item>
+
+    <nz-descriptions-item nzTitle="Remark" nzSpan=2>
+      <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
+        <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
+      </nz-input-group>
+    </nz-descriptions-item>
+  </nz-descriptions>
+  <a nz-button nzType="link" (click)="handleLeadSubmission(selectedLead)">Submit Change</a>
+</ng-container>

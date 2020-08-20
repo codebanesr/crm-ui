@@ -56,9 +56,16 @@
   </nz-form-item>
 
 
+
   <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
-      <input type="file" id="myFile" name="filename" (change)="captureCampaignConfigFile($event)" />
+      <!-- hidden upload element -->
+      <input type="file" #uploader (change)="captureCampaignConfigFile($event)" style="display: none;">
+      <button type="upload" id="myFile" nz-button nzType="default" (click)="uploader.click()">
+        <i nz-icon nzType="upload" nzTheme="outline"></i>
+        Upload File
+        <nz-badge [nzCount]="campaignFiles?.length" style="margin-left: 1px;"></nz-badge>
+      </button>
 
       <button nz-button nzType="primary" [disabled]="!campaignForm.valid" (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
     </nz-form-control>

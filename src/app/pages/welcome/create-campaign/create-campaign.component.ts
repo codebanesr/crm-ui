@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -227,6 +227,7 @@ export class CreateCampaignComponent implements OnInit {
   campaignFiles: any[] = [];
   captureCampaignConfigFile(event) {
     this.campaignFiles = event.target.files;
+    console.log(this.campaignFiles);
   }
 
 

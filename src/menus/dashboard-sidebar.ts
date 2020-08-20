@@ -32,6 +32,11 @@ export default () => {
           link: routePoints.LEADS
         },
         {
+          title: "Lead Solo",
+          show: true,
+          link: routePoints.LEAD_SOLO
+        },
+        {
           title: "Tickets",
           show: true,
           link: routePoints.TICKETS
@@ -62,7 +67,7 @@ export default () => {
           title: "Create",
           show: true,
           link: routePoints.CREATE_CAMPAIGN
-        },
+        }
       ]
     },
 

@@ -19,6 +19,7 @@ import { PermissionsComponent } from '../permissions/permissions.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 import { CampaignOverviewComponent } from 'src/app/campaign-overview/campaign-overview.component';
+import { LeadSoloComponent } from './lead-solo/lead-solo.component';
 
 const routes: Routes = [
   {
@@ -65,6 +66,13 @@ const routes: Routes = [
       {
         path: 'create',
         component: LeadCreateComponent,
+        data: {
+          breadcrumb: 'create',
+        },
+      },
+      {
+        path: 'solo',
+        component: LeadSoloComponent,
         data: {
           breadcrumb: 'create',
         },

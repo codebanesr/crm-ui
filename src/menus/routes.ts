@@ -3,6 +3,7 @@ export const routePoints = {
     USER_CREATE: "user/create",
     LEADS: "leads",
     LEAD_CREATE: "lead/create",
+    LEAD_SOLO: "leads/solo",
     TICKETS: "tickets",
     TICKET_CREATE: "ticket/create",
     UPLOADS: "uploads",
