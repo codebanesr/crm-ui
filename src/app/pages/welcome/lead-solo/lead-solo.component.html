@@ -3,7 +3,7 @@
   <i nz-icon nzType="close-circle" nzTheme="fill" (click)="clearAllFilters()" style="cursor: pointer"></i>
 </nz-radio-group>
 
-<nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="handleModelChange($event)">
+<nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaignId" (ngModelChange)="handleSelectedCampaignChange($event)">
   <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
 </nz-select>
 
@@ -35,7 +35,7 @@
       </nz-descriptions-item>
     </ng-container>
     <nz-descriptions-item nzTitle="Disposition">
-      <nz-tree [nzData]="demoDispositionNodes" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
+      <nz-tree [nzData]="dispositionNodes" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
     </nz-descriptions-item>
 
     <nz-descriptions-item nzTitle="Remark" nzSpan=2>

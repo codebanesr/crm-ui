@@ -3,6 +3,7 @@ import {IDisposition} from './disposition.interface'
 import { LeadsService } from 'src/app/leads.service';
 import { ILead } from 'src/interfaces/leads.interface';
 import { CampaignService } from '../campaign.service';
+import { ICampaign } from '../leads/lead.interface';
 
 @Component({
   selector: 'app-lead-solo',
@@ -17,7 +18,7 @@ export class LeadSoloComponent implements OnInit {
   ) { }
 
   selectedDisposition: string;
-  selectedCampaign: string;
+  selectedCampaignId: string;
   dispositionTypes: IDisposition[];
   selectedDispositionTree: any;
   selectedLead: ILead;
@@ -45,8 +46,8 @@ export class LeadSoloComponent implements OnInit {
   }
 
   getDispositionForCampaign() {
-    this.campaignService.getDisposition(this.selectedCampaign).subscribe((data: any)=>{
-      console.log(data);
+    this.campaignService.getDisposition(this.selectedCampaignId).subscribe((data: any)=>{
+      this.dispositionNodes = data;
     }, error => {
         console.log(error);
     })
@@ -74,7 +75,8 @@ export class LeadSoloComponent implements OnInit {
   }
 
   dispositionTypeChange(event) {
-    this.leadsService.getSingleLeadByDispositionAndCampaign(this.selectedDisposition, this.selectedCampaign).subscribe(data=>{
+    this.leadsService.getSingleLeadByDispositionAndCampaign(this.selectedDisposition, this.selectedCampaignId).subscribe(data => {
+      this.initDispositionNodes(data._id);
       this.selectedLead = data;
     }, error => {
         console.log(error);
@@ -107,35 +109,17 @@ export class LeadSoloComponent implements OnInit {
 
   handleDateOpenChange(event) {}
   handleDatePanelChange(event) { }
-  handleModelChange(event) {
+  handleSelectedCampaignChange(event) {
     console.log("selected campaign changed to: ", event);
     this.getDispositionForCampaign();
   }
 
-
-  demoDispositionNodes = [
-    {
-      title: 'parent 1',
-      key: '100',
-      children: [
-        {
-          title: 'parent 1-0',
-          key: '1001',
-          disabled: true,
-          children: [
-            { title: 'leaf 1-0-0', key: '10010', disableCheckbox: true, isLeaf: true },
-            { title: 'leaf 1-0-1', key: '10011', isLeaf: true }
-          ]
-        },
-        {
-          title: 'parent 1-1',
-          key: '1002',
-          children: [
-            { title: 'leaf 1-1-0', key: '10020', isLeaf: true },
-            { title: 'leaf 1-1-1', key: '10021', isLeaf: true }
-          ]
-        }
-      ]
-    }
-  ];
+  dispositionNodes: any;
+  initDispositionNodes(campaignId: string) {
+    this.campaignService.getDisposition(campaignId).subscribe(dispositionOptions => {
+      this.dispositionNodes = dispositionOptions;
+    }, error => {
+        console.log("Error in fetching disposition nodes", error);
+    })
+  }
 }

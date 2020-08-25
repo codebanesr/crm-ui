@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ILead } from 'src/interfaces/leads.interface';
-import { ILeadColumn } from './pages/welcome/leads/lead.interface';
+import { ICampaign, ILeadColumn } from './pages/welcome/leads/lead.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +76,7 @@ export class LeadsService {
   }
 
 
-  getSingleLeadByDispositionAndCampaign(dispositionType: string, campaign: string): Observable<ILead> {
+  getSingleLeadByDispositionAndCampaign(dispositionType: string, campaignId: string): Observable<ILead> {
     return of({
         _id : '5f26bf151d9cccc34b3559d0',
         externalId : 'mlohden1@soup.io',

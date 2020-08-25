@@ -1,9 +1,9 @@
 export interface ILeadColumn {
-  "internalField": string,
-  "name": string,
-  "__v": number,
-  "readableField": string,
-  "type": string,
+  'internalField': string,
+  'name': string,
+  '__v': number,
+  'readableField': string,
+  'type': string,
   checked: boolean
 }
 
@@ -23,3 +23,15 @@ export interface Setting {
   simple: boolean;
   tableScroll: string;
 }
+
+export interface ICampaign {
+  '_id' : string,
+  'campaignName' : string,
+  'comment' : string,
+  'createdAt' : Date,
+  'createdBy' : Date,
+  'interval' : [Date],
+  'type' : string,
+  'updatedAt' : Date
+}
+

@@ -27,6 +27,7 @@ import { FormlyDatePicker } from 'src/app/custom-templates/date-picker';
 import { LeadSoloComponent } from './lead-solo/lead-solo.component';
 import { ConferenceComponent } from './conference/conference.component';
 import { ChatComponent } from './chat/chat.component';
+import { ConfigurerComponent } from './configurer/configurer.component';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { ChatComponent } from './chat/chat.component';
     FormlyDatePicker,
     LeadSoloComponent,
     ConferenceComponent,
-    ChatComponent
+    ChatComponent,
+    ConfigurerComponent
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],
