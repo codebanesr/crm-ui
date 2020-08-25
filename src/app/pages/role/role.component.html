@@ -1,10 +1,8 @@
 <button nz-button nzType="primary" (click)="createNewRole()"><i nz-icon nzType="plus-square" nzTheme="outline"></i>Role</button>
-<div style="background: #ECECEC;padding:30px;">
-  <div nz-row [nzGutter]="8">
-    <div nz-col [nzSpan]="8" *ngFor="let role of roles">
-      <nz-card nzTitle="{{role.label}}" class="crd">
-        <nz-checkbox-group [(ngModel)]="role.permissions" (ngModelChange)="updateRole(role)"></nz-checkbox-group>
-      </nz-card>
-    </div>
-  </div>
-</div>
+
+
+<nz-descriptions *ngFor="let role of roles" nzBordered nzLayout="vertical">
+  <nz-descriptions-item nzTitle="{{role.label}}">
+    <nz-checkbox-group [(ngModel)]="role.permissions" (ngModelChange)="updateRole(role)"></nz-checkbox-group>
+  </nz-descriptions-item>
+</nz-descriptions>

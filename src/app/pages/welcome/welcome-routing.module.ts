@@ -20,6 +20,8 @@ import { RoleCreateComponent } from '../role-create/role-create.component';
 import { AdminActionsComponent } from '../admin-actions/admin-actions.component';
 import { CampaignOverviewComponent } from 'src/app/campaign-overview/campaign-overview.component';
 import { LeadSoloComponent } from './lead-solo/lead-solo.component';
+import { ConferenceComponent } from './conference/conference.component';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes = [
   {
@@ -51,6 +53,20 @@ const routes: Routes = [
           breadcrumb: 'create-user',
         },
       },
+      {
+        path: "conference",
+        component: ConferenceComponent,
+        data: {
+          breadcrumb: 'conference'
+        }
+      },
+      {
+        path: "chat",
+        component: ChatComponent,
+        data: {
+          breadcrumb: 'chat'
+        }
+      }
     ],
   },
   {

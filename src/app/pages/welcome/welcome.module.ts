@@ -25,6 +25,8 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyNgZorroAntdModule } from '@ngx-formly/ng-zorro-antd';
 import { FormlyDatePicker } from 'src/app/custom-templates/date-picker';
 import { LeadSoloComponent } from './lead-solo/lead-solo.component';
+import { ConferenceComponent } from './conference/conference.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -61,7 +63,9 @@ import { LeadSoloComponent } from './lead-solo/lead-solo.component';
     RoleCreateComponent,
     AdminActionsComponent,
     FormlyDatePicker,
-    LeadSoloComponent
+    LeadSoloComponent,
+    ConferenceComponent,
+    ChatComponent
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],
