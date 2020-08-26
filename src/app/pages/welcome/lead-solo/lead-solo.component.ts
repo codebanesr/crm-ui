@@ -26,6 +26,7 @@ export class LeadSoloComponent implements OnInit {
   dateMode: string = 'time';
   loadingCampaignList = false;
   campaignList: any[] = [];
+  callDispositions;
   ngOnInit(): void {
     this.initializeDispositionTypes();
     this.getLeadMappings();
@@ -46,7 +47,7 @@ export class LeadSoloComponent implements OnInit {
 
   getDispositionForCampaign() {
     this.campaignService.getDisposition(this.selectedCampaign).subscribe((data: any)=>{
-      console.log(data);
+      this.callDispositions = data.options;
     }, error => {
         console.log(error);
     })
@@ -111,31 +112,4 @@ export class LeadSoloComponent implements OnInit {
     console.log("selected campaign changed to: ", event);
     this.getDispositionForCampaign();
   }
-
-
-  demoDispositionNodes = [
-    {
-      title: 'parent 1',
-      key: '100',
-      children: [
-        {
-          title: 'parent 1-0',
-          key: '1001',
-          disabled: true,
-          children: [
-            { title: 'leaf 1-0-0', key: '10010', disableCheckbox: true, isLeaf: true },
-            { title: 'leaf 1-0-1', key: '10011', isLeaf: true }
-          ]
-        },
-        {
-          title: 'parent 1-1',
-          key: '1002',
-          children: [
-            { title: 'leaf 1-1-0', key: '10020', isLeaf: true },
-            { title: 'leaf 1-1-1', key: '10021', isLeaf: true }
-          ]
-        }
-      ]
-    }
-  ];
 }

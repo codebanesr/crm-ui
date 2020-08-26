@@ -4,6 +4,7 @@ import { User } from '../../../../interfaces/user';
 import { UsersService } from 'src/app/service/users.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,7 +14,11 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
 })
 export class UsersComponent implements OnInit {
 
-  constructor(private usersService: UsersService, private nzContextMenuService: NzContextMenuService) { }
+  constructor(
+    private usersService: UsersService,
+    private nzContextMenuService: NzContextMenuService,
+    private router: Router
+  ) { }
 
   total = 1;
     listOfRandomUser: User[] = [];
@@ -38,6 +43,10 @@ export class UsersComponent implements OnInit {
         this.total = 200; // mock the total data here
         this.listOfRandomUser = data;
       });
+    }
+
+    navigate(email: string) {
+      this.router.navigate(['welcome', 'users', 'details', email]);
     }
 
     onQueryParamsChange(params: NzTableQueryParams): void {

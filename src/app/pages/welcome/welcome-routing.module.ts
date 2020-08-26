@@ -22,6 +22,7 @@ import { CampaignOverviewComponent } from 'src/app/campaign-overview/campaign-ov
 import { LeadSoloComponent } from './lead-solo/lead-solo.component';
 import { ConferenceComponent } from './conference/conference.component';
 import { ChatComponent } from './chat/chat.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 const routes: Routes = [
   {
@@ -38,13 +39,20 @@ const routes: Routes = [
   },
   {
     path: routePoints.USERS,
-    data: {
-      breadcrumb: 'users',
-    },
     children: [
       {
         path: '',
         component: UsersComponent,
+        data: {
+          breadcrumb: 'users',
+        },
+      },
+      {
+        path: 'details/:email',
+        component: UserDetailsComponent,
+        data: {
+          breadcrumb: 'details'
+        }
       },
       {
         path: "create",

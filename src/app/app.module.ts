@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -25,6 +24,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { CampaignOverviewComponent } from './campaign-overview/campaign-overview.component';
+import { UserDetailsComponent } from './pages/welcome/user-details/user-details.component';
 
 
 registerLocaleData(en);
@@ -37,6 +37,7 @@ registerLocaleData(en);
     CustomersComponent,
     OverviewComponent,
     CampaignOverviewComponent,
+    UserDetailsComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,
@@ -44,7 +45,6 @@ registerLocaleData(en);
       echarts,
     }),
     ReactiveFormsModule,
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     IconsProviderModule,
     NzLayoutModule,

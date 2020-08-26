@@ -34,6 +34,10 @@ export class UsersService {
   }
 
 
+  transformFilterObjectToQueryParams(paramObject) {
+    return Object.keys(paramObject).map(key => key + '=' + paramObject[key]).join('&');
+  }
+
   getManagersForReassignment() {
     return this.http.get(`${environment.apiUrl}/user/managersForReassignment`);
   }
@@ -43,4 +47,9 @@ export class UsersService {
     return this.http.post(`${environment.apiUrl}/user/assignManager`, {newManager, user});
   }
 
+
+  getUsersLeadActivity(email: string, filters) {
+    const qs = this.transformFilterObjectToQueryParams(filters);
+    return this.http.get(`${environment.apiUrl}/user/lead/activity/${email}?${qs}`);
+  }
 }

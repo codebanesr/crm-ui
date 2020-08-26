@@ -1,0 +1,11 @@
+<nz-date-picker [(ngModel)]="startDate" (ngModelChange)="onStartDateChange($event)"></nz-date-picker>
+<nz-date-picker [(ngModel)]="endDate" (ngModelChange)="onEndDateChange($event)"></nz-date-picker>
+<button nz-button nzType="primary" (click)="applyFilters()">Apply filter</button>
+
+<nz-descriptions nzTitle="Lead Activity" nzBordered>
+  <ng-container *ngFor="let detail of userDetails" >
+    <nz-descriptions-item  [nzTitle]="detail._id.leadStatus">
+      {{detail.myCount}}
+    </nz-descriptions-item>
+  </ng-container>
+</nz-descriptions>
