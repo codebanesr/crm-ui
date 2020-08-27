@@ -29,7 +29,7 @@ export default () => {
         }, {
           title: "Leads",
           show: true,
-          link: routePoints.LEADS
+          link: routePoints.LEADS_ALL
         },
         {
           title: "Lead Solo",
@@ -69,9 +69,7 @@ export default () => {
           link: routePoints.CREATE_CAMPAIGN
         }
       ]
-    },
-
-    {
+    }, {
       title: "ROLE",
       icon: "radar-chart",
       show: true,

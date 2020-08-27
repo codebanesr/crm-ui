@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe((data: any)=>{
       this.msg.success("Successfully Logged In");
-      this.router.navigate(["welcome", routePoints.LEADS]);
+      this.router.navigate(["welcome", routePoints.LEADS_ALL]);
     }, (error: Error)=>{
       this.msg.error("Incorrect username or password");
     })
@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
   submitSignupForm(username, password, confirmPassword) {
     this.authService.signup(username, password, confirmPassword).subscribe((data: any)=>{
       this.msg.success("Your Account has been registered");
-      this.router.navigate(["welcome", routePoints.LEADS]);
+      this.router.navigate(["welcome", routePoints.LEADS_ALL]);
     }, (error: Error)=>{
       this.msg.error("Something went wrong");
     });

@@ -101,7 +101,7 @@ export class CampaignComponent implements OnInit {
     this.campaignService
       .getCampaigns(this.page, this.perPage, this.filters, null, null)
       .subscribe(
-        (data: any[]) => {
+        (data: any) => {
           this.processData(data);
         },
         (error) => {
@@ -110,9 +110,12 @@ export class CampaignComponent implements OnInit {
       );
   }
 
-  processData(data: any) {
+  totalPage: number = 0;
+  processData(result: { data: any[], metadata: { total: number, page: number } }) {
+    this.page = result.metadata.page;
+    this.totalPage = result.metadata.total;
     this.listOfData = [];
-    for (let d of data) {
+    for (let d of result.data) {
       this.listOfData.push({
         startDate: d.interval[0],
         endDate: d.interval[1],

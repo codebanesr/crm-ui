@@ -39,6 +39,9 @@ const routes: Routes = [
   },
   {
     path: routePoints.USERS,
+    data: {
+      breadcrumb: 'user'
+    },
     children: [
       {
         path: '',
@@ -78,13 +81,13 @@ const routes: Routes = [
     ],
   },
   {
-    path: routePoints.LEADS,
+    path: 'leads',
     data: {
-      breadcrumb: 'leads',
+      breadcrumb: 'lead',
     },
     children: [
       {
-        path: '',
+        path: 'all',
         component: LeadsComponent,
       },
       {
@@ -98,7 +101,7 @@ const routes: Routes = [
         path: 'solo',
         component: LeadSoloComponent,
         data: {
-          breadcrumb: 'create',
+          breadcrumb: 'solo',
         },
       },
     ],
@@ -161,12 +164,15 @@ const routes: Routes = [
   },
   {
     path: 'campaigns',
+    data: {
+      breadcrumb: 'campaign'
+    },
     children: [
       {
         path: 'list',
         component: CampaignComponent,
         data: {
-          breadcrumb: 'campaigns',
+          breadcrumb: 'list',
         },
       },
       {
@@ -181,7 +187,7 @@ const routes: Routes = [
   {
     path: 'role',
     data: {
-      breadcrumb: 'roles',
+      breadcrumb: 'role',
     },
     children: [
       {
@@ -204,7 +210,7 @@ const routes: Routes = [
     path: 'permission',
     component: PermissionsComponent,
     data: {
-      breadcrumb: 'permissions',
+      breadcrumb: 'permission',
     },
   },
   {

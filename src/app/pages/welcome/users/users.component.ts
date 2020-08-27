@@ -38,10 +38,10 @@ export class UsersComponent implements OnInit {
       filter: Array<{ key: string; value: string[] }>
     ): void {
       this.loading = true;
-      this.usersService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe((data: any) => {
+      this.usersService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe((result: any) => {
         this.loading = false;
-        this.total = 200; // mock the total data here
-        this.listOfRandomUser = data;
+        this.total = result.metadata.total; // mock the total data here
+        this.listOfRandomUser = result.users;
       });
     }
 

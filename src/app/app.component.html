@@ -22,7 +22,7 @@
     >
       <li *ngFor="let menuitem of dashboardSidebar" nz-submenu [nzOpen]="menuitem.open" [nzTitle]="menuitem.title" [nzIcon]="menuitem.icon">
         <ul *ngFor="let subitem of menuitem.subMenus">
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="permissions.includes(subitem.link)">
             <a routerLink="welcome/{{subitem.link}}">{{subitem.title}}</a>
           </li>
         </ul>

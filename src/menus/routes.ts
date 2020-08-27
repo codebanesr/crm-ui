@@ -1,7 +1,7 @@
 export const routePoints = {
     USERS: "users",
     USER_CREATE: "user/create",
-    LEADS: "leads",
+    LEADS_ALL: "leads/all",
     LEAD_CREATE: "lead/create",
     LEAD_SOLO: "leads/solo",
     TICKETS: "tickets",

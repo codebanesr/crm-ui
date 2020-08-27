@@ -35,10 +35,9 @@ export class LeadSoloComponent implements OnInit {
 
   populateCampaignDropdown(filter) {
     this.loadingCampaignList = true;
-    this.campaignService.getCampaigns(1, 20, filter, "", 'asc').subscribe((data: any) => {
+    this.campaignService.getCampaigns(1, 20, filter, "", 'asc').subscribe((result: any) => {
       this.loadingCampaignList = false;
-      this.campaignList = data;
-      console.log(data);
+      this.campaignList = result.data;
     }, error => {
         this.loadingCampaignList = false;
         console.log(error);
