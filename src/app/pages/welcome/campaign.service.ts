@@ -103,7 +103,7 @@ export class CampaignService {
     return uniqueId;
   }
 
-  getCampaignById(campaignId: string) {
-    return this.http.get(`${environment.apiUrl}/campaign/${campaignId}`);
+  getCampaignById(campaignId: string, identifier=undefined) {
+    return this.http.get(`${environment.apiUrl}/campaign/${campaignId}?identifier=${identifier}`);
   }
 }

@@ -56,30 +56,21 @@ export class LeadSoloComponent implements OnInit {
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings();
     this.typeDict = typeDict;
-    console.log(this.typeDict)
   }
 
   initializeDispositionTypes() {
     this.dispositionTypes = [{
-      label: 'Follow Up',
-      value: 'followUp'
+      label: 'Goldenrod',
+      value: 'Goldenrod'
     },{
-      label: 'New Lead',
-      value: 'newLead'
+      label: 'Blue',
+      value: 'Blue'
     },{
-      label: 'Archived',
-      value: 'archived'
+      label: 'Khaki',
+      value: 'Khaki'
       }]
 
     this.selectedDisposition = this.dispositionTypes[0].value;
-  }
-
-  dispositionTypeChange(event) {
-    this.leadsService.getSingleLeadByDispositionAndCampaign(this.selectedDisposition, this.selectedCampaign).subscribe(data=>{
-      this.selectedLead = data;
-    }, error => {
-        console.log(error);
-    })
   }
 
   clearAllFilters() {
@@ -111,5 +102,16 @@ export class LeadSoloComponent implements OnInit {
   handleModelChange(event) {
     console.log("selected campaign changed to: ", event);
     this.getDispositionForCampaign();
+  }
+
+  fetchNextLead(event?) {
+    this.leadsService.fetchNextLead(this.selectedCampaign, this.selectedDisposition).subscribe((data: any)=>{
+      this.selectedLead = data.result;
+      this.campaignService.getCampaignById(this.selectedLead.campaign, 'campaignName').subscribe(campaign => {
+        console.log("Found campaign by name", campaign);
+      })
+    }, error => {
+        console.log(error);
+    })
   }
 }

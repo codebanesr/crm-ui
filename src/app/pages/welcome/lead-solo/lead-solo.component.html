@@ -1,4 +1,4 @@
-<nz-radio-group [(ngModel)]="selectedDisposition" nzButtonStyle="solid" (ngModelChange)="dispositionTypeChange($event)">
+<nz-radio-group [(ngModel)]="selectedDisposition" nzButtonStyle="solid" (ngModelChange)="fetchNextLead($event)">
   <label nz-radio-button [nzValue]="disposition.value" *ngFor="let disposition of dispositionTypes">{{disposition.label}}</label>
   <i nz-icon nzType="close-circle" nzTheme="fill" (click)="clearAllFilters()" style="cursor: pointer"></i>
 </nz-radio-group>
@@ -7,30 +7,33 @@
   <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
 </nz-select>
 
+<a nz-button nzType="link" (click)="fetchNextLead()">Fetch Next Lead</a>
 
 <nz-divider></nz-divider>
 <ng-container *ngIf="selectedLead">
   <nz-descriptions nzTitle="Lead Info" nzBordered=true>
     <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
       <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-        <ng-container *ngIf="typeDict[leadKey].type == 'date'">
-          <nz-date-picker
-            [nzMode]="dateMode"
-            [(ngModel)]="selectedLead[leadKey]"
-            [nzDisabled]="isDisabled(leadKey)"
-            nzShowTime
-            (nzOnOpenChange)="handleDateOpenChange($event)"
-            (nzOnPanelChange)="handleDatePanelChange($event)"
-          >
-          </nz-date-picker>
-        </ng-container>
+        <ng-container [ngSwitch]="typeDict[leadKey].type">
+          <ng-container *ngSwitchCase="'date'">
+            <nz-date-picker
+              [nzMode]="dateMode"
+              [(ngModel)]="selectedLead[leadKey]"
+              [nzDisabled]="isDisabled(leadKey)"
+              nzShowTime
+              (nzOnOpenChange)="handleDateOpenChange($event)"
+              (nzOnPanelChange)="handleDatePanelChange($event)"
+            >
+            </nz-date-picker>
+          </ng-container>
 
-        <ng-container *ngIf="typeDict[leadKey].type == 'number'">
-          <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"/>
-        </ng-container>
+          <ng-container *ngSwitchCase="'number'">
+            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"/>
+          </ng-container>
 
-        <ng-container *ngIf="typeDict[leadKey].type == 'string'">
-          <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
+          <ng-container *ngSwitchCase="'string'">
+            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
+          </ng-container>
         </ng-container>
       </nz-descriptions-item>
     </ng-container>

@@ -76,29 +76,7 @@ export class LeadsService {
   }
 
 
-  getSingleLeadByDispositionAndCampaign(dispositionType: string, campaign: string): Observable<ILead> {
-    return of({
-        _id : '5f26bf151d9cccc34b3559d0',
-        externalId : 'mlohden1@soup.io',
-        __v : 0,
-        address : '0 Homewood Drive',
-        amount : '¥50917.27',
-        campaign : 'core',
-        companyName : 'AbbVie Inc.',
-        createdAt : '2020-08-02T17:26:47.365+04:00',
-        customerEmail : 'mlohden1@bbb.org',
-        email : 'frontline1@email.com',
-        firstName : 'Muhammad',
-        followUp : '2020-03-28T04:00:00.000+04:00',
-        lastName : 'Lohden',
-        leadStatus : 'Blue',
-        phoneNumber : '88132',
-        phoneNumberPrefix : '1756',
-        product : 'Pepper - Black, Crushed',
-        remarks : '0.0607950874',
-        source : 'NYSE',
-        updatedAt : '2020-08-02T17:26:47.365+04:00'
-    });
-    // return this.http.get(`${environment.apiUrl}/lead/singleLeadByDisposition/${dispositionType}`);
+  fetchNextLead(campaignName: string, leadStatus: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/lead/fetchNextLead/${campaignName}/${leadStatus}`);
   }
 }
