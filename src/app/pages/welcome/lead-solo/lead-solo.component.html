@@ -35,7 +35,17 @@
           <ng-container *ngSwitchCase="'string'">
             <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
           </ng-container>
+
+
+          <ng-container *ngSwitchCase="'select'">
+            <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+              <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option"></nz-option>
+            </nz-select>
+
+          </ng-container>
+
         </ng-container>
+
       </nz-descriptions-item>
     </ng-container>
     <nz-descriptions-item nzTitle="Disposition">
