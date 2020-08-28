@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ILead } from 'src/interfaces/leads.interface';
 import { ILeadColumn } from './pages/welcome/leads/lead.interface';
 
 @Injectable({
@@ -68,7 +67,8 @@ export class LeadsService {
             label: path.readableField,
             value: path.internalField,
             checked: path.checked,
-            type: path.type
+            type: path.type,
+            options: path.options
           });
         });
         const typeDict = Object.assign({}, ...showCols.map((x) => ({ [x.value]: x })));

@@ -16,10 +16,7 @@ export class LeadSoloComponent implements OnInit {
     private campaignService: CampaignService
   ) { }
 
-  selectedDisposition: string;
   selectedCampaign: string;
-  dispositionTypes: IDisposition[];
-  selectedDispositionTree: any;
   selectedLead: ILead;
   typeDict: any;
   objectkeys = Object.keys;
@@ -28,7 +25,6 @@ export class LeadSoloComponent implements OnInit {
   campaignList: any[] = [];
   callDispositions;
   ngOnInit(): void {
-    this.initializeDispositionTypes();
     this.getLeadMappings();
     this.populateCampaignDropdown("");
   }
@@ -52,28 +48,12 @@ export class LeadSoloComponent implements OnInit {
     })
   }
 
+  leadStatusOptions: string[];
+  selectedLeadStatus: string;
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings(this.selectedCampaign);
     this.typeDict = typeDict;
-  }
-
-  initializeDispositionTypes() {
-    this.dispositionTypes = [{
-      label: 'Goldenrod',
-      value: 'Goldenrod'
-    },{
-      label: 'Blue',
-      value: 'Blue'
-    },{
-      label: 'Khaki',
-      value: 'Khaki'
-      }]
-
-    this.selectedDisposition = this.dispositionTypes[0].value;
-  }
-
-  clearAllFilters() {
-    this.selectedDisposition = undefined;
+    this.leadStatusOptions = this.typeDict.leadStatus.options;
   }
 
   disabledKeys = ['externalId', 'createdAt', 'updatedAt', '_id']
@@ -105,7 +85,7 @@ export class LeadSoloComponent implements OnInit {
   }
 
   fetchNextLead(event?) {
-    this.leadsService.fetchNextLead(this.selectedCampaign, this.selectedDisposition).subscribe((data: any)=>{
+    this.leadsService.fetchNextLead(this.selectedCampaign, this.selectedLeadStatus).subscribe((data: any)=>{
       this.selectedLead = data.result;
       this.campaignService.getCampaignById(this.selectedLead.campaign, 'campaignName').subscribe(campaign => {
         console.log("Found campaign by name", campaign);

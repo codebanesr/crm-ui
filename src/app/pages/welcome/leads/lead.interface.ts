@@ -4,7 +4,8 @@ export interface ILeadColumn {
   "__v": number,
   "readableField": string,
   "type": string,
-  checked: boolean
+  checked: boolean,
+  options: string[]
 }
 
 export interface Setting {

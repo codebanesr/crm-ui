@@ -1,11 +1,12 @@
-<nz-radio-group [(ngModel)]="selectedDisposition" nzButtonStyle="solid" (ngModelChange)="fetchNextLead($event)">
-  <label nz-radio-button [nzValue]="disposition.value" *ngFor="let disposition of dispositionTypes">{{disposition.label}}</label>
-  <i nz-icon nzType="close-circle" nzTheme="fill" (click)="clearAllFilters()" style="cursor: pointer"></i>
-</nz-radio-group>
-
 <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="handleModelChange($event)">
   <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
 </nz-select>
+
+
+<nz-select nzMode="default" *ngIf="leadStatusOptions" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedLeadStatus" (ngModelChange)="handleModelChange($event)">
+  <nz-option *ngFor="let status of leadStatusOptions" [nzLabel]="status" [nzValue]="status"></nz-option>
+</nz-select>
+
 
 <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Next Lead</a>
 
