@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe((data: any)=>{
       this.msg.success("Successfully Logged In");
-      this.router.navigate(["welcome", routePoints.LEADS_ALL]);
+      this.router.navigate(["welcome", 'leads', 'all']);
     }, (error: Error)=>{
       this.msg.error("Incorrect username or password");
     })

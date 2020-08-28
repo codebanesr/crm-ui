@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {IDisposition} from './disposition.interface'
 import { LeadsService } from 'src/app/leads.service';
 import { ILead } from 'src/interfaces/leads.interface';
@@ -53,7 +53,7 @@ export class LeadSoloComponent implements OnInit {
   }
 
   async getLeadMappings() {
-    const { typeDict } = await this.leadsService.getLeadMappings();
+    const { typeDict } = await this.leadsService.getLeadMappings(this.selectedCampaign);
     this.typeDict = typeDict;
   }
 
@@ -98,8 +98,9 @@ export class LeadSoloComponent implements OnInit {
 
   handleDateOpenChange(event) {}
   handleDatePanelChange(event) { }
-  handleModelChange(event) {
+  async handleModelChange(event) {
     console.log("selected campaign changed to: ", event);
+    await this.getLeadMappings();
     this.getDispositionForCampaign();
   }
 

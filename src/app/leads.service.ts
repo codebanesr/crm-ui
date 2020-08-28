@@ -21,8 +21,12 @@ export class LeadsService {
   }
 
 
-  getAllLeadColumns() {
-    return this.http.get(`${environment.apiUrl}/lead/getAllLeadColumns`);
+  getAllLeadColumns(campaignType?: string) {
+    let reqUrl = `${environment.apiUrl}/lead/getAllLeadColumns`;
+    if (campaignType) {
+      reqUrl += `?campaignType=${campaignType}`;
+    }
+    return this.http.get(reqUrl);
   }
 
 
@@ -55,10 +59,10 @@ export class LeadsService {
   }
 
 
-  getLeadMappings(): Promise<any> {
+  getLeadMappings(campaignName?: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const showCols = [];
-      this.getAllLeadColumns().subscribe((mSchema: { paths: ILeadColumn[] }) => {
+      this.getAllLeadColumns(campaignName).subscribe((mSchema: { paths: ILeadColumn[] }) => {
         mSchema.paths.forEach((path: ILeadColumn) => {
           showCols.push({
             label: path.readableField,
