@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { RoleService } from 'src/app/role.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class RoleCreateComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private msgService: NzMessageService
   ) {}
   listOfOption: any[]
   ngOnInit(): void {
@@ -39,9 +41,9 @@ export class RoleCreateComponent implements OnInit {
     console.log(this.validateForm.value)
     if(this.validateForm.valid) {
       this.roleService.createOrUpdateRole(this.validateForm.value).subscribe(data=>{
-        console.log(data)
+        this.msgService.success("Successfully updated roles with permissions");
       }, error=>{
-        console.log(error);
+          this.msgService.error("An error occured while updating roles with permissions");
       })
     }
   }

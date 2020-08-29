@@ -13,5 +13,5 @@ export const routePoints = {
     OVERVIEW: "overview",
     ROLE: "role/list",
     ROLE_CREATE: "role/create",
-    PERMISSION: "permission"
+    PERMISSION: "role/permission"
 }

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 
 import {routePoints} from '../../menus/routes';
+import { PubsubService } from '../pubsub.service';
+import { SIDEBAR } from 'src/string.constants';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +27,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthenticationService,
     private msg: NzMessageService,
-    private router: Router
+    private router: Router,
+    private pubsub: PubsubService
   ) { }
 
   formType = "login";
@@ -56,11 +59,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe((data: any)=>{
       this.msg.success("Successfully Logged In");
       this.router.navigate(["welcome", 'leads', 'all']);
+      this.pubsub.$pub(SIDEBAR, true);
     }, (error: Error)=>{
       this.msg.error("Incorrect username or password");
     })

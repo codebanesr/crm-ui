@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { RoleService } from 'src/app/role.service';
 
 interface DataItem {
@@ -36,13 +37,12 @@ export class PermissionsComponent implements OnInit {
     }
   ];
 
-
-
   listOfData: DataItem[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private msgService: NzMessageService
   ) {}
 
   submitForm(): void {
@@ -53,18 +53,17 @@ export class PermissionsComponent implements OnInit {
 
 
     if(this.validateForm.valid) {
-      this.roleService.addPermission(this.validateForm.value).subscribe(data=>{
-        console.log(data);
+      this.roleService.addPermission(this.validateForm.value).subscribe(data => {
+        this.msgService.success("Successfully updated roles for user");
         this.initTable()
       }, error=>{
-        console.log(error);
+          this.msgService.error("An error occured while adding roles to the database", error.message);
       })
     }
   }
 
   ngOnInit(): void {
     this.initForm();
-
     this.initTable();
   }
 
@@ -82,7 +81,6 @@ export class PermissionsComponent implements OnInit {
     this.roleService.getAllPermissions().subscribe((data: any[])=>{
       this.listOfData = data;
     }, error=>{
-
     })
   }
 }

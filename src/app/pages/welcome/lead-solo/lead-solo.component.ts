@@ -3,6 +3,7 @@ import {IDisposition} from './disposition.interface'
 import { LeadsService } from 'src/app/leads.service';
 import { ILead } from 'src/interfaces/leads.interface';
 import { CampaignService } from '../campaign.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-lead-solo',
@@ -13,7 +14,8 @@ export class LeadSoloComponent implements OnInit {
 
   constructor(
     private leadsService: LeadsService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private msgService: NzMessageService
   ) { }
 
   selectedCampaign: string;
@@ -65,7 +67,11 @@ export class LeadSoloComponent implements OnInit {
   }
 
   handleLeadSubmission(lead: ILead) {
-    console.log(lead);
+    this.leadsService.updateLead(lead.externalId, lead).subscribe(data => {
+      this.msgService.success("Successfully updated lead");
+    }, error => {
+        this.msgService.error("Error in updating lead");
+    });
   }
 
   handleDispositionTreeEvent(event) {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { HostListener, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LeadCreateComponent } from './lead-create/lead-create.component';
 import { LeadsComponent } from './leads/leads.component';
@@ -27,6 +27,8 @@ import { FormlyDatePicker } from 'src/app/custom-templates/date-picker';
 import { LeadSoloComponent } from './lead-solo/lead-solo.component';
 import { ConferenceComponent } from './conference/conference.component';
 import { ChatComponent } from './chat/chat.component';
+import { PubsubService } from 'src/app/pubsub.service';
+import { SIDEBAR } from 'src/string.constants';
 
 
 @NgModule({
@@ -70,4 +72,13 @@ import { ChatComponent } from './chat/chat.component';
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],
 })
-export class WelcomeModule {}
+export class WelcomeModule {
+  constructor(private pubsub: PubsubService) {
+
+  }
+  @HostListener('window:unload', ['$event'])
+  unloadHandler(event) {
+    console.log("browser refresh")
+    this.pubsub.$pub(SIDEBAR, true);
+  }
+}

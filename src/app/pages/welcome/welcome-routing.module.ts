@@ -204,14 +204,14 @@ const routes: Routes = [
           breadcrumb: 'create-role',
         },
       },
+      {
+        path: 'permission',
+        component: PermissionsComponent,
+        data: {
+          breadcrumb: 'permission',
+        },
+      },
     ],
-  },
-  {
-    path: 'permission',
-    component: PermissionsComponent,
-    data: {
-      breadcrumb: 'permission',
-    },
   },
   {
     path: 'agent/actions',
