@@ -32,23 +32,23 @@ export class UploadsComponent  {
   count = 3;
   array1 = [{
     name: "customer",
-    url: "http://35.154.8.217:5182/customer/many?type=customer"
+    url: "http://localhost:3000/customer/many?type=customer"
   }, {
     name: "lead",
-    url: "http://35.154.8.217:5182/customer/many?type=lead"
+    url: "http://localhost:3000/customer/many?type=lead"
   }, {
     name: "ticket",
-    url: "http://35.154.8.217:5182/customer/many?type=ticket"
+    url: "http://localhost:3000/customer/many?type=ticket"
   }]
 
 
   array2 = [{
     name: "campaign",
-    url: "http://35.154.8.217:5182/customer/many?type=campaign"
+    url: "http://localhost:3000/customer/many?type=campaign"
   },
   {
     name: "users",
-    url: "http://35.154.8.217:5182/user/many"
+    url: "http://localhost:3000/user/many"
   }]
 
   reGenerateArray(count: number): void {

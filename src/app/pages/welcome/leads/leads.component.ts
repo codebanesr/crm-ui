@@ -110,8 +110,9 @@ export class LeadsComponent implements OnInit{
   getData() {
     this.leadsService.getLeads(this.leadOptions).subscribe((response: any)=>{
       this.msg.info("Retrieved some leads");
-      this.generateListOfCols(response[0]);
-      this.listOfData = response;
+      this.generateListOfCols(response.data[0]);
+      this.listOfData = response.data;
+      this.total = response.total;
     }, error=>{
       this.msg.error("Some error occured while fetching leads");
     });

@@ -13,19 +13,10 @@ export class AppComponent implements OnInit, OnDestroy{
   isCollapsed = false;
   objectKeys = Object.keys;
 
-  constructor(private pubsub: PubsubService) { }
-  permissions = [];
-  dashboardSidebar;
+  constructor() { }
   sidebar: Subscription;
+  dashboardSidebar = dashboardSidebar();
   ngOnInit() {
-    this.sidebar = this.pubsub.$sub(SIDEBAR).subscribe(show => {
-      if (show) {
-        this.permissions = JSON.parse(localStorage.getItem("currentUser")).permissions;
-        this.dashboardSidebar = dashboardSidebar(this.permissions);
-      } else {
-        this.permissions = [];
-      }
-    })
   }
 
   ngOnDestroy() {

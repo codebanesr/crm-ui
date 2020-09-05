@@ -30,7 +30,7 @@
     <nz-form-control [nzSpan]="12" nzHasFeedback>
       <input placeholder="input here" nz-input formControlName="campaignName" [nzAutocomplete]="auto" />
       <nz-autocomplete #auto>
-        <nz-auto-option *ngFor="let option of options" [nzValue]="option?.type">{{option?.type}}</nz-auto-option>
+        <nz-auto-option *ngFor="let option of options" [nzValue]="option?.campaignName">{{option?.campaignName}}</nz-auto-option>
       </nz-autocomplete>
     </nz-form-control>
   </nz-form-item>
@@ -97,8 +97,8 @@
           <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
           <input placeholder="Select Campaign" nz-input formControlName="campaign" [nzAutocomplete]="autob" />
           <nz-autocomplete #autob>
-            <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.type" [nzLabel]="co.type">
-              {{ co.type }}
+            <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.campaignName" [nzLabel]="co.campaignName">
+              {{ co.campaignName }}
             </nz-auto-option>
           </nz-autocomplete>
         </nz-form-item>

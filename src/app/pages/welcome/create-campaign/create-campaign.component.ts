@@ -266,7 +266,7 @@ export class CreateCampaignComponent implements OnInit {
           this.uploading = false;
           this.fileList = [];
           this.msg.success('Attachments uploaded successfully.');
-          this.attachments = response.body?.files;
+          this.attachments = response.body;
           this.submitEmailForm();
         },
         () => {
