@@ -85,8 +85,9 @@ export class LeadSoloComponent implements OnInit {
   }
 
   handleDateOpenChange(event) {}
+  handleLeadStatusChange(event){}
   handleDatePanelChange(event) { }
-  async handleModelChange(event) {
+  async handleCampaignChange(event) {
     console.log("selected campaign changed to: ", event);
     await this.getLeadMappings();
     this.getDispositionForCampaign();

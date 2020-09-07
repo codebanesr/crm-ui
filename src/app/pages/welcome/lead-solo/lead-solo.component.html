@@ -1,9 +1,9 @@
-<nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="handleModelChange($event)">
+<nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="handleCampaignChange($event)">
   <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
 </nz-select>
 
 
-<nz-select nzMode="default" *ngIf="leadStatusOptions" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedLeadStatus" (ngModelChange)="handleModelChange($event)">
+<nz-select nzMode="default" *ngIf="leadStatusOptions" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedLeadStatus" (ngModelChange)="handleLeadStatusChange($event)">
   <nz-option *ngFor="let status of leadStatusOptions" [nzLabel]="status" [nzValue]="status"></nz-option>
 </nz-select>
 
