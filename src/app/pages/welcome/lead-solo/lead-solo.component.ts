@@ -4,6 +4,8 @@ import { LeadsService } from 'src/app/leads.service';
 import { ILead } from 'src/interfaces/leads.interface';
 import { CampaignService } from '../campaign.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ClassValidationError } from 'src/global.interfaces';
+import { error } from 'protractor';
 
 @Component({
   selector: 'app-lead-solo',
@@ -69,8 +71,8 @@ export class LeadSoloComponent implements OnInit {
   handleLeadSubmission(lead: ILead) {
     this.leadsService.updateLead(lead.externalId, lead).subscribe(data => {
       this.msgService.success("Successfully updated lead");
-    }, error => {
-        this.msgService.error("Error in updating lead");
+    }, ({error}: {error: ClassValidationError}) => {
+        this.msgService.error(error.message[0]);
     });
   }
 

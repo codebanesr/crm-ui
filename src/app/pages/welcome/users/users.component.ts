@@ -40,7 +40,7 @@ export class UsersComponent implements OnInit {
       this.loading = true;
       this.usersService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe((result: any) => {
         this.loading = false;
-        this.total = result.metadata.total; // mock the total data here
+        this.total = result.metadata.total;
         this.listOfRandomUser = result.users;
       });
     }

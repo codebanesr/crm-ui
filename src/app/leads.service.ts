@@ -30,7 +30,7 @@ export class LeadsService {
 
 
   updateLead(leadId, body) {
-    return this.http.put(`${environment.apiUrl}/lead/${leadId}`, {lead: body});
+    return this.http.put(`${environment.apiUrl}/lead/${leadId}`, body);
   }
 
 

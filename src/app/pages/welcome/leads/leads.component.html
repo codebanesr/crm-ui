@@ -1,18 +1,19 @@
 <div class="table-operations">
-  <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
-    Filters</button>
-  <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
-    Lead</button>
   <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px;"
     (change)="handleSearchTerm()">
-    <input type="text" nz-input placeholder="input search text" [(ngModel)]="leadOptions.searchTerm" />
+    <input type="text" nz-input placeholder="Global Search" [(ngModel)]="leadOptions.searchTerm" />
   </nz-input-group>
   <ng-template #suffixIconButton>
     <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
   </ng-template>
+  <nz-divider nzType="vertical"></nz-divider>
+  <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
+    Filters</button>
+  <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
+    Lead</button>
 </div>
 <nz-table #filterTable [nzData]="listOfData" nzTableLayout="scroll" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
-[nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="listOfData.length > 0">
+[nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="!isEmpty">
   <thead>
     <tr>
       <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
@@ -58,15 +59,19 @@
   </tbody>
 </nz-table>
 
+<nz-empty *ngIf="isEmpty"></nz-empty>
+
+
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
   (nzOnClose)="close()" nzWidth="350px">
   <form nz-form [formGroup]="settingForm" nzLayout="vertical">
     <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzRequired nzFor="handlerEmail">Handler Email</nz-form-label>
-      <nz-form-control [nzSpan]="24">
-        <input type="text" nz-input formControlName="handlerEmail" placeholder="Please input your name" />
-      </nz-form-control>
+      <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
+      <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" formControlName="selectedCampaign">
+        <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign.campaignName"></nz-option>
+      </nz-select>
     </nz-form-item>
+
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzFor="dateRange">Date Range</nz-form-label>
       <nz-form-control [nzSpan]="24">

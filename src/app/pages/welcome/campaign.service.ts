@@ -106,4 +106,15 @@ export class CampaignService {
   getCampaignById(campaignId: string, identifier=undefined) {
     return this.http.get(`${environment.apiUrl}/campaign/${campaignId}?identifier=${identifier}`);
   }
+
+
+  async populateCampaignDropdown(filter): Promise<any[]> {
+    return new Promise((resolve, reject)=>{
+      this.getCampaigns(1, 20, filter, "", 'asc').subscribe((result: any) => {
+        resolve(result.data);
+      }, error => {
+          reject(error);
+      })
+    })
+  }
 }
