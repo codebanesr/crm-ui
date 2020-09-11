@@ -65,7 +65,7 @@ export class SignupComponent implements OnInit {
       fullName: [null, [Validators.required]],
       phoneNumberPrefix: ['+86'],
       phoneNumber: [null, [Validators.required]],
-      roleType: 'frontline',
+      roleType: [null, Validators.required],
       manages: [[], Validators.required],
       reportsTo: [null, Validators.required],
       agree: [false],

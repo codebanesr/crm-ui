@@ -41,6 +41,27 @@
     </nz-form-control>
   </nz-form-item>
 
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reportsTo" nzRequired>
+      <span>
+        Role Type
+        <i nz-icon nz-tooltip nzTooltipTitle="User Role" nzType="question-circle"
+          nzTheme="outline"></i>
+      </span>
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="What will be the role of this user">
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select Role Type" formControlName="roleType">
+        <nz-option nzLabel="Frontline" nzValue="frontline"></nz-option>
+        <nz-option nzLabel="Manager" nzValue="manager"></nz-option>
+        <nz-option nzLabel="Senior Manager" nzValue="seniorManager"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+
+
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reportsTo" nzRequired>
       <span>
