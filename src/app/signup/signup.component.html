@@ -50,7 +50,9 @@
       </span>
     </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Who does the user report to">
-      <input nz-input id="reportsTo" formControlName="reportsTo" />
+      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" formControlName="reportsTo">
+        <nz-option *ngFor="let user of listOfOption" [nzLabel]="user.fullName" [nzValue]="user.email"></nz-option>
+      </nz-select>
     </nz-form-control>
   </nz-form-item>
 
@@ -63,9 +65,9 @@
     </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Who will he manage">
       <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" formControlName="manages">
-      <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.fullName" [nzValue]="option.email"
-        [nzHide]="!isNotSelected(option.email)"></nz-option>
-    </nz-select>
+        <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.fullName" [nzValue]="option.email"
+          [nzHide]="!isNotSelected(option.email)"></nz-option>
+      </nz-select>
     </nz-form-control>
 
   </nz-form-item>
