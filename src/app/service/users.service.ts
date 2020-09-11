@@ -33,7 +33,9 @@ export class UsersService {
     return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user/allUsers`, { params });
   }
 
-
+  getAllUsersHack() {
+    return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user`);
+  }
   transformFilterObjectToQueryParams(paramObject) {
     return Object.keys(paramObject).map(key => key + '=' + paramObject[key]).join('&');
   }

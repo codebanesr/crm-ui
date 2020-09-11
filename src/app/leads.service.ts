@@ -79,8 +79,8 @@ export class LeadsService {
     })
   }
 
-
   fetchNextLead(campaignName: string, leadStatus: string): Observable<any> {
     return this.http.get(`${environment.apiUrl}/lead/fetchNextLead/${campaignName}/${leadStatus}`);
   }
+
 }

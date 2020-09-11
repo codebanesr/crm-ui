@@ -49,9 +49,6 @@ export class LoginComponent implements OnInit {
       case this.formView.login:
         this.submitLoginForm(username, password);
         break;
-      case this.formView.signup:
-        this.submitSignupForm(username, password, confirmPassword);
-        break;
 
       case this.formView.reset:
         this.submitResetForm(username);
@@ -67,15 +64,6 @@ export class LoginComponent implements OnInit {
     }, (error: Error)=>{
       this.msg.error("Incorrect username or password");
     })
-  }
-
-  submitSignupForm(username, password, confirmPassword) {
-    this.authService.signup(username, password, confirmPassword).subscribe((data: any)=>{
-      this.msg.success("Your Account has been registered");
-      this.router.navigate(["welcome", routePoints.LEADS_ALL]);
-    }, (error: Error)=>{
-      this.msg.error("Something went wrong");
-    });
   }
 
   submitResetForm(username: string) {

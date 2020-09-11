@@ -25,6 +25,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import * as echarts from 'echarts';
 import { CampaignOverviewComponent } from './campaign-overview/campaign-overview.component';
 import { UserDetailsComponent } from './pages/welcome/user-details/user-details.component';
+import { SignupComponent } from './signup/signup.component';
 
 
 registerLocaleData(en);
@@ -38,6 +39,7 @@ registerLocaleData(en);
     OverviewComponent,
     CampaignOverviewComponent,
     UserDetailsComponent,
+    SignupComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,

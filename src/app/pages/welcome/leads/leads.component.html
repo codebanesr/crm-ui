@@ -152,7 +152,7 @@
 <!-- reassignment modal -->
 <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
   (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user">
-  <input nz-input placeholder="small size" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
+  <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
 
   <nz-list nzItemLayout="horizontal" [nzLoading]="false">
     <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">

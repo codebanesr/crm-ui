@@ -21,8 +21,8 @@
       <td nz-popover [nzPopoverTitle]="titleTemplate" [nzPopoverContent]="contentTemplate">{{ data?.managedBy?.email }}</td>
       <td class="actions">
         <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
-        <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history')"></i> &nbsp;
-        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign')"></i>
+        <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i> &nbsp;
+        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign'); $event.stopPropagation()"></i>
       </td>
 
       <ng-template #titleTemplate><i nz-icon></i> {{data.managedBy.email}}</ng-template>
