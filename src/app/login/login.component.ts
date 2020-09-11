@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
   }
 
   submitResetForm(username: string) {
-    this.authService.resetPassword(username).subscribe((data: any)=>{
+    this.authService.forgotPassword(username).subscribe((data: any)=>{
       this.msg.success("A link to reset your account has been sent to your email");
     }, (error: Error)=>{
       // message from the backend server to be shown here

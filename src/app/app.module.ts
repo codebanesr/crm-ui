@@ -27,7 +27,6 @@ import { CampaignOverviewComponent } from './campaign-overview/campaign-overview
 import { UserDetailsComponent } from './pages/welcome/user-details/user-details.component';
 import { SignupComponent } from './signup/signup.component';
 
-
 registerLocaleData(en);
 
 @NgModule({
