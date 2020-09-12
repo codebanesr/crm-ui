@@ -3,98 +3,100 @@ import { routePoints } from '../menus/routes';
 export default () => {
   return [
     {
-      title: "Dashboard",
-      icon: "radar-chart",
+      title: 'Admin',
+      icon: 'radar-chart',
       show: true,
       hasChildren: true,
       open: true,
       subMenus: [
         {
-          title: "Performance",
+          title: 'Create Users',
           show: true,
-          link: routePoints.OVERVIEW
-        }
-      ]
+          link: 'signup',
+        },
+      ],
     },
     {
-      title: "Welcome",
-      icon: "dashboard",
+      title: 'Welcome',
+      icon: 'dashboard',
       show: true,
       hasChildren: true,
       open: true,
       subMenus: [
         {
-          title: "Users",
+          title: 'Users',
           show: true,
-          link: routePoints.USERS
+          link: routePoints.USERS,
         },
         {
-          title: "Leads",
+          title: 'Leads',
           show: true,
-          link: routePoints.LEADS_ALL
+          link: routePoints.LEADS_ALL,
         },
         {
-          title: "Lead Solo",
+          title: 'Lead Solo',
           show: true,
-          link: routePoints.LEAD_SOLO
+          link: routePoints.LEAD_SOLO,
         },
         {
-          title: "Tickets",
+          title: 'Tickets',
           show: true,
-          link: routePoints.TICKETS
+          link: routePoints.TICKETS,
         },
         {
-          title: "Uploads",
+          title: 'Uploads',
           show: true,
-          link: routePoints.UPLOADS
+          link: routePoints.UPLOADS,
         },
         {
-          title: "Alarms",
+          title: 'Alarms',
           show: true,
-          link: routePoints.ALARMS
-        }
-      ]
-    }, {
-      title: "Campaigns",
-      icon: "alipay",
+          link: routePoints.ALARMS,
+        },
+      ],
+    },
+    {
+      title: 'Campaigns',
+      icon: 'alipay',
       show: true,
       hasChildren: true,
       open: false,
       subMenus: [
         {
-          title: "List",
+          title: 'List',
           show: true,
-          link: routePoints.LIST_CAMPAIGN
+          link: routePoints.LIST_CAMPAIGN,
         },
         {
-          title: "Create",
+          title: 'Create',
           show: true,
-          link: routePoints.CREATE_CAMPAIGN
-        }
-      ]
-    }, {
-      title: "ROLE",
-      icon: "radar-chart",
+          link: routePoints.CREATE_CAMPAIGN,
+        },
+      ],
+    },
+    {
+      title: 'ROLE',
+      icon: 'radar-chart',
       show: true,
       hasChildren: true,
       open: true,
       subMenus: [
         {
-          title: "List",
+          title: 'List',
           show: true,
-          link: routePoints.ROLE
+          link: routePoints.ROLE,
         },
         {
-          title: "Create",
+          title: 'Create',
           show: true,
-          link: routePoints.ROLE_CREATE
+          link: routePoints.ROLE_CREATE,
         },
         {
-          title: "Permissions",
+          title: 'Permissions',
           show: true,
-          link: routePoints.PERMISSION
-        }
-      ]
+          link: routePoints.PERMISSION,
+        },
+      ],
     },
-  ]
-}
+  ];
+};

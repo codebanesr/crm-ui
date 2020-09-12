@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscribable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import dashboardSidebar from 'src/menus/dashboard-sidebar';
-import { SIDEBAR } from 'src/string.constants';
-import { PubsubService } from './pubsub.service';
 
 @Component({
   selector: 'app-root',
