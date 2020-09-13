@@ -9,8 +9,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UsersService {
-
-  randomUserUrl = 'https://api.randomuser.me/';
   constructor(private http: HttpClient) { }
 
   getUsers(

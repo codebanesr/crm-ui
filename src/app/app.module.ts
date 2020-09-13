@@ -26,6 +26,7 @@ import * as echarts from 'echarts';
 import { CampaignOverviewComponent } from './campaign-overview/campaign-overview.component';
 import { UserDetailsComponent } from './pages/welcome/user-details/user-details.component';
 import { SignupComponent } from './signup/signup.component';
+import { OrganizationComponent } from './organization/organization.component';
 
 registerLocaleData(en);
 
@@ -39,6 +40,7 @@ registerLocaleData(en);
     CampaignOverviewComponent,
     UserDetailsComponent,
     SignupComponent,
+    OrganizationComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,

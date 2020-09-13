@@ -126,7 +126,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: routePoints.UPLOADS,
+    path: 'uploads',
     component: UploadsComponent,
     data: {
       breadcrumb: 'uploads',

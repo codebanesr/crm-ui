@@ -1,5 +1,5 @@
 <form nz-form [formGroup]="signupForm" (ngSubmit)="submitForm()">
-  <nz-divider nzText="Sign Up" nzOrientation="center"></nz-divider>
+  <nz-divider nzText="Create your organization" nzOrientation="center"></nz-divider>
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="fullName" nzRequired>
       <span>
@@ -12,6 +12,23 @@
       <input nz-input id="fullName" formControlName="fullName" />
     </nz-form-control>
   </nz-form-item>
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="organizationName">Organization Name</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
+      <input nz-input formControlName="organizationName" id="organizationName" />
+      <ng-template #userErrorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')">
+          Please input your username!
+        </ng-container>
+        <ng-container *ngIf="control.hasError('duplicated')">
+          The username is redundant!
+        </ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
