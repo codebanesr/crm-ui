@@ -10,7 +10,7 @@ export class OrganizationService {
 
   createOrganizationAndAdmin(createOrganizationDto) {
     return this.http.post(
-      `${environment.apiUrl}/user/assignManager`,
+      `${environment.apiUrl}/organization`,
       createOrganizationDto
     );
   }

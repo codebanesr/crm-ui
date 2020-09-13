@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Observer } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounce, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AuthenticationService } from '../authentication.service';
 import { OrganizationService } from '../organization.service';
 import { UsersService } from '../service/users.service';
@@ -28,7 +28,7 @@ export class OrganizationComponent implements OnInit {
       this.signupForm.controls[i].updateValueAndValidity();
     }
 
-    this.authService.signup(this.signupForm.value).subscribe(
+    this.organizationService.createOrganizationAndAdmin(this.signupForm.value).subscribe(
       (data: any) => {
         this.msg.success('Your Account has been registered');
         this.router.navigate(['welcome', 'leads', 'all']);
@@ -75,8 +75,7 @@ export class OrganizationComponent implements OnInit {
           .isAttributeValid({
             label: label,
             value: control.value,
-          })
-          .pipe(debounceTime(200), distinctUntilChanged()).subscribe(
+          }).subscribe(
             (result) => {
               observer.next(null);
               observer.complete();
@@ -89,6 +88,8 @@ export class OrganizationComponent implements OnInit {
           );
       });
   };
+
+  organizationNameValidator = this.attributeValidator('organizationName');
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
@@ -103,7 +104,7 @@ export class OrganizationComponent implements OnInit {
           Validators.maxLength(12),
           Validators.minLength(6),
         ],
-        [this.attributeValidator('name')],
+        [this.organizationNameValidator],
       ],
       phoneNumberPrefix: ['+86'],
       phoneNumber: [null, [Validators.required]],
