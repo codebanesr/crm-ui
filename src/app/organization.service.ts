@@ -24,4 +24,12 @@ export class OrganizationService {
       payload
     );
   }
+
+
+
+  generateAndReceiveOtp(phoneNumber: string) {
+    return this.http.post(`${environment.apiUrl}/organization/otp`, {
+      "mobileNumber": phoneNumber
+    });
+  }
 }

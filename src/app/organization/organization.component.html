@@ -58,73 +58,34 @@
     </nz-form-control>
   </nz-form-item>
 
-
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reportsTo" nzRequired>
-      <span>
-        Role Type
-        <i nz-icon nz-tooltip nzTooltipTitle="User Role" nzType="question-circle"
-          nzTheme="outline"></i>
-      </span>
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="What will be the role of this user">
-      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select Role Type" formControlName="roleType">
-        <nz-option nzLabel="Frontline" nzValue="frontline"></nz-option>
-        <nz-option nzLabel="Manager" nzValue="manager"></nz-option>
-        <nz-option nzLabel="Senior Manager" nzValue="seniorManager"></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-
-
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reportsTo" nzRequired>
-      <span>
-        Reports To
-        <i nz-icon nz-tooltip nzTooltipTitle="Who does this user report to" nzType="question-circle"
-          nzTheme="outline"></i>
-      </span>
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Who does the user report to">
-      <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select a person" formControlName="reportsTo">
-        <nz-option *ngFor="let user of listOfOption" [nzLabel]="user.fullName" [nzValue]="user.email"></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="manages" nzRequired>
-      <span>
-        Manages
-        <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
-      </span>
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Who will he manage">
-      <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" formControlName="manages">
-        <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.fullName" [nzValue]="option.email"
-          [nzHide]="!isNotSelected(option.email)"></nz-option>
-      </nz-select>
-    </nz-form-control>
-
-  </nz-form-item>
-
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="signupForm.controls['phoneNumber']"
       nzErrorTip="Please input your phone number!">
       <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
         <ng-template #addOnBeforeTemplate>
-          <nz-select formControlName="phoneNumberPrefix" class="phone-select">
+          <nz-select formControlName="phoneNumberPrefix" nzValue="+91" class="phone-select">
             <nz-option nzLabel="+91" nzValue="+91"></nz-option>
             <nz-option nzLabel="+87" nzValue="+87"></nz-option>
           </nz-select>
         </ng-template>
-        <input formControlName="phoneNumber" id="'phoneNumber'" nz-input />
+        <input formControlName="phoneNumber" id="phoneNumber" nz-input />
+      </nz-input-group>
+      <button nz-button nzType="default" (click)="onPhoneNumberEnter()">Generate OTP</button>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="otp" nzRequired>Enter OTP</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="signupForm.controls['otp']"
+      nzErrorTip="Please Enter the otp sent to your mobile!">
+      <nz-input-group>
+        <input formControlName="otp" id="otp" nz-input />
       </nz-input-group>
     </nz-form-control>
   </nz-form-item>
+
+
   <nz-form-item nz-row class="register-area">
     <nz-form-control [nzSpan]="14" [nzOffset]="6">
       <label nz-checkbox formControlName="agree">

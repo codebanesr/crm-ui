@@ -106,11 +106,9 @@ export class OrganizationComponent implements OnInit {
         ],
         [this.organizationNameValidator],
       ],
-      phoneNumberPrefix: ['+86'],
+      phoneNumberPrefix: ['+91'],
       phoneNumber: [null, [Validators.required]],
-      roleType: [null, Validators.required],
-      manages: [[], Validators.required],
-      reportsTo: [null, Validators.required],
+      otp: [null, Validators.required],
       agree: [false],
     });
     this.initUsersList();
@@ -118,11 +116,6 @@ export class OrganizationComponent implements OnInit {
 
   listOfOption = [];
   listOfSelectedValue: string[] = [];
-
-  isNotSelected(value: string): boolean {
-    // return this.listOfSelectedValue.indexOf(value) === -1;
-    return this.signupForm.get('manages').value.indexOf(value) === -1;
-  }
 
   usersCount = 0;
   initUsersList() {
@@ -135,5 +128,22 @@ export class OrganizationComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  onPhoneNumberEnter() {
+    const prefix = this.signupForm.get('phoneNumberPrefix').value;
+    const phoneNumber = this.signupForm.get('phoneNumber').value;
+
+    this.organizationService.generateAndReceiveOtp(prefix+""+phoneNumber).subscribe(data=>{
+      console.log(data);
+      this.msg.success("Successfully sent otp to your mobile");
+    }, error=>{
+      this.msg.error("An error occured while trying to generate otp for your mobile");
+      console.error("An error occured", error);
+    })
+  }
+
+  onPhoneNumberCancel() {
+    console.log("Cancelled otp")
   }
 }
