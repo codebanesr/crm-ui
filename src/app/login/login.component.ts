@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe((data: any)=>{
       this.msg.success("Successfully Logged In");
+      this.pubsub.$pub(SIDEBAR, true);
       this.router.navigate(["welcome", 'leads', 'all']);
       this.pubsub.$pub(SIDEBAR, true);
     }, (error: Error)=>{
@@ -84,6 +85,7 @@ export class LoginComponent implements OnInit {
       confirmPassword: [null, [Validators.required]],
       remember: [true]
     });
+    this.pubsub.$pub(SIDEBAR, false);
   }
 
   onFormTypeChange(formType) {
