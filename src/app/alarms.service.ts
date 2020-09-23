@@ -15,6 +15,6 @@ export class AlarmsService {
 
 
   get(body) {
-    return this.http.post(`${environment.apiUrl}/alarm/findAll`, {});
+    return this.http.post(`${environment.apiUrl}/lead/alarms/getAll`, {});
   }
 }

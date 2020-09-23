@@ -27,6 +27,7 @@ export class CreateCampaignComponent implements OnInit {
   campaignForm: FormGroup;
 
 
+  objectKeys = Object.keys;
   renameText: string;
   inputValue?: string;
   isDispositionVisible = false;

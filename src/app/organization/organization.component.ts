@@ -31,7 +31,7 @@ export class OrganizationComponent implements OnInit {
     this.organizationService.createOrganizationAndAdmin(this.signupForm.value).subscribe(
       (data: any) => {
         this.msg.success('Your Account has been registered');
-        this.router.navigate(['welcome', 'leads', 'all']);
+        this.router.navigate(['login']);
       },
       (e: any) => {
         this.msg.error(e.error.message[0]);

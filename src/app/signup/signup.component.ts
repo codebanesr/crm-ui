@@ -13,7 +13,7 @@ import { UsersService } from '../service/users.service';
 })
 export class SignupComponent implements OnInit {
   signupForm!: FormGroup;
-
+  rolesOptions: any;
   submitForm(): void {
     for (const i in this.signupForm.controls) {
       this.signupForm.controls[i].markAsDirty();
@@ -63,14 +63,23 @@ export class SignupComponent implements OnInit {
       password: [null, [Validators.required]],
       checkPassword: [null, [Validators.required, this.confirmationValidator]],
       fullName: [null, [Validators.required]],
-      phoneNumberPrefix: ['+86'],
+      phoneNumberPrefix: ['+91'],
       phoneNumber: [null, [Validators.required]],
       roleType: [null, Validators.required],
       manages: [[], Validators.required],
+      roles: [[], Validators.required],
       reportsTo: [null, Validators.required],
       agree: [false],
     });
     this.initUsersList();
+
+    this.rolesOptions = [{
+      label: "Admin",
+      value: "admin"
+    }, {
+      label: "User",
+      value: "user"
+    }]
   }
 
 
@@ -80,6 +89,11 @@ export class SignupComponent implements OnInit {
   isNotSelected(value: string): boolean {
     // return this.listOfSelectedValue.indexOf(value) === -1;
     return this.signupForm.get('manages').value.indexOf(value) === -1
+  }
+
+
+  isNotSelectedRole(value): boolean {
+    return this.signupForm.get('roles').value.indexOf(value) === -1
   }
 
 

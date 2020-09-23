@@ -26,7 +26,7 @@
     </nz-form-item>
   </form>
 </div>
-<nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed" [nzPageSize]="perPage"	[nzShowPagination]="false">
+<nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed" [nzPageSize]="perPage" [nzShowPagination]="false">
   <thead>
     <tr>
       <th *ngFor="let column of listOfColumns; trackBy: trackByName">
@@ -46,7 +46,8 @@
       <td>{{ data.endDate | date }}</td>
       <td (click)="markActiveCampaign($event, data)">
 
-        <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files">
+        <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true
+          nzName="files">
           <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
           <button nz-button nz-primary (click)="handleLeadFilesUpload(); $event.stopPropagation()">go</button>
         </nz-upload>
@@ -56,12 +57,6 @@
 </nz-table>
 
 <div class="pagination-block">
-  <nz-pagination
-    [nzPageIndex]="page"
-    [nzTotal]="totalPage"
-    nzShowSizeChanger
-    [nzPageSize]="perPage"
-    (nzPageSizeChange)="onPageSizeChange($event)"
-    (nzPageIndexChange)="onPageIndexChange($event)"
-  ></nz-pagination>
+  <nz-pagination [nzPageIndex]="page" [nzTotal]="totalPage" nzShowSizeChanger [nzPageSize]="perPage"
+    (nzPageSizeChange)="onPageSizeChange($event)" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination>
 </div>

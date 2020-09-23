@@ -44,7 +44,7 @@
 
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reportsTo" nzRequired>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="roleType" nzRequired>
       <span>
         Role Type
         <i nz-icon nz-tooltip nzTooltipTitle="User Role" nzType="question-circle"
@@ -76,6 +76,25 @@
       </nz-select>
     </nz-form-control>
   </nz-form-item>
+
+
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="roles" nzRequired>
+      <span>
+        Roles
+        <i nz-icon nz-tooltip nzTooltipTitle="what roles will he have" nzTheme="outline"></i>
+      </span>
+    </nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Roles Error">
+      <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" formControlName="roles">
+        <nz-option *ngFor="let role of rolesOptions" [nzLabel]="role.label" [nzValue]="role.value" [nzHide]="!isNotSelectedRole(role.value)"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+
+
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="manages" nzRequired>

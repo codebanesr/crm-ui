@@ -38,7 +38,7 @@ const routes: Routes = [
     }
   },
   {
-    path: routePoints.USERS,
+    path: 'users',
     data: {
       breadcrumb: 'user'
     },
@@ -107,7 +107,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: routePoints.TICKETS,
+    path: 'tickets',
     data: {
       breadcrumb: 'tickets',
     },
@@ -133,7 +133,7 @@ const routes: Routes = [
     },
   },
   {
-    path: routePoints.ALARMS,
+    path: 'alarm',
     component: AlarmsComponent,
     data: {
       breadcrumb: 'alarms',
