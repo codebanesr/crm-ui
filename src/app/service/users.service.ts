@@ -52,4 +52,27 @@ export class UsersService {
     const qs = this.transformFilterObjectToQueryParams(filters);
     return this.http.get(`${environment.apiUrl}/user/lead/activity/${email}?${qs}`);
   }
+
+  getUserById(userid: string) {
+    return this.http.get(`${environment.apiUrl}/user/single/${userid}`);
+  }
+
+  updateUser(userid: string, userObj: any) {
+    return this.http.put(`${environment.apiUrl}/user/${userid}`, userObj);
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

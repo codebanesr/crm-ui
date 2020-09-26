@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { routePoints } from 'src/menus/routes';
 import { AuthenticationService } from '../authentication.service';
@@ -20,13 +20,20 @@ export class SignupComponent implements OnInit {
       this.signupForm.controls[i].updateValueAndValidity();
     }
 
+    if(this.userid) {
+      this.usersService.updateUser(this.userid, this.signupForm.value).subscribe(success=>{
 
-    this.authService.signup(this.signupForm.value).subscribe((data: any)=>{
-      this.msg.success("Your Account has been registered");
-      this.router.navigate(["welcome", 'leads', 'all']);
-    }, (e: any)=>{
-      this.msg.error(e.error.message[0]);
-    });
+      }, error=>{
+        this.msg.error("Failed to update user", error);
+      })
+    }else{
+      this.authService.signup(this.signupForm.value).subscribe((data: any)=>{
+        this.msg.success("Your Account has been registered");
+        this.router.navigate(["welcome", 'leads', 'all']);
+      }, (e: any)=>{
+        this.msg.error(e.error.message[0]);
+      });
+    }
   }
 
   updateConfirmValidator(): void {
@@ -54,7 +61,8 @@ export class SignupComponent implements OnInit {
     private authService: AuthenticationService,
     private msg: NzMessageService,
     private router: Router,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +81,8 @@ export class SignupComponent implements OnInit {
     });
     this.initUsersList();
 
+    this.createOrUpdate();
+
     this.rolesOptions = [{
       label: "Admin",
       value: "admin"
@@ -80,6 +90,19 @@ export class SignupComponent implements OnInit {
       label: "User",
       value: "user"
     }]
+  }
+
+  userid: string;
+  createOrUpdate() {
+    this.activatedRoute.queryParams.subscribe(data=>{
+      this.userid = data.userid;
+      this.usersService.getUserById(this.userid).subscribe(data=>{
+        this.signupForm.patchValue(data);
+      });
+
+    }, error=>{
+      this.msg.error("This was not supposed to happen");
+    })
   }
 
 

@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of listOfRandomUser" (click)="navigate(data.email)">
+    <tr *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)">
       <td>{{ data._id }}</td>
       <td>{{ data.email }}</td>
       <td>{{ data.createdAt }}</td>

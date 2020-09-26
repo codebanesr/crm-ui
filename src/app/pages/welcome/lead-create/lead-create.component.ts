@@ -47,7 +47,7 @@ export class LeadCreateComponent implements OnInit {
   }
 
   getDispositionForCampaign(campaignName: string) {
-    this.campaignService.getDisposition(campaignName).subscribe((data: any)=>{
+    this.campaignService.getDispositionByCampaignName(campaignName).subscribe((data: any)=>{
       this.callDispositions = data.options;
     }, error => {
         console.log(error);
@@ -103,7 +103,7 @@ export class LeadCreateComponent implements OnInit {
     this.leadId = id;
     this.leadsService.getLeadById(id).subscribe((lead: ILead) => {
       this.selectedLead = lead;
-      this.getDispositionForCampaign(this.selectedLead.companyName);
+      this.getDispositionForCampaign(this.selectedLead.campaign);
     }, error => {
       this.msgService.error('Failed to fetch data for ticket id ', id);
     });

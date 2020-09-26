@@ -45,8 +45,8 @@ export class UsersComponent implements OnInit {
       });
     }
 
-    navigate(email: string) {
-      this.router.navigate(['welcome', 'users', 'details', email]);
+    navigate(userid: string) {
+      this.router.navigate(['signup'], {queryParams: {userid}});
     }
 
     onQueryParamsChange(params: NzTableQueryParams): void {
