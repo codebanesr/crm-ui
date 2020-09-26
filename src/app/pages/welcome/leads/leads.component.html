@@ -16,7 +16,7 @@
 [nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="!isEmpty">
   <thead>
     <tr>
-      <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+      <th nzWidth="3vw" [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
       <th *ngFor="let column of listOfColumns">
         {{ typeDict[column.name]?.label }}
       </th>
