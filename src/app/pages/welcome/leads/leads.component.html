@@ -112,8 +112,8 @@
 <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
   <form nz-form [formGroup]="emailForm" nzLayout="vertical">
     <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
-      <input placeholder="Select Campaign" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
+      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
+      <input placeholder="Email Subject" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
       <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
         <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
           {{ et.subject }}

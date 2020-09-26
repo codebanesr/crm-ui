@@ -1,11 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {IDisposition} from './disposition.interface'
 import { LeadsService } from 'src/app/leads.service';
 import { ILead } from 'src/interfaces/leads.interface';
 import { CampaignService } from '../campaign.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ClassValidationError } from 'src/global.interfaces';
 import { error } from 'protractor';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-lead-solo',
@@ -17,7 +20,8 @@ export class LeadSoloComponent implements OnInit {
   constructor(
     private leadsService: LeadsService,
     private campaignService: CampaignService,
-    private msgService: NzMessageService
+    private msgService: NzMessageService,
+    private fb: FormBuilder
   ) { }
 
   selectedCampaign: string;
@@ -28,10 +32,25 @@ export class LeadSoloComponent implements OnInit {
   loadingCampaignList = false;
   campaignList: any[] = [];
   callDispositions;
+  isVisible = false;
+
   ngOnInit(): void {
     this.getLeadMappings();
     this.populateCampaignDropdown("");
+    this.initEmailForm();
+    this.initEtAutocomplete();
   }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+  }
+
+
+  showEmailModal(): void {
+    this.isVisible = true;
+  }
+
 
   populateCampaignDropdown(filter) {
     this.loadingCampaignList = true;
@@ -102,5 +121,55 @@ export class LeadSoloComponent implements OnInit {
     }, error => {
         console.log(error);
     })
+  }
+
+  emailForm: FormGroup;
+  emailTemplates: any;
+  emailModel;
+  emailFields: FormlyFieldConfig[];
+  initEmailForm() {
+    this.emailForm = this.fb.group({
+      subject: [null],
+      content: [null],
+      attachments: [null],
+    });
+  }
+
+  etFormControl = new FormControl([null]);
+  attachments: any[] = [];
+  initEtAutocomplete() {
+    this.etFormControl.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((searchTerm) => {
+        console.log({selectedCampaign: this.selectedCampaign})
+        this.campaignService
+          .getAllEmailTemplates({ searchTerm, campaignName: this.selectedLead.campaign })
+          .subscribe((emailTemplates: any) => {
+            this.emailTemplates = emailTemplates;
+          });
+      });
+  }
+
+
+  submitEmailForm(model) {
+    console.log(model);
+  }
+
+
+  selectedEmailTemplate: any;
+  populateEmailModal(event) {
+    console.log(typeof event, event.nzValue);
+    this.selectedEmailTemplate = event.nzValue;
+
+    this.attachments = this.selectedEmailTemplate.attachments;
+    this.emailForm.patchValue({
+      subject: this.selectedEmailTemplate.subject,
+      content: this.selectedEmailTemplate.content,
+    });
+  }
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
   }
 }

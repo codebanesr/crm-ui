@@ -69,6 +69,7 @@ export class LeadsComponent implements OnInit {
     this.campaignList = await this.campaignService.populateCampaignDropdown(
       hint
     );
+    console.log(this.campaignList);
   }
 
   onItemChecked(id: string, checked: boolean): void {
@@ -274,9 +275,9 @@ export class LeadsComponent implements OnInit {
   }
 
   isVisible = false;
-  showEmailModal(customerData): void {
-    console.log(customerData);
+  showEmailModal(leadData): void {
     this.isVisible = true;
+    this.selectedLead = leadData;
   }
 
   handleOk(): void {
@@ -382,9 +383,9 @@ export class LeadsComponent implements OnInit {
   initEtAutocomplete() {
     this.etFormControl.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((searchTerm) => {
+      .subscribe((searchTerm: string) => {
         this.campaignService
-          .getAllEmailTemplates({ campaign: searchTerm })
+          .getAllEmailTemplates({ searchTerm })
           .subscribe((emailTemplates: any) => {
             this.emailTemplates = emailTemplates;
           });

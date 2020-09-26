@@ -42,8 +42,9 @@ export class CampaignService {
     return this.http.get(`${environment.apiUrl}/campaign/autocomplete/suggestTypes?hint=${hint}`);
   }
 
-  getAllEmailTemplates(props: {campaign: string}) {
-    return this.http.get(`${environment.apiUrl}/lead/getAllEmailTemplates?campaign=${props.campaign}`);
+  getAllEmailTemplates(props: {searchTerm: string, campaignName?: string}) {
+    const { campaignName, searchTerm } = props;
+    return this.http.get(`${environment.apiUrl}/lead/getAllEmailTemplates?searchTerm=${searchTerm}&campaignName=${campaignName}`);
   }
 
   createEmailTemplate(emailTemplate) {
