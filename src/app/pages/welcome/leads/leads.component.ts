@@ -208,7 +208,7 @@ export class LeadsComponent implements OnInit {
     { name: 'Ticket', formControlName: 'ticket' },
     { name: 'Lead', formControlName: 'lead' },
     { name: 'Archived', formControlName: 'archived' },
-    { name: 'Assigned', formControlName: 'assigned' },
+    { name: 'Upcoming', formControlName: 'upcoming' },
   ];
 
   filterForm: FormGroup;
@@ -216,6 +216,7 @@ export class LeadsComponent implements OnInit {
     this.settingForm = this.fb.group({
       lead: [true],
       archived: [false],
+      upcoming: [false],
       assigned: [true],
       dateRange: [null],
       selectedCampaign: [''],
