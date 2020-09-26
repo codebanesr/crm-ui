@@ -12,7 +12,7 @@
   <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
     Lead</button>
 </div>
-<nz-table #filterTable [nzData]="listOfData" nzTableLayout="scroll" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
+<nz-table nzBordered=true #filterTable [nzData]="listOfData" [nzScroll]="{ x: true, y: false }" nzTableLayout="fixed" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
 [nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="!isEmpty">
   <thead>
     <tr>
@@ -24,11 +24,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)">
-      <td
+      <td nzEllipsis=true
         [nzChecked]="setOfCheckedId.has(data.externalId)"
         (nzCheckedChange)="onItemChecked(data.externalId, $event)"
       ></td>
-      <td *ngFor="let key of objectkeys(data)">
+      <td nzEllipsis=true *ngFor="let key of objectkeys(data)">
         <!-- {{ data[key] }} -->
         {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
       </td>

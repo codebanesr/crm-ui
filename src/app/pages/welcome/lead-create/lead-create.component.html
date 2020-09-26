@@ -1,78 +1,50 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="externalId">Lead Id</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Id is required">
-      <input nz-input formControlName="externalId" id="externalId" [nzAutocomplete]="auto"/>
-      <nz-autocomplete [nzDataSource]="leadOptions" nzBackfill #auto (selectionChange)="fetchSelectedLead($event)"></nz-autocomplete>
-    </nz-form-control>
-  </nz-form-item>
+<nz-divider></nz-divider>
+<ng-container *ngIf="selectedLead">
+  <nz-descriptions nzTitle="Lead Info" nzBordered=true>
+    <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
+      <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+        <ng-container [ngSwitch]="typeDict[leadKey].type">
+          <ng-container *ngSwitchCase="'date'">
+            <nz-date-picker
+              [nzMode]="dateMode"
+              [(ngModel)]="selectedLead[leadKey]"
+              [nzDisabled]="isDisabled(leadKey)"
+              nzShowTime
+              (nzOnOpenChange)="handleDateOpenChange($event)"
+              (nzOnPanelChange)="handleDatePanelChange($event)"
+            >
+            </nz-date-picker>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'number'">
+            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"/>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'string'">
+            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
+          </ng-container>
 
 
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="address">Address</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-      <input nz-input formControlName="address" id="address" />
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstName" nzRequired>
-      <span>
-        firstName
-        <i nz-icon nz-tooltip nzTitle="What do you want other to call you" nzType="question-circle" nzTheme="outline"></i>
-      </span>
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your firstName!">
-      <input nz-input id="firstName" formControlName="firstName" />
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
-    <nz-form-control
-      [nzSm]="14"
-      [nzXs]="24"
-      [nzValidateStatus]="validateForm.controls['phoneNumber']"
-      nzErrorTip="Please input your phone number!"
-    >
-      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
-        <ng-template #addOnBeforeTemplate>
-          <nz-select formControlName="phoneNumberPrefix" class="phone-select">
-            <nz-option nzLabel="+91" nzValue="+91"></nz-option>
-            <nz-option nzLabel="+86" nzValue="+86"></nz-option>
-            <nz-option nzLabel="+87" nzValue="+87"></nz-option>
-          </nz-select>
-        </ng-template>
-        <input formControlName="phoneNumber" id="'phoneNumber'" nz-input />
+          <ng-container *ngSwitchCase="'select'">
+            <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+              <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option"></nz-option>
+            </nz-select>
+
+          </ng-container>
+
+        </ng-container>
+
+      </nz-descriptions-item>
+    </ng-container>
+    <nz-descriptions-item nzTitle="Disposition">
+      <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
+    </nz-descriptions-item>
+
+    <nz-descriptions-item nzTitle="Remark" nzSpan=2>
+      <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
+        <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
       </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="amount" nzRequired>Lead Amount</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Lead Amount cannot be empty!">
-      <input nz-input type="number" formControlName="amount" id="amount" />
-    </nz-form-control>
-  </nz-form-item>
-
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
-      Lead Status
-    </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-tag [nzColor]="'cyan'">{{this.validateForm.get('leadStatus').value}}</nz-tag>
-      <nz-tree [nzData]="demoDispositionNodes" nzBlockNode nzShowLine (nzClick)="nzEvent($event)"> </nz-tree>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Follow Up</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please enter a followUp date">
-      <nz-date-picker formControlName="followUp"></nz-date-picker>
-    </nz-form-control>
-  </nz-form-item>
-
-  <button nz-button nzType="primary">Submit</button>
-</form>
-
-
-
+    </nz-descriptions-item>
+  </nz-descriptions>
+  <a nz-button nzType="link" (click)="handleLeadSubmission(selectedLead)">Submit Change</a>
+</ng-container>
