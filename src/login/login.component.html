@@ -1,0 +1,45 @@
+<nz-card nzHoverable [nzCover]="coverTemplate" style="height: 90vh; position: relative; max-width: 500px;
+top: 50%;
+-ms-transform: translateY(-50%);
+transform: translateY(-50%);">
+  <nz-card-meta nzTitle="Welcome to Molecule" style="text-align: center; padding-bottom: 40px;"></nz-card-meta>
+  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item *ngIf="fieldsToShow.username">
+      <nz-form-control nzErrorTip="Please input your username!">
+        <nz-input-group nzPrefixIcon="user">
+          <input nzSize="large" type="text" nz-input formControlName="username" placeholder="Username" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="fieldsToShow.password">
+      <nz-form-control nzErrorTip="Please input your Password!">
+        <nz-input-group nzPrefixIcon="lock">
+          <input type="password" nzSize="large"  nz-input formControlName="password" placeholder="Password" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="fieldsToShow.confirmPassword">
+      <nz-form-control nzErrorTip="Please confirm your Password!">
+        <nz-input-group nzPrefixIcon="lock">
+          <input type="password" nzSize="large" nz-input formControlName="confirmPassword" placeholder="Confirm Password" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <div nz-row class="login-form-margin">
+      <div nz-col [nzSpan]="12">
+        <label nz-checkbox formControlName="remember">
+          <span>Remember me</span>
+        </label>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <a (click)="this.onFormTypeChange(formView.reset)" class="login-form-forgot">Forgot password</a>
+      </div>
+    </div>
+    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">{{buttonText}}</button>
+    Or <a (click)="this.onFormTypeChange(nextAction)"> {{nextAction}} </a>
+  </form>
+    
+</nz-card>
+<ng-template #coverTemplate>
+  <img alt="example" src="assets/icon/transparent_logo.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>
+</ng-template>

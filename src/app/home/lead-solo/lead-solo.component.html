@@ -1,0 +1,110 @@
+<nz-content class="parent">
+  <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign"
+    (ngModelChange)="handleCampaignChange($event)">
+    <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id">
+    </nz-option>
+  </nz-select>
+
+
+  <nz-select nzMode="default" *ngIf="leadStatusOptions" nzPlaceHolder="Inserted are removed"
+    [(ngModel)]="selectedLeadStatus" (ngModelChange)="handleLeadStatusChange($event)">
+    <nz-option *ngFor="let status of leadStatusOptions" [nzLabel]="status" [nzValue]="status"></nz-option>
+  </nz-select>
+
+
+  <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Next Lead</a>
+  <a nz-button nzType="link" (click)="showEmailModal()">Send Email</a>
+
+
+  <ng-container *ngIf="selectedLead">
+    <nz-descriptions nzTitle="Lead Info" nzBordered=true>
+      <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
+        <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+          <ng-container [ngSwitch]="typeDict[leadKey].type">
+            <ng-container *ngSwitchCase="'date'">
+              <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]" [nzDisabled]="isDisabled(leadKey)"
+                nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
+                (nzOnPanelChange)="handleDatePanelChange($event)">
+              </nz-date-picker>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'number'">
+              <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'string'">
+              <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                [disabled]="isDisabled(leadKey)" />
+            </ng-container>
+
+
+            <ng-container *ngSwitchCase="'select'">
+              <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
+                </nz-option>
+              </nz-select>
+
+            </ng-container>
+
+          </ng-container>
+
+        </nz-descriptions-item>
+      </ng-container>
+      <nz-descriptions-item nzTitle="Disposition">
+        <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)">
+        </nz-tree>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Remark" nzSpan=2>
+        <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
+          <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
+        </nz-input-group>
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <a nz-button nzType="link" (click)="handleLeadSubmission(selectedLead)">Submit Change</a>
+  </ng-container>
+
+
+
+  <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
+  <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" #emailModal>
+    <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
+        <input placeholder="Email Subject" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
+        <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
+          <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
+            {{ et.subject }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+            formControlName="content"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+            nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
+            <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment">
+            </nz-option>
+          </nz-select>
+          <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+
+</nz-content>

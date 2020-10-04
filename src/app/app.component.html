@@ -1,3 +1,21 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu side="start" content-id="main-content">
+    <ion-header>
+      <ion-toolbar translucent>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item *ngFor="let o of appPages" (click)="routeTo(o.url)">
+          <ion-icon [name]="o.icon" slot="start"></ion-icon>
+          <ion-label>{{o.title}}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <nz-layout id="main-content" class="inner-content">
+    <ion-router-outlet></ion-router-outlet>
+  </nz-layout>
 </ion-app>
