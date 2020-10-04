@@ -24,25 +24,20 @@ export class AppComponent {
       icon: 'paper-plane'
     },
     {
-      title: 'Favorites',
-      url: '/folder/Favorites',
-      icon: 'heart'
-    },
-    {
-      title: 'Archived',
-      url: '/folder/Archived',
-      icon: 'archive'
-    },
-    {
-      title: 'Trash',
-      url: '/folder/Trash',
+      title: 'All Users',
+      url: '/home/users',
       icon: 'trash'
     },
     {
-      title: 'Spam',
-      url: '/folder/Spam',
-      icon: 'warning'
-    }
+      title: 'Add User',
+      url: '/home/signup',
+      icon: 'heart'
+    },
+    {
+      title: 'List Campaigns',
+      url: '/home/campaign/list',
+      icon: 'archive'
+    },
   ];
 
   routeTo(url: string) {

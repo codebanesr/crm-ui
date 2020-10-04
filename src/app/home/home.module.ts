@@ -8,6 +8,9 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { LeadSoloComponent } from './lead-solo/lead-solo.component';
 import { LeadsComponent } from './leads/leads.component';
 import { ModantdModule } from './modantd/modantd.module';
+import { UsersComponent } from '../users/users.component';
+import { CampaignComponent } from '../campaign/campaign.component';
+import { SignupComponent } from '../signup/signup.component';
 
 
 @NgModule({
@@ -22,7 +25,10 @@ import { ModantdModule } from './modantd/modantd.module';
   declarations: [
     HomePage,
     LeadSoloComponent,
-    LeadsComponent
+    LeadsComponent,
+    UsersComponent,
+    CampaignComponent,
+    SignupComponent
   ]
 })
 export class HomePageModule {}

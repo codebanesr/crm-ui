@@ -1,0 +1,38 @@
+<a [routerLink]="['create']">Create a user</a>
+
+<nz-table nzShowSizeChanger [nzData]="listOfRandomUser" [nzFrontPagination]="false" [nzLoading]="loading"
+  [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)" class="scrollable">
+  <thead>
+    <tr>
+      <!-- <th nzColumnKey="id" [nzSortFn]="true">Id</th> -->
+      <th nzColumnKey="email" [nzFilters]="filterGender" [nzFilterFn]="true">Email</th>
+      <th nzColumnKey="createdAt" [nzSortFn]="true">Created At</th>
+      <th nzColumnKey="role" [nzSortFn]="true">Role</th>
+      <th nzColumnKey="managedBy">Managed By</th>
+      <th nzColumnKey="actions" [nzSortFn]="true">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)">
+      <!-- <td>{{ data._id }}</td> -->
+      <td>{{ data.email }}</td>
+      <td>{{ data.createdAt }}</td>
+      <td>{{ data.roleType }}</td>
+      <td nz-popover [nzPopoverTitle]="titleTemplate" [nzPopoverContent]="contentTemplate">{{ data?.managedBy?.email }}</td>
+      <td class="actions">
+        <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
+        <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i> &nbsp;
+        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign'); $event.stopPropagation()"></i>
+      </td>
+
+      <ng-template #titleTemplate><i nz-icon></i> {{data.managedBy.email}}</ng-template>
+      <ng-template #contentTemplate><i nz-icon></i>{{data.managedBy.roleType}}</ng-template>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, data)"> {{manager.email}} </li>
+        </ul>
+      </nz-dropdown-menu>
+    </tr>
+  </tbody>
+</nz-table>
+
