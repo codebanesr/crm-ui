@@ -30,7 +30,7 @@ export class AppComponent {
     },
     {
       title: 'Add User',
-      url: '/home/signup',
+      url: '/home/users/signup',
       icon: 'heart'
     },
     {

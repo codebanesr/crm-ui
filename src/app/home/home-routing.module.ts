@@ -14,7 +14,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'signup',
+    path: 'users/signup',
     component: SignupComponent,
     pathMatch: 'full'
   },
