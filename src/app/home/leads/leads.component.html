@@ -1,11 +1,11 @@
 <div class="table-operations">
-  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px;"
-    (change)="handleSearchTerm()">
-    <input type="text" nz-input placeholder="Global Search" [(ngModel)]="leadOptions.searchTerm" />
-  </nz-input-group>
   <ng-template #suffixIconButton>
     <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
   </ng-template>
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px; margin-top: 5px;"
+    (change)="handleSearchTerm()">
+    <input type="text" nz-input placeholder="Global Search" [(ngModel)]="leadOptions.searchTerm" />
+  </nz-input-group>
   <nz-divider nzType="vertical"></nz-divider>
   <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
     Filters</button>
@@ -66,7 +66,7 @@
   
     </nz-collapse-panel>
   </nz-collapse>
-<nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"></nz-pagination>
+<nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="perPage" nzSimple [nzPageIndex]="page" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"></nz-pagination>
 <nz-empty *ngIf="isEmpty"></nz-empty>
 
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
