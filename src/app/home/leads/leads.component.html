@@ -9,29 +9,37 @@
   <nz-divider nzType="vertical"></nz-divider>
   <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
     Filters</button>
-  <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
-    Lead</button>
 </div>
-<nz-table nzBordered=true #filterTable [nzData]="listOfData" [nzScroll]="{ x: true, y: false }" nzTableLayout="fixed" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
-[nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="!isEmpty" class="scrollable">
-  <thead>
-    <tr>
-      <th nzWidth="3vw" [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
-      <th *ngFor="let column of listOfColumns">
-        {{ typeDict[column.name]?.label }}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)">
-      <td nzEllipsis=true
-        [nzChecked]="setOfCheckedId.has(data.externalId)"
-        (nzCheckedChange)="onItemChecked(data.externalId, $event)"
-      ></td>
-      <td nzEllipsis=true *ngFor="let key of objectkeys(data)">
-        <!-- {{ data[key] }} -->
-        {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
-      </td>
+
+
+<!-- Add pagination here based on query param change -->
+<nz-collapse [nzBordered]="false">
+  <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfData" [nzHeader]="accordianheader" [nzActive]="data.active"
+  (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)" class="scrollable">
+
+      <p *ngFor="let key of objectkeys(data)">
+        {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
+      </p>
+
+      <ng-template #accordianheader>
+
+        <div nz-row nzJustify="space-between">
+          <div nz-col nzFlex="3">
+            <ion-label>
+              <h3>{{data.firstName}}</h3>
+              <h5>{{data.externalId}}</h5>
+            </ion-label>
+          </div>
+          <div nz-col nzFlex="1">
+            <ion-label>
+              <i nz-icon nzType="mail" nzTheme="outline"></i> &nbsp;
+              <i nz-icon nzType="phone" nzTheme="outline"></i> &nbsp;
+              <i nz-icon nzType="whats-app" nzTheme="outline"></i>
+            </ion-label>
+          </div>
+        </div>
+      </ng-template>
+
 
       <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
         <ul nz-menu>
@@ -55,10 +63,9 @@
           <li nz-menu-item (click)="open()">Advanced Filters</li>
         </ul>
       </nz-dropdown-menu>
-    </tr>
-  </tbody>
-</nz-table>
 
+  </nz-collapse-panel>
+</nz-collapse>
 <nz-empty *ngIf="isEmpty"></nz-empty>
 
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"

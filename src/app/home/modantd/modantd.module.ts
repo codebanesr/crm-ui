@@ -26,7 +26,7 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzGridModule, NzRowDirective } from 'ng-zorro-antd/grid';
 import { NzI18nModule } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -136,7 +136,7 @@ import { NzResizableModule } from 'ng-zorro-antd/resizable';
     NzTypographyModule,
     NzUploadModule,
     NzWaveModule,
-    NzResizableModule
+    NzResizableModule,
   ]
 })
 export class ModantdModule { }

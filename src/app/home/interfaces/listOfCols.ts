@@ -10,12 +10,13 @@ export interface ColumnItem {
 
 export interface DataItem {
   externalId: string;
-  name: string;
+  firstName: string;
   email: string;
-  phonenumber: string;
+  phoneNumber: string;
   amount: number;
-  followUpDate: number;
+  followUp: number;
   description: string;
+  active: boolean;
 }
 
 
@@ -23,12 +24,12 @@ export const listOfColumns: ColumnItem[] = [
   {
     name: 'Name',
     sortOrder: null,
-    sortFn: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name),
+    sortFn: (a: DataItem, b: DataItem) => a.firstName.localeCompare(b.firstName),
     // listOfFilter: [
     //   { text: 'Joe', value: 'Joe' },
     //   { text: 'Jim', value: 'Jim' }
     // ],
-    filterFn: (list: string[], item: DataItem) => list.some(name => item.name.indexOf(name) !== -1)
+    filterFn: (list: string[], item: DataItem) => list.some(name => item.firstName.indexOf(name) !== -1)
   },
   {
     name: 'Email',
@@ -37,7 +38,7 @@ export const listOfColumns: ColumnItem[] = [
   },
   {
     name: 'Phone Number',
-    sortFn: (a:DataItem, b: DataItem) => a.phonenumber.localeCompare(b.phonenumber)
+    sortFn: (a:DataItem, b: DataItem) => a.phoneNumber.localeCompare(b.phoneNumber)
   },
   {
     name: 'Amount',
