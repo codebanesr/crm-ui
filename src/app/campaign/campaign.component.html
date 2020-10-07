@@ -1,16 +1,16 @@
 <div class="table-operations">
   <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
+    <!-- <nz-form-item>
       <nz-form-control>
         <nz-input-group nzPrefixIcon="user">
           <input nz-input formControlName="handlerEmail" [nzAutocomplete]="auto">
           <nz-autocomplete [nzDataSource]="handlerEmailOpts" #auto></nz-autocomplete>
         </nz-input-group>
       </nz-form-control>
-    </nz-form-item>
+    </nz-form-item> -->
 
 
-    <nz-form-item>
+    <nz-form-item class="top-row">
       <nz-form-control>
         <nz-select nzMode="multiple" nzPlaceHolder="Select campaigns" formControlName="campaigns" style="width: 200px;">
           <nz-option *ngFor="let co of campaignOpts" [nzLabel]="co" [nzValue]="co"></nz-option>
@@ -19,42 +19,29 @@
 
     </nz-form-item>
 
-    <nz-form-item>
+    <nz-form-item class="top-row">
       <nz-form-control>
         <button nz-button nzType="primary" [disabled]="!validateForm.valid">Search</button>
       </nz-form-control>
     </nz-form-item>
   </form>
 </div>
-<nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed" [nzPageSize]="perPage" [nzShowPagination]="false" class="scrollable">
-  <thead>
-    <tr>
-      <th *ngFor="let column of listOfColumns; trackBy: trackByName">
-        {{ column.name }}
-      </th>
-
-      <th>
-        Actions
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of filterTable.data" (click)="gotoDetailedView(data)">
-      <td>{{ data.campaignName }}</td>
-      <td>{{ data.createdBy }}</td>
-      <td>{{ data.startDate | date }}</td>
-      <td>{{ data.endDate | date }}</td>
-      <td (click)="markActiveCampaign($event, data)">
-
+<div class="scrollable">
+  <ng-container *ngFor="let data of listOfData">
+    <nz-descriptions (click)="gotoDetailedView(data)" nzBordered [nzTitle]="data.campaignName" class="campaignContainer">
+      <nz-descriptions-item nzTitle="Creator">{{ data.createdBy }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Start Date">{{ data.startDate | date }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="End Date">{{ data.endDate | date }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Mark Active Campaign" (click)="markActiveCampaign($event, data)">
         <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true
           nzName="files">
           <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
           <button nz-button nz-primary (click)="handleLeadFilesUpload(); $event.stopPropagation()">go</button>
         </nz-upload>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+      </nz-descriptions-item>
+  </nz-descriptions>
+  </ng-container>
+</div>
 
 <div class="pagination-block">
   <nz-pagination [nzPageIndex]="page" [nzTotal]="totalPage" nzShowSizeChanger [nzPageSize]="perPage"
