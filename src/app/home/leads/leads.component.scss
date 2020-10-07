@@ -2,3 +2,11 @@
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
+
+
+
+.scrollable {
+    height: 95vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

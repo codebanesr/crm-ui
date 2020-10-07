@@ -13,9 +13,9 @@
 
 
 <!-- Add pagination here based on query param change -->
-<nz-collapse [nzBordered]="false">
+<nz-collapse [nzBordered]="true" *ngIf="listOfData" class="scrollable">
   <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfData" [nzHeader]="accordianheader" [nzActive]="data.active"
-  (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)" class="scrollable">
+  (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)">
 
       <p *ngFor="let key of objectkeys(data)">
         {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
@@ -26,8 +26,8 @@
         <div nz-row nzJustify="space-between">
           <div nz-col nzFlex="3">
             <ion-label>
-              <h3>{{data.firstName}}</h3>
-              <h5>{{data.externalId}}</h5>
+              <h3>{{data?.firstName}}</h3>
+              <h5>{{data?.externalId}}</h5>
             </ion-label>
           </div>
           <div nz-col nzFlex="1">
