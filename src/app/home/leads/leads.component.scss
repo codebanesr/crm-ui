@@ -6,7 +6,13 @@
 
 
 .scrollable {
-    height: 95vh;
+    height: 90vh;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+.pagination-component {
+    position: absolute; 
+    padding: 4px;
+    margin: 0 auto;
 }

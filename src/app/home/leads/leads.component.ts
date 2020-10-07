@@ -337,15 +337,8 @@ export class LeadsComponent implements OnInit {
 
   total: number = 1000;
   loading = false;
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex, sort, filter } = params;
-    const currentSort = sort.find((item) => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
-
-    this.leadOptions.perPage = pageSize;
-    this.leadOptions.page = pageIndex;
+  onQueryParamsChange(page: number): void {
+    this.leadOptions.page = page;
     this.getData();
   }
 
