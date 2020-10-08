@@ -38,6 +38,11 @@ export class AppComponent {
       url: '/home/campaign/list',
       icon: 'archive'
     },
+    {
+      title: 'Create Organization',
+      url: '/home/create-organization',
+      icon: 'paper-plane'
+    },
   ];
 
   routeTo(url: string) {

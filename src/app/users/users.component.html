@@ -1,38 +1,53 @@
 <a [routerLink]="['home', 'users', 'signup']">Create a user</a>
 
-<nz-table nzShowSizeChanger [nzData]="listOfRandomUser" [nzFrontPagination]="false" [nzLoading]="loading"
-  [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)" class="scrollable">
-  <thead>
-    <tr>
-      <!-- <th nzColumnKey="id" [nzSortFn]="true">Id</th> -->
-      <th nzColumnKey="email" [nzFilters]="filterGender" [nzFilterFn]="true">Email</th>
-      <th nzColumnKey="createdAt" [nzSortFn]="true">Created At</th>
-      <th nzColumnKey="role" [nzSortFn]="true">Role</th>
-      <th nzColumnKey="managedBy">Managed By</th>
-      <th nzColumnKey="actions" [nzSortFn]="true">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)">
-      <!-- <td>{{ data._id }}</td> -->
-      <td>{{ data.email }}</td>
-      <td>{{ data.createdAt }}</td>
-      <td>{{ data.roleType }}</td>
-      <td nz-popover [nzPopoverTitle]="titleTemplate" [nzPopoverContent]="contentTemplate">{{ data?.managedBy?.email }}</td>
-      <td class="actions">
-        <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
-        <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i> &nbsp;
-        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign'); $event.stopPropagation()"></i>
-      </td>
+<div class="scrollable">
+  <nz-collapse [nzBordered]="true">
+    <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)"
+      [nzHeader]="accordianheader">
+      <div nz-row>
+        <div nz-col nzFlex="3">
+          <ion-label>
+            <h3>{{data?.managedBy.email}}</h3>
+            <span>{{ data?.managedBy.roleType}}</span>
+          </ion-label>
+        </div>
+        <div nz-col nzFlex=1>
+          <span class="actions">
+            <i nz-icon nzType="mail" nzTheme="outline"></i> &nbsp;
+            <i nz-icon nzType="phone" nzTheme="outline"></i> &nbsp;
+            <i nz-icon nzType="whats-app" nzTheme="outline"></i>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, data)">
+                  {{manager.email}} </li>
+              </ul>
+            </nz-dropdown-menu>
+          </span>
+        </div>
+      </div>
 
-      <ng-template #titleTemplate><i nz-icon></i> {{data.managedBy.email}}</ng-template>
-      <ng-template #contentTemplate><i nz-icon></i>{{data.managedBy.roleType}}</ng-template>
-      <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, data)"> {{manager.email}} </li>
-        </ul>
-      </nz-dropdown-menu>
-    </tr>
-  </tbody>
-</nz-table>
 
+      <ng-template #accordianheader>
+        <div nz-row nzJustify="space-between">
+          <div nz-col nzFlex="3">
+            <ion-label>
+              <h3>{{data?.email}}</h3>
+              <p class="m0 p0">{{ data?.createdAt | date }}</p>
+              <p class="m0 p0">{{ data?.roleType }}</p>
+            </ion-label>
+          </div>
+          <div nz-col nzFlex="1">
+            <ion-label>
+              <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
+              <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i>
+              &nbsp;
+              <i nz-icon nzType="user-delete" nzTheme="outline"
+                (click)="takeActions('unassign'); $event.stopPropagation()"></i>
+            </ion-label>
+          </div>
+        </div>
+      </ng-template>
+    </nz-collapse-panel>
+  </nz-collapse>
+  <nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="pageSize" nzSimple [nzPageIndex]="pageIndex" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"></nz-pagination>
+</div>

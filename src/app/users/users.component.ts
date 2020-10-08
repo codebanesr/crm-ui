@@ -31,9 +31,9 @@ export class UsersComponent implements OnInit {
     loadDataFromServer(
       pageIndex: number,
       pageSize: number,
-      sortField: string | null,
-      sortOrder: string | null,
-      filter: Array<{ key: string; value: string[] }>
+      sortField?: string | null,
+      sortOrder?: string | null,
+      filter?: Array<{ key: string; value: string[] }>
     ): void {
       this.loading = true;
       this.usersService.getUsers(pageIndex, pageSize, sortField, sortOrder, filter).subscribe((result: any) => {
@@ -47,13 +47,10 @@ export class UsersComponent implements OnInit {
       this.router.navigate(['signup'], {queryParams: {userid}});
     }
 
-    onQueryParamsChange(params: NzTableQueryParams): void {
-      console.log(params);
-      const { pageSize, pageIndex, sort, filter } = params;
-      const currentSort = sort.find(item => item.value !== null);
-      const sortField = (currentSort && currentSort.key) || null;
-      const sortOrder = (currentSort && currentSort.value) || null;
-      this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+    onQueryParamsChange(page: number): void {
+
+      this.pageIndex = page;
+      this.loadDataFromServer(this.pageIndex, this.pageSize);
     }
 
     managers: any;

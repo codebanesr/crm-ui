@@ -11,6 +11,7 @@ import { ModantdModule } from './modantd/modantd.module';
 import { UsersComponent } from '../users/users.component';
 import { CampaignComponent } from '../campaign/campaign.component';
 import { SignupComponent } from '../signup/signup.component';
+import { OrganizationComponent } from '../organization/organization.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SignupComponent } from '../signup/signup.component';
     LeadsComponent,
     UsersComponent,
     CampaignComponent,
-    SignupComponent
+    SignupComponent,
+    OrganizationComponent
   ]
 })
 export class HomePageModule {}
