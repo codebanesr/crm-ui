@@ -39,6 +39,11 @@ export class AppComponent {
       icon: 'archive'
     },
     {
+      title: 'Create Campaign',
+      url: '/home/create-campaign',
+      icon: 'trash'
+    },
+    {
       title: 'Create Organization',
       url: '/home/create-organization',
       icon: 'paper-plane'

@@ -1,0 +1,156 @@
+<!-- The upper tab for choice of lead upload -->
+<form nz-form>
+  <nz-alert nzType="warning" nzMessage="Warning"
+    nzDescription="Please upload documents wisely, don't proceed without proper understanding of this space">
+  </nz-alert>
+
+  <br>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
+      <nz-radio-group [(ngModel)]="tabSelected" [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="handleFormTypeChange($event)" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="Lead Generation">Lead Generation</label>
+        <label nz-radio-button nzValue="Custom Workflow">Custom Workflow</label>
+      </nz-radio-group>
+      <a nz-button nzType="link" (click)="open()"><i nz-icon nzType="setting" nzTheme="outline"></i></a>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+
+
+<!-- campaign for creating new campaign and upload tab for uploading campaign config -->
+<form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback>
+      <input placeholder="input here" nz-input formControlName="campaignName" [nzAutocomplete]="auto" />
+      <nz-autocomplete #auto>
+        <nz-auto-option *ngFor="let option of options" [nzValue]="option?.campaignName">{{option?.campaignName}}
+        </nz-auto-option>
+      </nz-autocomplete>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Interval</nz-form-label>
+    <nz-form-control [nzSpan]="12">
+      <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Comment</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
+      <textarea formControlName="comment" nz-input rows="2" placeholder="write any thing"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine
+        (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
+      </nz-tree>
+    </nz-form-control>
+  </nz-form-item>
+
+
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <!-- hidden upload element -->
+      <input type="file" #uploader (change)="captureCampaignConfigFile($event)" style="display: none;">
+      <button type="upload" id="myFile" nz-button nzType="default" (click)="uploader.click()">
+        <i nz-icon nzType="upload" nzTheme="outline"></i>
+        Upload File
+        <nz-badge [nzCount]="campaignFiles?.length" style="margin-left: 1px;"></nz-badge>
+      </button>
+
+      <button nz-button nzType="primary" [disabled]="!campaignForm.valid"
+        (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<!-- campaign form ends here -->
+
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item (click)="deleteNode()">Delete This</li>
+    <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
+    <li nz-menu-item (click)="addParentNode()">Added Parent</li>
+    <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
+  </ul>
+</nz-dropdown-menu>
+
+<!-- Email form below inside drawer -->
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="500px" nzPlacement="right" nzTitle="Advanced Options"
+  (nzOnClose)="close()">
+  <ng-container>
+    <button nz-button [nzType]="'primary'" (click)="showEmailTplModal()"><span>+ Email Template</span></button>
+    <nz-modal nzWidth="700" [(nzVisible)]="isEmailTplVisible" nzTitle="Add Email Template Here"
+      (nzOnCancel)="handleEmailTplCancel()" (nzOnOk)="handleEmailTplOk()">
+      <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+
+        <nz-form-item>
+          <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
+          <input placeholder="Select Campaign" nz-input formControlName="campaign" [nzAutocomplete]="autob" />
+          <nz-autocomplete #autob>
+            <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.campaignName" [nzLabel]="co.campaignName">
+              {{ co.campaignName }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-item>
+
+
+        <nz-form-item>
+          <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzXs]="24">
+            <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+          <nz-form-control [nzSm]="24" [nzXs]="24">
+            <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+              formControlName="content"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
+          <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+        </nz-upload>
+      </form>
+
+      <div *nzModalFooter>
+        <button nz-button [nzType]="'danger'">Submit without attachments</button>
+        <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
+          [disabled]="fileList.length == 0" style="margin-top: 16px">
+          {{ uploading ? 'Uploading' : 'Use Attachments' }}
+        </button>
+      </div>
+    </nz-modal>
+  </ng-container>
+
+  <nz-divider nzText="Recently uploaded files"></nz-divider>
+  <ng-container *ngFor="let upload of recentUploads">
+    <!-- <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a> -->
+    <nz-descriptions nzLayout="vertical" nzBordered=true (click)="handleClick(upload)" class="downloadPanel"
+      nzTooltipTitle="Click to Download file" nzTooltipPlacement="left" nz-tooltip>
+      <nz-descriptions-item nzTitle="Email">
+        {{upload["email"]}}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Result">
+        {{upload["actionType"]}}
+      </nz-descriptions-item>
+
+
+      <nz-descriptions-item nzTitle="Uploaded At">
+        {{upload["createdAt"] | date}}
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+  </ng-container>
+</nz-drawer>

@@ -12,6 +12,7 @@ import { UsersComponent } from '../users/users.component';
 import { CampaignComponent } from '../campaign/campaign.component';
 import { SignupComponent } from '../signup/signup.component';
 import { OrganizationComponent } from '../organization/organization.component';
+import { CampaignCreateComponent } from '../campaign-create/campaign-create.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { OrganizationComponent } from '../organization/organization.component';
     UsersComponent,
     CampaignComponent,
     SignupComponent,
-    OrganizationComponent
+    OrganizationComponent,
+    CampaignCreateComponent
   ]
 })
 export class HomePageModule {}

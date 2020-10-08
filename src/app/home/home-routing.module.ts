@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CampaignCreateComponent } from '../campaign-create/campaign-create.component';
 import { CampaignComponent } from '../campaign/campaign.component';
 import { OrganizationComponent } from '../organization/organization.component';
 import { SignupComponent } from '../signup/signup.component';
@@ -32,6 +33,11 @@ const routes: Routes = [
   {
     path: 'campaign/list',
     component: CampaignComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'create-campaign',
+    component: CampaignCreateComponent,
     pathMatch: 'full'
   },
   {
