@@ -85,13 +85,13 @@
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item>
+    <!-- <nz-form-item>
       <nz-form-label [nzSpan]="24" nzFor="moduleTypes">Module Types</nz-form-label>
       <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
         nzPlaceHolder="Please select" formControlName="moduleTypes">
         <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
       </nz-select>
-    </nz-form-item>
+    </nz-form-item> -->
   </form>
 
   <form nz-form nzLayout="inline" [formGroup]="settingForm!">
@@ -157,10 +157,10 @@
 
 <!-- reassignment modal -->
 <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
-  (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user">
+  (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user" *ngIf="managers">
   <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
 
-  <nz-list nzItemLayout="horizontal" [nzLoading]="false">
+  <nz-list nzItemLayout="horizontal">
     <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
       <nz-list-item-meta [nzDescription]="manager.email">
       </nz-list-item-meta>
@@ -176,6 +176,7 @@
 <nz-modal [(nzVisible)]="isTimelineModalVisible"
   (nzOnCancel)="handleTimelineClose()"
   nzTitle="History for Lead {{selectedLead?.externalId}}"
+  *ngIf="campaignList"
 >
   <nz-timeline *ngIf = "selectedLeadHistory?.history?.length > 0; else empty">
     <nz-timeline-item *ngFor="let element of selectedLeadHistory?.history">

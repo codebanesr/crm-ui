@@ -1,7 +1,6 @@
-<br>
-<br>
+<h1>Invoice</h1>
 <div class="scrollable">
-  <nz-descriptions nzTitle="East Repair Inc" nzBordered>
+  <nz-descriptions nzTitle="East Repair Inc {{total | number: '1.0-2'}}" nzBordered>
     <nz-descriptions-item nzTitle="Bill To">
       East Repair Inc, 485 Amsterdam Avenue. New York, NY 1023
     </nz-descriptions-item>
@@ -33,10 +32,10 @@
   <nz-table #editRowTable nzBordered [nzData]="listOfData" class="scrollable">
     <thead>
       <tr>
-        <th>Qty</th>
+        <th nzWidth="10px">Qty</th>
         <th>Description</th>
         <th>Unit Price</th>
-        <th>Amount</th>
+        <th>Total</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -58,15 +57,14 @@
   
         <td class="editable-row">
           <div [hidden]="editId === data.id">
-            {{ data.unitPrice }}
+            {{ data.unitPrice | number: '1.0-2'}}
           </div>
           <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.unitPrice" (blur)="stopEdit()" />
         </td>
         <td class="editable-row">
-          <div [hidden]="editId === data.id">
-            {{ data.amount }}
+          <div>
+            {{ data.unitPrice * data.quantity }}
           </div>
-          <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.amount" (blur)="stopEdit()" />
         </td>
   
   

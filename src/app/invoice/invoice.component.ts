@@ -23,7 +23,7 @@ export class InvoiceComponent implements OnInit {
   calculateTotal() {
     this.total = 0;
     this.listOfData.forEach((d) => {
-      this.total += d.amount * d.quantity;
+      this.total += d.unitPrice * d.quantity;
     });
   }
 
@@ -34,7 +34,6 @@ export class InvoiceComponent implements OnInit {
         id: `${this.i}`,
         quantity: 1234,
         description: "32",
-        amount: 12,
         unitPrice: 100,
       },
     ];
@@ -56,5 +55,4 @@ interface ItemData {
   quantity: number;
   description: string;
   unitPrice: number;
-  amount: number;
 }

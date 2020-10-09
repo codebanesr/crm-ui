@@ -10,7 +10,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   getToken() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    console.log(currentUser.accessToken);
     return currentUser.accessToken;
   }
 

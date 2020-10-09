@@ -38,7 +38,7 @@ export class LeadsComponent implements OnInit {
 
   visible: boolean;
   placement = 'right';
-  managers: any;
+  managers = null;
   isTimelineModalVisible = false;
 
   settingValue!: Setting;
@@ -200,7 +200,7 @@ export class LeadsComponent implements OnInit {
   }
 
   listOfSwitch = [
-    { name: 'Ticket', formControlName: 'ticket' },
+    // { name: 'Ticket', formControlName: 'ticket' },
     { name: 'Lead', formControlName: 'lead' },
     { name: 'Archived', formControlName: 'archived' },
     { name: 'Upcoming', formControlName: 'upcoming' },

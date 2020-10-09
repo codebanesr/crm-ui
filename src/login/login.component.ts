@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthenticationService,
     private msg: NzMessageService,
-    private router: Router,
+    private router: Router
   ) { }
 
   formType = "login";
@@ -54,7 +54,10 @@ export class LoginComponent implements OnInit {
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe((data: any)=>{
       this.msg.success("Successfully Logged In");
-      this.router.navigate(["home"]);
+      
+      setTimeout(()=>{
+        this.router.navigate(['']);
+      }, 200);
     }, (error: Error)=>{
       this.msg.error("Incorrect username or password");
     })
