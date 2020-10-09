@@ -14,6 +14,7 @@ import { LoginComponent } from "src/login/login.component";
 import { authInterceptorProviders } from "./helpers/auth.interceptor";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { en_US, NZ_I18N } from 'ng-zorro-antd/i18n';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -32,6 +33,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: NZ_I18N, useValue: en_US },
     authInterceptorProviders,
   ],
   bootstrap: [AppComponent],

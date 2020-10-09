@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CampaignCreateComponent } from '../campaign-create/campaign-create.component';
 import { CampaignComponent } from '../campaign/campaign.component';
+import { InvoiceComponent } from '../invoice/invoice.component';
 import { OrganizationComponent } from '../organization/organization.component';
 import { SignupComponent } from '../signup/signup.component';
 import { UsersComponent } from '../users/users.component';
@@ -36,13 +37,18 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'create-campaign',
+    path: 'campaigns/create',
     component: CampaignCreateComponent,
     pathMatch: 'full'
   },
   {
     path: '',
     component: LeadsComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'invoice',
+    component: InvoiceComponent,
     pathMatch: 'full'
   },
 ];

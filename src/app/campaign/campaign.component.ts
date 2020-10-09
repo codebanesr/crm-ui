@@ -120,7 +120,7 @@ export class CampaignComponent implements OnInit {
 
   }
   gotoDetailedView(data: any) {
-    this.router.navigate(['welcome', 'campaigns', 'create'], { queryParams: { id: data._id } });
+    this.router.navigate(['home', 'campaigns', 'create'], { queryParams: { id: data._id } });
   }
 
   uploading = false;

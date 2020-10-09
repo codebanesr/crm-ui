@@ -48,6 +48,11 @@ export class AppComponent {
       url: '/home/create-organization',
       icon: 'paper-plane'
     },
+    {
+      title: 'Invoice',
+      url: '/home/invoice',
+      icon: 'trash'
+    },
   ];
 
   routeTo(url: string) {
