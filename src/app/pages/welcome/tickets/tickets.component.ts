@@ -1,110 +1,49 @@
 import { Component, OnInit } from '@angular/core';
-import { ColumnItem, listOfColumns, DataItem } from './listOfCols';
-import { TicketsService } from 'src/app/tickets.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Router } from '@angular/router';
-
+import html2canvas from 'html2canvas';
+import {jsPDF} from 'jspdf';
 
 @Component({
   selector: 'app-tickets',
-  templateUrl: './tickets.component.html',
-  styleUrls: ['./tickets.component.scss']
+  template: `
+    <nz-row [nzGutter]="16" id="contentToConvert" (click)="convetToPDF()">
+      <nz-col [nzSpan]="12">
+        <nz-statistic
+          [nzValue]="(1949101 | number)!"
+          [nzTitle]="'Active Users'"
+        ></nz-statistic>
+      </nz-col>
+      <nz-col [nzSpan]="12">
+        <nz-statistic
+          [nzValue]="(2019.111 | number: '1.0-2')!"
+          [nzTitle]="'Account Balance (CNY)'"
+        ></nz-statistic>
+      </nz-col>
+    </nz-row>
+  `,
+  styleUrls: ['./tickets.component.scss'],
 })
 export class TicketsComponent implements OnInit {
-  constructor(
-    private msg: NzMessageService,
-    private ticketsService: TicketsService,
-    private router: Router,
-  ) {}
-
-  listOfColumns: ColumnItem[]
   ngOnInit() {
-    this.listOfColumns = listOfColumns;
-    this.generateData();
 
   }
 
-  listOfData: DataItem[] = [];
-  page: number = 1;
-  perPage: number = 15;
+  title = 'html-to-pdf-angular-application';
+  public convetToPDF() {
+    console.log("clicking")
+    var data = document.getElementById('contentToConvert');
+    html2canvas(data).then((canvas) => {
+      // Few necessary setting options
+      var imgWidth = 208;
+      var pageHeight = 295;
+      var imgHeight = (canvas.height * imgWidth) / canvas.width;
+      var heightLeft = imgHeight;
 
-  generateData() {
-    this.ticketsService.getAllTickets(this.page, this.perPage).subscribe((response: any) => {
-      this.msg.info("Retrieved some leads");
-      response.forEach((row: any) => {
-        this.listOfData.push({
-          _id: row._id,
-          name: row.nickname,
-          email: row.email,
-          phoneNumber: row.phoneNumber,
-          assignedTo: row.assignedTo,
-          description: "rewrite change history",
-          createdAt: row.createdAt
-        });
-      })
-    }, error => {
-      this.msg.error("Some error occured while fetching leads");
+      const contentDataURL = canvas.toDataURL('image/png');
+      let pdf = new jsPDF('p', 'mm', 'a4', false); // A4 size page of PDF;
+      pdf.internal.scaleFactor = 30;
+      var position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('new-file.pdf'); // Generated PDF
     });
-  }
-
-
-  trackByName(_: number, item: ColumnItem): string {
-    return item.name;
-  }
-
-  sortByAge(): void {
-    this.listOfColumns.forEach(item => {
-      if (item.name === 'Age') {
-        item.sortOrder = 'descend';
-      } else {
-        item.sortOrder = null;
-      }
-    });
-  }
-
-  resetFilters(): void {
-    this.listOfColumns.forEach(item => {
-      if (item.name === 'Name') {
-        item.listOfFilter = [
-          { text: 'Joe', value: 'Joe' },
-          { text: 'Jim', value: 'Jim' }
-        ];
-      } else if (item.name === 'Address') {
-        item.listOfFilter = [
-          { text: 'London', value: 'London' },
-          { text: 'Sidney', value: 'Sidney' }
-        ];
-      }
-    });
-  }
-
-
-  createTicket() {
-    this.router.navigate(['welcome', "tickets", "create"]);
-  }
-
-  resetSortAndFilters(): void {
-    this.listOfColumns.forEach(item => {
-      item.sortOrder = null;
-    });
-    this.resetFilters();
-  }
-
-
-  onPageIndexChange(page: number) {
-    this.page = page;
-    this.generateData();
-  }
-
-  onPageSizeChange(perPage: number){
-    this.perPage = perPage;
-    this.generateData();
-  }
-
-
-
-  updateTicket(data) {
-    console.log(data)
-    this.router.navigate(['welcome', "tickets", "create"], { queryParams: { id: data._id } });
   }
 }

@@ -1,27 +1,33 @@
-import { Component, NgModule, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  NgModule,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { EChartOption } from 'echarts';
-
-
+import { DashboardService } from '../pages/welcome/dashboard.service';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+  styleUrls: ['./overview.component.scss'],
 })
 export class OverviewComponent implements OnInit {
   config: any;
   chartOption: EChartOption;
-  @ViewChild('myChart') myChart: ElementRef;
+  @ViewChild('leadStatusChart') leadStatusChart: ElementRef;
   labelOption: any;
 
+
+
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
     this.initChartConfig();
     this.initLabelOptions();
     this.initChartOptions();
   }
-
-
 
   initLabelOptions() {
     this.labelOption = {
@@ -35,12 +41,11 @@ export class OverviewComponent implements OnInit {
       fontSize: 16,
       rich: {
         name: {
-          textBorderColor: '#fff'
-        }
-      }
-    }
+          textBorderColor: '#fff',
+        },
+      },
+    };
   }
-
 
   initChartConfig() {
     this.config = {
@@ -56,96 +61,80 @@ export class OverviewComponent implements OnInit {
             align: this.config.align,
             verticalAlign: this.config.verticalAlign,
             position: this.config.position,
-            distance: this.config.distance
-          }
+            distance: this.config.distance,
+          },
         };
         this.myChart.setOption({
-          series: [{
-            label: labelOption
-          }, {
-            label: labelOption
-          }, {
-            label: labelOption
-          }, {
-            label: labelOption
-          }]
+          series: [
+            {
+              label: labelOption,
+            },
+            {
+              label: labelOption,
+            },
+            {
+              label: labelOption,
+            },
+            {
+              label: labelOption,
+            },
+          ],
         });
-      }
-    }
+      },
+    };
+  }
+
+
+  date = null;
+  onChange(e) {
+    this.date = e;
+    this.initChartOptions();
   }
 
 
   initChartOptions() {
-    this.chartOption = {
-      color: ['#e78c45', '#300b05', '#4cabce', '#e5323e'],
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
-      },
-      legend: {
-        left: 'center',
-        top: 'bottom',
-        data: ['Converted', 'Dropped', 'Positive', 'Negative']
-      },
-      toolbox: {
-        show: true,
-        orient: 'vertical',
-        left: 'left',
-        top: 'center',
-        feature: {
-          mark: { show: true, title: "mark" },
-          dataView: { show: true, readOnly: false, title: "data view" },
-          magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'], title: "magic" },
-          restore: { show: true, title: "restore" },
-          saveAsImage: { show: true, title: "download" }
-        }
-      },
-      xAxis: [
-        {
-          type: 'category',
-          axisTick: { show: false },
-          data: ['Shanur', 'Kunal', 'Akshay', 'Amandeep']
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value',
-          splitLine: {show: false},
-          max: function (value) {
-            return value.max + 100;
-          }
+    let leadStatusOptions = [];
+    let output = [];
+    this.dashboardService.getAggregatedLeadStatus(this.date).subscribe((result: any[])=>{
+      leadStatusOptions = result.map(r=>r._id.leadStatus);
 
-        }
-      ],
-      series: [
-        {
-          name: 'Converted',
-          type: 'bar',
-          barGap: 0,
-          label: this.labelOption,
-          data: [320, 332, 301, 334, 390]
+
+      output = result.map((o) => {
+        return { name: o._id.leadStatus, value: o.totalAmount };
+      });
+
+      this.chartOption = {
+        title: {
+          text: 'Lead Status',
+          subtext: 'This week',
+          left: 'center',
         },
-        {
-          name: 'Dropped',
-          type: 'bar',
-          label: this.labelOption,
-          data: [220, 182, 191, 234, 290]
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
         },
-        {
-          name: 'Positive',
-          type: 'bar',
-          label: this.labelOption,
-          data: [150, 232, 201, 154, 190]
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: leadStatusOptions,
         },
-        {
-          name: 'Negative',
-          type: 'bar',
-          label: this.labelOption,
-          data: [98, 77, 101, 99, 40]
-        }
-      ]
-    }
+        series: [
+          {
+            name: 'Lead Status',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: output,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+              },
+            },
+          },
+        ],
+      };
+    })
   }
 }

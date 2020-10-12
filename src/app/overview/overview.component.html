@@ -1,6 +1,5 @@
 
-
-
-<div nz-row>
-  <div nz-col nzSpan="24" #mychart echarts [options]="chartOption" class="demo-chart"></div>
+<div nz-row *ngIf="chartOption">
+  <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
+  <div nz-col nzSpan="24" #leadStatusChart echarts [options]="chartOption" class="lead-status-chart"></div>
 </div>

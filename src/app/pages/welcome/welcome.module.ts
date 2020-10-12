@@ -29,6 +29,7 @@ import { ConferenceComponent } from './conference/conference.component';
 import { ChatComponent } from './chat/chat.component';
 import { PubsubService } from 'src/app/pubsub.service';
 import { SIDEBAR } from 'src/string.constants';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { SIDEBAR } from 'src/string.constants';
     FormlyDatePicker,
     LeadSoloComponent,
     ConferenceComponent,
-    ChatComponent
+    ChatComponent,
+    InvoiceComponent
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],

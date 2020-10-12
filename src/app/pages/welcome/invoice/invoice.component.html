@@ -1,0 +1,66 @@
+<nz-page-header class="site-page-header" nzBackIcon>
+  <nz-page-header-title>Title</nz-page-header-title>
+  <nz-page-header-subtitle>This is a subtitle</nz-page-header-subtitle>
+  <nz-page-header-content>
+    <nz-descriptions nzSize="small" [nzColumn]="3">
+      <nz-descriptions-item nzTitle="Created" [nzSpan]="1">Lili Qu</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Association" [nzSpan]="1"><a>421421</a></nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Creation Time" [nzSpan]="1">2017-01-10</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Effective Time" [nzSpan]="1">2017-10-10</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Remarks" [nzSpan]="2">
+        Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-page-header-content>
+</nz-page-header>
+<nz-table #editRowTable nzBordered [nzData]="listOfData">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Qty</th>
+      <th>Description</th>
+      <th>Unit Price</th>
+      <th>Amount</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of editRowTable.data" (click)="startEdit(data.id)">
+      <td>
+        {{ data.id }}
+      </td>
+      <td class="editable-row">
+        <div [hidden]="editId === data.id">
+          {{ data.quantity }}
+        </div>
+        <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.quantity" (blur)="stopEdit()" />
+      </td>
+
+      <td class="editable-row">
+        <div [hidden]="editId === data.id">
+          {{ data.description }}
+        </div>
+        <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.description" (blur)="stopEdit()" />
+      </td>
+
+      <td class="editable-row">
+        <div [hidden]="editId === data.id">
+          {{ data.unitPrice }}
+        </div>
+        <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.unitPrice" (blur)="stopEdit()" />
+      </td>
+      <td class="editable-row">
+        <div [hidden]="editId === data.id">
+          {{ data.amount }}
+        </div>
+        <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.amount" (blur)="stopEdit()" />
+      </td>
+
+
+      <td class="editable-row">
+        <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<button nz-button (click)="addRow()" nzType="primary">Add</button>

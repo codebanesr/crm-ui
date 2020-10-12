@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LeadsComponent } from './leads/leads.component';
 import { TicketsComponent } from './tickets/tickets.component';
-import { routePoints } from '../../../menus/routes';
 import { UploadsComponent } from './uploads/uploads.component';
 import { UsersComponent } from './users/users.component';
 import { UserCreateComponent } from './user-create/user-create.component';
@@ -23,6 +22,7 @@ import { LeadSoloComponent } from './lead-solo/lead-solo.component';
 import { ConferenceComponent } from './conference/conference.component';
 import { ChatComponent } from './chat/chat.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 const routes: Routes = [
   {
@@ -220,6 +220,11 @@ const routes: Routes = [
       breadcrumb: 'actions',
     },
   },
+  {
+    path: 'invoice',
+    component: InvoiceComponent,
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
