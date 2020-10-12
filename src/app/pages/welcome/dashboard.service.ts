@@ -17,4 +17,9 @@ export class DashboardService {
   getAggregatedLeadStatus(dateArray) {
     return this.http.post(`${environment.apiUrl}/dashboard/leadStatus`, {dateArray});
   }
+
+
+  getLeadStatusByDepartment(dateArray) {
+    return this.http.post(`${environment.apiUrl}/dashboard/leadStatus/department`, {dateArray});
+  }
 }

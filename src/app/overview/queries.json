@@ -1,0 +1,72 @@
+// usernames by lead count
+db.leads.aggregate([
+        { $group: { _id: "$email", count: { $sum: 1 } } },
+        { $sort: { count: -1 } }
+]);
+
+
+[{
+  "_id" : "frontline1@gmail.com",
+  "count" : 752.0
+},{
+  "_id" : "shanur.cse.nitap@gmail.com",
+  "count" : 248.0
+}]
+
+
+
+
+
+____________________________________________________________________________________________________________________________________________________________________________________
+// get users with most leads this month
+db.leads.aggregate([
+  { $group: { _id: {email: "$email", leadStatus: "$leadStatus"}, count: { $sum: 1 }, amount: {$sum: "$amount"} } }, // take {email, leadStatus, leadCount, totalAmount}
+  { $sort: { count: -1 } },                                                                                         // sort by count that was calculated in stage 1
+  { $limit : 3 },                                                                                                   // take top 3 users
+  { $project: {email: "$_id.email", leadStatus: "$_id.leadStatus", count: "$count", amount: "$amount", _id: 0}},    // project how you would like to use this in the frontend
+  { $group: { _id: "$email", leadsWithStatus: { $push : "$$ROOT" }, allLeadCount: {$sum: "$amount"} } }             // final result
+])
+
+output
+{
+  "_id" : "frontline1@gmail.com",
+  "leadsWithStatus" : [
+      {
+          "email" : "frontline1@gmail.com",
+          "leadStatus" : "NURTURING",
+          "count" : 658.0,
+          "amount" : 336111186.545589
+      },
+      {
+          "email" : "frontline1@gmail.com",
+          "leadStatus" : "CLOSED",
+          "count" : 68.0,
+          "amount" : 33336426.1273849
+      },
+      {
+          "email" : "frontline1@gmail.com",
+          "leadStatus" : "OPEN",
+          "count" : 26.0,
+          "amount" : 12796027.8271291
+      }
+  ],
+  "allLeadCount" : 382243640.500103
+},
+{
+  "_id" : "shanur.cse.nitap@gmail.com",
+  "leadsWithStatus" : [
+      {
+          "email" : "shanur.cse.nitap@gmail.com",
+          "leadStatus" : "NURTURING",
+          "count" : 223.0,
+          "amount" : 112685578.111234
+      },
+      {
+          "email" : "shanur.cse.nitap@gmail.com",
+          "leadStatus" : "CLOSED",
+          "count" : 19.0,
+          "amount" : 8133654.27802684
+      }
+  ],
+  "allLeadCount" : 120819232.389261
+}

@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { EChartOption } from 'echarts';
 import { DashboardService } from '../pages/welcome/dashboard.service';
+import { barChartLabelOption } from './chartOptions';
 
 @Component({
   selector: 'app-overview',
@@ -15,11 +16,11 @@ import { DashboardService } from '../pages/welcome/dashboard.service';
 })
 export class OverviewComponent implements OnInit {
   config: any;
-  chartOption: EChartOption;
+  leadStatusChartOption: EChartOption;
+  performanceChartOptions: EChartOption;
   @ViewChild('leadStatusChart') leadStatusChart: ElementRef;
+  @ViewChild('performanceChart') performanceChart: ElementRef;
   labelOption: any;
-
-
 
   constructor(private dashboardService: DashboardService) {}
 
@@ -84,57 +85,126 @@ export class OverviewComponent implements OnInit {
     };
   }
 
-
   date = null;
   onChange(e) {
     this.date = e;
     this.initChartOptions();
   }
 
-
   initChartOptions() {
-    let leadStatusOptions = [];
-    let output = [];
-    this.dashboardService.getAggregatedLeadStatus(this.date).subscribe((result: any[])=>{
-      leadStatusOptions = result.map(r=>r._id.leadStatus);
+    this.initLeadStatusPieChart();
+    this.initPerformanceChart();
+  }
 
+  initPerformanceChart() {
+    this.dashboardService.getLeadStatusByDepartment(this.date).subscribe((data: any[])=>{
 
-      output = result.map((o) => {
-        return { name: o._id.leadStatus, value: o.totalAmount };
-      });
-
-      this.chartOption = {
-        title: {
-          text: 'Lead Status',
-          subtext: 'This week',
-          left: 'center',
-        },
+      this.performanceChartOptions = {
+        color: ['#003366', '#006699', '#4cabce', '#e5323e'],
         tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)',
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+          },
         },
         legend: {
+          data: data.map(d=>d._id),
           orient: 'vertical',
           left: 'left',
-          data: leadStatusOptions,
         },
-        series: [
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center',
+          feature: {
+            mark: { show: true },
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        xAxis: [
           {
-            name: 'Lead Status',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '60%'],
-            data: output,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)',
-              },
-            },
+            type: 'category',
+            axisTick: { show: false },
+            data: ["NURTURING", "CLOSED"],
+          },
+        ],
+        yAxis: [
+          {
+            type: 'value',
+          },
+        ],
+        series:
+        [
+          {
+            name: data[0]._id,
+            type: 'bar',
+            barGap: 0,
+            barWidth: '6%',
+            label: barChartLabelOption,
+            data: data[0].leadsWithStatus.map(d=>d.count),
+          },
+          {
+            name: data[1]._id,
+            barWidth: '6%',
+            type: 'bar',
+            label: barChartLabelOption,
+            data: data[1].leadsWithStatus.map(d=>d.count),
           },
         ],
       };
+    }, error=>{
+      console.log(error);
     })
+  }
+
+  initLeadStatusPieChart() {
+    let leadStatusOptions = [];
+    let output = [];
+    this.dashboardService
+      .getAggregatedLeadStatus(this.date)
+      .subscribe((result: any[]) => {
+        leadStatusOptions = result.map((r) => r._id.leadStatus);
+
+        output = result.map((o) => {
+          return { name: o._id.leadStatus, value: o.totalAmount };
+        });
+
+        this.leadStatusChartOption = {
+          title: {
+            text: 'Lead Status',
+            subtext: 'This week',
+            left: 'center',
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)',
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: leadStatusOptions,
+          },
+          series: [
+            {
+              name: 'Lead Status',
+              type: 'pie',
+              radius: '55%',
+              center: ['50%', '60%'],
+              data: output,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)',
+                },
+              },
+            },
+          ],
+        };
+      });
   }
 }
