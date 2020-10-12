@@ -129,6 +129,7 @@ export class OverviewComponent implements OnInit {
           {
             type: 'category',
             axisTick: { show: false },
+            // this should come from the api
             data: ["NURTURING", "CLOSED"],
           },
         ],
@@ -137,24 +138,16 @@ export class OverviewComponent implements OnInit {
             type: 'value',
           },
         ],
-        series:
-        [
-          {
-            name: data[0]._id,
+        series: data.map(d=>{
+          return {
+            name: d._id,
             type: 'bar',
             barGap: 0,
             barWidth: '6%',
             label: barChartLabelOption,
-            data: data[0].leadsWithStatus.map(d=>d.count),
-          },
-          {
-            name: data[1]._id,
-            barWidth: '6%',
-            type: 'bar',
-            label: barChartLabelOption,
-            data: data[1].leadsWithStatus.map(d=>d.count),
-          },
-        ],
+            data: d.leadsWithStatus.map(innerData=>innerData.count)
+          }
+        })
       };
     }, error=>{
       console.log(error);
