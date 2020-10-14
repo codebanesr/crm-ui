@@ -95,9 +95,9 @@ export class UsersComponent implements OnInit {
 
 
   showActivityDrawer: boolean = false;
-  userActivityDetails = null;
+  userActivityDetails = [];
   viewActivity(data: any) {
-    this.usersService.getUserDetails(data.email).subscribe(data=>{
+    this.usersService.getUserDetails(data.email).subscribe((data: any[])=>{
       this.userActivityDetails = data;
     }, error=>{
       console.log(error);
