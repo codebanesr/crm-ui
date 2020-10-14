@@ -5,6 +5,7 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PubsubService } from 'src/app/pubsub.service';
 import { CampaignService } from '../campaign.service';
 import { ColumnItem, DataItem } from '../interfaces/listOfCols';
 import { LeadsService } from '../leads.service';
@@ -25,7 +26,8 @@ export class LeadsComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private usersService: UsersService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private pubsub: PubsubService
   ) { }
 
   page: number = 1;
@@ -48,6 +50,7 @@ export class LeadsComponent implements OnInit {
   listOfCurrentPageData: any[] = [];
 
   ngOnInit() {
+    this.pubsub.$pub("HEADING", {heading: "Leads"});
     this.visible = false;
     this.listOfOption = ['LEAD', 'TICKET', 'USER', 'CUSTOMER'];
     this.initSettingForm();

@@ -8,6 +8,7 @@ import { NzUploadListComponent } from 'ng-zorro-antd/upload';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AgentService } from '../agent.service';
 import { CampaignService } from '../home/campaign.service';
+import { PubsubService } from '../pubsub.service';
 
 @Component({
   selector: 'app-campaign-create',
@@ -21,7 +22,8 @@ export class CampaignCreateComponent implements OnInit {
     private campaignService: CampaignService,
     private msg: NzMessageService,
     private nzContextMenuService: NzContextMenuService,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private pubsub: PubsubService
   ) {}
   campaignForm: FormGroup;
 
@@ -55,6 +57,7 @@ export class CampaignCreateComponent implements OnInit {
 
   campaignOptions: any = [];
   ngOnInit(){
+    this.pubsub.$pub("HEADING", {heading: "Leads"});
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
 

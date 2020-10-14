@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { PubsubService } from '../pubsub.service';
 
 @Component({
   selector: "app-invoice",
@@ -9,7 +10,8 @@ export class InvoiceComponent implements OnInit {
   i = 0;
   editId: string | null = null;
   listOfData: ItemData[] = [];
-
+  
+  constructor(private pubsub: PubsubService) {}
   startEdit(id: string): void {
     this.editId = id;
   }
@@ -45,6 +47,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.pubsub.$pub("HEADING", {heading: "Invoice"});
     this.addRow();
     this.addRow();
   }

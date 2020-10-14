@@ -6,14 +6,15 @@
 
 
 .scrollable {
-    height: 90vh;
+    margin-bottom: 70px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
 
 .pagination-component {
-    position: relative; 
-    padding-top: 8px;
+    width: 200px;
+    position: fixed;
+    margin-top: calc(100vh - 50px);
     left: 50%;
-    transform: translateX(-25%);
+    transform: translate(-50%, -50%);
 }

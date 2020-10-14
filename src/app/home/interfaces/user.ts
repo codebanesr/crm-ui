@@ -5,5 +5,6 @@ export interface User {
   createdAt: Date,
   roleType: string,
   managedBy: any
+  userLeadActivityDetails: any[]
 }
 

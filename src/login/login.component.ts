@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthenticationService } from '../authentication.service';
 
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthenticationService,
     private msg: NzMessageService,
-    private router: Router
+    private router: Router,
+    private menuController: MenuController
   ) { }
 
   formType = "login";
@@ -56,7 +58,7 @@ export class LoginComponent implements OnInit {
       this.msg.success("Successfully Logged In");
       
       setTimeout(()=>{
-        this.router.navigate(['']);
+        this.router.navigate(['home']);
       }, 200);
     }, (error: Error)=>{
       this.msg.error("Incorrect username or password");

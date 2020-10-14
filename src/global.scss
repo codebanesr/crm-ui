@@ -40,7 +40,7 @@
   /* Hide scrollbar for IE, Edge and Firefox */
 .scrollable {
 -ms-overflow-style: none;  /* IE and Edge */
-scrollbar-width: none;  /* Firefox */
+  scrollbar-width: none;  /* Firefox */
 }
 
 
@@ -50,4 +50,8 @@ scrollbar-width: none;  /* Firefox */
 
 .p0 {
   padding: 0;
+}
+
+.lr-margin {
+  padding: 0px 0px;
 }

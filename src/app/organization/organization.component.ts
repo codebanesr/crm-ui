@@ -6,6 +6,7 @@ import { Observable, Observer } from 'rxjs';
 import { AuthenticationService } from 'src/authentication.service';
 import { UsersService } from '../home/users.service';
 import { OrganizationService } from '../organization.service';
+import { PubsubService } from '../pubsub.service';
 
 @Component({
   selector: 'app-organization',
@@ -59,7 +60,8 @@ export class OrganizationComponent implements OnInit {
     private organizationService: OrganizationService,
     private msg: NzMessageService,
     private router: Router,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private pubsub: PubsubService
   ) {}
 
   attributeValidator = (label: string) => {
@@ -86,6 +88,7 @@ export class OrganizationComponent implements OnInit {
   organizationNameValidator = this.attributeValidator('organizationName');
 
   ngOnInit(): void {
+    this.pubsub.$pub("HEADING", {heading: "Create Organization"});
     this.signupForm = this.fb.group({
       email: [null, [Validators.email, Validators.required]],
       password: [null, [Validators.required]],

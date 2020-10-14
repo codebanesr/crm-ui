@@ -1,6 +1,16 @@
 .inner-content {
-    margin: 0vh 3vw;
+    padding: 0vh 3vw;
     font-size: 1.5rem;
     background: #fff;
     height: 100%;
+    margin-top: 35px;
+}
+
+::ng-deep ion-toolbar {
+    height: 35px;
+}
+
+.header-class {
+    line-height: 35px;
+    margin: 0 auto;
 }

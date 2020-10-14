@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PubsubService } from 'src/app/pubsub.service';
 import { CampaignService } from '../campaign.service';
 import { ClassValidationError } from '../interfaces/global.interfaces';
 import { ILead } from '../interfaces/leads.interface';
@@ -19,7 +20,8 @@ export class LeadSoloComponent implements OnInit {
     private leadsService: LeadsService,
     private campaignService: CampaignService,
     private msgService: NzMessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private pubsub: PubsubService
   ) { }
 
   selectedCampaign: string;
@@ -33,6 +35,7 @@ export class LeadSoloComponent implements OnInit {
   isVisible = false;
 
   ngOnInit(): void {
+    this.pubsub.$pub("HEADING", {heading: "Single Lead"});
     this.getLeadMappings();
     this.populateCampaignDropdown("");
     this.initEmailForm();

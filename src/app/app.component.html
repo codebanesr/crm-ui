@@ -1,10 +1,12 @@
 <ion-app>
-  <ion-menu side="start" content-id="main-content">
-    <ion-header color="#4287f5">
-      <ion-toolbar translucent>
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
+  <ion-fab vertical="top" horizontal="right" slot="fixed" expand="block" (click)="openMenu()">
+    <ion-fab-button style="transform: scale(0.7) translateY(-25px) translateX(-7px);">
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </ion-fab-button>
+
+  </ion-fab>
+
+  <ion-menu side="start" content-id="main-content" menuId="first">
     <ion-content>
       <ion-list>
         <ion-item *ngFor="let o of appPages" (click)="routeTo(o.url)">
@@ -14,8 +16,8 @@
       </ion-list>
     </ion-content>
   </ion-menu>
-
-  <nz-layout id="main-content" class="inner-content">
-    <ion-router-outlet></ion-router-outlet>
+  <nz-layout id="main-content">
+    <h4 nz-typography class="header-class">{{heading}}</h4>
+    <ion-router-outlet class="inner-content"></ion-router-outlet>
   </nz-layout>
 </ion-app>

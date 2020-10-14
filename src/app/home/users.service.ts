@@ -59,4 +59,8 @@ export class UsersService {
   updateUser(userid: string, userObj: any) {
     return this.http.put(`${environment.apiUrl}/user/${userid}`, userObj);
   }
+
+  getUsersLeadLogs(userEmail: string, dateRange?: string[]) {
+    return this.http.post(`${environment.apiUrl}/lead/activity/logs`, {userEmail, dateRange});
+  }
 }

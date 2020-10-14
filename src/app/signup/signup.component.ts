@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthenticationService } from 'src/authentication.service';
 import { UsersService } from '../home/users.service';
+import { PubsubService } from '../pubsub.service';
 
 @Component({
   selector: 'app-signup',
@@ -61,10 +62,12 @@ export class SignupComponent implements OnInit {
     private msg: NzMessageService,
     private router: Router,
     private usersService: UsersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private pubsub: PubsubService
   ) {}
 
   ngOnInit(): void {
+    this.pubsub.$pub("HEADING", {heading: "Add User"});
     this.signupForm = this.fb.group({
       email: [null, [Validators.email, Validators.required]],
       password: [null, [Validators.required]],

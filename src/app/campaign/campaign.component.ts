@@ -6,6 +6,7 @@ import { NzUploadListComponent } from 'ng-zorro-antd/upload';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CampaignService } from '../home/campaign.service';
 import { ColumnItem, DataItem } from '../home/interfaces/listOfCols';
+import { PubsubService } from '../pubsub.service';
 
 @Component({
   selector: 'app-campaign',
@@ -17,7 +18,8 @@ export class CampaignComponent implements OnInit {
     private campaignService: CampaignService,
     private msg: NzMessageService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private pubsub: PubsubService
   ) { }
 
   campaignOpts: string[];
@@ -26,6 +28,7 @@ export class CampaignComponent implements OnInit {
   perPage: number;
   filters: any;
   ngOnInit(): void {
+    this.pubsub.$pub("HEADING", {heading: "Campaigns"});
     this.page = 1;
     this.perPage = 20;
     this.campaignOpts = ['default'];

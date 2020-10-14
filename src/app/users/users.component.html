@@ -2,8 +2,7 @@
 
 <div class="scrollable">
   <nz-collapse [nzBordered]="true">
-    <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)"
-      [nzHeader]="accordianheader">
+    <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfRandomUser" [nzHeader]="accordianheader" (click)="viewActivity(data)">
       <div nz-row>
         <div nz-col nzFlex="3">
           <ion-label>
@@ -25,6 +24,9 @@
           </span>
         </div>
       </div>
+      <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Lead Details" *ngIf="data.userLeadActivityDetails?.length>0">
+        <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of data.userLeadActivityDetails">{{detail.amount}}</nz-descriptions-item>
+      </nz-descriptions>
 
 
       <ng-template #accordianheader>
@@ -34,6 +36,7 @@
               <h3>{{data?.email}}</h3>
               <p class="m0 p0">{{ data?.createdAt | date }}</p>
               <p class="m0 p0">{{ data?.roleType }}</p>
+              <a (click)="navigate(data._id);  $event.stopPropagation();">Edit User</a>
             </ion-label>
           </div>
           <div nz-col nzFlex="1">

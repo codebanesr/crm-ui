@@ -4,6 +4,13 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ILeadColumn } from './leads/lead.interface';
 
+
+export enum INTERVAL {
+  "TODAY" = "TODAY",
+  "THIS_WEEK" = "THIS_WEEK",
+  "THIS_MONTH" = "THIS_MONTH",
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -81,5 +88,9 @@ export class LeadsService {
 
   fetchNextLead(campaignName: string, leadStatus: string): Observable<any> {
     return this.http.get(`${environment.apiUrl}/lead/fetchNextLead/${campaignName}/${leadStatus}`);
+  }
+
+  getFollowUps() {
+    return this.http.post(`${environment.apiUrl}/lead/followUp`, { interval: INTERVAL.THIS_MONTH, userEmail: "frontline1@gmail.com" });
   }
 }
