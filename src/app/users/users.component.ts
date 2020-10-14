@@ -87,6 +87,13 @@ export class UsersComponent implements OnInit {
     }
 
     viewActivity(data: any) {
+      // followUp or upcoming api ____________________________________
+      this.leadService.getFollowUps().subscribe(data=>{
+        console.log(data);
+      }, error=>{
+        console.log(error);
+      })
+      // ______________________________________________________________
       this.leadService.getFollowUps().subscribe(data=>{
         console.log(data);
       }, error=>{
