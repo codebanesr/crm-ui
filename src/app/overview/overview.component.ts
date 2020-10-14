@@ -16,6 +16,8 @@ import { barChartLabelOption } from './chartOptions';
 })
 export class OverviewComponent implements OnInit {
   config: any;
+  selectedMonth = null;
+  monthFormat = 'yyyy/MM';
   leadStatusChartOption: EChartOption;
   performanceChartOptions: EChartOption;
   @ViewChild('leadStatusChart') leadStatusChart: ElementRef;
@@ -94,6 +96,20 @@ export class OverviewComponent implements OnInit {
   initChartOptions() {
     this.initLeadStatusPieChart();
     this.initPerformanceChart();
+  }
+
+
+  initMonthlyChart(month: number) {
+    this.dashboardService.getLeadStatusByMonth(month).subscribe(data=>{
+      console.log(data);
+    }, error=>{
+      console.log(error);
+    })
+  }
+
+  onMonthChange(selectedDate) {
+    const month = new Date(selectedDate).getMonth();
+    this.initMonthlyChart(month);
   }
 
   initPerformanceChart() {

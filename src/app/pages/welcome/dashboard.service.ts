@@ -22,4 +22,10 @@ export class DashboardService {
   getLeadStatusByDepartment(dateArray) {
     return this.http.post(`${environment.apiUrl}/dashboard/leadStatus/department`, {dateArray});
   }
+
+
+  // leadStatus/monthlyReport
+  getLeadStatusByMonth(month) {
+    return this.http.post(`${environment.apiUrl}/dashboard/leadStatus/monthlyReport`, {month});
+  }
 }

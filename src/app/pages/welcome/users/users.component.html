@@ -4,7 +4,6 @@
   [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" (nzQueryParams)="onQueryParamsChange($event)">
   <thead>
     <tr>
-      <th nzColumnKey="id" [nzSortFn]="true">Id</th>
       <th nzColumnKey="email" [nzFilters]="filterGender" [nzFilterFn]="true">Email</th>
       <th nzColumnKey="createdAt" [nzSortFn]="true">Created At</th>
       <th nzColumnKey="role" [nzSortFn]="true">Role</th>
@@ -14,7 +13,6 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)">
-      <td>{{ data._id }}</td>
       <td>{{ data.email }}</td>
       <td>{{ data.createdAt }}</td>
       <td>{{ data.roleType }}</td>
@@ -22,7 +20,8 @@
       <td class="actions">
         <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
         <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i> &nbsp;
-        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign'); $event.stopPropagation()"></i>
+        <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign'); $event.stopPropagation()"></i> &nbsp;
+        <a nzTheme="fill" (click)="viewActivity(data); $event.stopPropagation()">View Activity</a>
       </td>
 
       <ng-template #titleTemplate><i nz-icon></i> {{data.managedBy.email}}</ng-template>
@@ -35,4 +34,15 @@
     </tr>
   </tbody>
 </nz-table>
+
+
+
+
+<nz-drawer [nzVisible]="showActivityDrawer" [nzWidth]="500" [nzClosable]="true" (nzOnClose)="closeActivityDrawer()" [nzPlacement]="'left'" >
+  <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Leads">
+    <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of userActivityDetails">{{detail.amount}}</nz-descriptions-item>
+  </nz-descriptions>
+  <nz-divider></nz-divider>
+
+</nz-drawer>
 

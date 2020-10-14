@@ -34,6 +34,7 @@ export class UsersService {
   getAllUsersHack() {
     return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user`);
   }
+
   transformFilterObjectToQueryParams(paramObject) {
     return Object.keys(paramObject).map(key => key + '=' + paramObject[key]).join('&');
   }
@@ -60,19 +61,9 @@ export class UsersService {
   updateUser(userid: string, userObj: any) {
     return this.http.put(`${environment.apiUrl}/user/${userid}`, userObj);
   }
+
+
+  getUserDetails(userEmail: string, dateRange?: string[]) {
+    return this.http.post(`${environment.apiUrl}/lead/activity/logs`, {userEmail, dateRange});
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

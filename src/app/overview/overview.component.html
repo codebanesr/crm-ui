@@ -1,8 +1,26 @@
 
-<div nz-row *ngIf="leadStatusChartOption" style="width: 50%;">
-  <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
-  <div nz-col nzSpan="24" #leadStatusChart echarts [options]="leadStatusChartOption" class="lead-status-chart"></div>
-
-
-  <div nz-col nzSpan="24" #performanceChart echarts [options]="performanceChartOptions" class="performanceChart"></div>
+<div nz-row>
+  <div nz-col nzSpan="12">
+    <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
+    <div #leadStatusChart echarts [options]="leadStatusChartOption" class="lead-status-chart"></div>
+    <br>
+    <nz-divider></nz-divider>
+    <nz-range-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-range-picker>
+    <br>
+    <div #performanceChart echarts [options]="performanceChartOptions" class="performanceChart"></div>
+  </div>
+  <div nz-col nzSpan="12">
+    <nz-date-picker nzMode="month" [nzFormat]="monthFormat" (ngModelChange)="onMonthChange($event)" [(ngModel)]="selectedMonth"></nz-date-picker>
+    <br>
+    <br>
+    <nz-descriptions nzTitle="User Info">
+      <nz-descriptions-item nzTitle="UserName">Zhou Maomao</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Telephone">18100000000</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Live">Hangzhou, Zhejiang</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Remark">Empty</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Address">
+        No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
 </div>
