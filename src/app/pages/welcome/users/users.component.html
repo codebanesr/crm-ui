@@ -39,11 +39,10 @@
 
 
 <nz-drawer [nzVisible]="showActivityDrawer" [nzWidth]="500" [nzClosable]="true" (nzOnClose)="closeActivityDrawer()" [nzPlacement]="'left'" >
-  <nz-empty *ngIf="userActivityDetails.length === 0"></nz-empty>
-  <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Leads" *ngIf="userActivityDetails.length>0">
-    <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of userActivityDetails">{{detail.amount}}</nz-descriptions-item>
+  <nz-empty *ngIf="userLeadActivityDetails.length === 0"></nz-empty>
+  <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Leads" *ngIf="userLeadActivityDetails.length>0">
+    <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of userLeadActivityDetails">{{detail.amount}}</nz-descriptions-item>
   </nz-descriptions>
   <nz-divider></nz-divider>
-
 </nz-drawer>
 

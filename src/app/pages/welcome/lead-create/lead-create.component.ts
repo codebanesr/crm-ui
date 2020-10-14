@@ -82,6 +82,7 @@ export class LeadCreateComponent implements OnInit {
     if (event.node.isLeaf) {
       console.log("set this to formControl", event.node.origin.title);
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
+      this.selectedLead["disposition"] = event.node.origin.title;
     }
     event.node.isExpanded = !event.node.isExpanded;
   }

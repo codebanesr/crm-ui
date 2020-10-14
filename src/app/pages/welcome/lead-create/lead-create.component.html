@@ -37,6 +37,10 @@
       </nz-descriptions-item>
     </ng-container>
     <nz-descriptions-item nzTitle="Disposition">
+      <nz-tag nzColor="#55acee">
+        <i nz-icon nzType="twitter"></i>
+        <span>{{selectedLead["disposition"]}}</span>
+      </nz-tag>
       <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
     </nz-descriptions-item>
 

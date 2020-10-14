@@ -8,6 +8,7 @@ import {
   NzDropdownMenuComponent,
 } from 'ng-zorro-antd/dropdown';
 import { Router } from '@angular/router';
+import { LeadsService } from 'src/app/leads.service';
 
 @Component({
   selector: 'app-users',
@@ -17,6 +18,7 @@ import { Router } from '@angular/router';
 export class UsersComponent implements OnInit {
   constructor(
     private usersService: UsersService,
+    private leadService: LeadsService,
     private nzContextMenuService: NzContextMenuService,
     private router: Router
   ) {}
@@ -95,10 +97,15 @@ export class UsersComponent implements OnInit {
 
 
   showActivityDrawer: boolean = false;
-  userActivityDetails = [];
+  userLeadActivityDetails = [];
   viewActivity(data: any) {
-    this.usersService.getUserDetails(data.email).subscribe((data: any[])=>{
-      this.userActivityDetails = data;
+    this.leadService.getFollowUps().subscribe(data=>{
+      console.log(data);
+    }, error=>{
+      console.log(error);
+    })
+    this.usersService.getUsersLeadLogs(data.email).subscribe((data: any[])=>{
+      this.userLeadActivityDetails = data;
     }, error=>{
       console.log(error);
     })

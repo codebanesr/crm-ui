@@ -63,7 +63,7 @@ export class UsersService {
   }
 
 
-  getUserDetails(userEmail: string, dateRange?: string[]) {
+  getUsersLeadLogs(userEmail: string, dateRange?: string[]) {
     return this.http.post(`${environment.apiUrl}/lead/activity/logs`, {userEmail, dateRange});
   }
 }
