@@ -1,187 +1,189 @@
-<div class="table-operations">
-  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px;"
-    (change)="handleSearchTerm()">
-    <input type="text" nz-input placeholder="Global Search" [(ngModel)]="leadOptions.searchTerm" />
-  </nz-input-group>
-  <ng-template #suffixIconButton>
-    <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
-  </ng-template>
-  <nz-divider nzType="vertical"></nz-divider>
-  <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
-    Filters</button>
-  <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
-    Lead</button>
-</div>
-<nz-table nzBordered=true #filterTable [nzData]="listOfData" [nzScroll]="{ x: true, y: false }" nzTableLayout="fixed" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
-[nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="!isEmpty">
-  <thead>
-    <tr>
-      <th nzWidth="3vw" [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
-      <th *ngFor="let column of listOfColumns">
-        {{ typeDict[column.name]?.label }}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)">
-      <td nzEllipsis=true
-        [nzChecked]="setOfCheckedId.has(data.externalId)"
-        (nzCheckedChange)="onItemChecked(data.externalId, $event)"
-      ></td>
-      <td nzEllipsis=true *ngFor="let key of objectkeys(data)">
-        <!-- {{ data[key] }} -->
-        {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
-      </td>
+<ng-container *ngIf="listOfData && typeDict">
+  <div class="table-operations">
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px;"
+      (change)="handleSearchTerm()">
+      <input type="text" nz-input placeholder="Global Search" [(ngModel)]="leadOptions.searchTerm" />
+    </nz-input-group>
+    <ng-template #suffixIconButton>
+      <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+    </ng-template>
+    <nz-divider nzType="vertical"></nz-divider>
+    <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
+      Filters</button>
+    <button nz-button nzType="primary" (click)="createLead()"><i nz-icon nzType="plus" nzTheme="outline"></i>
+      Lead</button>
+  </div>
+  <nz-table nzBordered=true #filterTable [nzData]="listOfData" [nzScroll]="{ x: true, y: false }" nzTableLayout="fixed" nzShowSizeChanger [nzFrontPagination]="false" [nzLoading]="loading"
+  [nzTotal]="total" [nzPageSize]="perPage" [nzPageIndex]="page" (nzQueryParams)="onQueryParamsChange($event)" *ngIf="!isEmpty">
+    <thead>
+      <tr>
+        <th nzWidth="3vw" [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+        <th *ngFor="let column of listOfColumns">
+          {{ typeDict[column.name]?.label }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of filterTable.data" (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)">
+        <td nzEllipsis=true
+          [nzChecked]="setOfCheckedId.has(data.externalId)"
+          (nzCheckedChange)="onItemChecked(data.externalId, $event)"
+        ></td>
+        <td nzEllipsis=true *ngFor="let key of objectkeys(data)">
+          <!-- {{ data[key] }} -->
+          {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
+        </td>
 
-      <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
-        <ul nz-menu>
-          <li nz-menu-item (click)="openReassignModal(data)">Reassign</li>
-          <li nz-menu-item (click)="openReassignModal(data, true)">Bulk Reassign</li>
-          <li nz-menu-item (click)="showLeadHistory(data)">Show history</li>
-          <li nz-menu-item nzDisabled>disabled menu item</li>
-          <li nz-submenu nzTitle="Email/Message">
-            <ul>
-              <li nz-menu-item (click)="showEmailModal(data)">Send Email</li>
-              <li nz-menu-item>4th menu item</li>
-            </ul>
-          </li>
-          <li nz-submenu nzTitle="Move To">
-            <ul>
-              <li nz-menu-item>Created</li>
-              <li nz-menu-item>Won</li>
-              <li nz-menu-item>Lost</li>
-            </ul>
-          </li>
-          <li nz-menu-item (click)="open()">Advanced Filters</li>
-        </ul>
-      </nz-dropdown-menu>
-    </tr>
-  </tbody>
-</nz-table>
+        <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
+          <ul nz-menu>
+            <li nz-menu-item (click)="openReassignModal(data)">Reassign</li>
+            <li nz-menu-item (click)="openReassignModal(data, true)">Bulk Reassign</li>
+            <li nz-menu-item (click)="showLeadHistory(data)">Show history</li>
+            <li nz-menu-item nzDisabled>disabled menu item</li>
+            <li nz-submenu nzTitle="Email/Message">
+              <ul>
+                <li nz-menu-item (click)="showEmailModal(data)">Send Email</li>
+                <li nz-menu-item>4th menu item</li>
+              </ul>
+            </li>
+            <li nz-submenu nzTitle="Move To">
+              <ul>
+                <li nz-menu-item>Created</li>
+                <li nz-menu-item>Won</li>
+                <li nz-menu-item>Lost</li>
+              </ul>
+            </li>
+            <li nz-menu-item (click)="open()">Advanced Filters</li>
+          </ul>
+        </nz-dropdown-menu>
+      </tr>
+    </tbody>
+  </nz-table>
 
-<nz-empty *ngIf="isEmpty"></nz-empty>
-
-
-<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
-  (nzOnClose)="close()" nzWidth="350px">
-  <form nz-form [formGroup]="settingForm" nzLayout="vertical">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
-      <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" formControlName="selectedCampaign">
-        <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign.campaignName"></nz-option>
-      </nz-select>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzFor="dateRange">Date Range</nz-form-label>
-      <nz-form-control [nzSpan]="24">
-        <nz-range-picker formControlName="dateRange"></nz-range-picker>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzFor="moduleTypes">Module Types</nz-form-label>
-      <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-        nzPlaceHolder="Please select" formControlName="moduleTypes">
-        <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
-      </nz-select>
-    </nz-form-item>
-  </form>
-
-  <form nz-form nzLayout="inline" [formGroup]="settingForm!">
-    <nz-form-item *ngFor="let switch of listOfSwitch">
-      <nz-form-label> {{ switch.name }} </nz-form-label>
-      <nz-form-control><nz-switch [formControlName]="switch.formControlName"></nz-switch></nz-form-control>
-    </nz-form-item>
-  </form>
-  <nz-divider nzText="Fields To Show"></nz-divider>
-  <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
+  <nz-empty *ngIf="isEmpty"></nz-empty>
 
 
-  <nz-divider nzText="Leads By Status"></nz-divider>
-  <nz-descriptions nzLayout="vertical">
-    <ng-container *ngFor="let outer of basicOverview?.result">
-      <nz-descriptions-item nzColumn="24"	[nzTitle]="outer?._id">{{outer?.count}}</nz-descriptions-item>
-    </ng-container>
-  </nz-descriptions>
-</nz-drawer>
-
-
-
-<!-- form will adjust according to the modal size so let everything be at 24 grid size -->
-<nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-  <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-    <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
-      <input placeholder="Email Subject" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
-      <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
-        <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
-          {{ et.subject }}
-        </nz-auto-option>
-      </nz-autocomplete>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
-      <nz-form-control [nzSm]="24" [nzXs]="24">
-        <input nz-input placeholder="Write the subject of email" formControlName="subject" />
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
-      <nz-form-control [nzSm]="24" [nzXs]="24">
-        <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-          formControlName="content"></textarea>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
-      <nz-form-control [nzSm]="24" [nzXs]="24">
-        <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-          nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-          <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment"></nz-option>
+  <nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
+    (nzOnClose)="close()" nzWidth="350px">
+    <form nz-form [formGroup]="settingForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
+        <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" formControlName="selectedCampaign" (nzSelectionChange)="getAllLeadColumns()">
+          <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
         </nz-select>
-        <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-</nz-modal>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzFor="dateRange">Date Range</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-range-picker formControlName="dateRange"></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzFor="moduleTypes">Module Types</nz-form-label>
+        <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+          nzPlaceHolder="Please select" formControlName="moduleTypes">
+          <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </form>
+
+    <form nz-form nzLayout="inline" [formGroup]="settingForm!">
+      <nz-form-item *ngFor="let switch of listOfSwitch">
+        <nz-form-label> {{ switch.name }} </nz-form-label>
+        <nz-form-control><nz-switch [formControlName]="switch.formControlName"></nz-switch></nz-form-control>
+      </nz-form-item>
+    </form>
+    <nz-divider nzText="Fields To Show"></nz-divider>
+    <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
 
 
-<!-- reassignment modal -->
-<nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
-  (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user">
-  <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
-
-  <nz-list nzItemLayout="horizontal" [nzLoading]="false">
-    <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
-      <nz-list-item-meta [nzDescription]="manager.email">
-      </nz-list-item-meta>
-    </nz-list-item>
-    <nz-list-empty *ngIf="!managers || managers.length === 0"></nz-list-empty>
-  </nz-list>
-  <div *nzModalFooter></div>
-</nz-modal>
+    <nz-divider nzText="Leads By Status"></nz-divider>
+    <nz-descriptions nzLayout="vertical">
+      <ng-container *ngFor="let outer of basicOverview?.result">
+        <nz-descriptions-item nzColumn="24"	[nzTitle]="outer?._id">{{outer?.count}}</nz-descriptions-item>
+      </ng-container>
+    </nz-descriptions>
+  </nz-drawer>
 
 
 
-<!-- timeline modal-->
-<nz-modal [(nzVisible)]="isTimelineModalVisible"
-  (nzOnCancel)="handleTimelineClose()"
-  nzTitle="History for Lead {{selectedLead?.externalId}}"
->
-  <nz-timeline *ngIf = "selectedLeadHistory?.history?.length > 0; else empty">
-    <nz-timeline-item *ngFor="let element of selectedLeadHistory?.history">
-      {{element.note}}
-    </nz-timeline-item>
-  </nz-timeline>
-</nz-modal>
+  <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
+  <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
+        <input placeholder="Email Subject" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
+        <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
+          <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
+            {{ et.subject }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
 
-<ng-template #dotTemplate>
-  <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
-</ng-template>
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+        </nz-form-control>
+      </nz-form-item>
 
-<ng-template #empty>
-  <nz-empty></nz-empty>
-</ng-template>
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+            formControlName="content"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
+        <nz-form-control [nzSm]="24" [nzXs]="24">
+          <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+            nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
+            <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment"></nz-option>
+          </nz-select>
+          <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+
+
+  <!-- reassignment modal -->
+  <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
+    (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user">
+    <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
+
+    <nz-list nzItemLayout="horizontal" [nzLoading]="false">
+      <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
+        <nz-list-item-meta [nzDescription]="manager.email">
+        </nz-list-item-meta>
+      </nz-list-item>
+      <nz-list-empty *ngIf="!managers || managers.length === 0"></nz-list-empty>
+    </nz-list>
+    <div *nzModalFooter></div>
+  </nz-modal>
+
+
+
+  <!-- timeline modal-->
+  <nz-modal [(nzVisible)]="isTimelineModalVisible"
+    (nzOnCancel)="handleTimelineClose()"
+    nzTitle="History for Lead {{selectedLead?.externalId}}"
+  >
+    <nz-timeline *ngIf = "selectedLeadHistory?.history?.length > 0; else empty">
+      <nz-timeline-item *ngFor="let element of selectedLeadHistory?.history">
+        {{element.note}}
+      </nz-timeline-item>
+    </nz-timeline>
+  </nz-modal>
+
+  <ng-template #dotTemplate>
+    <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
+  </ng-template>
+
+  <ng-template #empty>
+    <nz-empty></nz-empty>
+  </ng-template>
+</ng-container>

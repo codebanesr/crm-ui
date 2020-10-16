@@ -161,28 +161,30 @@ export class LeadsComponent implements OnInit {
   dataLoaded: boolean = false;
   getAllLeadColumns() {
     this.loading = true;
-    this.leadsService.getAllLeadColumns().subscribe(
-      (mSchema: { paths: ILeadColumn[] }) => {
-        this.loading = false;
-        mSchema.paths.forEach((path: ILeadColumn) => {
-          this.showCols.push({
-            label: path.readableField,
-            value: path.internalField,
-            checked: path.checked,
-            type: path.type,
+    this.leadsService
+      .getAllLeadColumns(this.settingForm.get('selectedCampaign').value._id)
+      .subscribe(
+        (mSchema: { paths: ILeadColumn[] }) => {
+          this.loading = false;
+          mSchema.paths.forEach((path: ILeadColumn) => {
+            this.showCols.push({
+              label: path.readableField,
+              value: path.internalField,
+              checked: path.checked,
+              type: path.type,
+            });
           });
-        });
 
-        // for tables
-        this.typeDict = Object.assign(
-          {},
-          ...this.showCols.map((x) => ({ [x.value]: x }))
-        );
-      },
-      (error) => {
-        this.loading = false;
-      }
-    );
+          // for tables
+          this.typeDict = Object.assign(
+            {},
+            ...this.showCols.map((x) => ({ [x.value]: x }))
+          );
+        },
+        (error) => {
+          this.loading = false;
+        }
+      );
   }
 
   // get the mapper here and change the names, the key value pairs for data elements will not change

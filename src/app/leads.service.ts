@@ -4,29 +4,28 @@ import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ILeadColumn } from './pages/welcome/leads/lead.interface';
 
-
 export enum INTERVAL {
-  "TODAY" = "TODAY",
-  "THIS_WEEK" = "THIS_WEEK",
-  "THIS_MONTH" = "THIS_MONTH",
+  'TODAY' = 'TODAY',
+  'THIS_WEEK' = 'THIS_WEEK',
+  'THIS_MONTH' = 'THIS_MONTH',
 }
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LeadsService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getLeads(options): Observable<{ results: any[] }> {
-    return this.http.post<{ results: any[] }>(`${environment.apiUrl}/lead/findAll`, options);
+    return this.http.post<{ results: any[] }>(
+      `${environment.apiUrl}/lead/findAll`,
+      options
+    );
   }
 
   addLead(body) {
     return this.http.post(`${environment.apiUrl}/lead`, body);
   }
-
 
   getAllLeadColumns(campaignType?: string) {
     let reqUrl = `${environment.apiUrl}/lead/getAllLeadColumns`;
@@ -36,26 +35,27 @@ export class LeadsService {
     return this.http.get(reqUrl);
   }
 
-
   updateLead(leadId, body) {
     return this.http.put(`${environment.apiUrl}/lead/${leadId}`, body);
   }
-
 
   getLeadById(leadId: string) {
     return this.http.get(`${environment.apiUrl}/lead/${leadId}`);
   }
 
-
   reassignLead(oldUserEmail, newUserEmail, lead) {
-    return this.http.post(`${environment.apiUrl}/lead/reassignLead`, { oldUserEmail, newUserEmail, lead });
+    return this.http.post(`${environment.apiUrl}/lead/reassignLead`, {
+      oldUserEmail,
+      newUserEmail,
+      lead,
+    });
   }
-
 
   getHistoryForLead(externalId) {
-    return this.http.get(`${environment.apiUrl}/lead/getLeadHistoryById/${externalId}`);
+    return this.http.get(
+      `${environment.apiUrl}/lead/getLeadHistoryById/${externalId}`
+    );
   }
-
 
   getBasicOverview() {
     return this.http.get(`${environment.apiUrl}/lead/basicOverview`);
@@ -65,33 +65,43 @@ export class LeadsService {
     return this.http.get(`${environment.apiUrl}/lead/suggest/${leadId}`);
   }
 
-
   getLeadMappings(campaignName?: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const showCols = [];
-      this.getAllLeadColumns(campaignName).subscribe((mSchema: { paths: ILeadColumn[] }) => {
-        mSchema.paths.forEach((path: ILeadColumn) => {
-          showCols.push({
-            label: path.readableField,
-            value: path.internalField,
-            checked: path.checked,
-            type: path.type,
-            options: path.options
+      this.getAllLeadColumns(campaignName).subscribe(
+        (mSchema: { paths: ILeadColumn[] }) => {
+          mSchema.paths.forEach((path: ILeadColumn) => {
+            showCols.push({
+              label: path.readableField,
+              value: path.internalField,
+              checked: path.checked,
+              type: path.type,
+              options: path.options,
+            });
           });
-        });
-        const typeDict = Object.assign({}, ...showCols.map((x) => ({ [x.value]: x })));
-        resolve({ typeDict, mSchema });
-      }, error => {
-          reject({ error: "something went wrong in leads service" });
-      })
-    })
+          const typeDict = Object.assign(
+            {},
+            ...showCols.map((x) => ({ [x.value]: x }))
+          );
+          resolve({ typeDict, mSchema });
+        },
+        (error) => {
+          reject({ error: 'something went wrong in leads service' });
+        }
+      );
+    });
   }
 
   fetchNextLead(campaignName: string, leadStatus: string): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/lead/fetchNextLead/${campaignName}/${leadStatus}`);
+    return this.http.get(
+      `${environment.apiUrl}/lead/fetchNextLead/${campaignName}/${leadStatus}`
+    );
   }
 
   getFollowUps() {
-    return this.http.post(`${environment.apiUrl}/lead/followUp`, { interval: INTERVAL.THIS_MONTH, userEmail: "frontline1@gmail.com" });
+    return this.http.post(`${environment.apiUrl}/lead/followUp`, {
+      interval: INTERVAL.THIS_MONTH,
+      userEmail: 'frontline1@gmail.com',
+    });
   }
 }
