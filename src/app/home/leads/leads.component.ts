@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { PubsubService } from 'src/app/pubsub.service';
-import { CampaignService } from '../campaign.service';
-import { ColumnItem, DataItem } from '../interfaces/listOfCols';
-import { LeadsService } from '../leads.service';
-import { UsersService } from '../users.service';
-import { Setting, ILeadColumn } from './lead.interface';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
+import {
+  NzContextMenuService,
+  NzDropdownMenuComponent,
+} from "ng-zorro-antd/dropdown";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { NzTableQueryParams } from "ng-zorro-antd/table";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { PubsubService } from "src/app/pubsub.service";
+import { CampaignService } from "../campaign.service";
+import { ColumnItem, DataItem } from "../interfaces/listOfCols";
+import { LeadsService } from "../leads.service";
+import { UsersService } from "../users.service";
+import { Setting, ILeadColumn } from "./lead.interface";
 
 @Component({
-  selector: 'app-leads',
-  templateUrl: './leads.component.html',
-  styleUrls: ['./leads.component.scss'],
+  selector: "app-leads",
+  templateUrl: "./leads.component.html",
+  styleUrls: ["./leads.component.scss"],
 })
 export class LeadsComponent implements OnInit {
   setOfCheckedId = new Set<string>();
@@ -28,7 +31,7 @@ export class LeadsComponent implements OnInit {
     private usersService: UsersService,
     private campaignService: CampaignService,
     private pubsub: PubsubService
-  ) { }
+  ) {}
 
   page: number = 1;
   perPage: number = 15;
@@ -39,7 +42,7 @@ export class LeadsComponent implements OnInit {
   listOfOption: any[] = [];
 
   visible: boolean;
-  placement = 'right';
+  placement = "right";
   managers = null;
   isTimelineModalVisible = false;
 
@@ -50,9 +53,9 @@ export class LeadsComponent implements OnInit {
   listOfCurrentPageData: any[] = [];
 
   ngOnInit() {
-    this.pubsub.$pub("HEADING", {heading: "Leads"});
+    this.pubsub.$pub("HEADING", { heading: "Leads" });
     this.visible = false;
-    this.listOfOption = ['LEAD', 'TICKET', 'USER', 'CUSTOMER'];
+    this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initSettingForm();
     this.initEmailForm();
     this.rerenderCols();
@@ -60,7 +63,7 @@ export class LeadsComponent implements OnInit {
     this.initRightClickActions();
     this.getBasicOverview();
     this.initEtAutocomplete();
-    this.populateCampaignDropdown('');
+    this.populateCampaignDropdown("");
   }
 
   campaignList: any[];
@@ -87,21 +90,22 @@ export class LeadsComponent implements OnInit {
 
   onAllChecked(checked: boolean): void {
     if (checked)
-      this.listOfData.forEach((data: any) => this.setOfCheckedId.add(data.externalId)
+      this.listOfData.forEach((data: any) =>
+        this.setOfCheckedId.add(data.externalId)
       );
-    else
-      this.setOfCheckedId = new Set<string>();
+    else this.setOfCheckedId = new Set<string>();
     this.refreshCheckedStatus();
   }
 
   refreshCheckedStatus(): void {
-    this.checked = this.listOfData.every(({ externalId }) => this.setOfCheckedId.has(externalId)
+    this.checked = this.listOfData.every(({ externalId }) =>
+      this.setOfCheckedId.has(externalId)
     );
   }
 
   usersCount: number;
   initRightClickActions() {
-    this.usersService.getUsers(0, 20, 'abc', 'asc').subscribe(
+    this.usersService.getUsers(0, 20, "abc", "asc").subscribe(
       (data: any) => {
         this.managers = data.users;
         this.usersCount = data?.metadata?.total;
@@ -123,11 +127,11 @@ export class LeadsComponent implements OnInit {
     searchTerm: string;
     filters?: any;
   } = {
-      page: this.page || 1,
-      perPage: this.perPage || 1,
-      searchTerm: '',
-      filters: { assigned: true },
-    };
+    page: this.page || 1,
+    perPage: this.perPage || 1,
+    searchTerm: "",
+    filters: { assigned: true },
+  };
   isEmpty: boolean;
   getData() {
     this.leadsService.getLeads(this.leadOptions).subscribe(
@@ -143,7 +147,7 @@ export class LeadsComponent implements OnInit {
         }
       },
       (error) => {
-        this.msg.error('Some error occured while fetching leads');
+        this.msg.error("Some error occured while fetching leads");
       }
     );
   }
@@ -159,28 +163,30 @@ export class LeadsComponent implements OnInit {
   dataLoaded: boolean = false;
   getAllLeadColumns() {
     this.loading = true;
-    this.leadsService.getAllLeadColumns().subscribe(
-      (mSchema: { paths: ILeadColumn[]; }) => {
-        this.loading = false;
-        mSchema.paths.forEach((path: ILeadColumn) => {
-          this.showCols.push({
-            label: path.readableField,
-            value: path.internalField,
-            checked: path.checked,
-            type: path.type,
+    this.leadsService
+      .getAllLeadColumns(this.settingForm.get("selectedCampaign").value._id)
+      .subscribe(
+        (mSchema: { paths: ILeadColumn[] }) => {
+          this.loading = false;
+          mSchema.paths.forEach((path: ILeadColumn) => {
+            this.showCols.push({
+              label: path.readableField,
+              value: path.internalField,
+              checked: path.checked,
+              type: path.type,
+            });
           });
-        });
 
-        // for tables
-        this.typeDict = Object.assign(
-          {},
-          ...this.showCols.map((x) => ({ [x.value]: x }))
-        );
-      },
-      (error) => {
-        this.loading = false;
-      }
-    );
+          // for tables
+          this.typeDict = Object.assign(
+            {},
+            ...this.showCols.map((x) => ({ [x.value]: x }))
+          );
+        },
+        (error) => {
+          this.loading = false;
+        }
+      );
   }
 
   // get the mapper here and change the names, the key value pairs for data elements will not change
@@ -193,20 +199,20 @@ export class LeadsComponent implements OnInit {
   }
 
   createLead() {
-    this.router.navigate(['welcome', 'leads', 'create']);
+    this.router.navigate(["welcome", "leads", "create"]);
   }
 
   updateLead(data) {
-    this.router.navigate(['welcome', 'leads', 'create'], {
+    this.router.navigate(["welcome", "leads", "create"], {
       queryParams: { id: data.externalId },
     });
   }
 
   listOfSwitch = [
     // { name: 'Ticket', formControlName: 'ticket' },
-    { name: 'Lead', formControlName: 'lead' },
-    { name: 'Archived', formControlName: 'archived' },
-    { name: 'Upcoming', formControlName: 'upcoming' },
+    { name: "Lead", formControlName: "lead" },
+    { name: "Archived", formControlName: "archived" },
+    { name: "Upcoming", formControlName: "upcoming" },
   ];
 
   filterForm: FormGroup;
@@ -217,7 +223,7 @@ export class LeadsComponent implements OnInit {
       upcoming: [false],
       assigned: [true],
       dateRange: [null],
-      selectedCampaign: [''],
+      selectedCampaign: [""],
     });
     this.settingValue = this.settingForm.value;
     this.settingForm.valueChanges
@@ -268,7 +274,7 @@ export class LeadsComponent implements OnInit {
       },
       (error) => {
         this.selectedLeadHistory = undefined;
-        this.msg.error(error.message + ' : ' + lead.externalId);
+        this.msg.error(error.message + " : " + lead.externalId);
       }
     );
   }
@@ -280,12 +286,12 @@ export class LeadsComponent implements OnInit {
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
+    console.log("Button ok clicked!");
     this.isVisible = false;
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
+    console.log("Button cancel clicked!");
     this.isVisible = false;
   }
 
@@ -307,7 +313,7 @@ export class LeadsComponent implements OnInit {
       )
       .subscribe(
         (result) => {
-          this.msg.success('Successfully reassigned lead');
+          this.msg.success("Successfully reassigned lead");
         },
         (error) => {
           this.msg.error(error.error);
@@ -336,7 +342,7 @@ export class LeadsComponent implements OnInit {
     this.isTimelineModalVisible = false;
   }
 
-  handleReassignmentSubmit() { }
+  handleReassignmentSubmit() {}
 
   total: number = 1000;
   loading = false;
