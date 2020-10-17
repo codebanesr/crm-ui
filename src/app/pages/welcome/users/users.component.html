@@ -12,23 +12,23 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of listOfRandomUser" (click)="navigate(data._id)">
-      <td>{{ data.email }}</td>
-      <td>{{ data.createdAt }}</td>
-      <td>{{ data.roleType }}</td>
-      <td nz-popover [nzPopoverTitle]="titleTemplate" [nzPopoverContent]="contentTemplate">{{ data?.managedBy?.email }}</td>
+    <tr *ngFor="let user of listOfRandomUser" (click)="navigate(user._id)">
+      <td>{{ user.email }}</td>
+      <td>{{ user.createdAt }}</td>
+      <td>{{ user.roleType }}</td>
+      <td nz-popover [nzPopoverTitle]="titleTemplate" [nzPopoverContent]="contentTemplate">{{ user?.managedBy?.email }}</td>
       <td class="actions">
         <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
         <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i> &nbsp;
         <i nz-icon nzType="user-delete" nzTheme="outline" (click)="takeActions('unassign'); $event.stopPropagation()"></i> &nbsp;
-        <a nzTheme="fill" (click)="viewActivity(data); $event.stopPropagation()">View Activity</a>
+        <a nzTheme="fill" (click)="viewActivity(user); $event.stopPropagation()">View Activity</a>
       </td>
 
-      <ng-template #titleTemplate><i nz-icon></i> {{data.managedBy.email}}</ng-template>
-      <ng-template #contentTemplate><i nz-icon></i>{{data.managedBy.roleType}}</ng-template>
+      <ng-template #titleTemplate><i nz-icon></i> {{user.managedBy.email}}</ng-template>
+      <ng-template #contentTemplate><i nz-icon></i>{{user.managedBy.roleType}}</ng-template>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, data)"> {{manager.email}} </li>
+          <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, user)"> {{manager.email}} </li>
         </ul>
       </nz-dropdown-menu>
     </tr>
@@ -39,6 +39,24 @@
 
 
 <nz-drawer [nzVisible]="showActivityDrawer" [nzWidth]="500" [nzClosable]="true" (nzOnClose)="closeActivityDrawer()" [nzPlacement]="'left'" >
+  <div nz-row>
+    <div nz-col nzFlex=1>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
+        <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="onSelectionChange()">
+          <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+
+    <div nz-col nzFlex=1>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Interval</nz-form-label>
+        <nz-range-picker [(ngModel)]="selectedInterval" (ngModelChange)="onSelectionChange()"></nz-range-picker>
+      </nz-form-item>
+    </div>
+  </div>
+
   <nz-empty *ngIf="userLeadActivityDetails.length === 0"></nz-empty>
   <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Leads" *ngIf="userLeadActivityDetails.length>0">
     <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of userLeadActivityDetails">{{detail.amount}}</nz-descriptions-item>

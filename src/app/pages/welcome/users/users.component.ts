@@ -8,7 +8,9 @@ import {
   NzDropdownMenuComponent,
 } from 'ng-zorro-antd/dropdown';
 import { Router } from '@angular/router';
-import { LeadsService } from 'src/app/leads.service';
+import { INTERVAL, LeadsService } from 'src/app/leads.service';
+import { CampaignService } from '../campaign.service';
+import { ICampaign } from '../campaign/campaign.interface';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +22,8 @@ export class UsersComponent implements OnInit {
     private usersService: UsersService,
     private leadService: LeadsService,
     private nzContextMenuService: NzContextMenuService,
-    private router: Router
+    private router: Router,
+    private campaignService: CampaignService
   ) {}
 
   total = 1;
@@ -28,11 +31,13 @@ export class UsersComponent implements OnInit {
   loading = true;
   pageSize = 10;
   pageIndex = 1;
+  selectedInterval = null;
   filterGender = [
     { text: 'male', value: 'male' },
     { text: 'female', value: 'female' },
   ];
 
+  intervalEnum: any;
   loadDataFromServer(
     pageIndex: number,
     pageSize: number,
@@ -64,6 +69,7 @@ export class UsersComponent implements OnInit {
   }
 
   managers: any;
+  selectedCampaign: ICampaign;
   ngOnInit(): void {
     this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
     this.usersService.getManagersForReassignment().subscribe(
@@ -74,6 +80,20 @@ export class UsersComponent implements OnInit {
         console.log(error);
       }
     );
+    this.populateCampaignDropdown('');
+    this.intervalEnum = INTERVAL;
+  }
+
+  campaignList: ICampaign[];
+  async populateCampaignDropdown(hint: string) {
+    this.campaignList = await this.campaignService.populateCampaignDropdown(
+      hint
+    );
+    console.log(this.campaignList);
+  }
+
+  onSelectionChange() {
+    this.viewActivity(this.selectedUser);
   }
 
   takeActions(action) {
@@ -95,20 +115,33 @@ export class UsersComponent implements OnInit {
     );
   }
 
-
   showActivityDrawer: boolean = false;
   userLeadActivityDetails = [];
-  viewActivity(data: any) {
-    this.leadService.getFollowUps().subscribe(data=>{
-      console.log(data);
-    }, error=>{
-      console.log(error);
-    })
-    this.usersService.getUsersLeadLogs(data.email).subscribe((data: any[])=>{
-      this.userLeadActivityDetails = data;
-    }, error=>{
-      console.log(error);
-    })
+  selectedUser: User;
+  viewActivity(user: User) {
+    this.selectedUser = user;
+    this.leadService
+      .getFollowUps({
+        campaignName: this.selectedCampaign?.campaignName,
+        interval: this.selectedInterval,
+        userEmail: this.selectedUser.email,
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    this.usersService.getUsersLeadLogs(this.selectedUser.email).subscribe(
+      (res: any[]) => {
+        this.userLeadActivityDetails = res;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
     this.showActivityDrawer = true;
   }
 

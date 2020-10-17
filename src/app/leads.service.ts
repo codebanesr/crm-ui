@@ -98,10 +98,19 @@ export class LeadsService {
     );
   }
 
-  getFollowUps() {
+  getFollowUps({
+    campaignName,
+    interval,
+    userEmail,
+  }: {
+    campaignName: string;
+    interval: INTERVAL;
+    userEmail: string;
+  }) {
     return this.http.post(`${environment.apiUrl}/lead/followUp`, {
-      interval: INTERVAL.THIS_MONTH,
-      userEmail: 'frontline1@gmail.com',
+      campaignName,
+      interval,
+      userEmail,
     });
   }
 }
