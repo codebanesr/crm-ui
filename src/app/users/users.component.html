@@ -2,12 +2,12 @@
 
 <div class="scrollable">
   <nz-collapse [nzBordered]="true">
-    <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfRandomUser" [nzHeader]="accordianheader" (click)="viewActivity(data)">
+    <nz-collapse-panel [nzShowArrow]="false" *ngFor="let user of listOfRandomUser" [nzHeader]="accordianheader" (click)="viewActivity(user)">
       <div nz-row>
         <div nz-col nzFlex="3">
           <ion-label>
-            <h3>{{data?.managedBy.email}}</h3>
-            <span>{{ data?.managedBy.roleType}}</span>
+            <h3>{{user?.managedBy.email}}</h3>
+            <span>{{ user?.managedBy.roleType}}</span>
           </ion-label>
         </div>
         <div nz-col nzFlex=1>
@@ -17,15 +17,33 @@
             <i nz-icon nzType="whats-app" nzTheme="outline"></i>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
-                <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, data)">
+                <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, user)">
                   {{manager.email}} </li>
               </ul>
             </nz-dropdown-menu>
           </span>
         </div>
       </div>
-      <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Lead Details" *ngIf="data.userLeadActivityDetails?.length>0">
-        <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of data.userLeadActivityDetails">{{detail.amount}}</nz-descriptions-item>
+      <div nz-row>
+        <div nz-col nzFlex=1>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
+            <nz-select [nzSize]="'small'" nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="onSelectionChange()">
+              <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign"></nz-option>
+            </nz-select>
+          </nz-form-item>
+        </div>
+    
+        <div nz-col nzFlex=2>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Interval</nz-form-label>
+            <nz-range-picker [nzSize]="'small'" [(ngModel)]="selectedInterval" (ngModelChange)="onSelectionChange()"></nz-range-picker>
+          </nz-form-item>
+        </div>
+      </div>
+      
+      <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Lead Details" *ngIf="user.userLeadActivityDetails?.length>0">
+        <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of user.userLeadActivityDetails">{{detail.amount}}</nz-descriptions-item>
       </nz-descriptions>
 
 
@@ -33,10 +51,10 @@
         <div nz-row nzJustify="space-between">
           <div nz-col nzFlex="3">
             <ion-label>
-              <h3>{{data?.email}}</h3>
-              <p class="m0 p0">{{ data?.createdAt | date }}</p>
-              <p class="m0 p0">{{ data?.roleType }}</p>
-              <a (click)="navigate(data._id);  $event.stopPropagation();">Edit User</a>
+              <h3>{{user?.email}}</h3>
+              <p class="m0 p0">{{ user?.createdAt | date }}</p>
+              <p class="m0 p0">{{ user?.roleType }}</p>
+              <a (click)="navigate(user._id);  $event.stopPropagation();">Edit User</a>
             </ion-label>
           </div>
           <div nz-col nzFlex="1">
