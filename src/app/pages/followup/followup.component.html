@@ -24,11 +24,13 @@
       </p>
 
       <ng-template #accordianheader>
-        <div>
-          {{lead.email}}
-          {{lead.campaign}}
-          {{lead.followUp | date}}
-        </div>
+        <nz-descriptions>
+          <ng-container *ngFor="let key of objectkeys(lead); let i = index">
+            <nz-descriptions-item [nzTitle]="typeDict[key]?.label" *ngIf="i<6 && typeDict[key]?.label">
+              {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+            </nz-descriptions-item>
+          </ng-container>
+        </nz-descriptions>
       </ng-template>
 
   </nz-collapse-panel>
