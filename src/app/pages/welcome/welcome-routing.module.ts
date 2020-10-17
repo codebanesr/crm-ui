@@ -7,7 +7,6 @@ import { UsersComponent } from './users/users.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { LeadCreateComponent } from './lead-create/lead-create.component';
 import { TicketCreateComponent } from './ticket-create/ticket-create.component';
-import { AlarmsComponent } from '../alarms/alarms.component';
 import { CustomerCreateComponent } from 'src/app/customer-create/customer-create.component';
 import { CustomersComponent } from 'src/app/customers/customers.component';
 import { OverviewComponent } from 'src/app/overview/overview.component';
@@ -23,24 +22,25 @@ import { ConferenceComponent } from './conference/conference.component';
 import { ChatComponent } from './chat/chat.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { FollowUpComponent } from '../followup/followup.component';
 
 const routes: Routes = [
   {
     path: '',
-    data: { breadcrumb: 'overview'},
+    data: { breadcrumb: 'overview' },
     component: OverviewComponent,
   },
   {
     path: 'campaign-overview',
     component: CampaignOverviewComponent,
     data: {
-      breadcrumb: 'campaign-overview'
-    }
+      breadcrumb: 'campaign-overview',
+    },
   },
   {
     path: 'users',
     data: {
-      breadcrumb: 'user'
+      breadcrumb: 'user',
     },
     children: [
       {
@@ -54,30 +54,30 @@ const routes: Routes = [
         path: 'details/:email',
         component: UserDetailsComponent,
         data: {
-          breadcrumb: 'details'
-        }
+          breadcrumb: 'details',
+        },
       },
       {
-        path: "create",
+        path: 'create',
         component: UserCreateComponent,
         data: {
           breadcrumb: 'create-user',
         },
       },
       {
-        path: "conference",
+        path: 'conference',
         component: ConferenceComponent,
         data: {
-          breadcrumb: 'conference'
-        }
+          breadcrumb: 'conference',
+        },
       },
       {
-        path: "chat",
+        path: 'chat',
         component: ChatComponent,
         data: {
-          breadcrumb: 'chat'
-        }
-      }
+          breadcrumb: 'chat',
+        },
+      },
     ],
   },
   {
@@ -133,10 +133,10 @@ const routes: Routes = [
     },
   },
   {
-    path: 'alarm',
-    component: AlarmsComponent,
+    path: 'followup',
+    component: FollowUpComponent,
     data: {
-      breadcrumb: 'alarms',
+      breadcrumb: 'followup',
     },
   },
   {
@@ -165,7 +165,7 @@ const routes: Routes = [
   {
     path: 'campaigns',
     data: {
-      breadcrumb: 'campaign'
+      breadcrumb: 'campaign',
     },
     children: [
       {
@@ -194,8 +194,8 @@ const routes: Routes = [
         path: 'list',
         component: RoleComponent,
         data: {
-          breadcrumb: 'list-roles'
-        }
+          breadcrumb: 'list-roles',
+        },
       },
       {
         path: 'create',
@@ -223,8 +223,8 @@ const routes: Routes = [
   {
     path: 'invoice',
     component: InvoiceComponent,
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

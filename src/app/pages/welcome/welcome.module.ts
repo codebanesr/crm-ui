@@ -13,7 +13,7 @@ import { WelcomeComponent } from './welcome.component';
 import { RouterModule } from '@angular/router';
 import { DemoNgZorroAntdModule } from './antd.module';
 import { TimelineModalComponent } from '../timeline-modal/timeline-modal.component';
-import { AlarmsComponent } from '../alarms/alarms.component';
+import { FollowUpComponent } from '../followup/followup.component';
 import { authInterceptorProviders } from 'src/helpers/auth.interceptor';
 import { CampaignComponent } from './campaign/campaign.component';
 import { CreateCampaignComponent } from './create-campaign/create-campaign.component';
@@ -31,7 +31,6 @@ import { PubsubService } from 'src/app/pubsub.service';
 import { SIDEBAR } from 'src/string.constants';
 import { InvoiceComponent } from './invoice/invoice.component';
 
-
 @NgModule({
   imports: [
     RouterModule,
@@ -42,10 +41,10 @@ import { InvoiceComponent } from './invoice/invoice.component';
     DemoNgZorroAntdModule,
     FormlyNgZorroAntdModule,
     FormlyModule.forRoot({
-      validationMessages: [{ name: 'required', message: 'This field is required' }],
-      types: [
-        { name: 'datePicker', component: FormlyDatePicker }
-      ]
+      validationMessages: [
+        { name: 'required', message: 'This field is required' },
+      ],
+      types: [{ name: 'datePicker', component: FormlyDatePicker }],
     }),
   ],
   declarations: [
@@ -58,7 +57,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
     TicketCreateComponent,
     UserCreateComponent,
     TimelineModalComponent,
-    AlarmsComponent,
+    FollowUpComponent,
     CampaignComponent,
     CreateCampaignComponent,
     RoleComponent,
@@ -69,18 +68,16 @@ import { InvoiceComponent } from './invoice/invoice.component';
     LeadSoloComponent,
     ConferenceComponent,
     ChatComponent,
-    InvoiceComponent
+    InvoiceComponent,
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],
 })
 export class WelcomeModule {
-  constructor(private pubsub: PubsubService) {
-
-  }
+  constructor(private pubsub: PubsubService) {}
   @HostListener('window:unload', ['$event'])
   unloadHandler(event) {
-    console.log("browser refresh")
+    console.log('browser refresh');
     this.pubsub.$pub(SIDEBAR, true);
   }
 }

@@ -42,7 +42,7 @@
   <div nz-row>
     <div nz-col nzFlex=1>
       <nz-form-item>
-        <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
+        <nz-form-label [nzSpan]="24" nzFor="campaignList">Select Campaign</nz-form-label>
         <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="onSelectionChange()">
           <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign"></nz-option>
         </nz-select>
@@ -52,7 +52,7 @@
     <div nz-col nzFlex=1>
       <nz-form-item>
         <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Interval</nz-form-label>
-        <nz-range-picker [(ngModel)]="selectedInterval" (ngModelChange)="onSelectionChange()"></nz-range-picker>
+        <nz-range-picker [(ngModel)]="selectedInterval" (ngModelChange)="onSelectionChange()"  [nzDisabledDate]="disabledDate"></nz-range-picker>
       </nz-form-item>
     </div>
   </div>

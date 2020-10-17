@@ -14,7 +14,6 @@ import { UsersService } from 'src/app/service/users.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { CampaignService } from '../campaign.service';
-
 @Component({
   selector: 'app-leads',
   templateUrl: './leads.component.html',

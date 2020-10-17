@@ -8,9 +8,10 @@ import {
   NzDropdownMenuComponent,
 } from 'ng-zorro-antd/dropdown';
 import { Router } from '@angular/router';
-import { INTERVAL, LeadsService } from 'src/app/leads.service';
+import { LeadsService } from 'src/app/leads.service';
 import { CampaignService } from '../campaign.service';
 import { ICampaign } from '../campaign/campaign.interface';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 @Component({
   selector: 'app-users',
@@ -37,7 +38,6 @@ export class UsersComponent implements OnInit {
     { text: 'female', value: 'female' },
   ];
 
-  intervalEnum: any;
   loadDataFromServer(
     pageIndex: number,
     pageSize: number,
@@ -81,7 +81,6 @@ export class UsersComponent implements OnInit {
       }
     );
     this.populateCampaignDropdown('');
-    this.intervalEnum = INTERVAL;
   }
 
   campaignList: ICampaign[];
@@ -148,4 +147,9 @@ export class UsersComponent implements OnInit {
   closeActivityDrawer() {
     this.showActivityDrawer = false;
   }
+
+  today = new Date();
+  disabledDate = (current: Date): boolean => {
+    return differenceInCalendarDays(current, this.today) < 0;
+  };
 }
