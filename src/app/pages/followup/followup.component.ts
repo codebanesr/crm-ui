@@ -17,7 +17,8 @@ import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 export class FollowUpComponent implements OnInit {
   selectedCampaign: ICampaign;
   selectedInterval = null;
-  listOfData: ILead[] = [];
+  listOfUpcomingLeads: ILead[] = [];
+  objectkeys = Object.keys;
 
   constructor(
     private leadService: LeadsService,
@@ -25,7 +26,12 @@ export class FollowUpComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getLeadMappings();
     this.populateCampaignDropdown('');
+  }
+
+  onLeadSelectionChange() {
+    this.getLeadMappings();
     this.getFollowUps();
   }
 
@@ -33,11 +39,11 @@ export class FollowUpComponent implements OnInit {
     this.leadService
       .getFollowUps({
         interval: this.selectedInterval,
-        campaignName: this.selectedCampaign.campaignName,
+        campaignName: this.selectedCampaign?.campaignName,
       })
       .subscribe(
-        (data) => {
-          console.log(data);
+        (listOfUpcomingLeads: ILead[]) => {
+          this.listOfUpcomingLeads = listOfUpcomingLeads;
         },
         (error) => {
           console.log(error);
@@ -50,11 +56,20 @@ export class FollowUpComponent implements OnInit {
     this.campaignList = await this.campaignService.populateCampaignDropdown(
       hint
     );
-    console.log(this.campaignList);
   }
 
   today = new Date();
   disabledDate = (current: Date): boolean => {
     return differenceInCalendarDays(current, this.today) < 0;
   };
+
+  leadStatusOptions: string[];
+  typeDict = null;
+  async getLeadMappings() {
+    const { typeDict } = await this.leadService.getLeadMappings(
+      this.selectedCampaign._id
+    );
+    this.typeDict = typeDict;
+    this.leadStatusOptions = this.typeDict.leadStatus.options;
+  }
 }

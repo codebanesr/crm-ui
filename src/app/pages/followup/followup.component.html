@@ -2,7 +2,7 @@
   <div nz-col nzFlex=1>
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzFor="campaignList">Select Campaign</nz-form-label>
-      <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="getFollowUps()">
+      <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign" (ngModelChange)="onLeadSelectionChange()">
         <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign"></nz-option>
       </nz-select>
     </nz-form-item>
@@ -15,3 +15,21 @@
     </nz-form-item>
   </div>
 </div>
+
+
+<nz-collapse [nzBordered]="true" *ngIf="listOfUpcomingLeads && typeDict" class="scrollable">
+  <nz-collapse-panel [nzShowArrow]="false" *ngFor="let lead of listOfUpcomingLeads" [nzHeader]="accordianheader" [nzActive]="lead.active">
+      <p *ngFor="let key of objectkeys(lead)">
+        {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+      </p>
+
+      <ng-template #accordianheader>
+        <div>
+          {{lead.email}}
+          {{lead.campaign}}
+          {{lead.followUp | date}}
+        </div>
+      </ng-template>
+
+  </nz-collapse-panel>
+</nz-collapse>
