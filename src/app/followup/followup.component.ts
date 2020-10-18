@@ -31,6 +31,7 @@ export class FollowupComponent implements OnInit {
     this.getFollowUps();
   }
 
+  total: number;
   getFollowUps() {
     this.leadService
       .getFollowUps({
@@ -38,8 +39,9 @@ export class FollowupComponent implements OnInit {
         campaignName: this.selectedCampaign?.campaignName,
       })
       .subscribe(
-        (listOfUpcomingLeads: ILead[]) => {
-          this.listOfUpcomingLeads = listOfUpcomingLeads;
+        (result) => {
+          this.total = result[0]?.metadata[0].total;
+          this.listOfUpcomingLeads = result[0]?.data;
         },
         (error) => {
           console.log(error);
