@@ -103,9 +103,9 @@ export class LeadsService {
     interval,
     userEmail,
   }: {
-    campaignName: string;
-    interval: INTERVAL;
-    userEmail: string;
+    campaignName?: string;
+    interval?: string[];
+    userEmail?: string;
   }) {
     return this.http.post(`${environment.apiUrl}/lead/followUp`, {
       campaignName,

@@ -1,60 +1,66 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { CampaignCreateComponent } from '../campaign-create/campaign-create.component';
-import { CampaignComponent } from '../campaign/campaign.component';
-import { InvoiceComponent } from '../invoice/invoice.component';
-import { OrganizationComponent } from '../organization/organization.component';
-import { SignupComponent } from '../signup/signup.component';
-import { UsersComponent } from '../users/users.component';
-import { HomePage } from './home.page';
-import { LeadSoloComponent } from './lead-solo/lead-solo.component';
-import { LeadsComponent } from './leads/leads.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { CampaignCreateComponent } from "../campaign-create/campaign-create.component";
+import { CampaignComponent } from "../campaign/campaign.component";
+import { FollowupComponent } from "../followup/followup.component";
+import { InvoiceComponent } from "../invoice/invoice.component";
+import { OrganizationComponent } from "../organization/organization.component";
+import { SignupComponent } from "../signup/signup.component";
+import { UsersComponent } from "../users/users.component";
+import { HomePage } from "./home.page";
+import { LeadSoloComponent } from "./lead-solo/lead-solo.component";
+import { LeadsComponent } from "./leads/leads.component";
 
 const routes: Routes = [
   {
-    path: 'create-organization',
+    path: "create-organization",
     component: OrganizationComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'users',
+    path: "users",
     component: UsersComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'users/signup',
+    path: "users/signup",
     component: SignupComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'solo',
+    path: "solo",
     component: LeadSoloComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'campaign/list',
+    path: "campaign/list",
     component: CampaignComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'campaigns/create',
+    path: "campaigns/create",
     component: CampaignCreateComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: '',
+    path: "",
     component: LeadsComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'invoice',
+    path: "invoice",
     component: InvoiceComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
+  },
+  {
+    path: "followup",
+    component: FollowupComponent,
+    pathMatch: "full",
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class HomePageRoutingModule {}
