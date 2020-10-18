@@ -27,6 +27,7 @@ import { CampaignOverviewComponent } from './campaign-overview/campaign-overview
 import { UserDetailsComponent } from './pages/welcome/user-details/user-details.component';
 import { SignupComponent } from './signup/signup.component';
 import { OrganizationComponent } from './organization/organization.component';
+import { ForgotPasswordVerifyComponent } from './forgot-password-verify/forgot-password-verify.component';
 
 registerLocaleData(en);
 
@@ -41,6 +42,7 @@ registerLocaleData(en);
     UserDetailsComponent,
     SignupComponent,
     OrganizationComponent,
+    ForgotPasswordVerifyComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,
