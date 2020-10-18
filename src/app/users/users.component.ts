@@ -116,6 +116,8 @@ export class UsersComponent implements OnInit {
     this.selectedUser = user;
     this.leadService
       .getFollowUps({
+        page: 1,
+        perPage: 100,
         campaignName: this.selectedCampaign?.campaignName,
         interval: this.selectedInterval,
         userEmail: this.selectedUser.email,

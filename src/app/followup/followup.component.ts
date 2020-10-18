@@ -35,6 +35,8 @@ export class FollowupComponent implements OnInit {
   getFollowUps() {
     this.leadService
       .getFollowUps({
+        page: this.page,
+        perPage: this.perPage,
         interval: this.selectedInterval,
         campaignName: this.selectedCampaign?.campaignName,
       })
@@ -69,5 +71,17 @@ export class FollowupComponent implements OnInit {
     );
     this.typeDict = typeDict;
     this.leadStatusOptions = this.typeDict.leadStatus.options;
+  }
+
+  perPage = 20;
+  page = 1;
+  onPageSizeChange(size: number) {
+    this.perPage = size;
+    this.getFollowUps();
+  }
+
+  onPageIndexChange(index: number) {
+    this.page = index;
+    this.getFollowUps();
   }
 }
