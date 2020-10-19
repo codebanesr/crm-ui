@@ -37,6 +37,10 @@
             <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
           </ng-container>
 
+          <ng-container *ngSwitchCase="'tel'">
+            <input nz-input [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
+          </ng-container>
+
 
           <ng-container *ngSwitchCase="'select'">
             <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
@@ -44,6 +48,7 @@
             </nz-select>
 
           </ng-container>
+
 
         </ng-container>
 
