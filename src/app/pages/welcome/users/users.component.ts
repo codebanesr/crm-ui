@@ -124,6 +124,8 @@ export class UsersComponent implements OnInit {
         campaignName: this.selectedCampaign?.campaignName,
         interval: this.selectedInterval,
         userEmail: this.selectedUser.email,
+        page: 1,
+        perPage: 100,
       })
       .subscribe(
         (res) => {

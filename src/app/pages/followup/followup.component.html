@@ -35,3 +35,7 @@
 
   </nz-collapse-panel>
 </nz-collapse>
+
+
+<nz-pagination [nzPageIndex]="page" [nzTotal]="total" nzShowSizeChanger [nzPageSize]="perPage"
+  (nzPageSizeChange)="onPageSizeChange($event)" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination>

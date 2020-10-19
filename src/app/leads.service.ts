@@ -99,6 +99,8 @@ export class LeadsService {
   }
 
   getFollowUps({
+    page,
+    perPage,
     campaignName,
     interval,
     userEmail,
@@ -106,11 +108,15 @@ export class LeadsService {
     campaignName?: string;
     interval?: string[];
     userEmail?: string;
+    page: number;
+    perPage: number;
   }) {
     return this.http.post(`${environment.apiUrl}/lead/followUp`, {
       campaignName,
       interval,
       userEmail,
+      page,
+      perPage,
     });
   }
 }

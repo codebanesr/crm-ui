@@ -98,13 +98,15 @@ export class OverviewComponent implements OnInit {
     this.initPerformanceChart();
   }
 
-
   initMonthlyChart(month: number) {
-    this.dashboardService.getLeadStatusByMonth(month).subscribe(data=>{
-      console.log(data);
-    }, error=>{
-      console.log(error);
-    })
+    this.dashboardService.getLeadStatusByMonth(month).subscribe(
+      (data) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   onMonthChange(selectedDate) {
@@ -113,61 +115,66 @@ export class OverviewComponent implements OnInit {
   }
 
   initPerformanceChart() {
-    this.dashboardService.getLeadStatusByDepartment(this.date).subscribe((data: any[])=>{
-
-      this.performanceChartOptions = {
-        color: ['#003366', '#006699', '#4cabce', '#e5323e'],
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow',
+    this.dashboardService.getLeadStatusByDepartment(this.date).subscribe(
+      (data: any[]) => {
+        this.performanceChartOptions = {
+          color: ['#003366', '#006699', '#4cabce', '#e5323e'],
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow',
+            },
           },
-        },
-        legend: {
-          data: data.map(d=>d._id),
-          orient: 'vertical',
-          left: 'left',
-        },
-        toolbox: {
-          show: true,
-          orient: 'vertical',
-          left: 'right',
-          top: 'center',
-          feature: {
-            mark: { show: true },
-            dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
-            restore: { show: true },
-            saveAsImage: { show: true },
+          legend: {
+            data: data.map((d) => d._id),
+            orient: 'vertical',
+            left: 'left',
           },
-        },
-        xAxis: [
-          {
-            type: 'category',
-            axisTick: { show: false },
-            // this should come from the api
-            data: ["NURTURING", "CLOSED"],
+          toolbox: {
+            show: true,
+            orient: 'vertical',
+            left: 'right',
+            top: 'center',
+            feature: {
+              mark: { show: true },
+              dataView: { show: true, readOnly: false },
+              magicType: {
+                show: true,
+                type: ['line', 'bar', 'stack', 'tiled'],
+              },
+              restore: { show: true },
+              saveAsImage: { show: true },
+            },
           },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-          },
-        ],
-        series: data.map(d=>{
-          return {
-            name: d._id,
-            type: 'bar',
-            barGap: 0,
-            barWidth: '6%',
-            label: barChartLabelOption,
-            data: d.leadsWithStatus.map(innerData=>innerData.count)
-          }
-        })
-      };
-    }, error=>{
-      console.log(error);
-    })
+          xAxis: [
+            {
+              type: 'category',
+              axisTick: { show: false },
+              // this should come from the api
+              data: ['NURTURING', 'CLOSED'],
+            },
+          ],
+          yAxis: [
+            {
+              type: 'value',
+            },
+          ],
+          series: data.map((d) => {
+            return {
+              name: d._id,
+              type: 'bar',
+              barGap: 0,
+              barWidth: '6%',
+              label: barChartLabelOption,
+              data: d.leadsWithStatus.map((innerData) => innerData.count),
+            };
+          }),
+        };
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   initLeadStatusPieChart() {
