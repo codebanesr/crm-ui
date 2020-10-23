@@ -13,62 +13,98 @@
 
 
   <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Next Lead</a>
-  <a nz-button nzType="link" (click)="showEmailModal()">Send Email</a>
 
 
-  <ng-container *ngIf="selectedLead">
-    <nz-descriptions nzTitle="Lead Info" nzBordered=true>
-      <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
-        <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-          <ng-container [ngSwitch]="typeDict[leadKey].type">
-            <ng-container *ngSwitchCase="'date'">
-              <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]" [nzDisabled]="isDisabled(leadKey)"
-                nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
-                (nzOnPanelChange)="handleDatePanelChange($event)">
-              </nz-date-picker>
+
+
+  <nz-page-header class="site-page-header" nzBackIcon *ngIf="selectedLead">
+    <nz-page-header-title>{{selectedLead.firstName}}</nz-page-header-title>
+    <nz-page-header-subtitle>{{selectedLead.lastName}}</nz-page-header-subtitle>
+    <nz-page-header-extra>
+      <button nz-button nzType="secondary" (click)="showEmailModal()">Email</button>
+    </nz-page-header-extra>
+    <nz-page-header-content>
+      <div class="content">
+        <div class="main">  
+          <nz-descriptions nzBordered=true>
+            <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
+              <nz-descriptions-item *ngIf="typeDict[leadKey] && isLeadEditMode" [nzTitle]="typeDict[leadKey].label">
+                <ng-container [ngSwitch]="typeDict[leadKey].type">
+                  <ng-container *ngSwitchCase="'date'">
+                    <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]" [nzDisabled]="isDisabled(leadKey)"
+                      nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
+                      (nzOnPanelChange)="handleDatePanelChange($event)">
+                    </nz-date-picker>
+                  </ng-container>
+      
+                  <ng-container *ngSwitchCase="'number'">
+                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                  </ng-container>
+      
+                  <ng-container *ngSwitchCase="'string'">
+                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                      [disabled]="isDisabled(leadKey)" />
+                  </ng-container>
+      
+                  <ng-container *ngSwitchCase="'tel'">
+                    <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+      
+                  </ng-container>
+      
+                  <ng-container *ngSwitchCase="'select'">
+                    <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                      <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
+                      </nz-option>
+                    </nz-select>
+                  </ng-container>
+                </ng-container>
+      
+              </nz-descriptions-item>
             </ng-container>
 
-            <ng-container *ngSwitchCase="'number'">
-              <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'string'">
-              <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                [disabled]="isDisabled(leadKey)" />
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'tel'">
-              <!-- <input nz-input placeholder="Basic usage" 
-                [disabled]="isDisabled(leadKey)" /> -->
-              <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'select'">
-              <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
-                </nz-option>
-              </nz-select>
-            </ng-container>
-          </ng-container>
-
-        </nz-descriptions-item>
-      </ng-container>
-      <nz-descriptions-item nzTitle="Disposition">
-        <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)">
-        </nz-tree>
-      </nz-descriptions-item>
-
-      <nz-descriptions-item nzTitle="Remark" nzSpan=2>
-        <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
-          <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
-        </nz-input-group>
-      </nz-descriptions-item>
-    </nz-descriptions>
-    <a nz-button nzType="link" (click)="handleLeadSubmission(selectedLead)">Submit Change</a>
-  </ng-container>
-
-
+            <nz-descriptions-item nzTitle="Disposition">
+              <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)">
+              </nz-tree>
+            </nz-descriptions-item>
+      
+            <nz-descriptions-item nzTitle="Remark" nzSpan=2>
+              <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
+                <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
+              </nz-input-group>
+            </nz-descriptions-item>
+          </nz-descriptions>
+          <button nzType="primary" style="margin-top: 5px;" nz-button nzSize="small" (click)="handleLeadSubmission(selectedLead)">Submit Change</button>
+        </div>
+      </div>
+    </nz-page-header-content>
+    <nz-page-header-footer style="background-color: lavenderblush; padding-left: 10px; padding-right: 10px;">
+      <h5>History</h5>
+      <nz-timeline>
+        <nz-timeline-item nzColor="green">Create a services site 2015-09-01</nz-timeline-item>
+        <nz-timeline-item nzColor="green">Solve initial network problems 2015-09-01</nz-timeline-item>
+        <nz-timeline-item nzColor="red">
+          <p>Solve initial network problems 1</p>
+          <p>Solve initial network problems 2</p>
+          <p>Solve initial network problems 3 2015-09-01</p>
+        </nz-timeline-item>
+        <nz-timeline-item>
+          <p>Technical testing 1</p>
+          <p>Technical testing 2</p>
+          <p>Technical testing 3 2015-09-01</p>
+        </nz-timeline-item>
+        <nz-timeline-item nzColor="gray">
+          <p>Technical testing 1</p>
+          <p>Technical testing 2</p>
+          <p>Technical testing 3 2015-09-01</p>
+        </nz-timeline-item>
+        <nz-timeline-item nzColor="gray">
+          <p>Technical testing 1</p>
+          <p>Technical testing 2</p>
+          <p>Technical testing 3 2015-09-01</p>
+        </nz-timeline-item>
+      </nz-timeline>
+    </nz-page-header-footer>
+  </nz-page-header>
 
   <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
   <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" #emailModal>

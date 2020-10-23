@@ -26,7 +26,7 @@ export class LeadSoloComponent implements OnInit {
   selectedLead: ILead;
   typeDict: any;
   objectkeys = Object.keys;
-  dateMode: string = "time";
+  dateMode: string = "date";
   loadingCampaignList = false;
   campaignList: any[] = [];
   callDispositions;
@@ -74,6 +74,7 @@ export class LeadSoloComponent implements OnInit {
     );
   }
 
+  isLeadEditMode = true;
   leadStatusOptions: string[];
   selectedLeadStatus: string;
   async getLeadMappings() {
@@ -186,5 +187,9 @@ export class LeadSoloComponent implements OnInit {
   handleOk(): void {
     console.log("Button ok clicked!");
     this.isVisible = false;
+  }
+
+  showLeadDetails() {
+    this.isLeadEditMode = true;
   }
 }

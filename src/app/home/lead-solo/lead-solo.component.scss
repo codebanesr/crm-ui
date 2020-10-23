@@ -1,5 +1,9 @@
 .parent {
-    height: 100%;
-    width: calc(100% + 5px);
-    overflow-y: scroll;
+  height: 100%;
+  width: calc(100% + 5px);
+  overflow-y: scroll;
+}
+
+.site-page-header {
+  padding: 10px;
 }
