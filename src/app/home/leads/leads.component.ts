@@ -14,6 +14,8 @@ import { ColumnItem, DataItem } from "../interfaces/listOfCols";
 import { LeadsService } from "../leads.service";
 import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
+import { Plugins } from "@capacitor/core";
+const { Share } = Plugins;
 
 @Component({
   selector: "app-leads",
@@ -402,5 +404,14 @@ export class LeadsComponent implements OnInit {
 
   submitEmailForm(model) {
     console.log(model);
+  }
+
+  async onSocialShareClick(event, data) {
+    await Share.share({
+      title: "See cool stuff",
+      text: "Really awesome stuff ",
+      url: "https://thefosstech.com",
+      dialogTitle: "Share with buddies",
+    });
   }
 }

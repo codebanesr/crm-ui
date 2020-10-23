@@ -24,17 +24,16 @@
   
         <ng-template #accordianheader>
           <div nz-row nzJustify="space-between">
-            <div nz-col nzFlex="3">
+            <div nz-col nzFlex="6">
               <ion-label>
                 <h3>{{data?.firstName}}</h3>
                 <h5>{{data?.externalId}}</h5>
               </ion-label>
             </div>
             <div nz-col nzFlex="1">
-              <ion-label>
+              <ion-label (click)="$event.stopPropagation()">
                 <i nz-icon nzType="mail" nzTheme="outline"></i> &nbsp;
-                <i nz-icon nzType="phone" nzTheme="outline"></i> &nbsp;
-                <i nz-icon nzType="whats-app" nzTheme="outline"></i>
+                <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, data)"></ion-icon>
               </ion-label>
             </div>
           </div>
