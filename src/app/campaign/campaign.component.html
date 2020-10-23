@@ -32,7 +32,7 @@
       <nz-descriptions-item nzTitle="Creator">{{ data.createdBy }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Start Date">{{ data.startDate | date }}</nz-descriptions-item>
       <nz-descriptions-item nzTitle="End Date">{{ data.endDate | date }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Mark Active Campaign" (click)="markActiveCampaign($event, data)">
+      <nz-descriptions-item nzTitle="Mark Active Campaign" (click)="markActiveCampaign($event, data);">
         <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true
           nzName="files">
           <button nz-button><i nz-icon nzType="upload"></i>Select File</button>

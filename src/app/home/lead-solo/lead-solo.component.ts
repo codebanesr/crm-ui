@@ -74,7 +74,7 @@ export class LeadSoloComponent implements OnInit {
     );
   }
 
-  isLeadEditMode = true;
+  isLeadEditMode = false;
   leadStatusOptions: string[];
   selectedLeadStatus: string;
   async getLeadMappings() {
@@ -190,6 +190,16 @@ export class LeadSoloComponent implements OnInit {
   }
 
   showLeadDetails() {
-    this.isLeadEditMode = true;
+    this.isLeadEditMode = !this.isLeadEditMode;
+  }
+
+  showFilterDrawer = false;
+  openFilterDrawer(): void {
+    console.log(this.typeDict);
+    this.showFilterDrawer = true;
+  }
+
+  closeFilterDrawer(): void {
+    this.showFilterDrawer = false;
   }
 }
