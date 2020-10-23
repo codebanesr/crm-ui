@@ -48,6 +48,22 @@
   </nz-form-item>
 
   <nz-form-item>
+    <nz-form-label nzFor="Assignee" nzRequired [nzSpan]="7" >
+      <span>
+        Assignee
+        <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
+      </span>
+    </nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization">
+      <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" formControlName="assignees">
+        <nz-option *ngFor="let option of listOfUser" [nzLabel]="option.fullName" [nzValue]="option._id"
+          [nzHide]="!isNotSelected(option._id)"></nz-option>
+      </nz-select>
+    </nz-form-control>
+
+  </nz-form-item>
+
+  <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
       <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine
         (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { routePoints } from 'src/menus/routes';
@@ -20,19 +25,25 @@ export class SignupComponent implements OnInit {
       this.signupForm.controls[i].updateValueAndValidity();
     }
 
-    if(this.userid) {
-      this.usersService.updateUser(this.userid, this.signupForm.value).subscribe(success=>{
-
-      }, error=>{
-        this.msg.error("Failed to update user", error);
-      })
-    }else{
-      this.authService.signup(this.signupForm.value).subscribe((data: any)=>{
-        this.msg.success("Your Account has been registered");
-        this.router.navigate(["welcome", 'leads', 'all']);
-      }, (e: any)=>{
-        this.msg.error(e.error.message[0]);
-      });
+    if (this.userid) {
+      this.usersService
+        .updateUser(this.userid, this.signupForm.value)
+        .subscribe(
+          (success) => {},
+          (error) => {
+            this.msg.error('Failed to update user', error);
+          }
+        );
+    } else {
+      this.authService.signup(this.signupForm.value).subscribe(
+        (data: any) => {
+          this.msg.success('Your Account has been registered');
+          this.router.navigate(['welcome', 'leads', 'all']);
+        },
+        (e: any) => {
+          this.msg.error(e.error.message[0]);
+        }
+      );
     }
   }
 
@@ -83,42 +94,44 @@ export class SignupComponent implements OnInit {
 
     this.createOrUpdate();
 
-    this.rolesOptions = [{
-      label: "Admin",
-      value: "admin"
-    }, {
-      label: "User",
-      value: "user"
-    }]
+    this.rolesOptions = [
+      {
+        label: 'Admin',
+        value: 'admin',
+      },
+      {
+        label: 'User',
+        value: 'user',
+      },
+    ];
   }
 
   userid: string;
   createOrUpdate() {
-    this.activatedRoute.queryParams.subscribe(data=>{
-      this.userid = data.userid;
-      this.usersService.getUserById(this.userid).subscribe(data=>{
-        this.signupForm.patchValue(data);
-      });
-
-    }, error=>{
-      this.msg.error("This was not supposed to happen");
-    })
+    this.activatedRoute.queryParams.subscribe(
+      (data) => {
+        this.userid = data.userid;
+        this.usersService.getUserById(this.userid).subscribe((data) => {
+          this.signupForm.patchValue(data);
+        });
+      },
+      (error) => {
+        this.msg.error('This was not supposed to happen');
+      }
+    );
   }
-
 
   listOfOption = [];
   listOfSelectedValue: string[] = [];
 
   isNotSelected(value: string): boolean {
     // return this.listOfSelectedValue.indexOf(value) === -1;
-    return this.signupForm.get('manages').value.indexOf(value) === -1
+    return this.signupForm.get('manages').value.indexOf(value) === -1;
   }
-
 
   isNotSelectedRole(value): boolean {
-    return this.signupForm.get('roles').value.indexOf(value) === -1
+    return this.signupForm.get('roles').value.indexOf(value) === -1;
   }
-
 
   usersCount = 0;
   initUsersList() {

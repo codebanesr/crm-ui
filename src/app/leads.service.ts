@@ -92,9 +92,16 @@ export class LeadsService {
     });
   }
 
-  fetchNextLead(campaignName: string, leadStatus: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiUrl}/lead/fetchNextLead/${campaignName}/${leadStatus}`
+  fetchNextLead(
+    campaignName: string,
+    typeDict: {
+      [key: string]: { label: string; value: string; options?: any };
+    },
+    filters: Map<string, string>
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.apiUrl}/lead/fetchNextLead/${campaignName}`,
+      { filters, typeDict }
     );
   }
 
