@@ -10,9 +10,14 @@
   <nz-option *ngFor="let status of leadStatusOptions" [nzLabel]="status" [nzValue]="status"></nz-option>
 </nz-select> -->
 
-
 <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Next Lead</a>
 <a nz-button nzType="link" (click)="showEmailModal()">Send Email</a>
+<a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a>
+<ng-container *ngIf="leadFilter">
+  <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)" [nzColor]="'magenta'">
+    {{typeDict[key].label}} : {{leadFilter[key]}}
+  </nz-tag>
+</ng-container>
 
 <nz-divider></nz-divider>
 <ng-container *ngIf="selectedLead">
@@ -110,8 +115,6 @@
   </form>
 </nz-modal>
 
-
-<button nz-button (click)="openFilterDrawer()">Add Filters</button>
 <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
   (nzOnClose)="closeFilterDrawer()">
   <ng-container *ngIf="typeDict">

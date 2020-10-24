@@ -120,12 +120,17 @@ export class LeadSoloComponent implements OnInit {
     this.getDispositionForCampaign();
   }
 
+  showAppliedFiltersOnNoResult = false;
   fetchNextLead(event?) {
+    this.showAppliedFiltersOnNoResult = false;
     this.leadsService
       .fetchNextLead(this.selectedCampaign, this.typeDict, this.leadFilter)
       .subscribe(
         (data: any) => {
           this.selectedLead = data.result;
+          if (!this.selectedLead) {
+            this.showAppliedFiltersOnNoResult = true;
+          }
           this.campaignService
             .getCampaignById(this.selectedLead.campaign, 'campaignName')
             .subscribe((campaign) => {
@@ -202,5 +207,10 @@ export class LeadSoloComponent implements OnInit {
 
   printFilters() {
     console.log(this.leadFilter);
+  }
+
+  handleTagRemoval(tag) {
+    delete this.leadFilter[tag];
+    this.fetchNextLead();
   }
 }
