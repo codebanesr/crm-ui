@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadListComponent } from 'ng-zorro-antd/upload';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CampaignService } from '../home/campaign.service';
-import { ColumnItem, DataItem } from '../home/interfaces/listOfCols';
-import { PubsubService } from '../pubsub.service';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Router } from "@angular/router";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { NzUploadListComponent } from "ng-zorro-antd/upload";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { CampaignService } from "../home/campaign.service";
+import { ColumnItem, DataItem } from "../home/interfaces/listOfCols";
+import { PubsubService } from "../pubsub.service";
 
 @Component({
-  selector: 'app-campaign',
-  templateUrl: './campaign.component.html',
-  styleUrls: ['./campaign.component.scss'],
+  selector: "app-campaign",
+  templateUrl: "./campaign.component.html",
+  styleUrls: ["./campaign.component.scss"],
 })
 export class CampaignComponent implements OnInit {
   constructor(
@@ -20,18 +20,18 @@ export class CampaignComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private pubsub: PubsubService
-  ) { }
+  ) {}
 
   campaignOpts: string[];
-  handlerEmailOpts: string[] = ['santa', 'banta'];
+  handlerEmailOpts: string[] = ["santa", "banta"];
   page: number;
   perPage: number;
   filters: any;
   ngOnInit(): void {
-    this.pubsub.$pub("HEADING", {heading: "Campaigns"});
+    this.pubsub.$pub("HEADING", { heading: "Campaigns" });
     this.page = 1;
     this.perPage = 20;
-    this.campaignOpts = ['default'];
+    this.campaignOpts = ["default"];
     this.validateForm = this.fb.group({
       handlerEmail: [null],
       campaigns: [],
@@ -41,13 +41,21 @@ export class CampaignComponent implements OnInit {
 
     this.getCampaigns();
 
-    this.campaignService.getAllCampaignTypes().subscribe((campaignOpts: any[])=>{
-      this.campaignOpts = campaignOpts;
-    }, error=>{
-      console.log(error);
-    })
+    this.campaignService.getAllCampaignTypes().subscribe(
+      (campaignOpts: any[]) => {
+        this.campaignOpts = campaignOpts;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
-  listOfColumns: ColumnItem[] = [{ name: 'Campaign Name' }, { name: 'Created By' }, { name: 'Start Date' }, { name: 'End Date' }];
+  listOfColumns: ColumnItem[] = [
+    { name: "Campaign Name" },
+    { name: "Created By" },
+    { name: "Start Date" },
+    { name: "End Date" },
+  ];
 
   listOfData: any[] = [];
 
@@ -67,7 +75,7 @@ export class CampaignComponent implements OnInit {
 
   initFormControlListeners() {
     this.validateForm
-      .get('handlerEmail')
+      .get("handlerEmail")
       .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((change) => {
         this.campaignService
@@ -79,7 +87,7 @@ export class CampaignComponent implements OnInit {
   }
 
   getCampaigns() {
-    this.msg.info('fetched campaigns');
+    this.msg.info("fetched campaigns");
     this.campaignService
       .getCampaigns(this.page, this.perPage, this.filters, null, null)
       .subscribe(
@@ -93,7 +101,11 @@ export class CampaignComponent implements OnInit {
   }
 
   totalPage: number = 0;
-  processData(result: { data: any[], interval: string[], metadata: { total: number, page: number } }) {
+  processData(result: {
+    data: any[];
+    interval: string[];
+    metadata: { total: number; page: number };
+  }) {
     this.page = result.metadata.page;
     this.totalPage = result.metadata.total;
     this.listOfData = [];
@@ -103,8 +115,8 @@ export class CampaignComponent implements OnInit {
         endDate: d.interval[1],
         createdBy: d.createdBy,
         campaignName: d.campaignName,
-        _id: d._id
-      })
+        _id: d._id,
+      });
     }
   }
   validateForm!: FormGroup;
@@ -114,44 +126,45 @@ export class CampaignComponent implements OnInit {
     this.getCampaigns();
   }
 
-
   // welcome/campaigns/create
   activeCampaign: any;
   markActiveCampaign(event: Event, data) {
     event.stopImmediatePropagation();
+    event.stopPropagation();
     this.activeCampaign = data;
-
   }
   gotoDetailedView(data: any) {
-    this.router.navigate(['home', 'campaigns', 'create'], { queryParams: { id: data._id } });
+    this.router.navigate(["home", "campaigns", "create"], {
+      queryParams: { id: data._id },
+    });
   }
 
   uploading = false;
   leadFileList: NzUploadListComponent[] = [];
-  handleLeadFilesUpload() {
+  handleLeadFilesUpload(event: Event) {
     const formData = new FormData();
     this.leadFileList.forEach((file: any) => {
-      formData.append('files[]', file);
+      formData.append("files[]", file);
     });
 
     formData.append("campaignName", this.activeCampaign.campaignName);
     this.uploading = true;
     // You can use any AJAX library you like
-    this.campaignService.uploadMultipleLeadFiles(formData)
-      .subscribe((response: any) => {
-          this.uploading = false;
-          this.leadFileList = [];
-          this.msg.success('Lead Files uploaded successfully.');
-        },
-        () => {
-          this.uploading = false;
-          this.msg.error('Lead files could not be uploaded.');
-        }
-      );
+    this.campaignService.uploadMultipleLeadFiles(formData).subscribe(
+      (response: any) => {
+        this.uploading = false;
+        this.leadFileList = [];
+        this.msg.success("Lead Files uploaded successfully.");
+      },
+      () => {
+        this.uploading = false;
+        this.msg.error("Lead files could not be uploaded.");
+      }
+    );
   }
 
   beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
     this.leadFileList = this.leadFileList.concat(file);
     return false;
-  }
+  };
 }

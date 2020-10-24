@@ -192,14 +192,4 @@ export class LeadSoloComponent implements OnInit {
   showLeadDetails() {
     this.isLeadEditMode = !this.isLeadEditMode;
   }
-
-  showFilterDrawer = false;
-  openFilterDrawer(): void {
-    console.log(this.typeDict);
-    this.showFilterDrawer = true;
-  }
-
-  closeFilterDrawer(): void {
-    this.showFilterDrawer = false;
-  }
 }
