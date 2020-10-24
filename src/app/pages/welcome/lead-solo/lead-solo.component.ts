@@ -27,7 +27,7 @@ export class LeadSoloComponent implements OnInit {
   selectedLead: ILead;
   typeDict: any;
   objectkeys = Object.keys;
-  dateMode: string = 'time';
+  dateMode: string = 'date';
   loadingCampaignList = false;
   campaignList: any[] = [];
   callDispositions;

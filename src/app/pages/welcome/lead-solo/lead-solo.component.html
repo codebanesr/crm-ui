@@ -15,7 +15,7 @@
 <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a>
 <ng-container *ngIf="leadFilter">
   <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)" [nzColor]="'magenta'">
-    {{typeDict[key].label}} : {{leadFilter[key]}}
+    {{typeDict[key].label}} : {{typeDict[key].type === 'date' ? ((leadFilter[key][0]|date)+" to "+(leadFilter[key][1]|date)): leadFilter[key]}}
   </nz-tag>
 </ng-container>
 
@@ -123,10 +123,10 @@
         <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
           <ng-container [ngSwitch]="typeDict[key].type">
             <ng-container *ngSwitchCase="'date'">
-              <nz-date-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]" [nzDisabled]="isDisabled(key)"
-                nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
+              <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
+                (nzOnOpenChange)="handleDateOpenChange($event)"
                 (nzOnPanelChange)="handleDatePanelChange($event)">
-              </nz-date-picker>
+              </nz-range-picker>
             </ng-container>
 
             <ng-container *ngSwitchCase="'number'">
@@ -134,13 +134,12 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="'string'">
-              <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" [disabled]="isDisabled(key)" />
+              <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"/>
             </ng-container>
 
             <ng-container *ngSwitchCase="'tel'">
-              <input nz-input [(ngModel)]="leadFilter[key]" [disabled]="isDisabled(key)" />
+              <input nz-input [(ngModel)]="leadFilter[key]"/>
             </ng-container>
-
 
             <ng-container *ngSwitchCase="'select'">
               <nz-select nzMode="default" [(ngModel)]="leadFilter[key]">
