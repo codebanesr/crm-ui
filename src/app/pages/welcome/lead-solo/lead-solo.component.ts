@@ -9,6 +9,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { runInThisContext } from 'vm';
+import { UsersService } from 'src/app/service/users.service';
 
 @Component({
   selector: 'app-lead-solo',
@@ -20,7 +21,8 @@ export class LeadSoloComponent implements OnInit {
     private leadsService: LeadsService,
     private campaignService: CampaignService,
     private msgService: NzMessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UsersService
   ) {}
 
   selectedCampaign: string;
@@ -38,6 +40,14 @@ export class LeadSoloComponent implements OnInit {
     this.populateCampaignDropdown('');
     this.initEmailForm();
     this.initEtAutocomplete();
+    this.fetchUsersForReassignment();
+  }
+
+  usersForReassignment = [];
+  fetchUsersForReassignment() {
+    this.userService.getAllUsersHack().subscribe((result: any) => {
+      this.usersForReassignment = result[0].users;
+    });
   }
 
   handleCancel(): void {
@@ -92,10 +102,30 @@ export class LeadSoloComponent implements OnInit {
     return false;
   }
 
-  handleLeadSubmission(lead: ILead) {
-    this.leadsService.updateLead(lead.externalId, lead).subscribe(
+  async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
+    const geoLocation = await this.requestPosition();
+    const updateObj = {
+      lead,
+      geoLocation: {
+        coordinates: [
+          geoLocation.coords.latitude,
+          geoLocation.coords.longitude,
+        ],
+      },
+    };
+
+    if (this.selectedUserForReassignment) {
+      updateObj['reassignmentInfo'] = this.selectedUserForReassignment;
+    }
+
+    this.leadsService.updateLead(lead.externalId, updateObj).subscribe(
       (data) => {
+        // clean user reassigment once done
+        this.selectedUserForReassignment = null;
         this.msgService.success('Successfully updated lead');
+        if (fetchNextLead) {
+          this.fetchNextLead();
+        }
       },
       ({ error }: { error: ClassValidationError }) => {
         this.msgService.error(error.message[0]);
@@ -117,6 +147,7 @@ export class LeadSoloComponent implements OnInit {
   async handleCampaignChange(event) {
     console.log('selected campaign changed to: ', event);
     await this.getLeadMappings();
+    this.openFilterDrawer();
     this.getDispositionForCampaign();
   }
 
@@ -212,5 +243,44 @@ export class LeadSoloComponent implements OnInit {
   handleTagRemoval(tag) {
     delete this.leadFilter[tag];
     this.fetchNextLead();
+  }
+
+  requestPosition(): Promise<Position> {
+    // additionally supplying options for fine tuning, if you want to
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000, // time in millis when error callback will be invoked
+      maximumAge: 0, // max cached age of gps data, also in millis
+    };
+
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          resolve(pos);
+        },
+        (err) => {
+          reject(err);
+        },
+        options
+      );
+    });
+  }
+
+  isReassignmentDrawerVisible = false;
+  showReassignmentModal() {
+    this.isReassignmentDrawerVisible = true;
+  }
+
+  closeReassignmentModal() {
+    this.isReassignmentDrawerVisible = false;
+  }
+
+  selectedUserForReassignment = null;
+  selectUserForReassignment(user: {
+    email: string;
+    _id: string;
+    fullname: string;
+  }) {
+    this.selectedUserForReassignment = user;
   }
 }

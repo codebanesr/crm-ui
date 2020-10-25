@@ -35,7 +35,10 @@ export class LeadsService {
     return this.http.get(reqUrl);
   }
 
-  updateLead(leadId, body) {
+  updateLead(
+    leadId,
+    body: { geoLocation: any; lead: any; reassignmentInfo?: any }
+  ) {
     return this.http.put(`${environment.apiUrl}/lead/${leadId}`, body);
   }
 

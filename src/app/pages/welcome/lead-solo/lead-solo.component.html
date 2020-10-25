@@ -1,5 +1,5 @@
 <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign"
-  (ngModelChange)="handleCampaignChange($event)">
+  (ngModelChange)="handleCampaignChange($event);">
   <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id">
   </nz-option>
 </nz-select>
@@ -69,7 +69,29 @@
       </nz-input-group>
     </nz-descriptions-item>
   </nz-descriptions>
-  <a nz-button nzType="link" (click)="handleLeadSubmission(selectedLead)">Submit Change</a>
+  <nz-button-group style="margin-top: 5px;">
+    <button nzType="danger" nz-button nzSize="default"
+    (click)="showReassignmentModal()">Reassign</button>
+
+    <button nzType="primary" nz-button nzSize="default"
+      (click)="handleLeadSubmission(selectedLead, false)">Save</button>
+
+    <button nzType="primary" nz-button nzSize="default"
+      (click)="handleLeadSubmission(selectedLead, true)">Save & Next</button>
+  </nz-button-group>
+
+  <h1>History</h1>
+    <nz-timeline>
+      <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.slice().reverse()">
+        <p>
+          Created at {{h.createdAt | date:"medium"}}
+          <span *ngIf="h.leadStatus">, with lead status
+            <span style="background-color: cornsilk;">{{h.leadStatus}}</span>
+            <span> @ ({{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}) </span>
+          </span>
+        </p>
+      </nz-timeline-item>
+    </nz-timeline>
 </ng-container>
 
 
@@ -154,3 +176,20 @@
     <button nz-button (click)="printFilters()">print filters</button>
   </ng-container>
 </nz-drawer>
+
+
+
+<!-- user reassignment drawer -->
+<nz-modal [nzClosable]="false" [(nzVisible)]="isReassignmentDrawerVisible" nzPlacement="bottom" nzHeight="80vh" (nzOnCancel)="closeReassignmentModal()">
+  <ul nz-list [nzDataSource]="usersForReassignment" nzSize="small">
+    <nz-list-header>Reassign handler: [{{selectedUserForReassignment.email}}]</nz-list-header>
+    <li nz-list-item *ngFor="let user of usersForReassignment" nzNoFlex>
+      <ul nz-list-item-actions>
+        <nz-list-item-action>
+          <a>Select</a>
+        </nz-list-item-action>
+      </ul>
+      {{ user.email }}
+    </li>
+  </ul>
+</nz-modal>

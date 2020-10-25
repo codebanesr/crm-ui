@@ -19,8 +19,6 @@ export class LeadCreateComponent implements OnInit {
     private activatedRouter: ActivatedRoute
   ) {}
 
-
-
   selectedCampaign: string;
   selectedLead: ILead;
   typeDict: any;
@@ -32,37 +30,45 @@ export class LeadCreateComponent implements OnInit {
   ngOnInit(): void {
     this.subscribeToQueryParamChange();
     this.getLeadMappings();
-    this.populateCampaignDropdown("");
+    this.populateCampaignDropdown('');
   }
 
   populateCampaignDropdown(filter) {
     this.loadingCampaignList = true;
-    this.campaignService.getCampaigns(1, 20, filter, "", 'asc').subscribe((result: any) => {
-      this.loadingCampaignList = false;
-      this.campaignList = result.data;
-    }, error => {
+    this.campaignService.getCampaigns(1, 20, filter, '', 'asc').subscribe(
+      (result: any) => {
+        this.loadingCampaignList = false;
+        this.campaignList = result.data;
+      },
+      (error) => {
         this.loadingCampaignList = false;
         console.log(error);
-    })
+      }
+    );
   }
 
   getDispositionForCampaign(campaignName: string) {
-    this.campaignService.getDispositionByCampaignName(campaignName).subscribe((data: any)=>{
-      this.callDispositions = data.options;
-    }, error => {
+    this.campaignService.getDispositionByCampaignName(campaignName).subscribe(
+      (data: any) => {
+        this.callDispositions = data.options;
+      },
+      (error) => {
         console.log(error);
-    })
+      }
+    );
   }
 
   leadStatusOptions: string[];
   selectedLeadStatus: string;
   async getLeadMappings() {
-    const { typeDict } = await this.leadsService.getLeadMappings(this.selectedCampaign);
+    const { typeDict } = await this.leadsService.getLeadMappings(
+      this.selectedCampaign
+    );
     this.typeDict = typeDict;
     this.leadStatusOptions = this.typeDict.leadStatus.options;
   }
 
-  disabledKeys = ['externalId', 'createdAt', 'updatedAt', '_id']
+  disabledKeys = ['externalId', 'createdAt', 'updatedAt', '_id'];
   isDisabled(leadKey: string) {
     if (this.disabledKeys.includes(leadKey)) {
       return true;
@@ -71,43 +77,48 @@ export class LeadCreateComponent implements OnInit {
   }
 
   handleLeadSubmission(lead: ILead) {
-    this.leadsService.updateLead(lead.externalId, lead).subscribe(data => {
-      this.msgService.success("Successfully updated lead");
-    }, ({error}: {error: ClassValidationError}) => {
-        this.msgService.error(error.message[0]);
-    });
+    /** @Todo all updates should move to lead-solo component, its already implemented there */
+    // this.leadsService.updateLead(lead.externalId, lead).subscribe(data => {
+    //   this.msgService.success("Successfully updated lead");
+    // }, ({error}: {error: ClassValidationError}) => {
+    //     this.msgService.error(error.message[0]);
+    // });
   }
 
   handleDispositionTreeEvent(event) {
     if (event.node.isLeaf) {
-      console.log("set this to formControl", event.node.origin.title);
+      console.log('set this to formControl', event.node.origin.title);
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
-      this.selectedLead["disposition"] = event.node.origin.title;
+      this.selectedLead['disposition'] = event.node.origin.title;
     }
     event.node.isExpanded = !event.node.isExpanded;
   }
 
   handleDateOpenChange(event) {}
-  handleLeadStatusChange(event){}
-  handleDatePanelChange(event) { }
+  handleLeadStatusChange(event) {}
+  handleDatePanelChange(event) {}
   async handleCampaignChange(event) {
-    console.log("selected campaign changed to: ", event);
+    console.log('selected campaign changed to: ', event);
     await this.getLeadMappings();
-    this.getDispositionForCampaign("asd");
+    this.getDispositionForCampaign('asd');
   }
 
   leadId: string;
-  subscribeToQueryParamChange(){
+  subscribeToQueryParamChange() {
     const { id } = this.activatedRouter.snapshot.queryParams;
-    if (!id) { return; }
+    if (!id) {
+      return;
+    }
 
     this.leadId = id;
-    this.leadsService.getLeadById(id).subscribe((lead: ILead) => {
-      this.selectedLead = lead;
-      this.getDispositionForCampaign(this.selectedLead.campaign);
-    }, error => {
-      this.msgService.error('Failed to fetch data for ticket id ', id);
-    });
+    this.leadsService.getLeadById(id).subscribe(
+      (lead: ILead) => {
+        this.selectedLead = lead;
+        this.getDispositionForCampaign(this.selectedLead.campaign);
+      },
+      (error) => {
+        this.msgService.error('Failed to fetch data for ticket id ', id);
+      }
+    );
   }
-
 }

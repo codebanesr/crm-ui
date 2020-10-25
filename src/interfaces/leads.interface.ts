@@ -19,5 +19,13 @@ export interface ILead {
   remarks: string;
   source: string;
   updatedAt: string;
-  active?: boolean; //for accordian
+  history: [
+    {
+      createdAt: string;
+      leadStatus: string;
+      newUser: string;
+      oldUser: string;
+      geoLocation: { coordinates: number[] };
+    }
+  ];
 }
