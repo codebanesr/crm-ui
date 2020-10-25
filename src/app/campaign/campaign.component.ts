@@ -141,7 +141,7 @@ export class CampaignComponent implements OnInit {
 
   uploading = false;
   leadFileList: NzUploadListComponent[] = [];
-  handleLeadFilesUpload(event: Event) {
+  handleLeadFilesUpload() {
     const formData = new FormData();
     this.leadFileList.forEach((file: any) => {
       formData.append("files[]", file);
