@@ -1,7 +1,7 @@
 <nz-content class="parent">
   <div class="top">
     <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign"
-      (ngModelChange)="handleCampaignChange($event)">
+      (ngModelChange)="handleCampaignChange($event);">
       <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id">
       </nz-option>
     </nz-select>
@@ -12,8 +12,13 @@
       <nz-option *ngFor="let status of leadStatusOptions" [nzLabel]="status" [nzValue]="status"></nz-option>
     </nz-select>
 
-
     <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
+    <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a>
+    <ng-container *ngIf="leadFilter">
+      <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)" [nzColor]="'magenta'">
+        {{typeDict[key].label}} : {{typeDict[key].type === 'date' ? ((leadFilter[key][0]|date)+" to "+(leadFilter[key][1]|date)): leadFilter[key]}}
+      </nz-tag>
+    </ng-container>
   </div>
 
   <nz-page-header class="site-page-header" nzBackIcon *ngIf="selectedLead">
@@ -49,10 +54,9 @@
                         [disabled]="isDisabled(leadKey)" />
                     </ng-container>
 
-                    <ng-container *ngSwitchCase="'tel'">
+                    <!-- <ng-container *ngSwitchCase="'tel'">
                       <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-
-                    </ng-container>
+                    </ng-container> -->
 
                     <ng-container *ngSwitchCase="'select'">
                       <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
@@ -62,9 +66,15 @@
                       </nz-select>
                     </ng-container>
                   </ng-container>
-
                 </nz-descriptions-item>
               </ng-container>
+            </ng-container>
+
+            <!-- all fields that have to be shown in level 1 can be shown in this iteration -->
+            <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
+              <nz-descriptions-item [nzTitle]="typeDict[leadKey].label" *ngIf="typeDict[leadKey] && (typeDict[leadKey].type === 'tel' || leadKey === 'leadStatus')">
+                <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+              </nz-descriptions-item>
             </ng-container>
 
             <nz-descriptions-item nzTitle="Disposition">
@@ -80,35 +90,25 @@
               </nz-input-group>
             </nz-descriptions-item>
           </nz-descriptions>
-          <button nzType="primary" style="margin-top: 5px;" nz-button nzSize="small"
-            (click)="handleLeadSubmission(selectedLead)">Submit Change</button>
+
+          <nz-button-group style="margin-top: 5px;">
+            <button nzType="danger" nz-button nzSize="default"
+            (click)="showReassignmentDrawer()">Reassign</button>
+  
+            <button nzType="primary" nz-button nzSize="default"
+              (click)="handleLeadSubmission(selectedLead, false)">Save</button>
+  
+            <button nzType="primary" nz-button nzSize="default"
+              (click)="handleLeadSubmission(selectedLead, true)">Save & Next</button>
+          </nz-button-group>
         </div>
       </div>
     </nz-page-header-content>
     <nz-page-header-footer style="background-color: whitesmoke; padding-left: 10px; padding-right: 10px;">
       <h5>History</h5>
       <nz-timeline>
-        <nz-timeline-item nzColor="green">Create a services site 2015-09-01</nz-timeline-item>
-        <nz-timeline-item nzColor="green">Solve initial network problems 2015-09-01</nz-timeline-item>
-        <nz-timeline-item nzColor="red">
-          <p>Solve initial network problems 1</p>
-          <p>Solve initial network problems 2</p>
-          <p>Solve initial network problems 3 2015-09-01</p>
-        </nz-timeline-item>
-        <nz-timeline-item>
-          <p>Technical testing 1</p>
-          <p>Technical testing 2</p>
-          <p>Technical testing 3 2015-09-01</p>
-        </nz-timeline-item>
-        <nz-timeline-item nzColor="gray">
-          <p>Technical testing 1</p>
-          <p>Technical testing 2</p>
-          <p>Technical testing 3 2015-09-01</p>
-        </nz-timeline-item>
-        <nz-timeline-item nzColor="gray">
-          <p>Technical testing 1</p>
-          <p>Technical testing 2</p>
-          <p>Technical testing 3 2015-09-01</p>
+        <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history">
+          <p>Created at {{h.createdAt | date:"HH:mm"}} <span *ngIf="h.leadStatus">, with lead status <span style="background-color: cornsilk;">{{h.leadStatus}}</span></span></p>
         </nz-timeline-item>
       </nz-timeline>
     </nz-page-header-footer>
@@ -155,3 +155,61 @@
     </form>
   </nz-modal>
 </nz-content>
+
+
+<nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
+  (nzOnClose)="closeFilterDrawer()">
+  <ng-container *ngIf="typeDict">
+    <ng-container *ngFor="let key of objectkeys(typeDict)">
+      <nz-descriptions>
+        <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
+          <ng-container [ngSwitch]="typeDict[key].type">
+            <ng-container *ngSwitchCase="'date'">
+              <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
+                (nzOnOpenChange)="handleDateOpenChange($event)"
+                (nzOnPanelChange)="handleDatePanelChange($event)">
+              </nz-range-picker>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'number'">
+              <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'string'">
+              <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"/>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'tel'">
+              <input nz-input [(ngModel)]="leadFilter[key]"/>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'select'">
+              <nz-select nzMode="default" [(ngModel)]="leadFilter[key]">
+                <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
+                </nz-option>
+              </nz-select>
+            </ng-container>
+          </ng-container>
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </ng-container>
+    <button nz-button (click)="printFilters()">print filters</button>
+  </ng-container>
+</nz-drawer>
+
+
+<!-- user reassignment drawer -->
+<nz-drawer [nzClosable]="false" [nzVisible]="isReassignmentDrawerVisible" nzPlacement="bottom" nzHeight="80vh" (nzOnClose)="closeReassignmentDrawer()">
+  <ul nz-list [nzDataSource]="usersForReassignment" nzSize="small">
+    <nz-list-header>Reassign handler</nz-list-header>
+    <li nz-list-item *ngFor="let user of usersForReassignment" nzNoFlex>
+      <ul nz-list-item-actions>
+        <nz-list-item-action>
+          <a>Select</a>
+        </nz-list-item-action>
+      </ul>
+      {{ user.email }}
+    </li>
+    <!-- <nz-list-footer>Footer</nz-list-footer> -->
+  </ul>
+</nz-drawer>

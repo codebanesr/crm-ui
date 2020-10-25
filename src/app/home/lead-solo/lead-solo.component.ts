@@ -7,6 +7,11 @@ import { CampaignService } from "../campaign.service";
 import { ClassValidationError } from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 import { LeadsService } from "../leads.service";
+import { Plugins } from "@capacitor/core";
+import { ModalController } from "@ionic/angular";
+import { LeadsComponent } from "../leads/leads.component";
+import { UsersService } from "../users.service";
+const { Geolocation } = Plugins;
 
 @Component({
   selector: "app-lead-solo",
@@ -19,7 +24,8 @@ export class LeadSoloComponent implements OnInit {
     private campaignService: CampaignService,
     private msgService: NzMessageService,
     private fb: FormBuilder,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    private userService: UsersService
   ) {}
 
   selectedCampaign: string;
@@ -38,6 +44,15 @@ export class LeadSoloComponent implements OnInit {
     this.populateCampaignDropdown("");
     this.initEmailForm();
     this.initEtAutocomplete();
+    this.fetchUsersForReassignment();
+  }
+
+  usersForReassignment = [];
+  fetchUsersForReassignment() {
+    this.userService.getAllUsersHack().subscribe((result: any) => {
+      console.log(result);
+      this.usersForReassignment = result[0].users;
+    });
   }
 
   handleCancel(): void {
@@ -93,15 +108,31 @@ export class LeadSoloComponent implements OnInit {
     return false;
   }
 
-  handleLeadSubmission(lead: ILead) {
-    this.leadsService.updateLead(lead.externalId, lead).subscribe(
-      (data) => {
-        this.msgService.success("Successfully updated lead");
-      },
-      ({ error }: { error: ClassValidationError }) => {
-        this.msgService.error(error.message[0]);
-      }
-    );
+  async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
+    const geoLocation = await Geolocation.getCurrentPosition();
+
+    console.log(geoLocation);
+    this.leadsService
+      .updateLead(lead.externalId, {
+        lead,
+        geoLocation: {
+          coordinates: [
+            geoLocation.coords.latitude,
+            geoLocation.coords.longitude,
+          ],
+        },
+      })
+      .subscribe(
+        (data) => {
+          this.msgService.success("Successfully updated lead");
+          if (fetchNextLead) {
+            this.fetchNextLead();
+          }
+        },
+        ({ error }: { error: ClassValidationError }) => {
+          this.msgService.error(error.message[0]);
+        }
+      );
   }
 
   handleDispositionTreeEvent(event) {
@@ -118,15 +149,21 @@ export class LeadSoloComponent implements OnInit {
   async handleCampaignChange(event) {
     console.log("selected campaign changed to: ", event);
     await this.getLeadMappings();
+    this.openFilterDrawer();
     this.getDispositionForCampaign();
   }
 
+  showAppliedFiltersOnNoResult = false;
   fetchNextLead(event?) {
+    this.showAppliedFiltersOnNoResult = false;
     this.leadsService
-      .fetchNextLead(this.selectedCampaign, this.selectedLeadStatus)
+      .fetchNextLead(this.selectedCampaign, this.typeDict, this.leadFilter)
       .subscribe(
         (data: any) => {
           this.selectedLead = data.result;
+          if (!this.selectedLead) {
+            this.showAppliedFiltersOnNoResult = true;
+          }
           this.campaignService
             .getCampaignById(this.selectedLead.campaign, "campaignName")
             .subscribe((campaign) => {
@@ -189,7 +226,35 @@ export class LeadSoloComponent implements OnInit {
     this.isVisible = false;
   }
 
+  leadFilter = {} as any;
+  showFilterDrawer = false;
+  openFilterDrawer(): void {
+    console.log(this.typeDict);
+    this.showFilterDrawer = true;
+  }
+
+  closeFilterDrawer(): void {
+    this.showFilterDrawer = false;
+  }
+
+  printFilters() {
+    console.log(this.leadFilter);
+  }
+
+  handleTagRemoval(tag) {
+    delete this.leadFilter[tag];
+    this.fetchNextLead();
+  }
   showLeadDetails() {
     this.isLeadEditMode = !this.isLeadEditMode;
+  }
+
+  isReassignmentDrawerVisible = false;
+  showReassignmentDrawer() {
+    this.isReassignmentDrawerVisible = true;
+  }
+
+  closeReassignmentDrawer() {
+    this.isReassignmentDrawerVisible = false;
   }
 }

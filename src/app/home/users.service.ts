@@ -1,14 +1,14 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { User } from './interfaces/user';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
+import { User } from "./interfaces/user";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class UsersService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUsers(
     pageIndex: number,
@@ -18,38 +18,46 @@ export class UsersService {
     filters?: Array<{ key: string; value: string[] }>
   ): Observable<{ results: User[] }> {
     let params = new HttpParams()
-      .append('page', `${pageIndex}`)
-      .append('results', `${pageSize}`)
-      .append('sortField', `${sortField}`)
-      .append('sortOrder', `${sortOrder}`);
+      .append("page", `${pageIndex}`)
+      .append("results", `${pageSize}`)
+      .append("sortField", `${sortField}`)
+      .append("sortOrder", `${sortOrder}`);
     // filters.forEach(filter => {
     //   filter.value.forEach(value => {
     //     params = params.append(filter.key, value);
     //   });
     // });
-    return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user/allUsers`, { params });
+    return this.http.get<{ results: User[] }>(
+      `${environment.apiUrl}/user/allUsers`,
+      { params }
+    );
   }
 
   getAllUsersHack() {
     return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user`);
   }
   transformFilterObjectToQueryParams(paramObject) {
-    return Object.keys(paramObject).map(key => key + '=' + paramObject[key]).join('&');
+    return Object.keys(paramObject)
+      .map((key) => key + "=" + paramObject[key])
+      .join("&");
   }
 
   getManagersForReassignment() {
     return this.http.get(`${environment.apiUrl}/user/managersForReassignment`);
   }
 
-
   assignManager(newManager, user) {
-    return this.http.post(`${environment.apiUrl}/user/assignManager`, {newManager, user});
+    return this.http.post(`${environment.apiUrl}/user/assignManager`, {
+      newManager,
+      user,
+    });
   }
-
 
   getUsersLeadActivity(email: string, filters) {
     const qs = this.transformFilterObjectToQueryParams(filters);
-    return this.http.get(`${environment.apiUrl}/user/lead/activity/${email}?${qs}`);
+    return this.http.get(
+      `${environment.apiUrl}/user/lead/activity/${email}?${qs}`
+    );
   }
 
   getUserById(userid: string) {
@@ -61,6 +69,9 @@ export class UsersService {
   }
 
   getUsersLeadLogs(userEmail: string, dateRange?: string[]) {
-    return this.http.post(`${environment.apiUrl}/lead/activity/logs`, {userEmail, dateRange});
+    return this.http.post(`${environment.apiUrl}/lead/activity/logs`, {
+      userEmail,
+      dateRange,
+    });
   }
 }
