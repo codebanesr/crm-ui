@@ -6,12 +6,6 @@
       </nz-option>
     </nz-select>
 
-
-    <nz-select nzMode="default" *ngIf="leadStatusOptions" nzPlaceHolder="Inserted are removed"
-      [(ngModel)]="selectedLeadStatus" (ngModelChange)="handleLeadStatusChange($event)">
-      <nz-option *ngFor="let status of leadStatusOptions" [nzLabel]="status" [nzValue]="status"></nz-option>
-    </nz-select>
-
     <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
     <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a>
     <ng-container *ngIf="leadFilter">
@@ -25,6 +19,13 @@
     <nz-page-header-title>{{selectedLead.firstName}}</nz-page-header-title>
     <nz-page-header-subtitle>{{selectedLead.lastName}}</nz-page-header-subtitle>
     <nz-page-header-extra>
+      <div style="height: 150px; width: 95vw; overflow-y: scroll; padding: 10px; margin-bottom: 20px">
+        <nz-timeline>
+          <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead?.history.slice().reverse()">
+            <p>Created at {{h.createdAt | date:"medium"}} <br><span *ngIf="h.leadStatus">, with lead status <span style="background-color: cornsilk;">{{h.leadStatus}}</span></span></p>
+          </nz-timeline-item>
+        </nz-timeline>
+      </div>
       <button nz-button nzType="secondary" (click)="showLeadDetails()">
         {{isLeadEditMode ? 'Hide': 'Show More'}}
       </button>
@@ -72,10 +73,40 @@
 
             <!-- all fields that have to be shown in level 1 can be shown in this iteration -->
             <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
-              <nz-descriptions-item [nzTitle]="typeDict[leadKey].label" *ngIf="typeDict[leadKey] && (typeDict[leadKey].type === 'tel' || leadKey === 'leadStatus')">
-                <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+              <nz-descriptions-item [nzTitle]="typeDict[leadKey].label" *ngIf="typeDict[leadKey] && (typeDict[leadKey].type === 'tel' || leadKey === 'leadStatus' || leadKey === 'followUp')">
+                <ng-container [ngSwitch]="typeDict[leadKey].type">
+
+                  <ng-container *ngSwitchCase="'date'">
+                    <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]"
+                      [nzDisabled]="isDisabled(leadKey)" nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
+                      (nzOnPanelChange)="handleDatePanelChange($event)">
+                    </nz-date-picker>
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'number'">
+                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'string'">
+                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                      [disabled]="isDisabled(leadKey)" />
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'tel'">
+                    <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'select'">
+                    <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                      <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
+                        [nzValue]="option">
+                      </nz-option>
+                    </nz-select>
+                  </ng-container>
+                </ng-container>
               </nz-descriptions-item>
             </ng-container>
+            <!-- level 1 ends here -->
 
             <nz-descriptions-item nzTitle="Disposition">
               <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine
@@ -106,11 +137,7 @@
     </nz-page-header-content>
     <nz-page-header-footer style="background-color: whitesmoke; padding-left: 10px; padding-right: 10px;">
       <h5>History</h5>
-      <nz-timeline>
-        <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history">
-          <p>Created at {{h.createdAt | date:"HH:mm"}} <span *ngIf="h.leadStatus">, with lead status <span style="background-color: cornsilk;">{{h.leadStatus}}</span></span></p>
-        </nz-timeline-item>
-      </nz-timeline>
+      <!--  -->
     </nz-page-header-footer>
   </nz-page-header>
 
@@ -201,7 +228,7 @@
 <!-- user reassignment drawer -->
 <nz-drawer [nzClosable]="false" [nzVisible]="isReassignmentDrawerVisible" nzPlacement="bottom" nzHeight="80vh" (nzOnClose)="closeReassignmentDrawer()">
   <ul nz-list [nzDataSource]="usersForReassignment" nzSize="small">
-    <nz-list-header>Reassign handler</nz-list-header>
+    <nz-list-header><h2>Reassign handler</h2></nz-list-header>
     <li nz-list-item *ngFor="let user of usersForReassignment" nzNoFlex>
       <ul nz-list-item-actions>
         <nz-list-item-action>
