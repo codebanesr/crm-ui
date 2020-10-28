@@ -17,6 +17,7 @@ import { AgentService } from 'src/app/agent.service';
 import { CampaignService } from '../campaign.service';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from 'src/app/service/users.service';
+import { ICampaign } from '../campaign/campaign.interface';
 
 @Component({
   selector: 'app-create-campaign',
@@ -66,8 +67,6 @@ export class CreateCampaignComponent implements OnInit {
 
     this.initEmailForm();
 
-    // this should be replaced
-    this.initDispositionCore('core');
     this.agentService.listAgentActions(0, 'campaignSchema').subscribe(
       (list: any) => {
         this.recentUploads = list;
@@ -95,10 +94,12 @@ export class CreateCampaignComponent implements OnInit {
     this.submitText = 'Update';
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe(
-      (campaign: any) => {
+      (campaign: ICampaign) => {
+        this.initDispositionCore(campaign._id);
         this.patchCompainValues(campaign);
       },
       (error) => {
+        // this should be replaced
         this.msg.error('Failed to fetch data for ticket id ', id);
       }
     );
@@ -110,6 +111,10 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   initDispositionCore(campaignId: string) {
+    if (!campaignId) {
+      console.warn('fetching core disposition');
+      campaignId = 'core';
+    }
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
         this.demoDispositionNodes = data.options;
@@ -180,7 +185,7 @@ export class CreateCampaignComponent implements OnInit {
   activeContext: NzFormatEmitEvent;
   nodeActions(ev: NzFormatEmitEvent) {
     this.activeContext = ev;
-    console.log('activeContext', ev);
+    console.log('activeContext', ev, this.demoDispositionNodes);
   }
 
   addLeafNode() {
@@ -308,7 +313,6 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   nzEvent(event: NzFormatEmitEvent): void {
-    console.log(event);
     event.node.isExpanded = !event.node.isExpanded;
   }
 
@@ -336,8 +340,21 @@ export class CreateCampaignComponent implements OnInit {
   rename() {
     if (this.renameText) {
       this.activeContext.node.title = this.renameText;
+      this.activeContext.node.origin.title = this.renameText;
+      console.log(this.demoDispositionNodes);
+      this.demoDispositionNodes = [
+        this.activeContext.node.treeService.rootNodes[0].origin,
+      ];
       this.renameText = '';
     }
+  }
+
+  selectedAction = null;
+  attachAction() {
+    if (this.selectedAction) {
+      this.activeContext.node.origin['action'] = this.selectedAction;
+    }
+    this.selectedAction = null;
   }
 
   usersCount = 0;

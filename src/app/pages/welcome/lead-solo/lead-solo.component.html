@@ -59,7 +59,7 @@
       </nz-descriptions-item>
     </ng-container>
     <nz-descriptions-item nzTitle="Disposition">
-      <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine (nzClick)="handleDispositionTreeEvent($event)">
+      <nz-tree [nzData]="callDispositions" nzBlockNode (nzClick)="handleDispositionTreeEvent($event)">
       </nz-tree>
     </nz-descriptions-item>
 

@@ -1,11 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { ForgotPasswordVerifyComponent } from './forgot-password-verify/forgot-password-verify.component';
 import { LoginComponent } from './login/login.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
+  {
+    path: 'dynamic-form',
+    pathMatch: 'full',
+    component: DynamicFormComponent,
+  },
   {
     path: '',
     pathMatch: 'full',

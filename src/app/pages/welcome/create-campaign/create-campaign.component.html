@@ -65,7 +65,7 @@
 
   <nz-form-item>
     <nz-form-control [nzOffset]="7" [nzSpan]="12">
-      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine
+      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzAllowClear="true"
         (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
       </nz-tree>
     </nz-form-control>
@@ -89,19 +89,18 @@
   </nz-form-item>
 </form>
 <!-- campaign form ends here -->
-
-
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item (click)="deleteNode()">Delete This</li>
     <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
-    <li nz-menu-item (click)="addParentNode()">Added Parent</li>
+    <li nz-menu-item>
+      <nz-select style="margin: 0px; padding: 0px;" nzShowSearch nzAllowClear nzPlaceHolder="Select an Action" [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
+        <nz-option nzLabel="Show Form" nzValue="showForm"></nz-option>
+      </nz-select>
+    </li>
     <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
   </ul>
 </nz-dropdown-menu>
-
-
-
 
 <!-- Email form below inside drawer -->
 <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="500px" nzPlacement="right" nzTitle="Advanced Options"

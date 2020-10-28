@@ -28,6 +28,7 @@ import { UserDetailsComponent } from './pages/welcome/user-details/user-details.
 import { SignupComponent } from './signup/signup.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { ForgotPasswordVerifyComponent } from './forgot-password-verify/forgot-password-verify.component';
+import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 
 registerLocaleData(en);
 
@@ -43,6 +44,7 @@ registerLocaleData(en);
     SignupComponent,
     OrganizationComponent,
     ForgotPasswordVerifyComponent,
+    DynamicFormComponent,
   ],
   imports: [
     DemoNgZorroAntdModule,
