@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     },
     {
       title: "Create Campaign",
-      url: "/home/create-campaign",
+      url: "/home/campaigns/create",
       icon: "trash",
     },
     {

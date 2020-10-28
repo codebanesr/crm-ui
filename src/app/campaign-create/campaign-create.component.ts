@@ -94,6 +94,7 @@ export class CampaignCreateComponent implements OnInit {
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe(
       (campaign: any) => {
+        this.initDispositionCore(campaign._id);
         this.patchCampainValues(campaign);
       },
       (error) => {
@@ -108,6 +109,11 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   initDispositionCore(campaignId: string) {
+    if (!campaignId) {
+      console.warn("fetching core disposition");
+      campaignId = "core";
+    }
+
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
         this.demoDispositionNodes = data.options;
