@@ -1,14 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { field, value } from 'src/app/global.model';
 
+interface ModelInterface {
+  _id?: string;
+  name: string;
+  description: string;
+  theme: any;
+  attributes: Array<field>;
+}
 @Component({
   selector: 'app-campaign-form',
   templateUrl: './campaign-form.component.html',
   styleUrls: ['./campaign-form.component.scss'],
 })
 export class CampaignFormComponent implements OnInit {
+  @Output() formUpdate = new EventEmitter<ModelInterface>();
   value: value = {
     label: '',
     value: '',
@@ -149,7 +157,7 @@ export class CampaignFormComponent implements OnInit {
   ];
 
   modelFields: Array<field> = [];
-  model: any = {
+  model: ModelInterface = {
     name: 'App name...',
     description: 'App Description...',
     theme: {
@@ -165,17 +173,7 @@ export class CampaignFormComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit() {
-    // this.route.params.subscribe( params =>{
-    //   console.log(params);
-    //   this.us.getDataApi('/admin/getFormById',{id:params.id}).subscribe(r=>{
-    //     console.log(r);
-    //     this.model = r['data'];
-    //   });
-    // });
-    // this.model = this.cs.data;
-    // console.log(this.model.data);
-  }
+  ngOnInit() {}
 
   onDragStart(event: DragEvent) {
     console.log('drag started', JSON.stringify(event, null, 2));
@@ -197,6 +195,7 @@ export class CampaignFormComponent implements OnInit {
     if (effect === 'move') {
       const index = list.indexOf(item);
       list.splice(index, 1);
+      this.onModelChange();
     }
   }
 
@@ -217,29 +216,23 @@ export class CampaignFormComponent implements OnInit {
         index = list.length;
       }
       list.splice(index, 0, event.data);
+      this.onModelChange();
     }
   }
 
   addValue(values) {
     values.push(this.value);
     this.value = { label: '', value: '' };
+    this.onModelChange();
   }
 
   removeField(i) {
-    // swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "Do you want to remove this field?",
-    //   type: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#00B96F',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText: 'Yes, remove!'
-    // }).then((result) => {
-    //   if (result.value) {
-    //     this.model.attributes.splice(i,1);
-    //   }
-    // });
     this.model.attributes.splice(i, 1);
+    this.onModelChange();
+  }
+
+  onModelChange() {
+    this.formUpdate.emit(this.model);
   }
 
   updateForm() {
@@ -251,11 +244,6 @@ export class CampaignFormComponent implements OnInit {
     input.append('bgColor', this.model.theme.bgColor);
     input.append('textColor', this.model.theme.textColor);
     input.append('attributes', JSON.stringify(this.model.attributes));
-
-    // this.us.putDataApi('/admin/updateForm',input).subscribe(r=>{
-    //   console.log(r);
-    //   swal('Success','App updated successfully','success');
-    // });
   }
 
   initReport() {
@@ -263,17 +251,6 @@ export class CampaignFormComponent implements OnInit {
     let input = {
       id: this.model._id,
     };
-    // this.us.getDataApi('/admin/allFilledForms',input).subscribe(r=>{
-    //   this.reports = r.data;
-    //   console.log('reports',this.reports);
-    //   this.reports.map(records=>{
-    //     return records.attributes.map(record=>{
-    //       if(record.type=='checkbox'){
-    //         record.value = record.values.filter(r=>r.selected).map(i=>i.value).join(',');
-    //       }
-    //     })
-    //   });
-    // });
   }
 
   toggleValue(item) {
@@ -286,14 +263,12 @@ export class CampaignFormComponent implements OnInit {
     validationArray.reverse().forEach((field) => {
       console.log(field.label + '=>' + field.required + '=>' + field.value);
       if (field.required && !field.value && field.type != 'checkbox') {
-        // swal("Error", "Please enter " + field.label, "error");
         valid = false;
         return false;
       }
       if (field.required && field.regex) {
         let regex = new RegExp(field.regex);
         if (regex.test(field.value) == false) {
-          // swal("Error", field.errorText, "error");
           valid = false;
           return false;
         }
@@ -313,13 +288,6 @@ export class CampaignFormComponent implements OnInit {
     let input = new FormData();
     input.append('formId', this.model._id);
     input.append('attributes', JSON.stringify(this.model.attributes));
-    // this.us.postDataApi('/user/formFill',input).subscribe(r=>{
-    //   console.log(r);
-    //   swal('Success','You have contact sucessfully','success');
-    //   this.success = true;
-    // },error=>{
-    //   swal('Error',error.message,'error');
-    // });
   }
 
   showModel() {

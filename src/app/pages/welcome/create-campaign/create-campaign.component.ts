@@ -18,6 +18,8 @@ import { CampaignService } from '../campaign.service';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from 'src/app/service/users.service';
 import { ICampaign } from '../campaign/campaign.interface';
+import { LeadsService } from 'src/app/leads.service';
+import { ILeadColumn } from '../leads/lead.interface';
 
 @Component({
   selector: 'app-create-campaign',
@@ -27,6 +29,7 @@ import { ICampaign } from '../campaign/campaign.interface';
 export class CreateCampaignComponent implements OnInit {
   constructor(
     private usersService: UsersService,
+    private leadsService: LeadsService,
     private fb: FormBuilder,
     private agentService: AgentService,
     private campaignService: CampaignService,
@@ -90,7 +93,7 @@ export class CreateCampaignComponent implements OnInit {
     if (!id) {
       return;
     }
-
+    this.getAllLeadColumns();
     this.submitText = 'Update';
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe(
@@ -186,6 +189,11 @@ export class CreateCampaignComponent implements OnInit {
   nodeActions(ev: NzFormatEmitEvent) {
     this.activeContext = ev;
     console.log('activeContext', ev, this.demoDispositionNodes);
+  }
+
+  formModel: any;
+  onCampaignFormUpdate(event) {
+    this.formModel = event;
   }
 
   addLeafNode() {
@@ -372,7 +380,25 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   isNotSelected(value: string): boolean {
-    // return this.listOfSelectedValue.indexOf(value) === -1;
-    return this.campaignForm.get('assignees').value.indexOf(value) === -1;
+    if (!this.campaignForm.get('assignees').value) {
+      return true;
+    }
+    return this.campaignForm.get('assignees').value?.indexOf(value) === -1;
+  }
+
+  loading = false;
+  editableCols: any[] = [];
+  browsableCols: any[] = [];
+  allCols: any;
+  async getAllLeadColumns() {
+    this.loading = true;
+    this.allCols = await this.leadsService.getLeadMappings(this.campaignId);
+    this.editableCols = Object.values(
+      JSON.parse(JSON.stringify(this.allCols.typeDict))
+    );
+
+    this.browsableCols = Object.values(
+      JSON.parse(JSON.stringify(this.allCols.typeDict))
+    );
   }
 }
