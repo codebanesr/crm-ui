@@ -23,6 +23,7 @@ import { ChatComponent } from './chat/chat.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { FollowUpComponent } from '../followup/followup.component';
+import { CampaignFormComponent } from './campaign-form/campaign-form.component';
 
 const routes: Routes = [
   {
@@ -223,6 +224,11 @@ const routes: Routes = [
   {
     path: 'invoice',
     component: InvoiceComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'campaign-form',
+    component: CampaignFormComponent,
     pathMatch: 'full',
   },
 ];

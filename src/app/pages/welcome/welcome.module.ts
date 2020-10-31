@@ -30,9 +30,12 @@ import { ChatComponent } from './chat/chat.component';
 import { PubsubService } from 'src/app/pubsub.service';
 import { SIDEBAR } from 'src/string.constants';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { CampaignFormComponent } from './campaign-form/campaign-form.component';
+import { DndModule } from 'ngx-drag-drop';
 
 @NgModule({
   imports: [
+    DndModule,
     RouterModule,
     WelcomeRoutingModule,
     FormsModule,
@@ -69,6 +72,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
     ConferenceComponent,
     ChatComponent,
     InvoiceComponent,
+    CampaignFormComponent,
   ],
   exports: [WelcomeComponent],
   providers: [authInterceptorProviders],
