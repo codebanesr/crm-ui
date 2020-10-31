@@ -90,7 +90,7 @@
     <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
       <nz-tabset>
         <nz-tab nzTitle="Create Form Here">
-          <app-campaign-form (formUpdate)="onCampaignFormUpdate($event)"></app-campaign-form>
+          <app-campaign-form (formUpdate)="onCampaignFormUpdate($event)" [formModel]="formModel"></app-campaign-form>
         </nz-tab>
         <nz-tab nzTitle="Show Preview">
           <div *ngIf="formModel" style="max-width:500px;">

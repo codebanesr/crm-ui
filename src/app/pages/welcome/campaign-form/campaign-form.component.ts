@@ -1,4 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { field, value } from 'src/app/global.model';
@@ -15,8 +23,17 @@ interface ModelInterface {
   templateUrl: './campaign-form.component.html',
   styleUrls: ['./campaign-form.component.scss'],
 })
-export class CampaignFormComponent implements OnInit {
+export class CampaignFormComponent implements OnInit, OnChanges {
+  @Input() formModel;
   @Output() formUpdate = new EventEmitter<ModelInterface>();
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.formModel.currentValue !== changes.formModel.previousValue) {
+      // console.log(changes.formModel.currentValue);
+      this.model = changes.formModel.currentValue;
+    }
+  }
+
   value: value = {
     label: '',
     value: '',

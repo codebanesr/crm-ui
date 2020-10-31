@@ -16,7 +16,7 @@
       </div>
     </div>
     <div nz-col nzSpan="20">
-      <form nz-form [style.backgroundColor]="model.theme.bgColor" [style.color]="model.theme.textColor" style="width: 90%; margin-left: 10%;">
+      <form nz-form [style.backgroundColor]="model.theme.bgColor" [style.color]="model.theme.textColor" style="width: 80%; margin-left: 10%;">
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired nzFor="name">Form Name</nz-form-label>
           <nz-form-control [nzSpan]="14" [nzOffset]="6">
@@ -151,7 +151,7 @@
             <div nz-col nzSpan="2">
               <i nz-icon nzType="up-circle" nzTheme="outline" *ngIf="item.toggle" (click)="item.toggle=false"></i>
               <i *ngIf="!item.toggle" (click)="item.toggle=true" nz-icon nzType="down-circle" nzTheme="outline"></i>
-              <i (click)="removeField(i)" class="fa fa-trash pull-right"></i>
+              <i (click)="removeField(i)" nz-icon nzType="delete" nzTheme="outline" style="font-size: 1.3rem"></i>
             </div>
           </div>
           <form nz-form *ngIf="item.toggle" style="padding: 15px; background: #d6d6d629;">

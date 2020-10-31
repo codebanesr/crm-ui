@@ -87,6 +87,7 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   campaignId: string;
+  campaign: ICampaign;
   submitText: string = '+ Create';
   subscribeToQueryParamChange() {
     const { id } = this.activatedRouter.snapshot.queryParams;
@@ -99,6 +100,7 @@ export class CreateCampaignComponent implements OnInit {
     this.campaignService.getCampaignById(id).subscribe(
       (campaign: ICampaign) => {
         this.initDispositionCore(campaign._id);
+        this.campaign = campaign;
         this.patchCompainValues(campaign);
       },
       (error) => {
@@ -269,9 +271,22 @@ export class CreateCampaignComponent implements OnInit {
     console.log(this.campaignFiles);
     formData.append('campaignFile', this.campaignFiles[0]);
     formData.append('campaignInfo', JSON.stringify(this.campaignForm.value));
+    formData.append('formModel', JSON.stringify(this.formModel));
     formData.append(
       'dispositionData',
       JSON.stringify(this.demoDispositionNodes)
+    );
+    formData.append(
+      'editableCols',
+      JSON.stringify(
+        this.editableCols.filter((c) => c.checked).map((c) => c.value)
+      )
+    );
+    formData.append(
+      'browsableCols',
+      JSON.stringify(
+        this.browsableCols.filter((c) => c.checked).map((c) => c.value)
+      )
     );
     // You can use any AJAX library you like
     this.campaignService.createCampaignAndDisposition(formData).subscribe(
@@ -397,8 +412,26 @@ export class CreateCampaignComponent implements OnInit {
       JSON.parse(JSON.stringify(this.allCols.typeDict))
     );
 
+    this.editableCols?.forEach((c) => {
+      if (this.campaign?.editableCols.includes(c.value)) {
+        c.checked = true;
+      } else {
+        c.checked = false;
+      }
+    });
+
     this.browsableCols = Object.values(
       JSON.parse(JSON.stringify(this.allCols.typeDict))
     );
+
+    this.browsableCols?.forEach((c) => {
+      if (this.campaign?.browsableCols.includes(c.value)) {
+        c.checked = true;
+      } else {
+        c.checked = false;
+      }
+    });
+
+    this.formModel = this.campaign.formModel;
   }
 }

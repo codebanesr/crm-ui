@@ -8,4 +8,7 @@ export interface ICampaign {
   type: string;
   updatedAt: string; //date obj,
   organization: string; //mongoose obj
+  editableCols: string[];
+  browsableCols: string[];
+  formModel: any;
 }
