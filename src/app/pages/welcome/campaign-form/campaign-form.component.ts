@@ -10,14 +10,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { field, value } from 'src/app/global.model';
+import { ModelInterface } from 'src/global.interfaces';
 
-interface ModelInterface {
-  _id?: string;
-  name: string;
-  description: string;
-  theme: any;
-  attributes: Array<field>;
-}
 @Component({
   selector: 'app-campaign-form',
   templateUrl: './campaign-form.component.html',

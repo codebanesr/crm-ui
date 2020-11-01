@@ -3,13 +3,15 @@ import { LeadsService } from 'src/app/leads.service';
 import { ILead } from 'src/interfaces/leads.interface';
 import { CampaignService } from '../campaign.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ClassValidationError } from 'src/global.interfaces';
+import { ClassValidationError, ModelInterface } from 'src/global.interfaces';
 import { error } from 'protractor';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { runInThisContext } from 'vm';
 import { UsersService } from 'src/app/service/users.service';
+import { field } from 'src/app/global.model';
+import { ICampaign } from '../campaign/campaign.interface';
 
 @Component({
   selector: 'app-lead-solo',
@@ -25,13 +27,25 @@ export class LeadSoloComponent implements OnInit {
     private userService: UsersService
   ) {}
 
+  modelFields: Array<field> = [];
+  formModel: ModelInterface = {
+    name: 'App name...',
+    description: 'App Description...',
+    theme: {
+      bgColor: 'ffffff',
+      textColor: '555555',
+      bannerImage: '',
+    },
+    attributes: this.modelFields,
+  };
+
   selectedCampaign: string;
   selectedLead: ILead;
   typeDict: any;
   objectkeys = Object.keys;
   dateMode: string = 'date';
   loadingCampaignList = false;
-  campaignList: any[] = [];
+  campaignList: ICampaign[] = [];
   callDispositions;
   isVisible = false;
 
@@ -48,15 +62,6 @@ export class LeadSoloComponent implements OnInit {
     this.userService.getAllUsersHack().subscribe((result: any) => {
       this.usersForReassignment = result[0].users;
     });
-  }
-
-  handleCancel(): void {
-    console.log('Button cancel clicked!');
-    this.isVisible = false;
-  }
-
-  showEmailModal(): void {
-    this.isVisible = true;
   }
 
   populateCampaignDropdown(filter) {
@@ -90,6 +95,13 @@ export class LeadSoloComponent implements OnInit {
     const { typeDict } = await this.leadsService.getLeadMappings(
       this.selectedCampaign
     );
+
+    const campaignObject = this.campaignList.filter(
+      (element) => element._id === this.selectedCampaign
+    );
+
+    this.formModel = campaignObject[0].formModel;
+
     this.typeDict = typeDict;
     // this.leadStatusOptions = this.typeDict.leadStatus.options;
   }
@@ -144,8 +156,9 @@ export class LeadSoloComponent implements OnInit {
   handleDateOpenChange(event) {}
   handleLeadStatusChange(event) {}
   handleDatePanelChange(event) {}
+
   async handleCampaignChange(event) {
-    console.log('selected campaign changed to: ', event);
+    console.log({ event, selectedCampaing: this.selectedCampaign });
     await this.getLeadMappings();
     this.openFilterDrawer();
     this.getDispositionForCampaign();
@@ -283,4 +296,6 @@ export class LeadSoloComponent implements OnInit {
   }) {
     this.selectedUserForReassignment = user;
   }
+
+  onCampaignFormUpdate(event) {}
 }

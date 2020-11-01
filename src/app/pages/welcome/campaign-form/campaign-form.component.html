@@ -16,7 +16,7 @@
       </div>
     </div>
     <div nz-col nzSpan="20">
-      <form nz-form [style.backgroundColor]="model.theme.bgColor" [style.color]="model.theme.textColor" style="width: 80%; margin-left: 10%;">
+      <form nz-form style="width: 80%; margin-left: 10%;">
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired nzFor="name">Form Name</nz-form-label>
           <nz-form-control [nzSpan]="14" [nzOffset]="6">
@@ -38,7 +38,7 @@
       <!--to allow dropping content that is not [dndDraggable] set dndAllowExternal to true-->
       <form nz-form dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event,model.attributes)"
         class="dndDropArea" [ngClass]="{'empty':model.attributes.length == 0}"
-        [style.backgroundColor]="model.theme.bgColor" [style.color]="model.theme.textColor">
+      >
 
         <div class="field" *ngFor="let item of model.attributes;let i= index;" (dndStart)="onDragStart($event)"
           (dndCanceled)="onDragCanceled($event)" (dndMoved)="onDragged(item, model.attributes, 'move')"

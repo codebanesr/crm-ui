@@ -20,6 +20,8 @@ import { UsersService } from 'src/app/service/users.service';
 import { ICampaign } from '../campaign/campaign.interface';
 import { LeadsService } from 'src/app/leads.service';
 import { ILeadColumn } from '../leads/lead.interface';
+import { field } from 'src/app/global.model';
+import { ModelInterface } from 'src/global.interfaces';
 
 @Component({
   selector: 'app-create-campaign',
@@ -94,13 +96,15 @@ export class CreateCampaignComponent implements OnInit {
     if (!id) {
       return;
     }
-    this.getAllLeadColumns();
     this.submitText = 'Update';
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe(
       (campaign: ICampaign) => {
         this.initDispositionCore(campaign._id);
         this.campaign = campaign;
+
+        /** This also calls the get campaigns api, jo readable field aur internal field ka mapping hai iske bina bhi hosakta hai */
+        this.getAllLeadColumns();
         this.patchCompainValues(campaign);
       },
       (error) => {
@@ -193,7 +197,18 @@ export class CreateCampaignComponent implements OnInit {
     console.log('activeContext', ev, this.demoDispositionNodes);
   }
 
-  formModel: any;
+  modelFields: Array<field> = [];
+  formModel: ModelInterface = {
+    name: 'App name...',
+    description: 'App Description...',
+    theme: {
+      bgColor: 'ffffff',
+      textColor: '555555',
+      bannerImage: '',
+    },
+    attributes: this.modelFields,
+  };
+
   onCampaignFormUpdate(event) {
     this.formModel = event;
   }
@@ -271,6 +286,11 @@ export class CreateCampaignComponent implements OnInit {
     console.log(this.campaignFiles);
     formData.append('campaignFile', this.campaignFiles[0]);
     formData.append('campaignInfo', JSON.stringify(this.campaignForm.value));
+
+    if (!this.formModel) {
+      this.msg.error('form model is undefined');
+      return;
+    }
     formData.append('formModel', JSON.stringify(this.formModel));
     formData.append(
       'dispositionData',
@@ -413,7 +433,7 @@ export class CreateCampaignComponent implements OnInit {
     );
 
     this.editableCols?.forEach((c) => {
-      if (this.campaign?.editableCols.includes(c.value)) {
+      if (this.campaign?.editableCols?.includes(c.value)) {
         c.checked = true;
       } else {
         c.checked = false;
@@ -425,13 +445,15 @@ export class CreateCampaignComponent implements OnInit {
     );
 
     this.browsableCols?.forEach((c) => {
-      if (this.campaign?.browsableCols.includes(c.value)) {
+      if (this.campaign?.browsableCols?.includes(c.value)) {
         c.checked = true;
       } else {
         c.checked = false;
       }
     });
 
-    this.formModel = this.campaign.formModel;
+    if (this.campaign.formModel) {
+      this.formModel = this.campaign.formModel;
+    }
   }
 }
