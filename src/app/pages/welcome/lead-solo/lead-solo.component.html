@@ -34,7 +34,7 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'number'">
-            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
           </ng-container>
 
           <ng-container *ngSwitchCase="'string'">
@@ -66,12 +66,13 @@
 
     <nz-descriptions-item nzTitle="Remark" nzSpan=2>
       <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
-        <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
+        <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon" [disabled]="isDisabled('remark')"></textarea>
       </nz-input-group>
     </nz-descriptions-item>
   </nz-descriptions>
 
 
+  <br>
   <nz-collapse>
     <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
       <div *ngIf="formModel" style="max-width:500px;">
@@ -195,6 +196,7 @@
       </div>
     </nz-collapse-panel>
   </nz-collapse>
+  <br>
   <nz-collapse>
     <nz-collapse-panel [nzHeader]="'Send Email'" [nzActive]="false">
       <form nz-form [formGroup]="emailForm" nzLayout="vertical">
@@ -236,9 +238,10 @@
       </form>
     </nz-collapse-panel>
   </nz-collapse>
+  <br>
 
 
-  <nz-button-group style="margin-top: 5px;">
+  <nz-button-group>
     <button nzType="danger" nz-button nzSize="default" (click)="showReassignmentModal()">Reassign</button>
 
     <button nzType="primary" nz-button nzSize="default"

@@ -91,6 +91,7 @@ export class LeadSoloComponent implements OnInit {
 
   // leadStatusOptions: string[];
   // selectedLeadStatus: string;
+  enabledKeys;
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings(
       this.selectedCampaign
@@ -102,16 +103,16 @@ export class LeadSoloComponent implements OnInit {
 
     this.formModel = campaignObject[0].formModel;
 
+    this.enabledKeys = campaignObject[0].editableCols;
     this.typeDict = typeDict;
     // this.leadStatusOptions = this.typeDict.leadStatus.options;
   }
 
-  disabledKeys = ['externalId', 'createdAt', 'updatedAt', '_id'];
   isDisabled(leadKey: string) {
-    if (this.disabledKeys.includes(leadKey)) {
-      return true;
+    if (this.enabledKeys.includes(leadKey)) {
+      return false;
     }
-    return false;
+    return true;
   }
 
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
