@@ -22,6 +22,7 @@ import { LeadsService } from 'src/app/leads.service';
 import { ILeadColumn } from '../leads/lead.interface';
 import { field } from 'src/app/global.model';
 import { ModelInterface } from 'src/global.interfaces';
+import { UploadService } from 'src/app/upload.service';
 
 @Component({
   selector: 'app-create-campaign',
@@ -37,7 +38,8 @@ export class CreateCampaignComponent implements OnInit {
     private campaignService: CampaignService,
     private msg: NzMessageService,
     private nzContextMenuService: NzContextMenuService,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private uploadService: UploadService
   ) {}
   campaignForm: FormGroup;
 
@@ -321,27 +323,28 @@ export class CreateCampaignComponent implements OnInit {
     );
   }
 
-  handleUpload(): void {
+  async handleUpload(): Promise<void> {
     const formData = new FormData();
     // tslint:disable-next-line:no-any
     this.fileList.forEach((file: any) => {
       formData.append('files[]', file);
     });
     this.uploading = true;
-    // You can use any AJAX library you like
-    this.campaignService.handleFilesUpload(formData).subscribe(
-      (response: any) => {
-        this.uploading = false;
-        this.fileList = [];
-        this.msg.success('Attachments uploaded successfully.');
-        this.attachments = response.body;
-        this.submitEmailForm();
-      },
-      () => {
-        this.uploading = false;
-        this.msg.error('upload failed.');
-      }
-    );
+
+    try {
+      const filePromises = this.fileList.map((f) => {
+        return this.uploadService.uploadFile('email-templates', f);
+      });
+
+      this.attachments = await Promise.all(filePromises);
+      this.submitEmailForm();
+      this.msg.success('Successfully uploaded all files');
+    } catch (e) {
+      console.log(e);
+      this.msg.error('Unable to upload multiple files');
+    }
+
+    this.uploading = false;
   }
 
   showDispositionTplModal() {

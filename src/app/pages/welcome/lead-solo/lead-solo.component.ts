@@ -131,6 +131,7 @@ export class LeadSoloComponent implements OnInit {
       updateObj['reassignmentInfo'] = this.selectedUserForReassignment;
     }
 
+    updateObj['emailForm'] = this.emailForm.value;
     this.leadsService.updateLead(lead.externalId, updateObj).subscribe(
       (data) => {
         // clean user reassigment once done

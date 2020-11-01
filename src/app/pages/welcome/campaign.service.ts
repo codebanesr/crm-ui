@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { filter } from 'rxjs/operators';
 import { ICampaign } from './campaign/campaign.interface';
+import { UploadService } from 'src/app/upload.service';
 
 @Injectable({
   providedIn: 'root',
