@@ -125,6 +125,11 @@ export class LeadSoloComponent implements OnInit {
           geoLocation.coords.longitude,
         ],
       },
+      requestedInformation: this.formModel.attributes.map((fld) => {
+        return {
+          [fld.label]: fld.value,
+        };
+      }),
     };
 
     if (this.selectedUserForReassignment) {
