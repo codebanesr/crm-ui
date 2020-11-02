@@ -21,11 +21,14 @@ export interface ILead {
   updatedAt: string;
   history: [
     {
+      geoLocation: {
+        coordinates: number[];
+      };
       createdAt: string;
-      leadStatus: string;
+      _id: string;
+      notes: string;
       newUser: string;
-      oldUser: string;
-      geoLocation: { coordinates: number[] };
+      requestedInformation: { [key: string]: string }[];
     }
   ];
 }

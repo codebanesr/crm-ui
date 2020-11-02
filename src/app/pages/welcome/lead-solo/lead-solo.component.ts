@@ -48,6 +48,7 @@ export class LeadSoloComponent implements OnInit {
   campaignList: ICampaign[] = [];
   callDispositions;
   isVisible = false;
+  jsonStringify = JSON.stringify;
 
   ngOnInit(): void {
     this.getLeadMappings();

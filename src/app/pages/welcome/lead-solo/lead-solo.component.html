@@ -255,11 +255,14 @@
     <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.slice().reverse()">
       <p>
         Created at {{h.createdAt | date:"medium"}}
-        <span *ngIf="h.leadStatus">, with lead status
+        <!-- <span *ngIf="h.leadStatus">, with lead status
           <span style="background-color: cornsilk;">{{h.leadStatus}}</span>
           <span> @ ({{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}) </span>
-        </span>
+        </span> -->
       </p>
+      <p>Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</p>
+      <p>{{h.notes}}</p>
+      <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}</p>
     </nz-timeline-item>
   </nz-timeline>
 </ng-container>
