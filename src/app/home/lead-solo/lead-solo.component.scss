@@ -1,6 +1,6 @@
 .parent {
   height: 100%;
-  width: calc(100% + 5px);
+  margin-bottom: 35px;
   overflow-y: scroll;
 }
 
@@ -10,4 +10,10 @@
 
 .top {
   margin: 0px 10px;
+}
+
+p {
+  white-space: normal;
+  overflow-wrap: break-word;
+  width: 85vw;
 }

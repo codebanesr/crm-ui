@@ -4,7 +4,7 @@
     <nz-alert nzType="warning" nzMessage="Warning"
       nzDescription="Please upload documents wisely, don't proceed without proper understanding of this space">
     </nz-alert>
-  
+
     <br>
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
@@ -18,9 +18,9 @@
       </nz-form-control>
     </nz-form-item>
   </form>
-  
-  
-  
+
+
+
   <!-- campaign for creating new campaign and upload tab for uploading campaign config -->
   <div class="scrollable">
     <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
@@ -34,24 +34,24 @@
           </nz-autocomplete>
         </nz-form-control>
       </nz-form-item>
-    
+
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Interval</nz-form-label>
         <nz-form-control [nzSpan]="12">
           <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker>
         </nz-form-control>
       </nz-form-item>
-    
+
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Comment</nz-form-label>
         <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
           <textarea formControlName="comment" nz-input rows="2" placeholder="write any thing"></textarea>
         </nz-form-control>
       </nz-form-item>
-    
-  
+
+
       <nz-form-item>
-        <nz-form-label nzFor="Assignee" nzRequired [nzSpan]="7" >
+        <nz-form-label nzFor="Assignee" nzRequired [nzSpan]="7">
           <span>
             Assignee
             <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
@@ -63,10 +63,10 @@
               [nzHide]="!isNotSelected(option._id)"></nz-option>
           </nz-select>
         </nz-form-control>
-  
+
       </nz-form-item>
-  
-  
+
+
       <nz-form-item>
         <nz-form-control [nzOffset]="1" [nzSpan]="12">
           <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine
@@ -74,9 +74,32 @@
           </nz-tree>
         </nz-form-control>
       </nz-form-item>
-    
-    
-    
+
+
+
+      <nz-collapse>
+        <nz-collapse-panel [nzHeader]="'Editable Columns'" [nzActive]="false">
+          <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+        </nz-collapse-panel>
+      </nz-collapse>
+      <br>
+
+      <nz-collapse>
+        <nz-collapse-panel [nzHeader]="'Browsable Columns'" [nzActive]="false">
+          <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+        </nz-collapse-panel>
+      </nz-collapse>
+      <br>
+
+      <nz-collapse>
+        <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
+          Not available in mobile
+        </nz-collapse-panel>
+      </nz-collapse>
+      <br>
+
+
+
       <nz-form-item>
         <nz-form-control [nzOffset]="7" [nzSpan]="12">
           <!-- hidden upload element -->
@@ -86,15 +109,15 @@
             Upload File
             <nz-badge [nzCount]="campaignFiles?.length" style="margin-left: 1px;"></nz-badge>
           </button>
-    
+
           <button nz-button nzType="primary" [disabled]="!campaignForm.valid"
             (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
         </nz-form-control>
       </nz-form-item>
     </form>
     <!-- campaign form ends here -->
-    
-    
+
+
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>
         <li nz-menu-item (click)="deleteNode()">Delete This</li>
@@ -103,7 +126,7 @@
         <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
       </ul>
     </nz-dropdown-menu>
-    
+
     <!-- Email form below inside drawer -->
     <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzWidth="500px" nzPlacement="right" nzTitle="Advanced Options"
       (nzOnClose)="close()">
@@ -112,25 +135,26 @@
         <nz-modal nzWidth="700" [(nzVisible)]="isEmailTplVisible" nzTitle="Add Email Template Here"
           (nzOnCancel)="handleEmailTplCancel()" (nzOnOk)="handleEmailTplOk()">
           <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-    
+
             <nz-form-item>
               <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
               <input placeholder="Select Campaign" nz-input formControlName="campaign" [nzAutocomplete]="autob" />
               <nz-autocomplete #autob>
-                <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.campaignName" [nzLabel]="co.campaignName">
+                <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.campaignName"
+                  [nzLabel]="co.campaignName">
                   {{ co.campaignName }}
                 </nz-auto-option>
               </nz-autocomplete>
             </nz-form-item>
-    
-    
+
+
             <nz-form-item>
               <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
               <nz-form-control [nzSm]="24" [nzXs]="24">
                 <input nz-input placeholder="Write the subject of email" formControlName="subject" />
               </nz-form-control>
             </nz-form-item>
-    
+
             <nz-form-item>
               <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
               <nz-form-control [nzSm]="24" [nzXs]="24">
@@ -142,7 +166,7 @@
               <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
             </nz-upload>
           </form>
-    
+
           <div *nzModalFooter>
             <button nz-button [nzType]="'danger'">Submit without attachments</button>
             <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
@@ -152,7 +176,7 @@
           </div>
         </nz-modal>
       </ng-container>
-    
+
       <nz-divider nzText="Recently uploaded files"></nz-divider>
       <ng-container *ngFor="let upload of recentUploads">
         <!-- <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a> -->
@@ -161,19 +185,19 @@
           <nz-descriptions-item nzTitle="Email">
             {{upload["email"]}}
           </nz-descriptions-item>
-    
+
           <nz-descriptions-item nzTitle="Result">
             {{upload["actionType"]}}
           </nz-descriptions-item>
-    
-    
+
+
           <nz-descriptions-item nzTitle="Uploaded At">
             {{upload["createdAt"] | date}}
           </nz-descriptions-item>
         </nz-descriptions>
         <nz-divider></nz-divider>
       </ng-container>
-    </nz-drawer>  
+    </nz-drawer>
   </div>
-  
+
 </div>

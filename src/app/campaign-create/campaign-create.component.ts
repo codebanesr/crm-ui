@@ -9,10 +9,15 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { NzFormatEmitEvent } from "ng-zorro-antd/tree";
 import { NzUploadListComponent } from "ng-zorro-antd/upload";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { field } from "src/global.model";
 import { AgentService } from "../agent.service";
+import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
+import { ModelInterface } from "../home/interfaces/global.interfaces";
+import { LeadsService } from "../home/leads.service";
 import { UsersService } from "../home/users.service";
 import { PubsubService } from "../pubsub.service";
+import { UploadService } from "../upload.service";
 
 @Component({
   selector: "app-campaign-create",
@@ -21,14 +26,15 @@ import { PubsubService } from "../pubsub.service";
 })
 export class CampaignCreateComponent implements OnInit {
   constructor(
+    private usersService: UsersService,
+    private leadsService: LeadsService,
     private fb: FormBuilder,
     private agentService: AgentService,
     private campaignService: CampaignService,
     private msg: NzMessageService,
     private nzContextMenuService: NzContextMenuService,
     private activatedRouter: ActivatedRoute,
-    private pubsub: PubsubService,
-    private usersService: UsersService
+    private uploadService: UploadService
   ) {}
   campaignForm: FormGroup;
 
@@ -58,14 +64,11 @@ export class CampaignCreateComponent implements OnInit {
 
   campaignOptions: any = [];
   ngOnInit() {
-    this.pubsub.$pub("HEADING", { heading: "Leads" });
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
 
     this.initEmailForm();
 
-    // this should be replaced
-    this.initDispositionCore("core");
     this.agentService.listAgentActions(0, "campaignSchema").subscribe(
       (list: any) => {
         this.recentUploads = list;
@@ -83,27 +86,32 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   campaignId: string;
+  campaign: ICampaign;
   submitText: string = "+ Create";
   subscribeToQueryParamChange() {
     const { id } = this.activatedRouter.snapshot.queryParams;
     if (!id) {
       return;
     }
-
     this.submitText = "Update";
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe(
-      (campaign: any) => {
+      (campaign: ICampaign) => {
         this.initDispositionCore(campaign._id);
-        this.patchCampainValues(campaign);
+        this.campaign = campaign;
+
+        /** This also calls the get campaigns api, jo readable field aur internal field ka mapping hai iske bina bhi hosakta hai */
+        this.getAllLeadColumns();
+        this.patchCompainValues(campaign);
       },
       (error) => {
+        // this should be replaced
         this.msg.error("Failed to fetch data for ticket id ", id);
       }
     );
   }
 
-  patchCampainValues(campaign: any) {
+  patchCompainValues(campaign: any) {
     this.campaignForm.patchValue(campaign);
     this.campaignForm.patchValue({ assignees: campaign.assignees });
   }
@@ -123,7 +131,6 @@ export class CampaignCreateComponent implements OnInit {
       }
     );
   }
-
   suggestCampaignNames(hint = undefined) {
     this.campaignService.getAllCampaignTypes(hint).subscribe(
       (campaignOpts: any[]) => {
@@ -184,7 +191,23 @@ export class CampaignCreateComponent implements OnInit {
   activeContext: NzFormatEmitEvent;
   nodeActions(ev: NzFormatEmitEvent) {
     this.activeContext = ev;
-    console.log("activeContext", ev);
+    console.log("activeContext", ev, this.demoDispositionNodes);
+  }
+
+  modelFields: Array<field> = [];
+  formModel: ModelInterface = {
+    name: "App name...",
+    description: "App Description...",
+    theme: {
+      bgColor: "ffffff",
+      textColor: "555555",
+      bannerImage: "",
+    },
+    attributes: this.modelFields,
+  };
+
+  onCampaignFormUpdate(event) {
+    this.formModel = event;
   }
 
   addLeafNode() {
@@ -260,9 +283,27 @@ export class CampaignCreateComponent implements OnInit {
     console.log(this.campaignFiles);
     formData.append("campaignFile", this.campaignFiles[0]);
     formData.append("campaignInfo", JSON.stringify(this.campaignForm.value));
+
+    if (!this.formModel) {
+      this.msg.error("form model is undefined");
+      return;
+    }
+    formData.append("formModel", JSON.stringify(this.formModel));
     formData.append(
       "dispositionData",
       JSON.stringify(this.demoDispositionNodes)
+    );
+    formData.append(
+      "editableCols",
+      JSON.stringify(
+        this.editableCols.filter((c) => c.checked).map((c) => c.value)
+      )
+    );
+    formData.append(
+      "browsableCols",
+      JSON.stringify(
+        this.browsableCols.filter((c) => c.checked).map((c) => c.value)
+      )
     );
     // You can use any AJAX library you like
     this.campaignService.createCampaignAndDisposition(formData).subscribe(
@@ -277,27 +318,28 @@ export class CampaignCreateComponent implements OnInit {
     );
   }
 
-  handleUpload(): void {
+  async handleUpload(): Promise<void> {
     const formData = new FormData();
     // tslint:disable-next-line:no-any
     this.fileList.forEach((file: any) => {
       formData.append("files[]", file);
     });
     this.uploading = true;
-    // You can use any AJAX library you like
-    this.campaignService.handleFilesUpload(formData).subscribe(
-      (response: any) => {
-        this.uploading = false;
-        this.fileList = [];
-        this.msg.success("Attachments uploaded successfully.");
-        this.attachments = response.body;
-        this.submitEmailForm();
-      },
-      () => {
-        this.uploading = false;
-        this.msg.error("upload failed.");
-      }
-    );
+
+    try {
+      const filePromises = this.fileList.map((f) => {
+        return this.uploadService.uploadFile("email-templates", f);
+      });
+
+      this.attachments = await Promise.all(filePromises);
+      this.submitEmailForm();
+      this.msg.success("Successfully uploaded all files");
+    } catch (e) {
+      console.log(e);
+      this.msg.error("Unable to upload multiple files");
+    }
+
+    this.uploading = false;
   }
 
   showDispositionTplModal() {
@@ -312,7 +354,6 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   nzEvent(event: NzFormatEmitEvent): void {
-    console.log(event);
     event.node.isExpanded = !event.node.isExpanded;
   }
 
@@ -340,8 +381,21 @@ export class CampaignCreateComponent implements OnInit {
   rename() {
     if (this.renameText) {
       this.activeContext.node.title = this.renameText;
+      this.activeContext.node.origin.title = this.renameText;
+      console.log(this.demoDispositionNodes);
+      this.demoDispositionNodes = [
+        this.activeContext.node.treeService.rootNodes[0].origin,
+      ];
       this.renameText = "";
     }
+  }
+
+  selectedAction = null;
+  attachAction() {
+    if (this.selectedAction) {
+      this.activeContext.node.origin["action"] = this.selectedAction;
+    }
+    this.selectedAction = null;
   }
 
   usersCount = 0;
@@ -359,7 +413,45 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   isNotSelected(value: string): boolean {
-    // return this.listOfSelectedValue.indexOf(value) === -1;
-    return this.campaignForm.get("assignees").value.indexOf(value) === -1;
+    if (!this.campaignForm.get("assignees").value) {
+      return true;
+    }
+    return this.campaignForm.get("assignees").value?.indexOf(value) === -1;
+  }
+
+  loading = false;
+  editableCols: any[] = [];
+  browsableCols: any[] = [];
+  allCols: any;
+  async getAllLeadColumns() {
+    this.loading = true;
+    this.allCols = await this.leadsService.getLeadMappings(this.campaignId);
+    this.editableCols = Object.values(
+      JSON.parse(JSON.stringify(this.allCols.typeDict))
+    );
+
+    this.editableCols?.forEach((c) => {
+      if (this.campaign?.editableCols?.includes(c.value)) {
+        c.checked = true;
+      } else {
+        c.checked = false;
+      }
+    });
+
+    this.browsableCols = Object.values(
+      JSON.parse(JSON.stringify(this.allCols.typeDict))
+    );
+
+    this.browsableCols?.forEach((c) => {
+      if (this.campaign?.browsableCols?.includes(c.value)) {
+        c.checked = true;
+      } else {
+        c.checked = false;
+      }
+    });
+
+    if (this.campaign.formModel) {
+      this.formModel = this.campaign.formModel;
+    }
   }
 }

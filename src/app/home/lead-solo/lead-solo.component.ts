@@ -2,15 +2,17 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { PubsubService } from "src/app/pubsub.service";
 import { CampaignService } from "../campaign.service";
-import { ClassValidationError } from "../interfaces/global.interfaces";
+import {
+  ClassValidationError,
+  ModelInterface,
+} from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 import { LeadsService } from "../leads.service";
 import { Plugins } from "@capacitor/core";
-import { ModalController } from "@ionic/angular";
-import { LeadsComponent } from "../leads/leads.component";
 import { UsersService } from "../users.service";
+import { ICampaign } from "src/app/campaign/campaign.interface";
+import { field } from "src/global.model";
 const { Geolocation } = Plugins;
 
 @Component({
@@ -24,9 +26,20 @@ export class LeadSoloComponent implements OnInit {
     private campaignService: CampaignService,
     private msgService: NzMessageService,
     private fb: FormBuilder,
-    private pubsub: PubsubService,
     private userService: UsersService
   ) {}
+
+  modelFields: Array<field> = [];
+  formModel: ModelInterface = {
+    name: "App name...",
+    description: "App Description...",
+    theme: {
+      bgColor: "ffffff",
+      textColor: "555555",
+      bannerImage: "",
+    },
+    attributes: this.modelFields,
+  };
 
   selectedCampaign: string;
   selectedLead: ILead;
@@ -34,12 +47,12 @@ export class LeadSoloComponent implements OnInit {
   objectkeys = Object.keys;
   dateMode: string = "date";
   loadingCampaignList = false;
-  campaignList: any[] = [];
+  campaignList: ICampaign[] = [];
   callDispositions;
   isVisible = false;
+  jsonStringify = JSON.stringify;
 
   ngOnInit(): void {
-    this.pubsub.$pub("HEADING", { heading: "Single Lead" });
     this.getLeadMappings();
     this.populateCampaignDropdown("");
     this.initEmailForm();
@@ -50,18 +63,8 @@ export class LeadSoloComponent implements OnInit {
   usersForReassignment = [];
   fetchUsersForReassignment() {
     this.userService.getAllUsersHack().subscribe((result: any) => {
-      console.log(result);
       this.usersForReassignment = result[0].users;
     });
-  }
-
-  handleCancel(): void {
-    console.log("Button cancel clicked!");
-    this.isVisible = false;
-  }
-
-  showEmailModal(): void {
-    this.isVisible = true;
   }
 
   populateCampaignDropdown(filter) {
@@ -89,50 +92,67 @@ export class LeadSoloComponent implements OnInit {
     );
   }
 
-  isLeadEditMode = false;
-  leadStatusOptions: string[];
-  selectedLeadStatus: string;
+  // leadStatusOptions: string[];
+  // selectedLeadStatus: string;
+  enabledKeys;
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings(
       this.selectedCampaign
     );
+
+    const campaignObject = this.campaignList.filter(
+      (element) => element._id === this.selectedCampaign
+    );
+
+    this.formModel = campaignObject[0].formModel;
+
+    this.enabledKeys = campaignObject[0].editableCols;
     this.typeDict = typeDict;
-    this.leadStatusOptions = this.typeDict.leadStatus.options;
+    // this.leadStatusOptions = this.typeDict.leadStatus.options;
   }
 
-  disabledKeys = ["externalId", "createdAt", "updatedAt", "_id"];
   isDisabled(leadKey: string) {
-    if (this.disabledKeys.includes(leadKey)) {
-      return true;
+    if (this.enabledKeys.includes(leadKey)) {
+      return false;
     }
-    return false;
+    return true;
   }
 
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
     const geoLocation = await Geolocation.getCurrentPosition();
+    const updateObj = {
+      lead,
+      geoLocation: {
+        coordinates: [
+          geoLocation.coords.latitude,
+          geoLocation.coords.longitude,
+        ],
+      },
+      requestedInformation: this.formModel.attributes.map((fld) => {
+        return {
+          [fld.label]: fld.value,
+        };
+      }),
+    };
 
-    console.log(geoLocation);
-    this.leadsService
-      .updateLead(lead.externalId, {
-        lead,
-        geoLocation: {
-          coordinates: [
-            geoLocation.coords.latitude,
-            geoLocation.coords.longitude,
-          ],
-        },
-      })
-      .subscribe(
-        (data) => {
-          this.msgService.success("Successfully updated lead");
-          if (fetchNextLead) {
-            this.fetchNextLead();
-          }
-        },
-        ({ error }: { error: ClassValidationError }) => {
-          this.msgService.error(error.message[0]);
+    if (this.selectedUserForReassignment) {
+      updateObj["reassignmentInfo"] = this.selectedUserForReassignment;
+    }
+
+    updateObj["emailForm"] = this.emailForm.value;
+    this.leadsService.updateLead(lead.externalId, updateObj).subscribe(
+      (data) => {
+        // clean user reassigment once done
+        this.selectedUserForReassignment = null;
+        this.msgService.success("Successfully updated lead");
+        if (fetchNextLead) {
+          this.fetchNextLead();
         }
-      );
+      },
+      ({ error }: { error: ClassValidationError }) => {
+        this.msgService.error(error.message[0]);
+      }
+    );
   }
 
   handleDispositionTreeEvent(event) {
@@ -146,8 +166,9 @@ export class LeadSoloComponent implements OnInit {
   handleDateOpenChange(event) {}
   handleLeadStatusChange(event) {}
   handleDatePanelChange(event) {}
+
   async handleCampaignChange(event) {
-    console.log("selected campaign changed to: ", event);
+    console.log({ event, selectedCampaing: this.selectedCampaign });
     await this.getLeadMappings();
     this.openFilterDrawer();
     this.getDispositionForCampaign();
@@ -226,8 +247,8 @@ export class LeadSoloComponent implements OnInit {
     this.isVisible = false;
   }
 
-  leadFilter = {} as any;
   showFilterDrawer = false;
+  leadFilter = {} as any;
   openFilterDrawer(): void {
     console.log(this.typeDict);
     this.showFilterDrawer = true;
@@ -245,6 +266,8 @@ export class LeadSoloComponent implements OnInit {
     delete this.leadFilter[tag];
     this.fetchNextLead();
   }
+
+  isLeadEditMode = false;
   showLeadDetails() {
     this.isLeadEditMode = !this.isLeadEditMode;
   }
@@ -257,4 +280,15 @@ export class LeadSoloComponent implements OnInit {
   closeReassignmentDrawer() {
     this.isReassignmentDrawerVisible = false;
   }
+
+  selectedUserForReassignment = null;
+  selectUserForReassignment(user: {
+    email: string;
+    _id: string;
+    fullname: string;
+  }) {
+    this.selectedUserForReassignment = user;
+  }
+
+  onCampaignFormUpdate(event) {}
 }
