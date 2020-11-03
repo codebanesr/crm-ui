@@ -126,6 +126,7 @@ export class CreateCampaignComponent implements OnInit {
       console.warn('fetching core disposition');
       campaignId = 'core';
     }
+
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
         this.demoDispositionNodes = data.options;
@@ -135,7 +136,6 @@ export class CreateCampaignComponent implements OnInit {
       }
     );
   }
-
   suggestCampaignNames(hint = undefined) {
     this.campaignService.getAllCampaignTypes(hint).subscribe(
       (campaignOpts: any[]) => {
