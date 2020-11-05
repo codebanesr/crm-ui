@@ -1,11 +1,6 @@
 <!-- The upper tab for choice of lead upload -->
 <div style="padding: 10px;" class="scrollable">
   <form nz-form>
-    <nz-alert nzType="warning" nzMessage="Warning"
-      nzDescription="Please upload documents wisely, don't proceed without proper understanding of this space">
-    </nz-alert>
-
-    <br>
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
       <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
@@ -67,31 +62,20 @@
       </nz-form-item>
 
 
-      <nz-form-item>
-        <nz-form-control [nzOffset]="1" [nzSpan]="12">
-          <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzShowLine
+      <nz-collapse>
+        <nz-collapse-panel [nzHeader]="'Disposition'" [nzActive]="false">
+          <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)"
             (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
           </nz-tree>
-        </nz-form-control>
-      </nz-form-item>
-
-
-
-      <nz-collapse>
+        </nz-collapse-panel>
         <nz-collapse-panel [nzHeader]="'Editable Columns'" [nzActive]="false">
           <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
         </nz-collapse-panel>
-      </nz-collapse>
-      <br>
 
-      <nz-collapse>
         <nz-collapse-panel [nzHeader]="'Browsable Columns'" [nzActive]="false">
           <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
         </nz-collapse-panel>
-      </nz-collapse>
-      <br>
 
-      <nz-collapse>
         <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
           Not available in mobile
         </nz-collapse-panel>

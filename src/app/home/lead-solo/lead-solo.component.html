@@ -21,19 +21,6 @@
     <nz-page-header-title>{{selectedLead.firstName}}</nz-page-header-title>
     <nz-page-header-subtitle>{{selectedLead.lastName}}</nz-page-header-subtitle>
     <nz-page-header-extra>
-      <div>
-        <h1>History</h1>
-        <nz-timeline>
-          <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.slice().reverse()">
-            <p>
-              Created at {{h.createdAt | date:"medium"}}
-            </p>
-            <p>Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</p>
-            <p style="width: 100%;">{{h.notes}}</p>
-            <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}</p>
-          </nz-timeline-item>
-        </nz-timeline>
-      </div>
       <button nz-button nzType="secondary" (click)="showLeadDetails()">
         {{isLeadEditMode ? 'Hide': 'Show More'}}
       </button>
@@ -130,6 +117,20 @@
           </nz-descriptions>
 
           <nz-collapse>
+            <nz-collapse-panel [nzActive]="true" [nzHeader]="'Lead History'">
+              <nz-timeline>
+                <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
+                  <p>
+                    Created at {{h.createdAt | date:"medium"}}
+                  </p>
+                  <p>Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</p>
+                  <p style="width: 100%;">{{h.notes}}</p>
+                  <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}
+                  </p>
+                </nz-timeline-item>
+                <span (click)="onShowMoreClick()">{{historyLimit === 3 ? "More" : "Less"}}</span>
+              </nz-timeline>
+            </nz-collapse-panel>
             <nz-collapse-panel [nzHeader]="'Requested Information'" [nzActive]="false">
               <div *ngIf="formModel" style="max-width:500px;">
                 <nz-page-header class="site-page-header" nzBackIcon>
@@ -137,84 +138,99 @@
                   <nz-page-header-subtitle>{{formModel.description}}</nz-page-header-subtitle>
                   <nz-page-header-content>
                     <div class="content">
-        
                       <form nz-form>
                         <ng-container *ngFor="let item of formModel.attributes">
                           <ng-container [ngSwitch]="item.type">
-        
+
                             <nz-form-item *ngSwitchCase="'text'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" nzFor="email">{{item.label}}</nz-form-label>
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" nzFor="email">{{item.label}}
+                              </nz-form-label>
                               <nz-form-control [nzSm]="14" [nzXs]="24">
-                                <input nz-input [id]="item.name" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
+                                <input nz-input [id]="item.name" [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}" />
                               </nz-form-control>
                             </nz-form-item>
-        
+
                             <nz-form-item *ngSwitchCase="'email'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <input nz-input type="email" id="{{item.name}}" [(ngModel)]="item.value" placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
+                                <input nz-input type="email" id="{{item.name}}" [(ngModel)]="item.value"
+                                  placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
-        
+
                             <nz-form-item *ngSwitchCase="'phone'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'number'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <input nz-input type="number" id="{{item.name}}" min="{{item.min}}" [(ngModel)]="item.value"
-                                  max="{{item.max}}" placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
-                                </nz-form-control>
+                                <input nz-input type="number" id="{{item.name}}" min="{{item.min}}"
+                                  [(ngModel)]="item.value" max="{{item.max}}" placeholder="{{item.placeholder}}"
+                                  [ngModelOptions]="{standalone: true}">
+                              </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'date'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <nz-date-picker nz-input type="date" id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"></nz-date-picker>
+                                <nz-date-picker nz-input type="date" id="{{item.name}}" [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}"></nz-date-picker>
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'datetime-local'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <nz-date-picker nz-input type="date" id="{{item.name}}" nzShowTime [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"></nz-date-picker>
+                                <nz-date-picker nz-input type="date" id="{{item.name}}" nzShowTime
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"></nz-date-picker>
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'textarea'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-                                  id="{{item.name}}" placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                <textarea nz-input placeholder="Controlled autosize"
+                                  [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
+                                  placeholder="{{item.placeholder}}" [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}">
                                 </textarea>
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'file'">
-                              <nz-form-label [nzSpan]="6">{{item.label}} (File can't be uploaded right now)</nz-form-label>
+                              <nz-form-label [nzSpan]="6">{{item.label}} (File can't be uploaded right now)
+                              </nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <input nz-input type="file" id="{{item.name}}" placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                <input nz-input type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
-        
+
                             <div *ngSwitchCase="'paragraph'">
                               <nz-form-item>
                                 <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                                 <nz-form-control>
                                   <nz-input-group [nzSuffix]="inputClearTpl">
-                                    <input type="text" nz-input [(ngModel)]="item.value" placeholder="input with clear icon" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
+                                    <input type="text" nz-input [(ngModel)]="item.value"
+                                      placeholder="input with clear icon" [(ngModel)]="item.value"
+                                      [ngModelOptions]="{standalone: true}" />
                                   </nz-input-group>
                                 </nz-form-control>
                               </nz-form-item>
-        
-                              <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
-                                  *ngIf="item.value" (click)="item.value = null"></i></ng-template>
+
+                              <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill"
+                                  nzType="close-circle" *ngIf="item.value" (click)="item.value = null"></i>
+                              </ng-template>
                             </div>
                             <div *ngSwitchCase="'autocomplete'">
                               <nz-form-item>
                                 <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                                 <nz-form-control [nzSpan]="14">
-                                  <nz-select id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                                    <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label"></nz-option>
+                                  <nz-select id="{{item.name}}" [(ngModel)]="item.value"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label">
+                                    </nz-option>
                                   </nz-select>
                                 </nz-form-control>
                               </nz-form-item>
@@ -251,8 +267,7 @@
                 </nz-page-header>
               </div>
             </nz-collapse-panel>
-          </nz-collapse>
-          <nz-collapse>
+
             <nz-collapse-panel [nzHeader]="'Send Email'" [nzActive]="false">
               <form nz-form [formGroup]="emailForm" nzLayout="vertical">
                 <nz-form-item>
@@ -264,14 +279,14 @@
                     </nz-auto-option>
                   </nz-autocomplete>
                 </nz-form-item>
-        
+
                 <nz-form-item>
                   <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
                   <nz-form-control [nzSm]="24" [nzXs]="24">
                     <input nz-input placeholder="Write the subject of email" formControlName="subject" />
                   </nz-form-control>
                 </nz-form-item>
-        
+
                 <nz-form-item>
                   <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
                   <nz-form-control [nzSm]="24" [nzXs]="24">
@@ -284,10 +299,12 @@
                   <nz-form-control [nzSm]="24" [nzXs]="24">
                     <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
                       nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-                      <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment">
+                      <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName"
+                        [nzValue]="attachment">
                       </nz-option>
                     </nz-select>
-                    <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
+                    <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
+                    </ng-template>
                   </nz-form-control>
                 </nz-form-item>
               </form>

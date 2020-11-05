@@ -7,6 +7,8 @@ import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { CampaignService } from "../home/campaign.service";
 import { ColumnItem, DataItem } from "../home/interfaces/listOfCols";
 import { PubsubService } from "../pubsub.service";
+import { UploadService } from "../upload.service";
+import { ICampaign } from "./campaign.interface";
 
 @Component({
   selector: "app-campaign",
@@ -19,7 +21,8 @@ export class CampaignComponent implements OnInit {
     private msg: NzMessageService,
     private fb: FormBuilder,
     private router: Router,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    private uploadService: UploadService
   ) {}
 
   campaignOpts: string[];
@@ -127,7 +130,7 @@ export class CampaignComponent implements OnInit {
   }
 
   // welcome/campaigns/create
-  activeCampaign: any;
+  activeCampaign: ICampaign;
   markActiveCampaign(event: Event, data) {
     event.stopImmediatePropagation();
     event.stopPropagation();
@@ -141,26 +144,30 @@ export class CampaignComponent implements OnInit {
 
   uploading = false;
   leadFileList: NzUploadListComponent[] = [];
-  handleLeadFilesUpload() {
-    const formData = new FormData();
-    this.leadFileList.forEach((file: any) => {
-      formData.append("files[]", file);
+  async handleLeadFilesUpload() {
+    this.uploading = true;
+    const filePromises = this.leadFileList.map((f) => {
+      return this.uploadService.uploadFile("leads", f);
     });
 
-    formData.append("campaignName", this.activeCampaign.campaignName);
-    this.uploading = true;
-    // You can use any AJAX library you like
-    this.campaignService.uploadMultipleLeadFiles(formData).subscribe(
-      (response: any) => {
-        this.uploading = false;
-        this.leadFileList = [];
-        this.msg.success("Lead Files uploaded successfully.");
-      },
-      () => {
-        this.uploading = false;
-        this.msg.error("Lead files could not be uploaded.");
-      }
-    );
+    const result = await Promise.all(filePromises);
+    this.campaignService
+      .uploadMultipleLeadFiles({
+        files: result,
+        campaignName: this.activeCampaign.campaignName,
+      })
+      .subscribe(
+        (response: any) => {
+          this.uploading = false;
+          this.leadFileList = [];
+          this.msg.success("Lead Files uploaded successfully.");
+        },
+        () => {
+          this.uploading = false;
+          this.msg.error("Lead files could not be uploaded.");
+        }
+      );
+    this.uploading = false;
   }
 
   beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {

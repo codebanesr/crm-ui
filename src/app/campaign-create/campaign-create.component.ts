@@ -330,7 +330,7 @@ export class CampaignCreateComponent implements OnInit {
       const filePromises = this.fileList.map((f) => {
         return this.uploadService.uploadFile("email-templates", f);
       });
-
+      
       this.attachments = await Promise.all(filePromises);
       this.submitEmailForm();
       this.msg.success("Successfully uploaded all files");
