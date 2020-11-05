@@ -45,7 +45,6 @@
       <td>{{ data.startDate | date }}</td>
       <td>{{ data.endDate | date }}</td>
       <td (click)="markActiveCampaign($event, data)">
-
         <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true
           nzName="files">
           <button nz-button><i nz-icon nzType="upload"></i>Select File</button>

@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { NzUploadListComponent } from 'ng-zorro-antd/upload';
+import { UploadService } from 'src/app/upload.service';
 
 interface DataItem {
   createdBy: string;
@@ -38,8 +39,9 @@ export class CampaignComponent implements OnInit {
     private campaignService: CampaignService,
     private msg: NzMessageService,
     private fb: FormBuilder,
-    private router: Router
-  ) { }
+    private router: Router,
+    private uploadService: UploadService
+  ) {}
 
   campaignOpts: string[];
   handlerEmailOpts: string[] = ['santa', 'banta'];
@@ -59,13 +61,21 @@ export class CampaignComponent implements OnInit {
 
     this.getCampaigns();
 
-    this.campaignService.getAllCampaignTypes().subscribe((campaignOpts: any[])=>{
-      this.campaignOpts = campaignOpts;
-    }, error=>{
-      console.log(error);
-    })
+    this.campaignService.getAllCampaignTypes().subscribe(
+      (campaignOpts: any[]) => {
+        this.campaignOpts = campaignOpts;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
-  listOfColumns: ColumnItem[] = [{ name: 'Campaign Name' }, { name: 'Created By' }, { name: 'Start Date' }, { name: 'End Date' }];
+  listOfColumns: ColumnItem[] = [
+    { name: 'Campaign Name' },
+    { name: 'Created By' },
+    { name: 'Start Date' },
+    { name: 'End Date' },
+  ];
 
   listOfData: DataItem[] = [];
 
@@ -111,7 +121,10 @@ export class CampaignComponent implements OnInit {
   }
 
   totalPage: number = 0;
-  processData(result: { data: any[], metadata: { total: number, page: number } }) {
+  processData(result: {
+    data: any[];
+    metadata: { total: number; page: number };
+  }) {
     this.page = result.metadata.page;
     this.totalPage = result.metadata.total;
     this.listOfData = [];
@@ -121,8 +134,8 @@ export class CampaignComponent implements OnInit {
         endDate: d.interval[1],
         createdBy: d.createdBy,
         campaignName: d.campaignName,
-        _id: d._id
-      })
+        _id: d._id,
+      });
     }
   }
   validateForm!: FormGroup;
@@ -132,31 +145,34 @@ export class CampaignComponent implements OnInit {
     this.getCampaigns();
   }
 
-
   // welcome/campaigns/create
   activeCampaign: any;
   markActiveCampaign(event: Event, data) {
     event.stopImmediatePropagation();
     this.activeCampaign = data;
-
   }
   gotoDetailedView(data: any) {
-    this.router.navigate(['welcome', 'campaigns', 'create'], { queryParams: { id: data._id } });
+    this.router.navigate(['welcome', 'campaigns', 'create'], {
+      queryParams: { id: data._id },
+    });
   }
 
   uploading = false;
   leadFileList: NzUploadListComponent[] = [];
-  handleLeadFilesUpload() {
-    const formData = new FormData();
-    this.leadFileList.forEach((file: any) => {
-      formData.append('files[]', file);
+  async handleLeadFilesUpload() {
+    this.uploading = true;
+    const filePromises = this.leadFileList.map((f) => {
+      return this.uploadService.uploadFile('leads', f);
     });
 
-    formData.append("campaignName", this.activeCampaign.campaignName);
-    this.uploading = true;
-    // You can use any AJAX library you like
-    this.campaignService.uploadMultipleLeadFiles(formData)
-      .subscribe((response: any) => {
+    const result = await Promise.all(filePromises);
+    this.campaignService
+      .uploadMultipleLeadFiles({
+        files: result,
+        campaignName: this.activeCampaign.campaignName,
+      })
+      .subscribe(
+        (response: any) => {
           this.uploading = false;
           this.leadFileList = [];
           this.msg.success('Lead Files uploaded successfully.');
@@ -166,10 +182,11 @@ export class CampaignComponent implements OnInit {
           this.msg.error('Lead files could not be uploaded.');
         }
       );
+    this.uploading = false;
   }
 
   beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
     this.leadFileList = this.leadFileList.concat(file);
     return false;
-  }
+  };
 }

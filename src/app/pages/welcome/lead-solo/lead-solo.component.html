@@ -252,7 +252,7 @@
 
   <h1>History</h1>
   <nz-timeline>
-    <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.slice().reverse()">
+    <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.reverse().slice(0, 3)">
       <p>
         Created at {{h.createdAt | date:"medium"}}
         <!-- <span *ngIf="h.leadStatus">, with lead status
@@ -264,6 +264,7 @@
       <p>{{h.notes}}</p>
       <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}</p>
     </nz-timeline-item>
+    <span (click)="onShowMoreClick()">{{historyLimit === 3 ? "More" : "Less"}}</span>
   </nz-timeline>
 </ng-container>
 

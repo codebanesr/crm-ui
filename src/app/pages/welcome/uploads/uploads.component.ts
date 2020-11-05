@@ -7,11 +7,13 @@ import { NzMarks } from 'ng-zorro-antd/slider';
 @Component({
   selector: 'app-uploads',
   templateUrl: './uploads.component.html',
-  styleUrls: ['./uploads.component.scss']
+  styleUrls: ['./uploads.component.scss'],
 })
-export class UploadsComponent  {
-
-  constructor(private msg: NzMessageService, private customerService: CustomerService){}
+export class UploadsComponent {
+  constructor(
+    private msg: NzMessageService,
+    private customerService: CustomerService
+  ) {}
 
   handleChange({ file, fileList }: UploadChangeParam): void {
     const status = file.status;
@@ -25,34 +27,34 @@ export class UploadsComponent  {
     }
   }
 
-
-
   hGutter = 16;
   vGutter = 16;
   count = 3;
-  array1 = [{
-    name: "customer",
-    url: "http://localhost:3000/customer/many?type=customer"
-  }, {
-    name: "lead",
-    url: "http://localhost:3000/customer/many?type=lead"
-  }, {
-    name: "ticket",
-    url: "http://localhost:3000/customer/many?type=ticket"
-  }]
+  array1 = [
+    {
+      name: 'customer',
+      url: 'http://localhost:3000/customer/many?type=customer',
+    },
+    {
+      name: 'lead',
+      url: 'http://localhost:3000/customer/many?type=lead',
+    },
+    {
+      name: 'ticket',
+      url: 'http://localhost:3000/customer/many?type=ticket',
+    },
+  ];
 
+  array2 = [
+    {
+      name: 'campaign',
+      url: 'http://localhost:3000/customer/many?type=campaign',
+    },
+    {
+      name: 'users',
+      url: 'http://localhost:3000/user/many',
+    },
+  ];
 
-  array2 = [{
-    name: "campaign",
-    url: "http://localhost:3000/customer/many?type=campaign"
-  },
-  {
-    name: "users",
-    url: "http://localhost:3000/user/many"
-  }]
-
-  reGenerateArray(count: number): void {
-
-  }
-
+  reGenerateArray(count: number): void {}
 }
