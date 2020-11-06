@@ -248,7 +248,12 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   handleClick(upload) {
-    this.agentService.downloadExcelFile(upload.filePath);
+    if (upload.filePath.indexOf('amazonaws') > 0) {
+      console.log(upload.filePath);
+      window.open(upload.filePath, '_blank');
+    } else {
+      this.agentService.downloadExcelFile(upload.filePath);
+    }
   }
   initEmailForm() {
     this.emailForm = this.fb.group({
