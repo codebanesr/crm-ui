@@ -310,11 +310,16 @@
   <nz-divider nzText="Recently uploaded files"></nz-divider>
   <ng-container *ngFor="let upload of recentUploads">
     <!-- <a nz-button nzType="link" (click)="handleClick(upload)">{{upload.email}} at {{upload.createdAt|date}}</a> -->
-    <nz-descriptions nzLayout="vertical" nzBordered=true (click)="handleClick(upload)" class="downloadPanel"
-      nzTooltipTitle="Click to Download file" nzTooltipPlacement="left" nz-tooltip>
+    <nz-descriptions nzLayout="vertical" nzBordered=true (click)="showExcelPreview(upload)" class="downloadPanel"
+      nzTooltipTitle="Click to Preview file" nzTooltipPlacement="left" nz-tooltip>
       <nz-descriptions-item nzTitle="Email">
         {{upload["email"]}}
       </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="FileName" *ngIf="upload['label']">
+        {{upload["fileName"]}}
+      </nz-descriptions-item>
+
 
       <nz-descriptions-item nzTitle="Result">
         {{upload["actionType"]}}
@@ -322,7 +327,7 @@
 
 
       <nz-descriptions-item nzTitle="Uploaded At">
-        {{upload["createdAt"] | date}}
+        {{upload["createdAt"] | date: 'short'}}
       </nz-descriptions-item>
     </nz-descriptions>
     <nz-divider></nz-divider>

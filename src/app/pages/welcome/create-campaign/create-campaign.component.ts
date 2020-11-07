@@ -464,4 +464,13 @@ export class CreateCampaignComponent implements OnInit {
       this.formModel = this.campaign.formModel;
     }
   }
+
+  showExcelPreview(document) {
+    // document.filePath
+
+    window.open(
+      'https://docs.google.com/gview?url=' + document.filePath,
+      '_blank'
+    );
+  }
 }
