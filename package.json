@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/platform-server": "~9.1.0",
     "@angular/router": "~9.1.0",
+    "@angular/service-worker": "~9.1.0",
     "@ngrx/store": "^9.1.0",
     "@ngx-formly/core": "^5.7.2",
     "@ngx-formly/ng-zorro-antd": "0.0.1",

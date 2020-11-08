@@ -29,6 +29,8 @@ import { SignupComponent } from './signup/signup.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { ForgotPasswordVerifyComponent } from './forgot-password-verify/forgot-password-verify.component';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 registerLocaleData(en);
 
@@ -59,8 +61,11 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, authInterceptorProviders],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
