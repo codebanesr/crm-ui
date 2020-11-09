@@ -10,5 +10,6 @@ export interface ICampaign {
   organization: string; //mongoose obj
   editableCols: string[];
   browsableCols: string[];
+  uniqueCols: string[];
   formModel: any;
 }

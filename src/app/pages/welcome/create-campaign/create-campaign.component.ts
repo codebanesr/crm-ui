@@ -315,6 +315,14 @@ export class CreateCampaignComponent implements OnInit {
         this.browsableCols.filter((c) => c.checked).map((c) => c.value)
       )
     );
+
+    formData.append(
+      'uniqueCols',
+      JSON.stringify(
+        this.uniqueCols.filter((c) => c.checked).map((c) => c.value)
+      )
+    );
+
     // You can use any AJAX library you like
     this.campaignService.createCampaignAndDisposition(formData).subscribe(
       (response: any) => {
@@ -432,14 +440,15 @@ export class CreateCampaignComponent implements OnInit {
   loading = false;
   editableCols: any[] = [];
   browsableCols: any[] = [];
+  uniqueCols: any[] = [];
   allCols: any;
   async getAllLeadColumns() {
     this.loading = true;
     this.allCols = await this.leadsService.getLeadMappings(this.campaignId);
+
     this.editableCols = Object.values(
       JSON.parse(JSON.stringify(this.allCols.typeDict))
     );
-
     this.editableCols?.forEach((c) => {
       if (this.campaign?.editableCols?.includes(c.value)) {
         c.checked = true;
@@ -451,9 +460,20 @@ export class CreateCampaignComponent implements OnInit {
     this.browsableCols = Object.values(
       JSON.parse(JSON.stringify(this.allCols.typeDict))
     );
-
     this.browsableCols?.forEach((c) => {
       if (this.campaign?.browsableCols?.includes(c.value)) {
+        c.checked = true;
+      } else {
+        c.checked = false;
+      }
+    });
+
+    this.uniqueCols = Object.values(
+      JSON.parse(JSON.stringify(this.allCols.typeDict))
+    );
+
+    this.uniqueCols?.forEach((c) => {
+      if (this.campaign?.uniqueCols?.includes(c.value)) {
         c.checked = true;
       } else {
         c.checked = false;

@@ -66,12 +66,14 @@
 
   <nz-collapse style="width: 75vw; margin-left: 5%;">
     <nz-collapse-panel [nzHeader]="'Disposition'" [nzActive]="false">
-      <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)" nzAllowClear="true"
+      <nz-tree [nzData]="demoDispositionNodes" nzDraggable (nzOnDrop)="nzEvent($event)" nzAllowClear="true"
         (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
       </nz-tree>
     </nz-collapse-panel>
 
-
+    <nz-collapse-panel [nzHeader]="'Unique Attributes'" [nzActive]="false">
+      <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+    </nz-collapse-panel>
 
     <nz-collapse-panel [nzHeader]="'Editable Columns'" [nzActive]="false">
       <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
@@ -219,8 +221,6 @@
               </nz-page-header-content>
             </nz-page-header>
           </div>
-
-
         </nz-tab>
       </nz-tabset>
     </nz-collapse-panel>

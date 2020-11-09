@@ -136,6 +136,13 @@ export class LeadSoloComponent implements OnInit {
     }
 
     updateObj['emailForm'] = this.emailForm.value;
+
+    // any condition that has to be validated before submitting the form goes into this;
+    const isSubmissionValid = this.checkSubmissionStatus();
+    if (!isSubmissionValid) {
+      return false;
+    }
+
     this.leadsService.updateLead(lead.externalId, updateObj).subscribe(
       (data) => {
         // clean user reassigment once done
@@ -151,12 +158,45 @@ export class LeadSoloComponent implements OnInit {
     );
   }
 
+  checkSubmissionStatus(): boolean {
+    // validate form
+    if (this.actions.isInformationRequested) {
+      for (let element of this.formModel.attributes) {
+        if (element.required && !element.value) {
+          this.msgService.error(`${element.label} is a required field`);
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  actions = {
+    isInformationRequested: false,
+  };
   handleDispositionTreeEvent(event) {
     if (event.node.isLeaf) {
-      console.log('set this to formControl', event.node.origin.title);
+      console.log('selected node', event.node.origin.action);
+      const action = event.node.origin.action;
+      this.resetAllActionHandlers();
+      if (action) {
+        switch (action) {
+          case 'showForm':
+            this.actions.isInformationRequested = true;
+            break;
+          default:
+            console.log('no action matched');
+        }
+      }
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
     }
     event.node.isExpanded = !event.node.isExpanded;
+  }
+
+  resetAllActionHandlers() {
+    Object.keys(this.actions).forEach((action) => {
+      this.actions[action] = false;
+    });
   }
 
   handleDateOpenChange(event) {}

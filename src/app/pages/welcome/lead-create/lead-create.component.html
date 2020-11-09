@@ -41,7 +41,7 @@
         <i nz-icon nzType="twitter"></i>
         <span>{{selectedLead["disposition"]}}</span>
       </nz-tag>
-      <nz-tree [nzData]="callDispositions" nzBlockNode (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
+      <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
     </nz-descriptions-item>
 
     <nz-descriptions-item nzTitle="Remark" nzSpan=2>
