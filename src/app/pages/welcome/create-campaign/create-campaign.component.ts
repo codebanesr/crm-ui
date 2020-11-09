@@ -69,16 +69,20 @@ export class CreateCampaignComponent implements OnInit {
 
   campaignOptions: any = [];
 
-  hierarchy = [
-    { label: 'Manager', value: 'manager' },
-    { label: 'Tele Callers', value: 'teleCallers' },
-    { label: 'Field Executives', value: 'fieldExecutives' },
-    { label: 'Past Handlers', value: 'pastHandlers' },
+  assignTo = [
+    { label: 'Manager', value: 'manager', checked: false },
+    { label: 'Tele Callers', value: 'teleCallers', checked: false },
+    { label: 'Field Executives', value: 'fieldExecutives', checked: false },
+    { label: 'Past Handlers', value: 'pastHandlers', checked: false },
   ];
 
   advancedSettings = [
-    { label: 'Mark Wrong Number', value: 'markWrongNumber' },
-    { label: 'Add Prospect Reference', value: 'addProspectReference' },
+    { label: 'Mark Wrong Number', value: 'markWrongNumber', checked: false },
+    {
+      label: 'Add Prospect Reference',
+      value: 'addProspectReference',
+      checked: false,
+    },
   ];
 
   ngOnInit() {
@@ -336,6 +340,20 @@ export class CreateCampaignComponent implements OnInit {
       )
     );
 
+    formData.append(
+      'advancedSettings',
+      JSON.stringify(
+        this.advancedSettings.filter((el) => el.checked).map((el) => el.value)
+      )
+    );
+
+    formData.append(
+      'assignTo',
+      JSON.stringify(
+        this.assignTo.filter((el) => el.checked).map((el) => el.value)
+      )
+    );
+
     // You can use any AJAX library you like
     this.campaignService.createCampaignAndDisposition(formData).subscribe(
       (response: any) => {
@@ -490,6 +508,18 @@ export class CreateCampaignComponent implements OnInit {
         c.checked = true;
       } else {
         c.checked = false;
+      }
+    });
+
+    this.assignTo.map((el) => {
+      if (this.campaign?.assignTo?.includes(el.value)) {
+        el.checked = true;
+      }
+    });
+
+    this.advancedSettings.map((el) => {
+      if (this.campaign?.advancedSettings?.includes(el.value)) {
+        el.checked = true;
       }
     });
 

@@ -12,4 +12,6 @@ export interface ICampaign {
   browsableCols: string[];
   uniqueCols: string[];
   formModel: any;
+  assignTo: string[];
+  advancedSettings: string[];
 }
