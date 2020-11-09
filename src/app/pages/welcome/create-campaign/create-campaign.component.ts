@@ -68,6 +68,19 @@ export class CreateCampaignComponent implements OnInit {
   demoDispositionNodes: any[] = [];
 
   campaignOptions: any = [];
+
+  hierarchy = [
+    { label: 'Manager', value: 'manager' },
+    { label: 'Tele Callers', value: 'teleCallers' },
+    { label: 'Field Executives', value: 'fieldExecutives' },
+    { label: 'Past Handlers', value: 'pastHandlers' },
+  ];
+
+  advancedSettings = [
+    { label: 'Mark Wrong Number', value: 'markWrongNumber' },
+    { label: 'Add Prospect Reference', value: 'addProspectReference' },
+  ];
+
   ngOnInit() {
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
@@ -486,8 +499,6 @@ export class CreateCampaignComponent implements OnInit {
   }
 
   showExcelPreview(document) {
-    // document.filePath
-
     window.open(
       'https://docs.google.com/gview?url=' + document.filePath,
       '_blank'

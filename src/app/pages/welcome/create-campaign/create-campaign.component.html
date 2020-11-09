@@ -67,7 +67,7 @@
   <nz-collapse style="width: 75vw; margin-left: 5%;">
     <nz-collapse-panel [nzHeader]="'Disposition'" [nzActive]="false">
       <nz-tree [nzData]="demoDispositionNodes" nzDraggable (nzOnDrop)="nzEvent($event)" nzAllowClear="true"
-        (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
+        (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)" [nzTreeTemplate]="nzTreeTemplate">
       </nz-tree>
     </nz-collapse-panel>
 
@@ -81,6 +81,14 @@
 
     <nz-collapse-panel [nzHeader]="'Browsable Columns'" [nzActive]="false">
       <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel [nzHeader]="'Assign To'" [nzActive]="false">
+      <nz-checkbox-group [(ngModel)]="hierarchy" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel [nzHeader]="'Advanced Settings'" [nzActive]="false">
+      <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
     </nz-collapse-panel>
 
     <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
@@ -332,3 +340,21 @@
     <nz-divider></nz-divider>
   </ng-container>
 </nz-drawer>
+
+
+
+
+<!-- defining tree template -->
+<ng-template #nzTreeTemplate let-node let-origin="origin">
+  <span class="custom-node">
+    <span *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu)">
+      <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'"></i>
+      <span class="folder-name">{{ node.title }}</span>
+    </span>
+    <span *ngIf="node.isLeaf" (contextmenu)="contextMenu($event, menu)">
+      <i nz-icon nzType="file"></i>
+      <span class="file-name">{{ node.title }}</span>
+      <span class="file-desc" *ngIf="node.origin.action">{{ node.origin.action | lowercase }}</span>
+    </span>
+  </span>
+</ng-template>
