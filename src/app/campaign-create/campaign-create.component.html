@@ -64,9 +64,15 @@
 
       <nz-collapse>
         <nz-collapse-panel [nzHeader]="'Disposition'" [nzActive]="false">
-          <nz-tree [nzData]="demoDispositionNodes" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)"
+          <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)"
             (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
           </nz-tree>
+        </nz-collapse-panel>
+        <nz-collapse-panel [nzHeader]="'Unique Attributes'" [nzActive]="false">
+          <nz-checkbox-group
+            [(ngModel)]="uniqueCols"
+            [ngModelOptions]="{ standalone: true }"
+          ></nz-checkbox-group>
         </nz-collapse-panel>
         <nz-collapse-panel [nzHeader]="'Editable Columns'" [nzActive]="false">
           <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
@@ -75,6 +81,21 @@
         <nz-collapse-panel [nzHeader]="'Browsable Columns'" [nzActive]="false">
           <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
         </nz-collapse-panel>
+
+        <nz-collapse-panel [nzHeader]="'Assign To'" [nzActive]="false">
+          <nz-checkbox-group
+            [(ngModel)]="assignTo"
+            [ngModelOptions]="{ standalone: true }"
+          ></nz-checkbox-group>
+        </nz-collapse-panel>
+    
+        <nz-collapse-panel [nzHeader]="'Advanced Settings'" [nzActive]="false">
+          <nz-checkbox-group
+            [(ngModel)]="advancedSettings"
+            [ngModelOptions]="{ standalone: true }"
+          ></nz-checkbox-group>
+        </nz-collapse-panel>
+
 
         <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
           Not available in mobile
@@ -185,3 +206,22 @@
   </div>
 
 </div>
+
+
+
+<!-- defining tree template -->
+<ng-template #nzTreeTemplate let-node let-origin="origin">
+  <span class="custom-node">
+    <span *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu)">
+      <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'"></i>
+      <span class="folder-name">{{ node.title }}</span>
+    </span>
+    <span *ngIf="node.isLeaf" (contextmenu)="contextMenu($event, menu)">
+      <i nz-icon nzType="file"></i>
+      <span class="file-name">{{ node.title }}</span>
+      <span class="file-desc" *ngIf="node.origin.action">{{
+        node.origin.action | lowercase
+      }}</span>
+    </span>
+  </span>
+</ng-template>

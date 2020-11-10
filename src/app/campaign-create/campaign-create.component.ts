@@ -63,6 +63,22 @@ export class CampaignCreateComponent implements OnInit {
   demoDispositionNodes: any[] = [];
 
   campaignOptions: any = [];
+  assignTo = [
+    { label: "Manager", value: "manager", checked: false },
+    { label: "Tele Callers", value: "teleCallers", checked: false },
+    { label: "Field Executives", value: "fieldExecutives", checked: false },
+    { label: "Past Handlers", value: "pastHandlers", checked: false },
+  ];
+
+  advancedSettings = [
+    { label: "Mark Wrong Number", value: "markWrongNumber", checked: false },
+    {
+      label: "Add Prospect Reference",
+      value: "addProspectReference",
+      checked: false,
+    },
+  ];
+
   ngOnInit() {
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
@@ -243,7 +259,12 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   handleClick(upload) {
-    this.agentService.downloadExcelFile(upload.filePath);
+    if (upload.filePath.indexOf("amazonaws") > 0) {
+      console.log(upload.filePath);
+      window.open(upload.filePath, "_blank");
+    } else {
+      this.agentService.downloadExcelFile(upload.filePath);
+    }
   }
   initEmailForm() {
     this.emailForm = this.fb.group({
@@ -330,7 +351,7 @@ export class CampaignCreateComponent implements OnInit {
       const filePromises = this.fileList.map((f) => {
         return this.uploadService.uploadFile("email-templates", f);
       });
-      
+
       this.attachments = await Promise.all(filePromises);
       this.submitEmailForm();
       this.msg.success("Successfully uploaded all files");
@@ -422,6 +443,7 @@ export class CampaignCreateComponent implements OnInit {
   loading = false;
   editableCols: any[] = [];
   browsableCols: any[] = [];
+  uniqueCols: any[] = [];
   allCols: any;
   async getAllLeadColumns() {
     this.loading = true;
@@ -447,6 +469,30 @@ export class CampaignCreateComponent implements OnInit {
         c.checked = true;
       } else {
         c.checked = false;
+      }
+    });
+
+    this.uniqueCols = Object.values(
+      JSON.parse(JSON.stringify(this.allCols.typeDict))
+    );
+
+    this.uniqueCols?.forEach((c) => {
+      if (this.campaign?.uniqueCols?.includes(c.value)) {
+        c.checked = true;
+      } else {
+        c.checked = false;
+      }
+    });
+
+    this.assignTo.map((el) => {
+      if (this.campaign?.assignTo?.includes(el.value)) {
+        el.checked = true;
+      }
+    });
+
+    this.advancedSettings.map((el) => {
+      if (this.campaign?.advancedSettings?.includes(el.value)) {
+        el.checked = true;
       }
     });
 

@@ -131,7 +131,13 @@
                 <span (click)="onShowMoreClick()">{{historyLimit === 3 ? "More" : "Less"}}</span>
               </nz-timeline>
             </nz-collapse-panel>
-            <nz-collapse-panel [nzHeader]="'Requested Information'" [nzActive]="false">
+
+            <ng-template #requiredTemplate>
+              <span>Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;" nz-icon nzType="star" nzTheme="fill"></i></span>
+            </ng-template>
+
+
+            <nz-collapse-panel [nzHeader]="requiredTemplate" [nzActive]="actions.isInformationRequested">
               <div *ngIf="formModel" style="max-width:500px;">
                 <nz-page-header class="site-page-header" nzBackIcon>
                   <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
