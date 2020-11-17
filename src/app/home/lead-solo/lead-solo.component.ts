@@ -333,8 +333,8 @@ export class LeadSoloComponent implements OnInit {
 
   onCampaignFormUpdate(event) {}
 
-  historyLimit = 3;
+  historyLimit = 1;
   onShowMoreClick() {
-    this.historyLimit = this.historyLimit === 3 ? 100 : 3;
+    this.historyLimit = this.historyLimit === 1 ? 100 : 1;
   }
 }

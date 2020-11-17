@@ -103,7 +103,7 @@
             <!-- level 1 ends here -->
 
             <nz-descriptions-item nzTitle="Disposition">
-              <nz-tree [nzData]="callDispositions" nzBlockNode nzShowLine
+              <nz-tree [nzData]="callDispositions" nzBlockNode
                 (nzClick)="handleDispositionTreeEvent($event)">
               </nz-tree>
             </nz-descriptions-item>
@@ -117,7 +117,7 @@
           </nz-descriptions>
 
           <nz-collapse>
-            <nz-collapse-panel [nzActive]="true" [nzHeader]="'Lead History'">
+            <nz-collapse-panel [nzActive]="false" [nzHeader]="'Lead History'">
               <nz-timeline>
                 <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
                   <p>
@@ -128,7 +128,7 @@
                   <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}
                   </p>
                 </nz-timeline-item>
-                <span (click)="onShowMoreClick()">{{historyLimit === 3 ? "More" : "Less"}}</span>
+                <span (click)="onShowMoreClick()">{{historyLimit === 1 ? "More" : "Less"}}</span>
               </nz-timeline>
             </nz-collapse-panel>
 
