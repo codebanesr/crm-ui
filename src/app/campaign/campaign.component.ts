@@ -5,6 +5,7 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { NzUploadListComponent } from "ng-zorro-antd/upload";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { CampaignService } from "../home/campaign.service";
+import { CurrentUser } from "../home/interfaces/global.interfaces";
 import { ColumnItem, DataItem } from "../home/interfaces/listOfCols";
 import { PubsubService } from "../pubsub.service";
 import { UploadService } from "../upload.service";
@@ -30,8 +31,13 @@ export class CampaignComponent implements OnInit {
   page: number;
   perPage: number;
   filters: any;
+  currentUserObj: CurrentUser;
+  roleType: string;
   ngOnInit(): void {
     this.pubsub.$pub("HEADING", { heading: "Campaigns" });
+
+    this.currentUserObj = JSON.parse(localStorage.getItem("currentUser"));
+    this.roleType = this.currentUserObj.roleType;
     this.page = 1;
     this.perPage = 20;
     this.campaignOpts = ["default"];
@@ -105,12 +111,12 @@ export class CampaignComponent implements OnInit {
 
   totalPage: number = 0;
   processData(result: {
-    data: any[];
+    data: ICampaign[];
     interval: string[];
     metadata: { total: number; page: number };
   }) {
     this.page = result.metadata.page;
-    this.totalPage = result.metadata.total;
+    this.totalPage = result.metadata.total / this.perPage;
     this.listOfData = [];
     for (let d of result.data) {
       this.listOfData.push({
@@ -118,6 +124,7 @@ export class CampaignComponent implements OnInit {
         endDate: d.interval[1],
         createdBy: d.createdBy,
         campaignName: d.campaignName,
+        archived: d.archived,
         _id: d._id,
       });
     }
@@ -129,49 +136,29 @@ export class CampaignComponent implements OnInit {
     this.getCampaigns();
   }
 
-  // welcome/campaigns/create
-  activeCampaign: ICampaign;
-  markActiveCampaign(event: Event, data) {
-    event.stopImmediatePropagation();
-    event.stopPropagation();
-    this.activeCampaign = data;
-  }
   gotoDetailedView(data: any) {
     this.router.navigate(["home", "campaigns", "create"], {
       queryParams: { id: data._id },
     });
   }
 
-  uploading = false;
-  leadFileList: NzUploadListComponent[] = [];
-  async handleLeadFilesUpload() {
-    this.uploading = true;
-    const filePromises = this.leadFileList.map((f) => {
-      return this.uploadService.uploadFile("leads", f);
-    });
-
-    const result = await Promise.all(filePromises);
-    this.campaignService
-      .uploadMultipleLeadFiles({
-        files: result,
-        campaignName: this.activeCampaign.campaignName,
-      })
-      .subscribe(
-        (response: any) => {
-          this.uploading = false;
-          this.leadFileList = [];
-          this.msg.success("Lead Files uploaded successfully.");
-        },
-        () => {
-          this.uploading = false;
-          this.msg.error("Lead files could not be uploaded.");
-        }
-      );
-    this.uploading = false;
+  archiveCampaign(campaign: ICampaign) {
+    this.campaignService.archiveCampaign(campaign).subscribe(
+      (data) => {
+        this.msg.success(
+          `${campaign.campaignName} has been archived successfully`
+        );
+      },
+      (error) => {
+        this.msg.error(
+          `There was an error in archiving ${campaign.campaignName}`
+        );
+      }
+    );
   }
 
-  beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
-    this.leadFileList = this.leadFileList.concat(file);
-    return false;
-  };
+  toggleArchiveStatus(event: Event, campaign: ICampaign) {
+    event.stopPropagation();
+    campaign.archived = !campaign.archived;
+  }
 }

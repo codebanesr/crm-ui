@@ -157,4 +157,8 @@ export class CampaignService {
       );
     });
   }
+
+  archiveCampaign(data) {
+    return this.http.post(`${environment.apiUrl}/campaign/archive`, data);
+  }
 }

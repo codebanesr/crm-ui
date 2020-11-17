@@ -1,38 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { AuthenticationService } from '../authentication.service';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { MenuController } from "@ionic/angular";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { AuthenticationService } from "../authentication.service";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-
   validateForm: FormGroup;
   formView = {
-    login : "login",
-    signup : "signup",
-    reset : "reset"
-  }
+    login: "login",
+    signup: "signup",
+    reset: "reset",
+  };
   buttonText: string = "Log in";
   nextAction: string;
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private authService: AuthenticationService,
     private msg: NzMessageService,
     private router: Router,
     private menuController: MenuController
-  ) { }
+  ) {}
 
   formType = "login";
   fieldsToShow = {
     username: true,
     password: true,
-    confirmPassword: false
+    confirmPassword: false,
   };
 
   submitForm(): void {
@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    const {username, password, confirmPassword} = this.validateForm.value;
-    switch(this.formType) {
+    const { username, password, confirmPassword } = this.validateForm.value;
+    switch (this.formType) {
       case this.formView.login:
         this.submitLoginForm(username, password);
         break;
@@ -54,25 +54,38 @@ export class LoginComponent implements OnInit {
   }
 
   submitLoginForm(username: string, password: string) {
-    this.authService.login(username, password).subscribe((data: any)=>{
-      this.msg.success("Successfully Logged In");
-      
-      setTimeout(()=>{
-        this.router.navigate(['home']);
-      }, 200);
-    }, (error: Error)=>{
-      this.msg.error("Incorrect username or password");
-    })
+    this.authService.login(username, password).subscribe(
+      (data: any) => {
+        this.msg.success("Successfully Logged In");
+        const currentUser = localStorage.getItem("currentUser");
+        const currentUserObj = JSON.parse(currentUser);
+        if (["admin", "manager"].includes(currentUserObj.roleType)) {
+          this.router.navigate(["home"]);
+        } else if (currentUserObj.roleType === "fieldExecutive") {
+          this.router.navigate(["home", "followup"]);
+        } else {
+          this.router.navigate(["home", "campaign", "list"]);
+        }
+      },
+      (error: Error) => {
+        this.msg.error("Incorrect username or password");
+      }
+    );
   }
 
   submitResetForm(username: string) {
-    this.authService.forgotPassword(username).subscribe((data: any)=>{
-      this.msg.success("A link to reset your account has been sent to your email");
-    }, (error: Error)=>{
-      // message from the backend server to be shown here
-      this.onFormTypeChange(this.formView.login);
-      this.msg.error("Something went wrong");
-    });
+    this.authService.forgotPassword(username).subscribe(
+      (data: any) => {
+        this.msg.success(
+          "A link to reset your account has been sent to your email"
+        );
+      },
+      (error: Error) => {
+        // message from the backend server to be shown here
+        this.onFormTypeChange(this.formView.login);
+        this.msg.error("Something went wrong");
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -81,9 +94,8 @@ export class LoginComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
       confirmPassword: [null, [Validators.required]],
-      remember: [true]
+      remember: [true],
     });
-
   }
 
   onFormTypeChange(formType) {
@@ -91,7 +103,7 @@ export class LoginComponent implements OnInit {
     Object.keys(this.fieldsToShow).forEach((key: string) => {
       this.fieldsToShow[key] = true;
     });
-    switch(this.formType) {
+    switch (this.formType) {
       case this.formView.signup:
         this.buttonText = "register";
         this.fieldsToShow.confirmPassword = true;

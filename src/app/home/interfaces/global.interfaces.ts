@@ -14,3 +14,11 @@ export interface ModelInterface {
   theme: any;
   attributes: Array<field>;
 }
+
+export interface CurrentUser {
+  accessToken: string;
+  email: string;
+  fullName: string;
+  refreshToken: string;
+  roleType: string;
+}

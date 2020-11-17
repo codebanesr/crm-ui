@@ -300,8 +300,6 @@ export class CampaignCreateComponent implements OnInit {
   handleCampaignConfigFileUpload() {
     const formData = new FormData();
     this.uploading = true;
-
-    console.log(this.campaignFiles);
     formData.append("campaignFile", this.campaignFiles[0]);
     formData.append("campaignInfo", JSON.stringify(this.campaignForm.value));
 
@@ -313,6 +311,27 @@ export class CampaignCreateComponent implements OnInit {
     formData.append(
       "dispositionData",
       JSON.stringify(this.demoDispositionNodes)
+    );
+
+    formData.append(
+      "advancedSettings",
+      JSON.stringify(
+        this.advancedSettings.filter((el) => el.checked).map((el) => el.value)
+      )
+    );
+
+    formData.append(
+      "assignTo",
+      JSON.stringify(
+        this.assignTo.filter((el) => el.checked).map((el) => el.value)
+      )
+    );
+
+    formData.append(
+      "uniqueCols",
+      JSON.stringify(
+        this.uniqueCols.filter((c) => c.checked).map((c) => c.value)
+      )
     );
     formData.append(
       "editableCols",
@@ -338,6 +357,40 @@ export class CampaignCreateComponent implements OnInit {
       }
     );
   }
+
+  leadFileList: NzUploadListComponent[] = [];
+  async handleLeadFilesUpload() {
+    event.stopImmediatePropagation();
+    event.stopPropagation();
+    this.uploading = true;
+    const filePromises = this.leadFileList.map((f) => {
+      return this.uploadService.uploadFile("leads", f);
+    });
+
+    const result = await Promise.all(filePromises);
+    this.campaignService
+      .uploadMultipleLeadFiles({
+        files: result,
+        campaignName: this.campaignForm.get("campaignName").value,
+      })
+      .subscribe(
+        (response: any) => {
+          this.uploading = false;
+          this.leadFileList = [];
+          this.msg.success("Lead Files uploaded successfully.");
+        },
+        () => {
+          this.uploading = false;
+          this.msg.error("Lead files could not be uploaded.");
+        }
+      );
+    this.uploading = false;
+  }
+
+  beforeLeadFilesUpload = (file: NzUploadListComponent): boolean => {
+    this.leadFileList = this.leadFileList.concat(file);
+    return false;
+  };
 
   async handleUpload(): Promise<void> {
     const formData = new FormData();

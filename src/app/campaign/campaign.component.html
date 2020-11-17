@@ -1,4 +1,4 @@
-<div class="table-operations">
+<div class="table-operations" style="padding-left: 10px;">
   <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <!-- <nz-form-item>
       <nz-form-control>
@@ -8,8 +8,6 @@
         </nz-input-group>
       </nz-form-control>
     </nz-form-item> -->
-
-
     <nz-form-item class="top-row">
       <nz-form-control>
         <nz-select nzMode="multiple" nzPlaceHolder="Select campaigns" formControlName="campaigns" style="width: 200px;">
@@ -28,21 +26,19 @@
 </div>
 <div class="scrollable">
   <ng-container *ngFor="let data of listOfData">
-    <nz-descriptions (click)="gotoDetailedView(data)" nzBordered [nzTitle]="data.campaignName" class="campaignContainer">
-      <nz-descriptions-item nzTitle="Creator">{{ data.createdBy }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Start Date">{{ data.startDate | date }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="End Date">{{ data.endDate | date }}</nz-descriptions-item>
-      <nz-descriptions-item nzTitle="Mark Active Campaign">
-        <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true
-          nzName="files" (click)="$event.stopImmediatePropagation();">
-          <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
-          <button nz-button nz-primary (click)="markActiveCampaign($event, data); handleLeadFilesUpload();">go</button>
-        </nz-upload>
-      </nz-descriptions-item>
-  </nz-descriptions>
+    <ng-container *ngIf="!data.archived || ['manager', 'admin'].includes(roleType)">
+      <nz-descriptions (click)="gotoDetailedView(data)" nzBordered [nzTitle]="data.campaignName" class="campaignContainer">
+        <!-- <nz-descriptions-item nzTitle="Creator">{{ data.createdBy }}</nz-descriptions-item> -->
+        <nz-descriptions-item nzTitle="Start Date">{{ data.startDate | date }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Date">{{ data.endDate | date }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Archive" (click)="toggleArchiveStatus($event, data);"  *ngIf="['manager', 'admin'].includes(roleType)">
+          <label nz-checkbox [(ngModel)]="data.archived" (ngModelChange)="archiveCampaign(data)">Checkbox</label>
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </ng-container>
   </ng-container>
 </div>
-<div class="pagination-block">
+<div class="pagination-block" *ngIf="totalPage > 1">
   <nz-pagination [nzPageIndex]="page" [nzTotal]="totalPage" nzShowSizeChanger [nzPageSize]="perPage"
     (nzPageSizeChange)="onPageSizeChange($event)" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination>
 </div>

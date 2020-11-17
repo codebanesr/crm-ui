@@ -14,4 +14,7 @@ export interface ICampaign {
   assignTo: string[];
   advancedSettings: string[];
   uniqueCols: string[];
+  archived: boolean;
+  startDate: string;
+  endDate: string;
 }
