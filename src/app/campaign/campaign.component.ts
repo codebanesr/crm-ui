@@ -110,14 +110,21 @@ export class CampaignComponent implements OnInit {
   }
 
   totalPage: number = 0;
+  quickStats: { campaign: string; followUp: number; overdue: number };
   processData(result: {
     data: ICampaign[];
     interval: string[];
     metadata: { total: number; page: number };
+    quickStatsAgg: {
+      campaign: string;
+      followUp: number;
+      overdue: number;
+    };
   }) {
     this.page = result.metadata.page;
     this.totalPage = result.metadata.total / this.perPage;
     this.listOfData = [];
+    this.quickStats = result.quickStatsAgg;
     for (let d of result.data) {
       this.listOfData.push({
         startDate: d.interval[0],

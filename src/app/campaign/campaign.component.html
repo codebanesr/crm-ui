@@ -34,6 +34,8 @@
         <nz-descriptions-item nzTitle="Archive" (click)="toggleArchiveStatus($event, data);"  *ngIf="['manager', 'admin'].includes(roleType)">
           <label nz-checkbox [(ngModel)]="data.archived" (ngModelChange)="archiveCampaign(data)">Checkbox</label>
         </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Follow Up">{{ quickStats[data.campaignName]?.followUp || 0 }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Overdue">{{ quickStats[data.campaignName]?.overdue || 0 }}</nz-descriptions-item>
       </nz-descriptions>
     </ng-container>
   </ng-container>

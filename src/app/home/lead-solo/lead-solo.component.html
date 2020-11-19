@@ -28,7 +28,7 @@
     <nz-page-header-content>
       <div class="content">
         <div class="main">
-          <nz-descriptions nzBordered=true>
+          <nz-descriptions nzBordered=true nzLayout="vertical" [nzSize]="'small'"> 
             <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
               <ng-container *ngIf="isLeadEditMode">
                 <nz-descriptions-item *ngIf="typeDict[leadKey] && isLeadEditMode" [nzTitle]="typeDict[leadKey].label">
@@ -378,7 +378,7 @@
   (nzOnClose)="closeFilterDrawer()">
   <ng-container *ngIf="typeDict">
     <ng-container *ngFor="let key of objectkeys(typeDict)">
-      <nz-descriptions>
+      <nz-descriptions nzLayout="vertical">
         <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
           <ng-container [ngSwitch]="typeDict[key].type">
             <ng-container *ngSwitchCase="'date'">
