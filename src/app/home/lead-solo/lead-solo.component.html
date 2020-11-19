@@ -17,7 +17,7 @@
     </ng-container>
   </div>
 
-  <nz-page-header class="site-page-header" nzBackIcon *ngIf="selectedLead">
+  <nz-page-header class="site-page-header" *ngIf="selectedLead">
     <nz-page-header-title>{{selectedLead.firstName}}</nz-page-header-title>
     <nz-page-header-subtitle>{{selectedLead.lastName}}</nz-page-header-subtitle>
     <nz-page-header-extra>
@@ -85,6 +85,12 @@
                   <ng-container *ngSwitchCase="'string'">
                     <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
                       [disabled]="isDisabled(leadKey)" />
+
+                    <ng-container *ngIf="leadKey === 'leadStatus'">
+                      <nz-tree [nzData]="callDispositions" nzBlockNode
+                        (nzClick)="handleDispositionTreeEvent($event)">
+                      </nz-tree>
+                    </ng-container>
                   </ng-container>
 
                   <ng-container *ngSwitchCase="'tel'">
@@ -101,12 +107,6 @@
               </nz-descriptions-item>
             </ng-container>
             <!-- level 1 ends here -->
-
-            <nz-descriptions-item nzTitle="Disposition">
-              <nz-tree [nzData]="callDispositions" nzBlockNode
-                (nzClick)="handleDispositionTreeEvent($event)">
-              </nz-tree>
-            </nz-descriptions-item>
 
             <nz-descriptions-item nzTitle="Remark" nzSpan=2>
               <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
@@ -376,41 +376,45 @@
 
 <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
   (nzOnClose)="closeFilterDrawer()">
-  <ng-container *ngIf="typeDict">
-    <ng-container *ngFor="let key of objectkeys(typeDict)">
-      <nz-descriptions nzLayout="vertical">
-        <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
-          <ng-container [ngSwitch]="typeDict[key].type">
-            <ng-container *ngSwitchCase="'date'">
-              <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
-                (nzOnOpenChange)="handleDateOpenChange($event)" (nzOnPanelChange)="handleDatePanelChange($event)">
-              </nz-range-picker>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'number'">
-              <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'string'">
-              <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'tel'">
-              <input nz-input [(ngModel)]="leadFilter[key]" />
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'select'">
-              <nz-select nzMode="default" [(ngModel)]="leadFilter[key]">
-                <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
-                </nz-option>
-              </nz-select>
-            </ng-container>
-          </ng-container>
-        </nz-descriptions-item>
-      </nz-descriptions>
-    </ng-container>
-    <button nz-button (click)="printFilters()">print filters</button>
-  </ng-container>
+  <nz-collapse [nzBordered]="false">
+    <nz-collapse-panel [nzHeader]="'Lead Filter'" [nzActive]="false">
+      <ng-container *ngIf="typeDict">
+        <ng-container *ngFor="let key of objectkeys(typeDict)">
+          <nz-descriptions nzLayout="vertical">
+            <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
+              <ng-container [ngSwitch]="typeDict[key].type">
+                <ng-container *ngSwitchCase="'date'">
+                  <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
+                    (nzOnOpenChange)="handleDateOpenChange($event)" (nzOnPanelChange)="handleDatePanelChange($event)">
+                  </nz-range-picker>
+                </ng-container>
+    
+                <ng-container *ngSwitchCase="'number'">
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
+                </ng-container>
+    
+                <ng-container *ngSwitchCase="'string'">
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
+                </ng-container>
+    
+                <ng-container *ngSwitchCase="'tel'">
+                  <input nz-input [(ngModel)]="leadFilter[key]" />
+                </ng-container>
+    
+                <ng-container *ngSwitchCase="'select'">
+                  <nz-select nzMode="default" [(ngModel)]="leadFilter[key]">
+                    <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
+                    </nz-option>
+                  </nz-select>
+                </ng-container>
+              </ng-container>
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </ng-container>
+        <button nz-button (click)="printFilters()">print filters</button>
+      </ng-container>
+    </nz-collapse-panel>
+  </nz-collapse>
 </nz-drawer>
 
 

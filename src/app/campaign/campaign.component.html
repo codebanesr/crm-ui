@@ -24,22 +24,36 @@
     </nz-form-item>
   </form>
 </div>
-<div class="scrollable">
+<div class="scrollable"> 
   <ng-container *ngFor="let data of listOfData">
-    <ng-container *ngIf="!data.archived || ['manager', 'admin'].includes(roleType)">
-      <nz-descriptions (click)="gotoDetailedView(data)" nzBordered [nzTitle]="data.campaignName" class="campaignContainer">
-        <!-- <nz-descriptions-item nzTitle="Creator">{{ data.createdBy }}</nz-descriptions-item> -->
-        <nz-descriptions-item nzTitle="Start Date">{{ data.startDate | date }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="End Date">{{ data.endDate | date }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Archive" (click)="toggleArchiveStatus($event, data);"  *ngIf="['manager', 'admin'].includes(roleType)">
-          <label nz-checkbox [(ngModel)]="data.archived" (ngModelChange)="archiveCampaign(data)">Checkbox</label>
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Follow Up">{{ quickStats[data.campaignName]?.followUp || 0 }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Overdue">{{ quickStats[data.campaignName]?.overdue || 0 }}</nz-descriptions-item>
-      </nz-descriptions>
-    </ng-container>
+    <nz-list nzItemLayout="horizontal" nzBordered="true" nzSize="small" [nzHeader]="campaignListHeader">
+      <nz-list-item style="padding-bottom: 4px; padding-top: 0px; margin-bottom: 4px;">
+        <ng-container *ngIf="!data.archived || ['manager', 'admin'].includes(roleType)" nzBordered>
+          <nz-list-item-meta>
+          <nz-list-item-meta-title>
+            <a style="font-size: smaller;">Follow-Up 
+              <nz-tag [nzColor]="'green'">{{ quickStats[data.campaignName]?.followUp || 0 }}</nz-tag></a> &nbsp;
+            <nz-divider nzType="vertical"></nz-divider>
+            <a style="font-size: smaller;">
+              Overdue <nz-tag [nzColor]="'red'">{{ quickStats[data.campaignName]?.overdue || 0  }}</nz-tag>
+            </a>
+          </nz-list-item-meta-title>
+        </nz-list-item-meta>
+        </ng-container>
+      </nz-list-item>
+      <nz-list-empty *ngIf="listOfData.length === 0"></nz-list-empty>
+    </nz-list>
+    <ng-template #campaignListHeader>
+      <span (click)="gotoDetailedView(data)">
+        <div nz-row nzJustify="space-between">
+          <div nz-col nzSpan="20"><span style="font-weight: 700;">{{data.campaignName | uppercase}}</span></div>
+          <div nz-col nzSpan="4" style="text-align: end;"><i nz-icon nzType="edit" nzTheme="outline" style="color: cornflowerblue;"></i> Edit</div>
+        </div>
+      </span>
+    </ng-template>
   </ng-container>
 </div>
+
 <div class="pagination-block" *ngIf="totalPage > 1">
   <nz-pagination [nzPageIndex]="page" [nzTotal]="totalPage" nzShowSizeChanger [nzPageSize]="perPage"
     (nzPageSizeChange)="onPageSizeChange($event)" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination>

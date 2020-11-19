@@ -13,6 +13,7 @@ import { Plugins } from "@capacitor/core";
 import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
+import { NzTreeNode } from "ng-zorro-antd/tree";
 const { Geolocation } = Plugins;
 
 @Component({
@@ -179,9 +180,20 @@ export class LeadSoloComponent implements OnInit {
     isInformationRequested: false,
   };
 
+  getLinks(node: NzTreeNode): string[] {
+    const links = [];
+    while (node.parentNode !== null) {
+      links.push(node.origin.title);
+      node = node.parentNode;
+    }
+
+    return links;
+  }
+
   handleDispositionTreeEvent(event) {
     if (event.node.isLeaf) {
-      console.log("selected node", event.node.origin.action);
+      const links = this.getLinks(event.node);
+      this.selectedLead.leadStatus = links.reverse().join(" / ");
       const action = event.node.origin.action;
       this.resetAllActionHandlers();
       if (action) {
