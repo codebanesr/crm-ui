@@ -14,6 +14,7 @@ import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
 import { NzTreeNode } from "ng-zorro-antd/tree";
+import { ActivatedRoute } from "@angular/router";
 const { Geolocation } = Plugins;
 
 @Component({
@@ -27,7 +28,8 @@ export class LeadSoloComponent implements OnInit {
     private campaignService: CampaignService,
     private msgService: NzMessageService,
     private fb: FormBuilder,
-    private userService: UsersService
+    private userService: UsersService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   modelFields: Array<field> = [];
@@ -55,10 +57,31 @@ export class LeadSoloComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLeadMappings();
+
+    /** @Todo we dont have to fetch the entire list of campaigns here, only the campaign whose id was provided in the query params
+     * coming from list campaigns page .....
+     */
     this.populateCampaignDropdown("");
     this.initEmailForm();
     this.initEtAutocomplete();
     this.fetchUsersForReassignment();
+    this.subscribeToQueryParamChange();
+  }
+
+  subscribeToQueryParamChange() {
+    this.activatedRoute.queryParams.subscribe(
+      async (data) => {
+        this.selectedCampaign = data.campaignId;
+        await this.getLeadMappings();
+        // this.openFilterDrawer();
+        this.getDispositionForCampaign();
+        this.fetchNextLead();
+        console.log("logging query params", data);
+      },
+      (error) => {
+        this.msgService.error("Error in subscribing to query params");
+      }
+    );
   }
 
   usersForReassignment = [];
@@ -219,13 +242,6 @@ export class LeadSoloComponent implements OnInit {
   handleDateOpenChange(event) {}
   handleLeadStatusChange(event) {}
   handleDatePanelChange(event) {}
-
-  async handleCampaignChange(event) {
-    console.log({ event, selectedCampaing: this.selectedCampaign });
-    await this.getLeadMappings();
-    this.openFilterDrawer();
-    this.getDispositionForCampaign();
-  }
 
   showAppliedFiltersOnNoResult = false;
   fetchNextLead(event?) {

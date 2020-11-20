@@ -31,12 +31,20 @@
         <ng-container *ngIf="!data.archived || ['manager', 'admin'].includes(roleType)" nzBordered>
           <nz-list-item-meta>
           <nz-list-item-meta-title>
-            <a style="font-size: smaller;">Follow-Up 
-              <nz-tag [nzColor]="'green'">{{ quickStats[data.campaignName]?.followUp || 0 }}</nz-tag></a> &nbsp;
-            <nz-divider nzType="vertical"></nz-divider>
-            <a style="font-size: smaller;">
-              Overdue <nz-tag [nzColor]="'red'">{{ quickStats[data.campaignName]?.overdue || 0  }}</nz-tag>
-            </a>
+
+            <div nz-row nzJustify="space-between">
+              <div nz-col nzSpan="20">
+                <a style="font-size: smaller;">Follow-Up 
+                  <nz-tag [nzColor]="'green'">{{ quickStats[data.campaignName]?.followUp || 0 }}</nz-tag></a> &nbsp;
+                <nz-divider nzType="vertical"></nz-divider>
+                <a style="font-size: smaller;">
+                  Overdue <nz-tag [nzColor]="'red'">{{ quickStats[data.campaignName]?.overdue || 0  }}</nz-tag>
+                </a>
+              </div>
+              <div nz-col nzSpan="4" style="text-align: end;">
+                <button nz-button nzSize="small" nzType="primary" (click)="routeToSoloLead(data)">Browse</button>
+              </div>
+            </div>
           </nz-list-item-meta-title>
         </nz-list-item-meta>
         </ng-container>
@@ -47,7 +55,9 @@
       <span (click)="gotoDetailedView(data)">
         <div nz-row nzJustify="space-between">
           <div nz-col nzSpan="20"><span style="font-weight: 700;">{{data.campaignName | uppercase}}</span></div>
-          <div nz-col nzSpan="4" style="text-align: end;"><i nz-icon nzType="edit" nzTheme="outline" style="color: cornflowerblue;"></i> Edit</div>
+          <div nz-col nzSpan="4" style="text-align: end;">
+            <button nz-button nzSize="small"><i nz-icon nzType="edit"></i>Edit</button>
+          </div>
         </div>
       </span>
     </ng-template>

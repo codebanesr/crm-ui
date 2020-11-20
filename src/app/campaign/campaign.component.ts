@@ -168,4 +168,14 @@ export class CampaignComponent implements OnInit {
     event.stopPropagation();
     campaign.archived = !campaign.archived;
   }
+
+  routeToSoloLead(data: ICampaign) {
+    console.log(data);
+    this.router.navigate(["home", "solo"], {
+      queryParams: {
+        campaignId: data._id,
+        campaignName: data.campaignName,
+      },
+    });
+  }
 }

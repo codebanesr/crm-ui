@@ -1,10 +1,9 @@
 <nz-content class="parent">
   <div class="top">
-    <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign"
-      (ngModelChange)="handleCampaignChange($event);">
+    <!-- <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign">
       <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id">
       </nz-option>
-    </nz-select>
+    </nz-select> -->
 
     <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
     <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a>
@@ -18,8 +17,8 @@
   </div>
 
   <nz-page-header class="site-page-header" *ngIf="selectedLead">
-    <nz-page-header-title>{{selectedLead.firstName}}</nz-page-header-title>
-    <nz-page-header-subtitle>{{selectedLead.lastName}}</nz-page-header-subtitle>
+    <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}}</nz-page-header-title>
+    <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
     <nz-page-header-extra>
       <button nz-button nzType="secondary" (click)="showLeadDetails()">
         {{isLeadEditMode ? 'Hide': 'Show More'}}
