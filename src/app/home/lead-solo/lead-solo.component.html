@@ -28,6 +28,11 @@
       <div class="content">
         <div class="main">
           <nz-descriptions nzBordered=true nzLayout="vertical" [nzSize]="'small'"> 
+            <ng-container *ngIf="isLeadEditMode">
+              <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
+                {{contact['value']}}
+              </nz-descriptions-item>
+            </ng-container>
             <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
               <ng-container *ngIf="isLeadEditMode">
                 <nz-descriptions-item *ngIf="typeDict[leadKey] && isLeadEditMode" [nzTitle]="typeDict[leadKey].label">

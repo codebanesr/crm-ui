@@ -31,4 +31,8 @@ export interface ILead {
       requestedInformation: { [key: string]: string }[];
     }
   ];
+  contact: {
+    label: string;
+    value: string;
+  }[];
 }

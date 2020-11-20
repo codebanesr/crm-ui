@@ -128,7 +128,7 @@ export class LeadSoloComponent implements OnInit {
       (element) => element._id === this.selectedCampaign
     );
 
-    this.formModel = campaignObject[0].formModel;
+    this.formModel = campaignObject[0]?.formModel;
 
     this.enabledKeys = campaignObject[0].editableCols;
     this.typeDict = typeDict;
