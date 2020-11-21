@@ -131,4 +131,14 @@ export class LeadsService {
       perPage,
     });
   }
+
+  addContact(
+    leadId: string,
+    contact: { label: string; value: string; type: string }
+  ) {
+    return this.http.put(
+      `${environment.apiUrl}/lead/contact/${leadId}`,
+      contact
+    );
+  }
 }

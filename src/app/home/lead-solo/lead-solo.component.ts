@@ -76,7 +76,7 @@ export class LeadSoloComponent implements OnInit {
     this.contactForm = this.fb.group({
       label: [null, [Validators.required]],
       value: [null, [Validators.required]],
-      type: [null, [Validators.required]],
+      category: [null, [Validators.required]],
     });
   }
 
@@ -392,8 +392,21 @@ export class LeadSoloComponent implements OnInit {
       this.contactForm.controls[i].updateValueAndValidity();
     }
 
+    /** @Todo validate form before submitting, also add backend validation */
     console.log(this.contactForm.value, this.selectedLead.contact);
     this.selectedLead.contact.push(this.contactForm.value);
+
+    this.leadsService
+      .addContact(this.selectedLead._id, this.contactForm.value)
+      .subscribe(
+        (success) => {
+          this.msgService.success("Updated contact information");
+        },
+        (error) => {
+          this.selectedLead.contact.pop();
+          this.msgService.error("Failed to update contact information");
+        }
+      );
 
     /** @Todo check for form errors */
     if (addNext) {
