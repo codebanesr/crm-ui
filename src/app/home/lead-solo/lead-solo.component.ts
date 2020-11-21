@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+} from "@angular/forms";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { CampaignService } from "../campaign.service";
@@ -56,8 +61,6 @@ export class LeadSoloComponent implements OnInit {
   jsonStringify = JSON.stringify;
 
   ngOnInit(): void {
-    this.getLeadMappings();
-
     /** @Todo we dont have to fetch the entire list of campaigns here, only the campaign whose id was provided in the query params
      * coming from list campaigns page .....
      */
@@ -65,7 +68,16 @@ export class LeadSoloComponent implements OnInit {
     this.initEmailForm();
     this.initEtAutocomplete();
     this.fetchUsersForReassignment();
-    this.subscribeToQueryParamChange();
+    this.initContactForm();
+  }
+
+  contactForm!: FormGroup;
+  initContactForm() {
+    this.contactForm = this.fb.group({
+      label: [null, [Validators.required]],
+      value: [null, [Validators.required]],
+      type: [null, [Validators.required]],
+    });
   }
 
   subscribeToQueryParamChange() {
@@ -91,12 +103,14 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
+  /** @Todo remove this, we are not populating list of campaigns */
   populateCampaignDropdown(filter) {
     this.loadingCampaignList = true;
     this.campaignService.getCampaigns(1, 20, filter, "", "asc").subscribe(
       (result: any) => {
         this.loadingCampaignList = false;
         this.campaignList = result.data;
+        this.subscribeToQueryParamChange();
       },
       (error) => {
         this.loadingCampaignList = false;
@@ -119,6 +133,7 @@ export class LeadSoloComponent implements OnInit {
   // leadStatusOptions: string[];
   // selectedLeadStatus: string;
   enabledKeys;
+  leadGroups: { label: string; value: string[]; _id: string }[] = [];
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings(
       this.selectedCampaign
@@ -128,15 +143,16 @@ export class LeadSoloComponent implements OnInit {
       (element) => element._id === this.selectedCampaign
     );
 
+    this.leadGroups = campaignObject[0]?.groups;
     this.formModel = campaignObject[0]?.formModel;
 
-    this.enabledKeys = campaignObject[0].editableCols;
+    this.enabledKeys = campaignObject[0]?.editableCols;
     this.typeDict = typeDict;
     // this.leadStatusOptions = this.typeDict.leadStatus.options;
   }
 
   isDisabled(leadKey: string) {
-    if (this.enabledKeys.includes(leadKey)) {
+    if (this.enabledKeys?.includes(leadKey)) {
       return false;
     }
     return true;
@@ -254,11 +270,6 @@ export class LeadSoloComponent implements OnInit {
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }
-          this.campaignService
-            .getCampaignById(this.selectedLead.campaign, "campaignName")
-            .subscribe((campaign) => {
-              console.log("Found campaign by name", campaign);
-            });
         },
         (error) => {
           console.log(error);
@@ -364,5 +375,31 @@ export class LeadSoloComponent implements OnInit {
   historyLimit = 1;
   onShowMoreClick() {
     this.historyLimit = this.historyLimit === 1 ? 100 : 1;
+  }
+
+  isContactDrawerVisible = false;
+  showContactDrawer() {
+    this.isContactDrawerVisible = true;
+  }
+
+  hideContactDrawer() {
+    this.isContactDrawerVisible = false;
+  }
+
+  submitContactForm(addNext: boolean) {
+    for (const i in this.contactForm.controls) {
+      this.contactForm.controls[i].markAsDirty();
+      this.contactForm.controls[i].updateValueAndValidity();
+    }
+
+    console.log(this.contactForm.value, this.selectedLead.contact);
+    this.selectedLead.contact.push(this.contactForm.value);
+
+    /** @Todo check for form errors */
+    if (addNext) {
+      return this.contactForm.reset();
+    }
+
+    this.isContactDrawerVisible = false;
   }
 }

@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -25,24 +25,22 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-
 .scrollable {
-    height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollable::-webkit-scrollbar {
-    display: none;
-}
-  
-  /* Hide scrollbar for IE, Edge and Firefox */
-.scrollable {
--ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  display: none;
 }
 
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollable {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 .m0 {
   margin: 0;

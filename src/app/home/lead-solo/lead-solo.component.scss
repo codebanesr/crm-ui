@@ -22,3 +22,33 @@ nz-descriptions-item {
   padding-top: 0px;
   margin-top: 0px;
 }
+
+::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 5px 32px;
+}
+
+::ng-deep
+  .ant-descriptions-bordered.ant-descriptions-small
+  .ant-descriptions-item-label {
+  padding: 3px 16px;
+}
+
+::ng-deep bordered.ant-descriptions-small .ant-descriptions-item-content {
+  padding: 3px 16px;
+}
+
+[nz-form] {
+  max-width: 600px;
+}
+
+.ant-form-item {
+  margin-bottom: 0px;
+}
+
+.ant-form-item .ant-form-item-label {
+  padding-bottom: 0px;
+}
+
+::ng-deep .ant-modal-body {
+  padding-top: 5px;
+}

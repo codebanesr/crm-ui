@@ -51,7 +51,6 @@
         </nz-form-control>
       </nz-form-item>
 
-
       <nz-form-item>
         <nz-form-label nzFor="Assignee" nzRequired [nzSpan]="7">
           <span>
@@ -103,6 +102,34 @@
           ></nz-checkbox-group>
         </nz-collapse-panel>
 
+        <nz-collapse-panel nzHeader="Create Groups">
+          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+            <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"/>
+          </nz-input-group>
+
+          <ng-template #addOnAfterTemplate>
+            <span (click)="handleGroupAdd($event)">Add</span>
+          </ng-template>
+
+
+          <ng-container *ngFor="let g of groups">
+            <nz-form-item>
+              <nz-form-label [nzFor]="g.label" [nzSpan]="7">
+                <span>
+                  {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i>
+                  <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
+                </span>
+              </nz-form-label>
+              <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization">
+                <!-- formControlName="assignees" -->
+                <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}">
+                  <nz-option *ngFor="let option of allLeadCols" [nzLabel]="option.readableField" [nzValue]="option.internalField"
+                    [nzHide]="!isNotInGroup(option.internalField, g.value)"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+        </nz-collapse-panel>
 
         <nz-collapse-panel nzHeader="Add Email Template Here">
           <form nz-form [formGroup]="emailForm" nzLayout="vertical">

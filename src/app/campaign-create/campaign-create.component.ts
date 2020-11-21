@@ -79,6 +79,8 @@ export class CampaignCreateComponent implements OnInit {
     },
   ];
 
+  groups = [];
+
   ngOnInit() {
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
@@ -115,6 +117,7 @@ export class CampaignCreateComponent implements OnInit {
       (campaign: ICampaign) => {
         this.initDispositionCore(campaign._id);
         this.campaign = campaign;
+        this.groups = this.campaign.groups;
 
         /** This also calls the get campaigns api, jo readable field aur internal field ka mapping hai iske bina bhi hosakta hai */
         this.getAllLeadColumns();
@@ -302,6 +305,7 @@ export class CampaignCreateComponent implements OnInit {
     this.uploading = true;
     formData.append("campaignFile", this.campaignFiles[0]);
     formData.append("campaignInfo", JSON.stringify(this.campaignForm.value));
+    formData.append("groups", JSON.stringify(this.groups));
 
     if (!this.formModel) {
       this.msg.error("form model is undefined");
@@ -493,14 +497,23 @@ export class CampaignCreateComponent implements OnInit {
     return this.campaignForm.get("assignees").value?.indexOf(value) === -1;
   }
 
+  isNotInGroup(value: string, all: string[]) {
+    if (!all.includes(value)) {
+      return true;
+    }
+    return false;
+  }
+
   loading = false;
   editableCols: any[] = [];
   browsableCols: any[] = [];
   uniqueCols: any[] = [];
   allCols: any;
+  allLeadCols: any[] = [];
   async getAllLeadColumns() {
     this.loading = true;
     this.allCols = await this.leadsService.getLeadMappings(this.campaignId);
+    this.allLeadCols = this.allCols.mSchema.paths;
     this.editableCols = Object.values(
       JSON.parse(JSON.stringify(this.allCols.typeDict))
     );
@@ -552,5 +565,16 @@ export class CampaignCreateComponent implements OnInit {
     if (this.campaign.formModel) {
       this.formModel = this.campaign.formModel;
     }
+  }
+
+  handleGroupAdd(event) {
+    this.groups.push({
+      label: this.inputValue,
+      value: [],
+    });
+  }
+
+  deleteGroup(label: string) {
+    this.groups = this.groups.filter((g) => g.label !== label);
   }
 }

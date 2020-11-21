@@ -19,111 +19,76 @@
   <nz-page-header class="site-page-header" *ngIf="selectedLead">
     <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}}</nz-page-header-title>
     <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
-    <nz-page-header-extra>
-      <button nz-button nzType="secondary" (click)="showLeadDetails()">
-        {{isLeadEditMode ? 'Hide': 'Show More'}}
-      </button>
-    </nz-page-header-extra>
     <nz-page-header-content>
       <div class="content">
         <div class="main">
-          <nz-descriptions nzBordered=true nzLayout="vertical" [nzSize]="'small'"> 
-            <ng-container *ngIf="isLeadEditMode">
-              <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
-                {{contact['value']}}
-              </nz-descriptions-item>
-            </ng-container>
-            <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
-              <ng-container *ngIf="isLeadEditMode">
-                <nz-descriptions-item *ngIf="typeDict[leadKey] && isLeadEditMode" [nzTitle]="typeDict[leadKey].label">
-                  <ng-container [ngSwitch]="typeDict[leadKey].type">
-                    <ng-container *ngSwitchCase="'date'">
-                      <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]"
-                        [nzDisabled]="isDisabled(leadKey)" nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
-                        (nzOnPanelChange)="handleDatePanelChange($event)">
-                      </nz-date-picker>
-                    </ng-container>
+          <ng-container>
+            <nz-collapse>
+              <nz-collapse-panel nzHeader="Lead Details" nzActive="false">
+                <nz-collapse-panel nzHeader="CONTACT INFORMATION" [nzActive]="false" [nzShowArrow]="'true'">
+                  <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
+                    <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
+                      {{contact['value']}}
+                    </nz-descriptions-item>
+                  </nz-descriptions>
+                  <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add Contact</button>
+                </nz-collapse-panel>
 
-                    <ng-container *ngSwitchCase="'number'">
-                      <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                    </ng-container>
+                <ng-container *ngFor="let g of leadGroups">
+                  <nz-collapse-panel [nzHeader]="g.label" [nzActive]="false" [nzShowArrow]="'true'">
 
-                    <ng-container *ngSwitchCase="'string'">
-                      <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                        [disabled]="isDisabled(leadKey)" />
-                    </ng-container>
+                    <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
+                      <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
 
-                    <!-- <ng-container *ngSwitchCase="'tel'">
-                      <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-                    </ng-container> -->
+                        <ng-container *ngIf="g.value.includes(leadKey)">
+                          <nz-descriptions-item *ngIf="typeDict[leadKey]"
+                            [nzTitle]="typeDict[leadKey].label">
+                            <ng-container [ngSwitch]="typeDict[leadKey].type">
+                              <ng-container *ngSwitchCase="'date'">
+                                <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]"
+                                  [nzDisabled]="isDisabled(leadKey)" nzShowTime
+                                  (nzOnOpenChange)="handleDateOpenChange($event)"
+                                  (nzOnPanelChange)="handleDatePanelChange($event)">
+                                </nz-date-picker>
+                              </ng-container>
 
-                    <ng-container *ngSwitchCase="'select'">
-                      <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                        <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
-                          [nzValue]="option">
-                        </nz-option>
-                      </nz-select>
-                    </ng-container>
-                  </ng-container>
-                </nz-descriptions-item>
-              </ng-container>
-            </ng-container>
+                              <ng-container *ngSwitchCase="'number'">
+                                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                              </ng-container>
 
-            <!-- all fields that have to be shown in level 1 can be shown in this iteration -->
-            <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
-              <nz-descriptions-item [nzTitle]="typeDict[leadKey].label"
-                *ngIf="typeDict[leadKey] && (typeDict[leadKey].type === 'tel' || leadKey === 'leadStatus' || leadKey === 'followUp')">
-                <ng-container [ngSwitch]="typeDict[leadKey].type">
+                              <ng-container *ngSwitchCase="'string'">
+                                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                                  [disabled]="isDisabled(leadKey)" />
+                              </ng-container>
 
-                  <ng-container *ngSwitchCase="'date'">
-                    <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]"
-                      [nzDisabled]="isDisabled(leadKey)" nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
-                      (nzOnPanelChange)="handleDatePanelChange($event)">
-                    </nz-date-picker>
-                  </ng-container>
+                              <!-- <ng-container *ngSwitchCase="'tel'">
+                                    <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+                                  </ng-container> -->
 
-                  <ng-container *ngSwitchCase="'number'">
-                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                  </ng-container>
-
-                  <ng-container *ngSwitchCase="'string'">
-                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                      [disabled]="isDisabled(leadKey)" />
-
-                    <ng-container *ngIf="leadKey === 'leadStatus'">
-                      <nz-tree [nzData]="callDispositions" nzBlockNode
-                        (nzClick)="handleDispositionTreeEvent($event)">
-                      </nz-tree>
-                    </ng-container>
-                  </ng-container>
-
-                  <ng-container *ngSwitchCase="'tel'">
-                    <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-                  </ng-container>
-
-                  <ng-container *ngSwitchCase="'select'">
-                    <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                      <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
-                      </nz-option>
-                    </nz-select>
-                  </ng-container>
+                              <ng-container *ngSwitchCase="'select'">
+                                <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                                  <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
+                                    [nzValue]="option">
+                                  </nz-option>
+                                </nz-select>
+                              </ng-container>
+                            </ng-container>
+                          </nz-descriptions-item>
+                        </ng-container>
+                      </ng-container>
+                    </nz-descriptions>
+                  </nz-collapse-panel>
                 </ng-container>
-              </nz-descriptions-item>
-            </ng-container>
-            <!-- level 1 ends here -->
 
-            <nz-descriptions-item nzTitle="Remark" nzSpan=2>
-              <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
-                <textarea nz-input [(ngModel)]="selectedLead['remark']"
-                  placeholder="textarea with clear icon"></textarea>
-              </nz-input-group>
-            </nz-descriptions-item>
-          </nz-descriptions>
+              </nz-collapse-panel>
+            </nz-collapse>
+          </ng-container>
 
           <nz-collapse>
             <nz-collapse-panel [nzActive]="false" [nzHeader]="'Lead History'">
               <nz-timeline>
-                <nz-timeline-item nzColor="green" *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
+                <nz-timeline-item nzColor="green"
+                  *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
                   <p>
                     Created at {{h.createdAt | date:"medium"}}
                   </p>
@@ -137,7 +102,8 @@
             </nz-collapse-panel>
 
             <ng-template #requiredTemplate>
-              <span>Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;" nz-icon nzType="star" nzTheme="fill"></i></span>
+              <span>Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
+                  nz-icon nzType="star" nzTheme="fill"></i></span>
             </ng-template>
 
 
@@ -392,19 +358,19 @@
                     (nzOnOpenChange)="handleDateOpenChange($event)" (nzOnPanelChange)="handleDatePanelChange($event)">
                   </nz-range-picker>
                 </ng-container>
-    
+
                 <ng-container *ngSwitchCase="'number'">
                   <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
                 </ng-container>
-    
+
                 <ng-container *ngSwitchCase="'string'">
                   <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
                 </ng-container>
-    
+
                 <ng-container *ngSwitchCase="'tel'">
                   <input nz-input [(ngModel)]="leadFilter[key]" />
                 </ng-container>
-    
+
                 <ng-container *ngSwitchCase="'select'">
                   <nz-select nzMode="default" [(ngModel)]="leadFilter[key]">
                     <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
@@ -439,3 +405,46 @@
     </li>
   </ul>
 </nz-drawer>
+
+<nz-modal
+      [(nzVisible)]="isContactDrawerVisible"
+      nzTitle="Add Contact"
+      (nzOnCancel)="hideContactDrawer()"
+      (nzOnOk)="isContactDrawerVisible = false;"
+      [nzStyle]="{ top: '200px' }"
+      [nzFooter]="contactModalFooter"
+    >
+    <form nz-form [formGroup]="contactForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Label</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Label!">
+          <input id="label" type="text" nz-input formControlName="label" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Value</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Value!">
+          <input id="value" type="text" nz-input formControlName="value" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzFor="type" nzRequired>Type</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Type of contact">
+          <nz-select
+            id="type"
+            formControlName="type"
+            nzPlaceHolder="Select a option and change input text above"
+          >
+            <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
+            <nz-option nzValue="email" nzLabel="Email"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <ng-template #contactModalFooter>
+      <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>
+      <button nz-button nzType="primary" (click)="submitContactForm(true)">Add Another</button>
+    </ng-template>
+</nz-modal>
