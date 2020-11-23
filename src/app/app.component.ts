@@ -31,6 +31,11 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: "trash",
     },
     {
+      title: "Slides",
+      url: "/home/welcome-slides",
+      icon: "trash",
+    },
+    {
       title: "Add User",
       url: "/home/users/signup",
       icon: "heart",

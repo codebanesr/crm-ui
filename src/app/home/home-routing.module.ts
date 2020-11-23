@@ -7,11 +7,17 @@ import { InvoiceComponent } from "../invoice/invoice.component";
 import { OrganizationComponent } from "../organization/organization.component";
 import { SignupComponent } from "../signup/signup.component";
 import { UsersComponent } from "../users/users.component";
+import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { HomePage } from "./home.page";
 import { LeadSoloComponent } from "./lead-solo/lead-solo.component";
 import { LeadsComponent } from "./leads/leads.component";
 
 const routes: Routes = [
+  {
+    path: "welcome-slides",
+    component: WelcomeSlidesComponent,
+    pathMatch: "full",
+  },
   {
     path: "create-organization",
     component: OrganizationComponent,

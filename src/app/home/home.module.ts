@@ -16,6 +16,7 @@ import { CampaignCreateComponent } from "../campaign-create/campaign-create.comp
 import { InvoiceComponent } from "../invoice/invoice.component";
 import { FollowupComponent } from "../followup/followup.component";
 import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
+import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
     OrganizationComponent,
     CampaignCreateComponent,
     InvoiceComponent,
+    WelcomeSlidesComponent,
   ],
 })
 export class HomePageModule {}
