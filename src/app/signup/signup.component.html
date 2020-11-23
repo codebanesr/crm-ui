@@ -1,68 +1,72 @@
-<WingBlank>
-  <form nz-form [formGroup]="signupForm" (ngSubmit)="submitForm()">
-    <ion-item>
-      <ion-label position="floating">Full Name</ion-label>
-      <ion-input  formControlName="fullName"></ion-input>
-    </ion-item>
+<ion-content style="max-height: 90vh; overflow-y: scroll;">
+  <WingBlank>
+    <form [formGroup]="signupForm" (ngSubmit)="submitForm()">
+      <ion-item>
+        <ion-label position="floating">Full Name</ion-label>
+        <ion-input  formControlName="fullName"></ion-input>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input  formControlName="email" type="email"></ion-input>
+      </ion-item>
   
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input  formControlName="email" type="email"></ion-input>
-    </ion-item>
-
-     <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input  formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Confirm Password</ion-label>
-      <ion-input type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()" type="password"></ion-input>
-      <div *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
-        Two passwords that you enter is inconsistent!
-      </div>
-    </ion-item>
+       <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input  formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password"></ion-input>
+      </ion-item>
   
-    <ion-item>
-      <ion-label position="floating">Role Type</ion-label>
-      <ion-select formControlName="roleType">
-        <ion-select-option value="frontline">Frontline</ion-select-option>
-        <ion-select-option value="manager">Manager</ion-select-option>
-        <ion-select-option value="seniorManager">Senior Manager</ion-select-option>
-      </ion-select>
-    </ion-item>
+      <ion-item>
+        <ion-label position="floating">Confirm Password</ion-label>
+        <ion-input type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()" type="password"></ion-input>
+        <div *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
+          Two passwords that you enter is inconsistent!
+        </div>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label position="floating">Role Type</ion-label>
+        <ion-select formControlName="roleType">
+          <ion-select-option value="frontline">Frontline</ion-select-option>
+          <ion-select-option value="manager">Manager</ion-select-option>
+          <ion-select-option value="seniorManager">Senior Manager</ion-select-option>
+        </ion-select>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label position="floating">Reports To</ion-label>
+        <ion-select formControlName="reportsTo">
+          <ion-select-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    
   
-    <ion-item>
-      <ion-label position="floating">Reports To</ion-label>
-      <ion-select formControlName="reportsTo">
-        <ion-select-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</ion-select-option>
-      </ion-select>
-    </ion-item>
   
+      <ion-item>
+        <ion-label position="floating">Roles</ion-label>
+        <ion-select formControlName="roles" multiple="true">
+          <ion-select-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="floating">Manages</ion-label>
+        <ion-select formControlName="manages" multiple="true">
+          <ion-select-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+  
+      <ion-item>
+        <ion-label position="floating">Mobile Number</ion-label>
+        <ion-input  formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel"></ion-input>
+      </ion-item>
+  
+      <ion-button>
+        Register
+      </ion-button>
+    </form>
+  </WingBlank>
 
-
-    <ion-item>
-      <ion-label position="floating">Roles</ion-label>
-      <ion-select formControlName="roles" multiple="true">
-        <ion-select-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Manages</ion-label>
-      <ion-select formControlName="manages" multiple="true">
-        <ion-select-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-
-    <ion-item>
-      <ion-label position="floating">Mobile Number</ion-label>
-      <ion-input  formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel"></ion-input>
-    </ion-item>
-
-    <ion-button>
-      Register
-    </ion-button>
-  </form>  
-</WingBlank>
+</ion-content>
+  
