@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
+import { ToastService } from "ng-zorro-antd-mobile";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzUploadListComponent } from "ng-zorro-antd/upload";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
@@ -19,7 +20,7 @@ import { ICampaign } from "./campaign.interface";
 export class CampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
-    private msg: NzMessageService,
+    private toast: ToastService,
     private fb: FormBuilder,
     private router: Router,
     private pubsub: PubsubService,
@@ -96,15 +97,16 @@ export class CampaignComponent implements OnInit {
   }
 
   getCampaigns() {
-    this.msg.info("fetched campaigns");
+    this.toast.loading("Fetching campaign list");
     this.campaignService
       .getCampaigns(this.page, this.perPage, this.filters, null, null)
       .subscribe(
         (data: any) => {
+          this.toast.hide();
           this.processData(data);
         },
         (error) => {
-          this.msg.error(error.message);
+          this.toast.fail(error.message);
         }
       );
   }
@@ -152,12 +154,12 @@ export class CampaignComponent implements OnInit {
   archiveCampaign(campaign: ICampaign) {
     this.campaignService.archiveCampaign(campaign).subscribe(
       (data) => {
-        this.msg.success(
+        this.toast.success(
           `${campaign.campaignName} has been archived successfully`
         );
       },
       (error) => {
-        this.msg.error(
+        this.toast.fail(
           `There was an error in archiving ${campaign.campaignName}`
         );
       }

@@ -41,14 +41,15 @@ nz-descriptions-item {
   max-width: 600px;
 }
 
+::ng-deep .am-list-item .am-list-line .am-list-extra {
+  // background-color: red;
+  transform: translateX(-75px);
+}
+
 .ant-form-item {
-  margin-bottom: 0px;
+  margin-bottom: 6px;
 }
 
-.ant-form-item .ant-form-item-label {
-  padding-bottom: 0px;
-}
-
-::ng-deep .ant-modal-body {
-  padding-top: 5px;
+.ant-col-sm-24.ant-form-item-label {
+  padding: 0 0 1px;
 }

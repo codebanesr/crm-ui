@@ -62,7 +62,7 @@ export class CampaignCreateComponent implements OnInit {
   attachments: any;
   demoDispositionNodes: any[] = [];
 
-  campaignOptions: any = [];
+  // campaignOptions: any = [];
   assignTo = [
     { label: "Manager", value: "manager", checked: false },
     { label: "Tele Callers", value: "teleCallers", checked: false },
@@ -195,6 +195,7 @@ export class CampaignCreateComponent implements OnInit {
     this.campaignService
       .handleEmailTemplateUpload({
         ...this.emailForm.value,
+        campaignId: this.campaign._id,
         attachments: this.attachments,
       })
       .subscribe(
@@ -271,12 +272,12 @@ export class CampaignCreateComponent implements OnInit {
   }
   initEmailForm() {
     this.emailForm = this.fb.group({
-      campaign: [null],
+      templateName: [null],
       subject: [null],
       content: [null],
     });
 
-    this.fillCampaignOpts();
+    // this.fillCampaignOpts();
   }
   showEmailTplModal() {
     this.isEmailTplVisible = true;
@@ -440,17 +441,17 @@ export class CampaignCreateComponent implements OnInit {
     console.log($event);
   }
 
-  fillCampaignOpts() {
-    this.emailForm
-      .get("campaign")
-      .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((hint) => {
-        this.campaignService.getAllCampaignTypes(hint).subscribe((options) => {
-          this.campaignOptions = options;
-          console.log(this.campaignOptions);
-        });
-      });
-  }
+  // fillCampaignOpts() {
+  //   this.emailForm
+  //     .get("campaign")
+  //     .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+  //     .subscribe((hint) => {
+  //       this.campaignService.getAllCampaignTypes(hint).subscribe((options) => {
+  //         this.campaignOptions = options;
+  //         console.log(this.campaignOptions);
+  //       });
+  //     });
+  // }
 
   handleFormTypeChange(event) {
     console.log(event, this.tabSelected);

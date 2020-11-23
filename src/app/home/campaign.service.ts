@@ -45,10 +45,9 @@ export class CampaignService {
     );
   }
 
-  getAllEmailTemplates(props: { searchTerm: string; campaignName?: string }) {
-    const { campaignName, searchTerm } = props;
+  getAllEmailTemplates(campaignId: string) {
     return this.http.get(
-      `${environment.apiUrl}/lead/getAllEmailTemplates?searchTerm=${searchTerm}&campaignName=${campaignName}`
+      `${environment.apiUrl}/lead/getAllEmailTemplates?campaignId=${campaignId}`
     );
   }
 

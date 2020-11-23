@@ -23,83 +23,94 @@
       <div class="content">
         <div class="main">
           <ng-container>
-            <nz-collapse>
-              <nz-collapse-panel nzHeader="Lead Details" nzActive="false">
-                <nz-collapse-panel nzHeader="CONTACT INFORMATION" [nzActive]="false" [nzShowArrow]="'true'">
-                  <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
-                    <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
-                      {{contact['value']}}
-                    </nz-descriptions-item>
-                  </nz-descriptions>
-                  <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add Contact</button>
-                </nz-collapse-panel>
-
-                <ng-container *ngFor="let g of leadGroups">
-                  <nz-collapse-panel [nzHeader]="g.label" [nzActive]="false" [nzShowArrow]="'true'">
-
+            <Accordion>
+              <AccordionPanel header="Lead Details" nzActive="false" key="0">
+                <Accordion>
+                  <AccordionPanel header="CONTACT INFORMATION" key="0">
                     <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
-                      <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
-
-                        <ng-container *ngIf="g.value.includes(leadKey)">
-                          <nz-descriptions-item *ngIf="typeDict[leadKey]"
-                            [nzTitle]="typeDict[leadKey].label">
-                            <ng-container [ngSwitch]="typeDict[leadKey].type">
-                              <ng-container *ngSwitchCase="'date'">
-                                <nz-date-picker [nzMode]="dateMode" [(ngModel)]="selectedLead[leadKey]"
-                                  [nzDisabled]="isDisabled(leadKey)" nzShowTime
-                                  (nzOnOpenChange)="handleDateOpenChange($event)"
-                                  (nzOnPanelChange)="handleDatePanelChange($event)">
-                                </nz-date-picker>
-                              </ng-container>
-
-                              <ng-container *ngSwitchCase="'number'">
-                                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                              </ng-container>
-
-                              <ng-container *ngSwitchCase="'string'">
-                                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                                  [disabled]="isDisabled(leadKey)" />
-                              </ng-container>
-
-                              <!-- <ng-container *ngSwitchCase="'tel'">
-                                    <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-                                  </ng-container> -->
-
-                              <ng-container *ngSwitchCase="'select'">
-                                <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                                  <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
-                                    [nzValue]="option">
-                                  </nz-option>
-                                </nz-select>
-                              </ng-container>
-                            </ng-container>
-                          </nz-descriptions-item>
-                        </ng-container>
-                      </ng-container>
+                      <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
+                        {{contact['value']}}
+                      </nz-descriptions-item>
                     </nz-descriptions>
-                  </nz-collapse-panel>
-                </ng-container>
+                    <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add
+                      Contact</button>
+                  </AccordionPanel>
 
-              </nz-collapse-panel>
-            </nz-collapse>
+                  <ng-container *ngFor="let g of leadGroups">
+                    <AccordionPanel [header]="g.label" key="2">
+
+                      <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
+                        <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
+
+                          <ng-container *ngIf="g.value.includes(leadKey)">
+                            <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+                              <ng-container [ngSwitch]="typeDict[leadKey].type">
+                                <ng-container *ngSwitchCase="'date'">
+                                  <List [className]="'date-picker-list'">
+                                    <ListItem DatePicker [extra]="currentDateFormat(value)"
+                                      [disabled]="isDisabled(leadKey)" [arrow]="'horizontal'"
+                                      [mode]="selectedLead[leadKey]" [(ngModel)]="value" [locale]="locale"
+                                      (onOk)="onOk($event)">
+                                    </ListItem>
+                                  </List>
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'number'">
+                                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                                </ng-container>
+
+                                <ng-container *ngSwitchCase="'string'">
+                                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                                    [disabled]="isDisabled(leadKey)" />
+                                </ng-container>
+
+                                <!-- <ng-container *ngSwitchCase="'tel'">
+                                      <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+                                    </ng-container> -->
+
+                                <ng-container *ngSwitchCase="'select'">
+                                  <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                                    <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
+                                      [nzValue]="option">
+                                    </nz-option>
+                                  </nz-select>
+                                </ng-container>
+                              </ng-container>
+                            </nz-descriptions-item>
+                          </ng-container>
+                        </ng-container>
+                      </nz-descriptions>
+                    </AccordionPanel>
+                  </ng-container>
+                </Accordion>
+
+              </AccordionPanel>
+            </Accordion>
           </ng-container>
 
-          <nz-collapse>
-            <nz-collapse-panel [nzActive]="false" [nzHeader]="'Lead History'">
-              <nz-timeline>
-                <nz-timeline-item nzColor="green"
-                  *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
-                  <p>
-                    Created at {{h.createdAt | date:"medium"}}
-                  </p>
-                  <p>Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</p>
-                  <p style="width: 100%;">{{h.notes}}</p>
-                  <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}
-                  </p>
-                </nz-timeline-item>
-                <span (click)="onShowMoreClick()">{{historyLimit === 1 ? "More" : "Less"}}</span>
-              </nz-timeline>
-            </nz-collapse-panel>
+          <Accordion>
+            <AccordionPanel [header]="'Lead History'" key="0">
+              <div style="max-height: 200px; overflow-y: scroll;">
+                <WhiteSpace size='lg'></WhiteSpace>
+                <nz-timeline>
+                  <nz-timeline-item nzColor="green"
+                    *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
+                    <p>
+                      Created at {{h.createdAt | date:"medium"}}
+                    </p>
+                    <p>Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</p>
+                    <p style="width: 100%;">{{h.notes}}</p>
+                    <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}
+                    </p>
+                  </nz-timeline-item>
+                  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="onShowMoreClick()">
+                    <ion-fab-button style="transform: scale(0.8); ">
+                      <ion-icon [name]="historyLimit === 1 ? 'add-outline' : 'remove-outline'"></ion-icon>
+                    </ion-fab-button>
+                  </ion-fab>
+                </nz-timeline>
+              </div>
+            </AccordionPanel>
 
             <ng-template #requiredTemplate>
               <span>Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
@@ -107,64 +118,52 @@
             </ng-template>
 
 
-            <nz-collapse-panel [nzHeader]="requiredTemplate" [nzActive]="actions.isInformationRequested">
-              <div *ngIf="formModel" style="max-width:500px;">
-                <nz-page-header class="site-page-header" nzBackIcon>
+            <AccordionPanel [header]="requiredTemplate" key="1">
+              <div *ngIf="formModel">
+                <nz-page-header style="margin: 4px; padding: 4px;">
                   <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
-                  <nz-page-header-subtitle>{{formModel.description}}</nz-page-header-subtitle>
+                  <!-- <nz-page-header-subtitle>{{formModel.description}}</nz-page-header-subtitle> -->
                   <nz-page-header-content>
                     <div class="content">
                       <form nz-form>
                         <ng-container *ngFor="let item of formModel.attributes">
                           <ng-container [ngSwitch]="item.type">
 
-                            <nz-form-item *ngSwitchCase="'text'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" nzFor="email">{{item.label}}
-                              </nz-form-label>
-                              <nz-form-control [nzSm]="14" [nzXs]="24">
-                                <input nz-input [id]="item.name" [(ngModel)]="item.value"
-                                  [ngModelOptions]="{standalone: true}" />
-                              </nz-form-control>
-                            </nz-form-item>
 
-                            <nz-form-item *ngSwitchCase="'email'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="email" id="{{item.name}}" [(ngModel)]="item.value"
-                                  placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
+                            <InputItem *ngSwitchCase="'text'" [type]="item.type" [placeholder]="item.placeholder"
+                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                            </InputItem>
 
-                            <nz-form-item *ngSwitchCase="'phone'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'number'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="number" id="{{item.name}}" min="{{item.min}}"
-                                  [(ngModel)]="item.value" max="{{item.max}}" placeholder="{{item.placeholder}}"
-                                  [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'date'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
-                              <nz-form-control [nzSpan]="14">
-                                <nz-date-picker nz-input type="date" id="{{item.name}}" [(ngModel)]="item.value"
-                                  [ngModelOptions]="{standalone: true}"></nz-date-picker>
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'datetime-local'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
-                              <nz-form-control [nzSpan]="14">
-                                <nz-date-picker nz-input type="date" id="{{item.name}}" nzShowTime
-                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"></nz-date-picker>
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'textarea'">
+
+
+                            <InputItem *ngSwitchCase="'email'" [type]="item.type" [placeholder]="item.placeholder"
+                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                            </InputItem>
+
+                            <InputItem *ngSwitchCase="'phone'" [type]="item.type" [placeholder]="item.placeholder"
+                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                            </InputItem>
+
+
+
+                            <InputItem *ngSwitchCase="'number'" [type]="item.type" [placeholder]="item.placeholder"
+                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                            </InputItem>
+
+
+                            <ListItem DatePicker [extra]="currentDateFormat(value)" [mode]="'datetime'"
+                              [(ngModel)]="item.value" [locale]="locale" (onOk)="onOk($event)" *ngSwitchCase="'date'" [ngModelOptions]="{standalone: true}">
+                              {{item.label}}
+                            </ListItem>
+
+
+                            <List [className]="'date-picker-list'" *ngSwitchCase="'datetime-local'">
+                              <ListItem DatePicker [extra]="currentDateFormat(value)" [arrow]="'horizontal'"
+                                [mode]="'datetime'" [(ngModel)]="item.value" [locale]="locale" (onOk)="onOk($event)" [ngModelOptions]="{standalone: true}">
+                              </ListItem>
+                            </List>
+
+                            <!-- <nz-form-item *ngSwitchCase="'textarea'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
                                 <textarea nz-input placeholder="Controlled autosize"
@@ -173,7 +172,11 @@
                                   [ngModelOptions]="{standalone: true}">
                                 </textarea>
                               </nz-form-control>
-                            </nz-form-item>
+                            </nz-form-item> -->
+                            <InputItem *ngSwitchCase="'textarea'" [type]="item.type" [placeholder]="item.placeholder"
+                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                            </InputItem>
+
                             <nz-form-item *ngSwitchCase="'file'">
                               <nz-form-label [nzSpan]="6">{{item.label}} (File can't be uploaded right now)
                               </nz-form-label>
@@ -183,7 +186,7 @@
                               </nz-form-control>
                             </nz-form-item>
 
-                            <div *ngSwitchCase="'paragraph'">
+                            <!-- <div *ngSwitchCase="'paragraph'">
                               <nz-form-item>
                                 <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                                 <nz-form-control>
@@ -198,7 +201,12 @@
                               <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill"
                                   nzType="close-circle" *ngIf="item.value" (click)="item.value = null"></i>
                               </ng-template>
-                            </div>
+                            </div> -->
+
+                            <InputItem *ngSwitchCase="'paragraph'" [type]="'text'" [placeholder]="item.placeholder"
+                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                            </InputItem>
+
                             <div *ngSwitchCase="'autocomplete'">
                               <nz-form-item>
                                 <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
@@ -225,7 +233,7 @@
                             <nz-form-item *ngSwitchCase="'radio'">
                               <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <nz-radio-group [(ngModel)]="item.value">
+                                <nz-radio-group [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                                   <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
                                 </nz-radio-group>
                               </nz-form-control>
@@ -242,50 +250,49 @@
                   </nz-page-header-content>
                 </nz-page-header>
               </div>
-            </nz-collapse-panel>
+            </AccordionPanel>
 
-            <nz-collapse-panel [nzHeader]="'Send Email'" [nzActive]="false">
-              <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+            <AccordionPanel [header]="'Send Email'" key="2">
+              <WingBlank>
                 <nz-form-item>
-                  <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
-                  <input placeholder="Email Subject" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
-                  <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
-                    <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
-                      {{ et.subject }}
-                    </nz-auto-option>
-                  </nz-autocomplete>
+                  <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired style="font-weight: 700;">Select Email Template</nz-form-label>
+                  <nz-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
+                    <nz-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.templateName"></nz-option>
+                  </nz-select>
                 </nz-form-item>
 
-                <nz-form-item>
-                  <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
-                  <nz-form-control [nzSm]="24" [nzXs]="24">
-                    <input nz-input placeholder="Write the subject of email" formControlName="subject" />
-                  </nz-form-control>
-                </nz-form-item>
-
-                <nz-form-item>
-                  <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
-                  <nz-form-control [nzSm]="24" [nzXs]="24">
-                    <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-                      formControlName="content"></textarea>
-                  </nz-form-control>
-                </nz-form-item>
-                <nz-form-item>
-                  <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
-                  <nz-form-control [nzSm]="24" [nzXs]="24">
-                    <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-                      nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-                      <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName"
-                        [nzValue]="attachment">
-                      </nz-option>
-                    </nz-select>
-                    <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
-                    </ng-template>
-                  </nz-form-control>
-                </nz-form-item>
-              </form>
-            </nz-collapse-panel>
-          </nz-collapse>
+                <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+                  <nz-form-item>
+                    <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+                    <nz-form-control [nzSm]="24" [nzXs]="24">
+                      <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+                    </nz-form-control>
+                  </nz-form-item>
+  
+                  <nz-form-item>
+                    <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+                    <nz-form-control [nzSm]="24" [nzXs]="24">
+                      <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                        formControlName="content"></textarea>
+                    </nz-form-control>
+                  </nz-form-item>
+                  <nz-form-item>
+                    <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
+                    <nz-form-control [nzSm]="24" [nzXs]="24">
+                      <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+                        nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
+                        <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName"
+                          [nzValue]="attachment">
+                        </nz-option>
+                      </nz-select>
+                      <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
+                      </ng-template>
+                    </nz-form-control>
+                  </nz-form-item>
+                </form>
+              </WingBlank>
+            </AccordionPanel>
+          </Accordion>
 
           <nz-button-group style="margin-top: 5px;">
             <button nzType="danger" nz-button nzSize="default" (click)="showReassignmentDrawer()">Reassign</button>
@@ -300,47 +307,6 @@
       </div>
     </nz-page-header-content>
   </nz-page-header>
-
-  <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
-  <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleOk()" (nzOnOk)="handleOk()" #emailModal>
-    <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-      <nz-form-item>
-        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
-        <input placeholder="Email Subject" nz-input [formControl]="etFormControl" [nzAutocomplete]="autob" />
-        <nz-autocomplete #autob (selectionChange)="populateEmailModal($event)">
-          <nz-auto-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.subject">
-            {{ et.subject }}
-          </nz-auto-option>
-        </nz-autocomplete>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
-        <nz-form-control [nzSm]="24" [nzXs]="24">
-          <input nz-input placeholder="Write the subject of email" formControlName="subject" />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
-        <nz-form-control [nzSm]="24" [nzXs]="24">
-          <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-            formControlName="content"></textarea>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
-        <nz-form-control [nzSm]="24" [nzXs]="24">
-          <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-            nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-            <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment">
-            </nz-option>
-          </nz-select>
-          <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
-  </nz-modal>
 </nz-content>
 
 
@@ -354,25 +320,24 @@
             <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
               <ng-container [ngSwitch]="typeDict[key].type">
                 <ng-container *ngSwitchCase="'date'">
-                  <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
-                    (nzOnOpenChange)="handleDateOpenChange($event)" (nzOnPanelChange)="handleDatePanelChange($event)">
+                  <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
                   </nz-range-picker>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'number'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}"/>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'string'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" />
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}"/>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'tel'">
-                  <input nz-input [(ngModel)]="leadFilter[key]" />
+                  <input nz-input [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}"/>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'select'">
-                  <nz-select nzMode="default" [(ngModel)]="leadFilter[key]">
+                  <nz-select nzMode="default" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
                     <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
                     </nz-option>
                   </nz-select>
@@ -406,45 +371,35 @@
   </ul>
 </nz-drawer>
 
-<nz-modal
-      [(nzVisible)]="isContactDrawerVisible"
-      nzTitle="Add Contact"
-      (nzOnCancel)="hideContactDrawer()"
-      (nzOnOk)="isContactDrawerVisible = false;"
-      [nzStyle]="{ top: '200px' }"
-      [nzFooter]="contactModalFooter"
-    >
-    <form nz-form [formGroup]="contactForm">
-      <nz-form-item>
-        <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Label</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Label!">
-          <input id="label" type="text" nz-input formControlName="label" />
-        </nz-form-control>
-      </nz-form-item>
+<nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
+  (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
+  <form nz-form [formGroup]="contactForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Label</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Label!">
+        <input id="label" type="text" nz-input formControlName="label" />
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Value</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Value!">
-          <input id="value" type="text" nz-input formControlName="value" />
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Value</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Value!">
+        <input id="value" type="text" nz-input formControlName="value" />
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="5" nzFor="category" nzRequired>category</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter category of contact">
-          <nz-select
-            id="category"
-            formControlName="category"
-            nzPlaceHolder="Select a option and change input text above"
-          >
-            <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
-            <nz-option nzValue="email" nzLabel="Email"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
-    <ng-template #contactModalFooter>
-      <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>
-      <button nz-button nzType="primary" (click)="submitContactForm(true)">Add Another</button>
-    </ng-template>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzFor="category" nzRequired>category</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter category of contact">
+        <nz-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
+          <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
+          <nz-option nzValue="email" nzLabel="Email"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <ng-template #contactModalFooter>
+    <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>
+    <button nz-button nzType="primary" (click)="submitContactForm(true)">Add Another</button>
+  </ng-template>
 </nz-modal>

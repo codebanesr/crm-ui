@@ -134,14 +134,8 @@
         <nz-collapse-panel nzHeader="Add Email Template Here">
           <form nz-form [formGroup]="emailForm" nzLayout="vertical">
             <nz-form-item>
-              <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Select Campaign</nz-form-label>
-              <input placeholder="Select Campaign" nz-input formControlName="campaign" [nzAutocomplete]="autob" />
-              <nz-autocomplete #autob>
-                <nz-auto-option *ngFor="let co of campaignOptions" [nzValue]="co.campaignName"
-                  [nzLabel]="co.campaignName">
-                  {{ co.campaignName }}
-                </nz-auto-option>
-              </nz-autocomplete>
+              <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Template Name</nz-form-label>
+              <input placeholder="Template Name" nz-input formControlName="templateName" />
             </nz-form-item>
 
 
@@ -164,13 +158,13 @@
             </nz-upload>
           </form>
 
-          <div *nzModalFooter>
+            <!-- @Todo add functionality for submit without attachments -->
             <button nz-button [nzType]="'danger'">Submit without attachments</button>
             <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
               [disabled]="fileList.length == 0" style="margin-top: 16px">
               {{ uploading ? 'Uploading' : 'Use Attachments' }}
             </button>
-          </div>
+
         </nz-collapse-panel>
         <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
           Not available in mobile

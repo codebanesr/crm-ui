@@ -15,6 +15,7 @@ import { OrganizationComponent } from "../organization/organization.component";
 import { CampaignCreateComponent } from "../campaign-create/campaign-create.component";
 import { InvoiceComponent } from "../invoice/invoice.component";
 import { FollowupComponent } from "../followup/followup.component";
+import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { FollowupComponent } from "../followup/followup.component";
     IonicModule,
     HomePageRoutingModule,
     ModantdModule,
+    NgZorroAntdMobileModule,
   ],
   declarations: [
     FollowupComponent,

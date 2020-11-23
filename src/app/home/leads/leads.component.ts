@@ -64,7 +64,7 @@ export class LeadsComponent implements OnInit {
     this.getAllLeadColumns();
     this.initRightClickActions();
     this.getBasicOverview();
-    this.initEtAutocomplete();
+    // this.initEtAutocomplete();
     this.populateCampaignDropdown("");
   }
 
@@ -380,17 +380,17 @@ export class LeadsComponent implements OnInit {
   emailTemplates: any;
   etFormControl = new FormControl([null]);
   attachments: any[] = [];
-  initEtAutocomplete() {
-    this.etFormControl.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((searchTerm: string) => {
-        this.campaignService
-          .getAllEmailTemplates({ searchTerm })
-          .subscribe((emailTemplates: any) => {
-            this.emailTemplates = emailTemplates;
-          });
-      });
-  }
+  // initEtAutocomplete() {
+  //   this.etFormControl.valueChanges
+  //     .pipe(debounceTime(500), distinctUntilChanged())
+  //     .subscribe((searchTerm: string) => {
+  //       this.campaignService
+  //         .getAllEmailTemplates({ searchTerm })
+  //         .subscribe((emailTemplates: any) => {
+  //           this.emailTemplates = emailTemplates;
+  //         });
+  //     });
+  // }
 
   emailForm: FormGroup;
   emailModel;

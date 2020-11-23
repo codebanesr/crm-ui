@@ -21,6 +21,7 @@ import { field } from "src/global.model";
 import { NzTreeNode } from "ng-zorro-antd/tree";
 import { ActivatedRoute } from "@angular/router";
 const { Geolocation } = Plugins;
+import { en_US, ToastService } from "ng-zorro-antd-mobile";
 
 @Component({
   selector: "app-lead-solo",
@@ -31,10 +32,10 @@ export class LeadSoloComponent implements OnInit {
   constructor(
     private leadsService: LeadsService,
     private campaignService: CampaignService,
-    private msgService: NzMessageService,
     private fb: FormBuilder,
     private userService: UsersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toast: ToastService
   ) {}
 
   modelFields: Array<field> = [];
@@ -59,14 +60,15 @@ export class LeadSoloComponent implements OnInit {
   callDispositions;
   isVisible = false;
   jsonStringify = JSON.stringify;
+  locale = en_US;
 
   ngOnInit(): void {
     /** @Todo we dont have to fetch the entire list of campaigns here, only the campaign whose id was provided in the query params
      * coming from list campaigns page .....
      */
+
     this.populateCampaignDropdown("");
     this.initEmailForm();
-    this.initEtAutocomplete();
     this.fetchUsersForReassignment();
     this.initContactForm();
   }
@@ -85,13 +87,12 @@ export class LeadSoloComponent implements OnInit {
       async (data) => {
         this.selectedCampaign = data.campaignId;
         await this.getLeadMappings();
-        // this.openFilterDrawer();
         this.getDispositionForCampaign();
         this.fetchNextLead();
         console.log("logging query params", data);
       },
       (error) => {
-        this.msgService.error("Error in subscribing to query params");
+        this.toast.fail("Error in subscribing to query params");
       }
     );
   }
@@ -148,7 +149,18 @@ export class LeadSoloComponent implements OnInit {
 
     this.enabledKeys = campaignObject[0]?.editableCols;
     this.typeDict = typeDict;
-    // this.leadStatusOptions = this.typeDict.leadStatus.options;
+    this.populateEmailTemplateDropdown(campaignObject[0]);
+  }
+
+  populateEmailTemplateDropdown(campaignObj: ICampaign) {
+    this.campaignService.getAllEmailTemplates(campaignObj._id).subscribe(
+      (data) => {
+        this.emailTemplates = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   isDisabled(leadKey: string) {
@@ -191,13 +203,13 @@ export class LeadSoloComponent implements OnInit {
       (data) => {
         // clean user reassigment once done
         this.selectedUserForReassignment = null;
-        this.msgService.success("Successfully updated lead");
+        this.toast.success("Successfully updated lead");
         if (fetchNextLead) {
           this.fetchNextLead();
         }
       },
       ({ error }: { error: ClassValidationError }) => {
-        this.msgService.error(error.message[0]);
+        this.toast.fail(error.message[0]);
       }
     );
   }
@@ -207,7 +219,7 @@ export class LeadSoloComponent implements OnInit {
     if (this.actions.isInformationRequested) {
       for (let element of this.formModel.attributes) {
         if (element.required && !element.value) {
-          this.msgService.error(`${element.label} is a required field`);
+          this.toast.show(`${element.label} is a required field`);
           return false;
         }
       }
@@ -255,17 +267,17 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
-  handleDateOpenChange(event) {}
   handleLeadStatusChange(event) {}
-  handleDatePanelChange(event) {}
 
   showAppliedFiltersOnNoResult = false;
   fetchNextLead(event?) {
     this.showAppliedFiltersOnNoResult = false;
+    this.toast.loading("Fetching next lead");
     this.leadsService
       .fetchNextLead(this.selectedCampaign, this.typeDict, this.leadFilter)
       .subscribe(
         (data: any) => {
+          this.toast.hide();
           this.selectedLead = data.result;
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
@@ -279,6 +291,7 @@ export class LeadSoloComponent implements OnInit {
 
   emailForm: FormGroup;
   emailTemplates: any;
+  tempObj: any = {};
   emailModel;
   initEmailForm() {
     this.emailForm = this.fb.group({
@@ -288,23 +301,7 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
-  etFormControl = new FormControl([null]);
   attachments: any[] = [];
-  initEtAutocomplete() {
-    this.etFormControl.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((searchTerm) => {
-        console.log({ selectedCampaign: this.selectedCampaign });
-        this.campaignService
-          .getAllEmailTemplates({
-            searchTerm,
-            campaignName: this.selectedLead.campaign,
-          })
-          .subscribe((emailTemplates: any) => {
-            this.emailTemplates = emailTemplates;
-          });
-      });
-  }
 
   submitEmailForm(model) {
     console.log(model);
@@ -312,8 +309,7 @@ export class LeadSoloComponent implements OnInit {
 
   selectedEmailTemplate: any;
   populateEmailModal(event) {
-    console.log(typeof event, event.nzValue);
-    this.selectedEmailTemplate = event.nzValue;
+    this.selectedEmailTemplate = event;
 
     this.attachments = this.selectedEmailTemplate.attachments;
     this.emailForm.patchValue({
@@ -400,11 +396,11 @@ export class LeadSoloComponent implements OnInit {
       .addContact(this.selectedLead._id, this.contactForm.value)
       .subscribe(
         (success) => {
-          this.msgService.success("Updated contact information");
+          this.toast.success("Updated contact information");
         },
         (error) => {
           this.selectedLead.contact.pop();
-          this.msgService.error("Failed to update contact information");
+          this.toast.fail("Failed to update contact information");
         }
       );
 
@@ -414,5 +410,39 @@ export class LeadSoloComponent implements OnInit {
     }
 
     this.isContactDrawerVisible = false;
+  }
+
+  name = "shanur";
+  value = new Date();
+
+  currentDateFormat(date, format: string = "yyyy-mm-dd HH:MM"): any {
+    const pad = (n: number): string => (n < 10 ? `0${n}` : n.toString());
+    return format
+      .replace("yyyy", date.getFullYear())
+      .replace("mm", pad(date.getMonth() + 1))
+      .replace("dd", pad(date.getDate()))
+      .replace("HH", pad(date.getHours()))
+      .replace("MM", pad(date.getMinutes()))
+      .replace("ss", pad(date.getSeconds()));
+  }
+
+  onOk(result: Date) {
+    this.name = this.currentDateFormat(result);
+    this.value = result;
+  }
+
+  formatIt(date: Date, form: string) {
+    const pad = (n: number) => (n < 10 ? `0${n}` : n);
+    const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+      date.getDate()
+    )}`;
+    const timeStr = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    if (form === "YYYY-MM-DD") {
+      return dateStr;
+    }
+    if (form === "HH:mm") {
+      return timeStr;
+    }
+    return `${dateStr} ${timeStr}`;
   }
 }

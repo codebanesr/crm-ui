@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MenuController } from "@ionic/angular";
+import { ToastService } from "ng-zorro-antd-mobile";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from "../authentication.service";
 
@@ -23,9 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
-    private msg: NzMessageService,
-    private router: Router,
-    private menuController: MenuController
+    private toast: ToastService,
+    private router: Router
   ) {}
 
   formType = "login";
@@ -56,7 +56,8 @@ export class LoginComponent implements OnInit {
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe(
       (data: any) => {
-        this.msg.success("Successfully Logged In");
+        // this.msg.success("Successfully Logged In");
+        this.toast.success("Login Successful");
         const currentUser = localStorage.getItem("currentUser");
         const currentUserObj = JSON.parse(currentUser);
         if (["admin", "manager"].includes(currentUserObj.roleType)) {
@@ -68,7 +69,7 @@ export class LoginComponent implements OnInit {
         }
       },
       (error: Error) => {
-        this.msg.error("Incorrect username or password");
+        this.toast.fail("Login failed");
       }
     );
   }
@@ -76,14 +77,14 @@ export class LoginComponent implements OnInit {
   submitResetForm(username: string) {
     this.authService.forgotPassword(username).subscribe(
       (data: any) => {
-        this.msg.success(
+        this.toast.success(
           "A link to reset your account has been sent to your email"
         );
       },
       (error: Error) => {
         // message from the backend server to be shown here
         this.onFormTypeChange(this.formView.login);
-        this.msg.error("Something went wrong");
+        this.toast.fail("Something went wrong");
       }
     );
   }
