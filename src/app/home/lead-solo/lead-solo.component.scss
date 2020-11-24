@@ -53,3 +53,17 @@ nz-descriptions-item {
 .ant-col-sm-24.ant-form-item-label {
   padding: 0 0 1px;
 }
+
+::ng-deep .ant-collapse-content > .ant-collapse-content-box {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 7px;
+  padding-top: 7px;
+}
+
+::ng-deep nz-tree-node:first-child {
+  background-color: white;
+  color: white;
+  pointer-events: none;
+  margin-top: -30px;
+}

@@ -23,75 +23,83 @@
       <div class="content">
         <div class="main">
           <ng-container>
-            <Accordion>
-              <AccordionPanel header="Lead Details" nzActive="false" key="0">
-                <Accordion>
-                  <AccordionPanel header="CONTACT INFORMATION" key="0">
-                    <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
-                      <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
-                        {{contact['value']}}
-                      </nz-descriptions-item>
-                    </nz-descriptions>
-                    <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add
-                      Contact</button>
-                  </AccordionPanel>
-
-                  <ng-container *ngFor="let g of leadGroups">
-                    <AccordionPanel [header]="g.label" key="2">
-
-                      <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
-                        <ng-container *ngFor="let leadKey of objectkeys(selectedLead)">
-
-                          <ng-container *ngIf="g.value.includes(leadKey)">
-                            <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-                              <ng-container [ngSwitch]="typeDict[leadKey].type">
-                                <ng-container *ngSwitchCase="'date'">
-                                  <List [className]="'date-picker-list'">
-                                    <ListItem DatePicker [extra]="currentDateFormat(value)"
-                                      [disabled]="isDisabled(leadKey)" [arrow]="'horizontal'"
-                                      [mode]="selectedLead[leadKey]" [(ngModel)]="value" [locale]="locale"
-                                      (onOk)="onOk($event)">
-                                    </ListItem>
-                                  </List>
-                                </ng-container>
-
-                                <ng-container *ngSwitchCase="'number'">
-                                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                                </ng-container>
-
-                                <ng-container *ngSwitchCase="'string'">
-                                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                                    [disabled]="isDisabled(leadKey)" />
-                                </ng-container>
-
-                                <!-- <ng-container *ngSwitchCase="'tel'">
-                                      <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-                                    </ng-container> -->
-
-                                <ng-container *ngSwitchCase="'select'">
-                                  <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                                    <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
-                                      [nzValue]="option">
-                                    </nz-option>
-                                  </nz-select>
-                                </ng-container>
-                              </ng-container>
-                            </nz-descriptions-item>
-                          </ng-container>
-                        </ng-container>
+            <nz-collapse>
+              <nz-collapse-panel nzHeader="LEAD DETAILS" nzActive="false">
+                <WingBlank size='sm'>
+                  <nz-collapse>
+                    <nz-collapse-panel nzHeader="Contact Information" nzShowArrow="false">
+                      <nz-descriptions nzBordered="true" [nzSize]="'small'" style="background-color: snow;">
+                        <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
+                          {{contact['value']}}
+                        </nz-descriptions-item>
                       </nz-descriptions>
-                    </AccordionPanel>
-                  </ng-container>
-                </Accordion>
+                      <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add
+                        Contact</button>
+                    </nz-collapse-panel>
+  
+                    <ng-container *ngFor="let g of leadGroups">
+                      <nz-collapse-panel [nzHeader]="g.label" key="g.label" nzShowArrow="false">
+                        <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
+                          <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
+                            <ng-container *ngIf="g.value.includes(leadKey)">
+                              <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+                                <ng-container [ngSwitch]="typeDict[leadKey].type">
+                                  <ng-container *ngSwitchCase="'date'">
+                                    <List [className]="'date-picker-list'">
+                                      <ListItem DatePicker [extra]="currentDateFormat(value)"
+                                        [disabled]="isDisabled(leadKey)" [arrow]="'horizontal'"
+                                        [mode]="selectedLead[leadKey]" [(ngModel)]="value" [locale]="locale"
+                                        (onOk)="onOk($event)">
+                                      </ListItem>
+                                    </List>
+                                  </ng-container>
+  
+                                  <ng-container *ngSwitchCase="'number'">
+                                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                                  </ng-container>
+  
+                                  <ng-container *ngSwitchCase="'string'">
+                                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                                      [disabled]="isDisabled(leadKey)" />
+                                  </ng-container>
+  
+                                  <!-- <ng-container *ngSwitchCase="'tel'">
+                                        <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
+                                      </ng-container> -->
+  
+                                  <ng-container *ngSwitchCase="'select'">
+                                    <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                                      <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
+                                        [nzValue]="option">
+                                      </nz-option>
+                                    </nz-select>
+                                  </ng-container>
+                                </ng-container>
+                              </nz-descriptions-item>
+                            </ng-container>
+                          </ng-container>
+                        </nz-descriptions>
+                      </nz-collapse-panel>
+                    </ng-container>
+                  </nz-collapse>
+                </WingBlank>
 
-              </AccordionPanel>
-            </Accordion>
+              </nz-collapse-panel>
+              <nz-collapse-panel [nzHeader]="'Disposition'">
+                <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
+                </nz-tree>      
+              </nz-collapse-panel>
+            </nz-collapse>
           </ng-container>
-
-          <Accordion>
-            <AccordionPanel [header]="'Lead History'" key="0">
-              <div style="max-height: 200px; overflow-y: scroll;">
+          <nz-collapse>
+            <nz-collapse-panel [nzHeader]="'Lead History'" *ngIf="selectedLead.history">
+              <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
                 <WhiteSpace size='lg'></WhiteSpace>
+                <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
+                  <ion-fab-button style="transform: scale(0.8);">
+                    <ion-icon [name]="historyLimit === 1 ? 'add-outline' : 'remove-outline'"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
                 <nz-timeline>
                   <nz-timeline-item nzColor="green"
                     *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
@@ -103,14 +111,9 @@
                     <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}
                     </p>
                   </nz-timeline-item>
-                  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="onShowMoreClick()">
-                    <ion-fab-button style="transform: scale(0.8); ">
-                      <ion-icon [name]="historyLimit === 1 ? 'add-outline' : 'remove-outline'"></ion-icon>
-                    </ion-fab-button>
-                  </ion-fab>
                 </nz-timeline>
               </div>
-            </AccordionPanel>
+            </nz-collapse-panel>
 
             <ng-template #requiredTemplate>
               <span>Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
@@ -118,7 +121,7 @@
             </ng-template>
 
 
-            <AccordionPanel [header]="requiredTemplate" key="1">
+            <nz-collapse-panel [nzHeader]="requiredTemplate" [nzActive]="actions.isInformationRequested">
               <div *ngIf="formModel">
                 <nz-page-header style="margin: 4px; padding: 4px;">
                   <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
@@ -250,9 +253,9 @@
                   </nz-page-header-content>
                 </nz-page-header>
               </div>
-            </AccordionPanel>
+            </nz-collapse-panel>
 
-            <AccordionPanel [header]="'Send Email'" key="2">
+            <nz-collapse-panel [nzHeader]="'Send Email'" key="5">
               <WingBlank>
                 <nz-form-item>
                   <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired style="font-weight: 700;">Select Email Template</nz-form-label>
@@ -291,8 +294,8 @@
                   </nz-form-item>
                 </form>
               </WingBlank>
-            </AccordionPanel>
-          </Accordion>
+            </nz-collapse-panel>
+          </nz-collapse>
 
           <nz-button-group style="margin-top: 5px;">
             <button nzType="danger" nz-button nzSize="default" (click)="showReassignmentDrawer()">Reassign</button>

@@ -241,6 +241,7 @@ export class LeadSoloComponent implements OnInit {
     return links;
   }
 
+  showFab = false;
   handleDispositionTreeEvent(event) {
     if (event.node.isLeaf) {
       const links = this.getLinks(event.node);
@@ -259,6 +260,10 @@ export class LeadSoloComponent implements OnInit {
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
     }
     event.node.isExpanded = !event.node.isExpanded;
+  }
+
+  fabTransition() {
+    console.log("transition");
   }
 
   resetAllActionHandlers() {
