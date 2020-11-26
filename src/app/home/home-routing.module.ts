@@ -4,6 +4,7 @@ import { CampaignCreateComponent } from "../campaign-create/campaign-create.comp
 import { CampaignComponent } from "../campaign/campaign.component";
 import { FollowupComponent } from "../followup/followup.component";
 import { InvoiceComponent } from "../invoice/invoice.component";
+import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { OrganizationComponent } from "../organization/organization.component";
 import { SignupComponent } from "../signup/signup.component";
 import { UsersComponent } from "../users/users.component";
@@ -36,6 +37,11 @@ const routes: Routes = [
   {
     path: "solo",
     component: LeadSoloComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "lead-create",
+    component: LeadCreateComponent,
     pathMatch: "full",
   },
   {

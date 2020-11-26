@@ -45,13 +45,9 @@
                               <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
                                 <ng-container [ngSwitch]="typeDict[leadKey].type">
                                   <ng-container *ngSwitchCase="'date'">
-                                    <List [className]="'date-picker-list'">
-                                      <ListItem DatePicker [extra]="currentDateFormat(value)"
-                                        [disabled]="isDisabled(leadKey)" [arrow]="'horizontal'"
-                                        [mode]="selectedLead[leadKey]" [(ngModel)]="value" [locale]="locale"
-                                        (onOk)="onOk($event)">
-                                      </ListItem>
-                                    </List>
+                                    <input type="datetime-local" nz-input [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
+                                      nzShowTime (nzOnOpenChange)="handleDateOpenChange($event)"
+                                      (nzOnPanelChange)="handleDatePanelChange($event)">
                                   </ng-container>
   
                                   <ng-container *ngSwitchCase="'number'">
@@ -83,12 +79,24 @@
                     </ng-container>
                   </nz-collapse>
                 </WingBlank>
+              </nz-collapse-panel>
+            </nz-collapse>
 
-              </nz-collapse-panel>
-              <nz-collapse-panel [nzHeader]="'Disposition'">
-                <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
-                </nz-tree>      
-              </nz-collapse-panel>
+            <div style="background-color: whitesmoke;" style="padding-left: 3px;">
+              <ng-container *ngFor="let contact of selectedLead.contact">
+                <ion-button color="success" size="small" (click)="onPhoneClick(contact.value)" *ngIf="contact.category === 'mobile'">
+                  <ion-icon name="call"></ion-icon>
+                  <i class="icon ion-ios-telephone"></i> &nbsp;
+                  {{contact.value}}
+                </ion-button>
+              </ng-container>
+            </div>  
+
+            
+            <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)" style="background-color: whitesmoke;">
+            </nz-tree>   
+              <nz-collapse>
+
             </nz-collapse>
           </ng-container>
           <nz-collapse>
@@ -122,52 +130,64 @@
 
 
             <nz-collapse-panel [nzHeader]="requiredTemplate" [nzActive]="actions.isInformationRequested">
-              <div *ngIf="formModel">
-                <nz-page-header style="margin: 4px; padding: 4px;">
+              <div *ngIf="formModel" style="max-width:500px;">
+                <nz-page-header class="site-page-header" nzBackIcon>
                   <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
-                  <!-- <nz-page-header-subtitle>{{formModel.description}}</nz-page-header-subtitle> -->
+                  <nz-page-header-subtitle>{{formModel.description}}</nz-page-header-subtitle>
                   <nz-page-header-content>
                     <div class="content">
                       <form nz-form>
                         <ng-container *ngFor="let item of formModel.attributes">
                           <ng-container [ngSwitch]="item.type">
-
-
-                            <InputItem *ngSwitchCase="'text'" [type]="item.type" [placeholder]="item.placeholder"
-                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                            </InputItem>
-
-
-
-                            <InputItem *ngSwitchCase="'email'" [type]="item.type" [placeholder]="item.placeholder"
-                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                            </InputItem>
-
-                            <InputItem *ngSwitchCase="'phone'" [type]="item.type" [placeholder]="item.placeholder"
-                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                            </InputItem>
-
-
-
-                            <InputItem *ngSwitchCase="'number'" [type]="item.type" [placeholder]="item.placeholder"
-                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                            </InputItem>
-
-
-                            <ListItem DatePicker [extra]="currentDateFormat(value)" [mode]="'datetime'"
-                              [(ngModel)]="item.value" [locale]="locale" (onOk)="onOk($event)" *ngSwitchCase="'date'" [ngModelOptions]="{standalone: true}">
-                              {{item.label}}
-                            </ListItem>
-
-
-                            <List [className]="'date-picker-list'" *ngSwitchCase="'datetime-local'">
-                              <ListItem DatePicker [extra]="currentDateFormat(value)" [arrow]="'horizontal'"
-                                [mode]="'datetime'" [(ngModel)]="item.value" [locale]="locale" (onOk)="onOk($event)" [ngModelOptions]="{standalone: true}">
-                              </ListItem>
-                            </List>
-
-                            <!-- <nz-form-item *ngSwitchCase="'textarea'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
+        
+                            <nz-form-item *ngSwitchCase="'text'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" nzFor="email">{{item.label}}
+                              </nz-form-label>
+                              <nz-form-control [nzSm]="14" [nzXs]="24">
+                                <input nz-input [id]="item.id" [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}" />
+                              </nz-form-control>
+                            </nz-form-item>
+        
+                            <nz-form-item *ngSwitchCase="'email'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
+                              <nz-form-control [nzSpan]="14">
+                                <input nz-input type="email" id="{{item.name}}" [(ngModel)]="item.value"
+                                  placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
+                              </nz-form-control>
+                            </nz-form-item>
+        
+                            <nz-form-item *ngSwitchCase="'phone'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
+                              <nz-form-control [nzSpan]="14">
+                                <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                              </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item *ngSwitchCase="'number'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
+                              <nz-form-control [nzSpan]="14">
+                                <input nz-input type="number" id="{{item.name}}" min="{{item.min}}" [(ngModel)]="item.value"
+                                  max="{{item.max}}" placeholder="{{item.placeholder}}"
+                                  [ngModelOptions]="{standalone: true}">
+                              </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item *ngSwitchCase="'date'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
+                              <nz-form-control [nzSpan]="14">
+                                <input type="datetime-local" nz-input id="{{item.name}}" [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}">
+                              </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item *ngSwitchCase="'datetime-local'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
+                              <nz-form-control [nzSpan]="14">
+                                <input type="datetime-local" nz-input id="{{item.name}}" nzShowTime [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}">
+                              </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item *ngSwitchCase="'textarea'">
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
                                 <textarea nz-input placeholder="Controlled autosize"
                                   [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
@@ -175,44 +195,32 @@
                                   [ngModelOptions]="{standalone: true}">
                                 </textarea>
                               </nz-form-control>
-                            </nz-form-item> -->
-                            <InputItem *ngSwitchCase="'textarea'" [type]="item.type" [placeholder]="item.placeholder"
-                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                            </InputItem>
-
+                            </nz-form-item>
                             <nz-form-item *ngSwitchCase="'file'">
-                              <nz-form-label [nzSpan]="6">{{item.label}} (File can't be uploaded right now)
-                              </nz-form-label>
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}} (File can't be uploaded right now)</nz-form-label>
                               <nz-form-control [nzSpan]="14">
                                 <input nz-input type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
                                   [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
-
-                            <!-- <div *ngSwitchCase="'paragraph'">
+        
+                            <div *ngSwitchCase="'paragraph'">
                               <nz-form-item>
-                                <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
+                                <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
                                 <nz-form-control>
                                   <nz-input-group [nzSuffix]="inputClearTpl">
-                                    <input type="text" nz-input [(ngModel)]="item.value"
-                                      placeholder="input with clear icon" [(ngModel)]="item.value"
-                                      [ngModelOptions]="{standalone: true}" />
+                                    <input type="text" nz-input [(ngModel)]="item.value" placeholder="input with clear icon"
+                                      [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
                                   </nz-input-group>
                                 </nz-form-control>
                               </nz-form-item>
-
+        
                               <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill"
-                                  nzType="close-circle" *ngIf="item.value" (click)="item.value = null"></i>
-                              </ng-template>
-                            </div> -->
-
-                            <InputItem *ngSwitchCase="'paragraph'" [type]="'text'" [placeholder]="item.placeholder"
-                              [content]="item.label" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                            </InputItem>
-
+                                  nzType="close-circle" *ngIf="item.value" (click)="item.value = null"></i></ng-template>
+                            </div>
                             <div *ngSwitchCase="'autocomplete'">
                               <nz-form-item>
-                                <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
+                                <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
                                 <nz-form-control [nzSpan]="14">
                                   <nz-select id="{{item.name}}" [(ngModel)]="item.value"
                                     [ngModelOptions]="{standalone: true}">
@@ -224,7 +232,7 @@
                             </div>
                             <div *ngSwitchCase="'checkbox'">
                               <nz-form-item>
-                                <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
+                                <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
                                 <nz-form-control [nzSpan]="14">
                                   <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
                                     [nzValue]="v.value" [ngModelOptions]="{standalone: true}">
@@ -234,16 +242,17 @@
                               </nz-form-item>
                             </div>
                             <nz-form-item *ngSwitchCase="'radio'">
-                              <nz-form-label [nzSpan]="6">{{item.label}}</nz-form-label>
+                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
                               <nz-form-control [nzSpan]="14">
-                                <nz-radio-group [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                <nz-radio-group [(ngModel)]="item.value">
                                   <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
                                 </nz-radio-group>
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'button'">
                               <nz-form-control [nzSpan]="14">
-                                <input nz-input type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}">
+                                <input nz-input type="{{item.subtype}}" value="{{item.label}}"
+                                  id="{{item.name}}">
                               </nz-form-control>
                             </nz-form-item>
                           </ng-container>

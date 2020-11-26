@@ -34,5 +34,6 @@ export interface ILead {
   contact: {
     label: string;
     value: string;
+    category: string;
   }[];
 }

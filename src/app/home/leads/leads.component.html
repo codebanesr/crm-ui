@@ -1,117 +1,121 @@
-
-<div class="table-operations lr-margin">
+<!-- <nz-modal [(nzVisible)]="showGlobalSearch" nzTitle="Global Search">
   <ng-template #suffixIconButton>
-    <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+    <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search" (click)="showGlobalSearch=false"></i></button>
   </ng-template>
-  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="display: inline-block; max-width: 150px; margin-top: 5px;"
-    (change)="handleSearchTerm()">
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton"
+    style="display: inline-block; max-width: 150px; margin-top: 5px;" (change)="handleSearchTerm()">
     <input type="text" nz-input placeholder="Global Search" [(ngModel)]="leadOptions.searchTerm" />
   </nz-input-group>
-  <nz-divider nzType="vertical"></nz-divider>
-  <button nz-button nzType="primary" (click)="open()"><i nz-icon nzType="aim" nzTheme="outline"></i>Advanced
-    Filters</button>
-</div>
+</nz-modal> -->
 
+<SearchBar [(ngModel)]="leadOptions.searchTerm" [placeholder]="'Search'" [maxLength]="8" (change)="handleSearchTerm()"></SearchBar>
 
 <!-- Add pagination here based on query param change -->
-  <nz-collapse [nzBordered]="true" *ngIf="listOfData" class="scrollable">
-    <nz-collapse-panel [nzShowArrow]="false" *ngFor="let data of listOfData" [nzHeader]="accordianheader" [nzActive]="data.active"
-    (contextmenu)="contextMenu($event, menu)" (click)="updateLead(data)">
-  
-        <p *ngFor="let key of objectkeys(data)">
-          {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (data[key] | date) : (data[key])}}
-        </p>
-  
-        <ng-template #accordianheader>
-          <div nz-row nzJustify="space-between">
-            <div nz-col nzFlex="6">
-              <ion-label>
-                <h3>{{data?.firstName}}</h3>
-                <h5>{{data?.externalId}}</h5>
-              </ion-label>
-            </div>
-            <div nz-col nzFlex="1">
-              <ion-label (click)="$event.stopPropagation()">
-                <i nz-icon nzType="mail" nzTheme="outline"></i> &nbsp;
-                <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, data)"></ion-icon>
-              </ion-label>
-            </div>
-          </div>
-        </ng-template>
-  
-  
-        <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
-          <ul nz-menu>
-            <li nz-menu-item (click)="openReassignModal(data)">Reassign</li>
-            <li nz-menu-item (click)="openReassignModal(data, true)">Bulk Reassign</li>
-            <li nz-menu-item (click)="showLeadHistory(data)">Show history</li>
-            <li nz-menu-item nzDisabled>disabled menu item</li>
-            <li nz-submenu nzTitle="Email/Message">
-              <ul>
-                <li nz-menu-item (click)="showEmailModal(data)">Send Email</li>
-                <li nz-menu-item>4th menu item</li>
-              </ul>
-            </li>
-            <li nz-submenu nzTitle="Move To">
-              <ul>
-                <li nz-menu-item>Created</li>
-                <li nz-menu-item>Won</li>
-                <li nz-menu-item>Lost</li>
-              </ul>
-            </li>
-            <li nz-menu-item (click)="open()">Advanced Filters</li>
+<nz-collapse [nzBordered]="true" *ngIf="leads" class="scrollable">
+  <nz-collapse-panel [nzShowArrow]="false" *ngFor="let lead of leads" [nzHeader]="accordianheader"
+    [nzActive]="lead.active" (contextmenu)="contextMenu($event, menu)">
+    <ion-button (click)="handleLeadEdit(lead)">Edit</ion-button>
+    <p *ngFor="let key of objectkeys(lead)">
+      {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+    </p>
+
+    <ng-template #accordianheader>
+      <div nz-row nzJustify="space-between">
+        <div nz-col nzFlex="6">
+          <ion-label>
+            <h3>{{lead?.firstName}}</h3>
+            <h5>{{lead?.externalId}}</h5>
+          </ion-label>
+        </div>
+        <div nz-col nzFlex="1">
+          <ion-label (click)="$event.stopPropagation()">
+            <i nz-icon nzType="mail" nzTheme="outline"></i> &nbsp;
+            <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)"></ion-icon>
+          </ion-label>
+        </div>
+      </div>
+    </ng-template>
+
+
+    <nz-dropdown-menu #menu="nzDropdownMenu" class="context-area">
+      <ul nz-menu>
+        <li nz-menu-item (click)="openReassignModal(lead)">Reassign</li>
+        <li nz-menu-item (click)="openReassignModal(lead, true)">Bulk Reassign</li>
+        <li nz-menu-item (click)="showLeadHistory(lead)">Show history</li>
+        <li nz-menu-item nzDisabled>disabled menu item</li>
+        <li nz-submenu nzTitle="Email/Message">
+          <ul>
+            <li nz-menu-item (click)="showEmailModal(lead)">Send Email</li>
+            <li nz-menu-item>4th menu item</li>
           </ul>
-        </nz-dropdown-menu>
-  
-    </nz-collapse-panel>
-  </nz-collapse>
-<nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="perPage" nzSimple [nzPageIndex]="page" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"></nz-pagination>
+        </li>
+        <li nz-submenu nzTitle="Move To">
+          <ul>
+            <li nz-menu-item>Created</li>
+            <li nz-menu-item>Won</li>
+            <li nz-menu-item>Lost</li>
+          </ul>
+        </li>
+        <li nz-menu-item (click)="showFilterDrawer = true">Advanced Filters</li>
+      </ul>
+    </nz-dropdown-menu>
+
+  </nz-collapse-panel>
+</nz-collapse>
+<nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="perPage" nzSimple [nzPageIndex]="page"
+  (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"></nz-pagination>
 <nz-empty *ngIf="isEmpty"></nz-empty>
 
-<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzPlacement]="placement" nzTitle="Select Advanced Filters"
-  (nzOnClose)="close()" nzWidth="350px">
-  <form nz-form [formGroup]="settingForm" nzLayout="vertical">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzFor="dateRange">Select Campaign</nz-form-label>
-      <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" formControlName="selectedCampaign">
-        <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id"></nz-option>
-      </nz-select>
-    </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzFor="dateRange">Date Range</nz-form-label>
-      <nz-form-control [nzSpan]="24">
-        <nz-range-picker formControlName="dateRange"></nz-range-picker>
-      </nz-form-control>
-    </nz-form-item>
+<nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
+  (nzOnClose)="closeFilterDrawer()">
 
-    <!-- <nz-form-item>
-      <nz-form-label [nzSpan]="24" nzFor="moduleTypes">Module Types</nz-form-label>
-      <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-        nzPlaceHolder="Please select" formControlName="moduleTypes">
-        <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
-      </nz-select>
-    </nz-form-item> -->
-  </form>
+  <nz-select nzMode="default"  [nzPlaceHolder]="'select campaign'" [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()" style="width: 200px;">
+    <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName"
+      [nzValue]="campaign">
+    </nz-option>
+  </nz-select>
 
-  <form nz-form nzLayout="inline" [formGroup]="settingForm!">
-    <nz-form-item *ngFor="let switch of listOfSwitch">
-      <nz-form-label> {{ switch.name }} </nz-form-label>
-      <nz-form-control><nz-switch [formControlName]="switch.formControlName"></nz-switch></nz-form-control>
-    </nz-form-item>
-  </form>
-  <nz-divider nzText="Fields To Show"></nz-divider>
-  <nz-checkbox-group [(ngModel)]="showCols" (ngModelChange)="rerenderCols()"></nz-checkbox-group>
+  <nz-collapse [nzBordered]="false">
+    <nz-collapse-panel [nzHeader]="'Lead Filter'" [nzActive]="false">
+      <ng-container *ngIf="typeDict">
+        <ng-container *ngFor="let key of objectkeys(typeDict)">
+          <nz-descriptions nzLayout="vertical">
+            <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
+              <ng-container [ngSwitch]="typeDict[key].type">
+                <ng-container *ngSwitchCase="'date'">
+                  <input type="datetime-local" nz-input [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
+                </ng-container>
 
+                <ng-container *ngSwitchCase="'number'">
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+                    [ngModelOptions]="{standalone: true}" />
+                </ng-container>
 
-  <nz-divider nzText="Leads By Status"></nz-divider>
-  <nz-descriptions nzLayout="vertical">
-    <ng-container *ngFor="let outer of basicOverview?.result">
-      <nz-descriptions-item nzColumn="24"	[nzTitle]="outer?._id">{{outer?.count}}</nz-descriptions-item>
-    </ng-container>
-  </nz-descriptions>
+                <ng-container *ngSwitchCase="'string'">
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+                    [ngModelOptions]="{standalone: true}" />
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'tel'">
+                  <input nz-input [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}" />
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'select'">
+                  <nz-select nzMode="default" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
+                    <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
+                    </nz-option>
+                  </nz-select>
+                </ng-container>
+              </ng-container>
+            </nz-descriptions-item>
+          </nz-descriptions>
+        </ng-container>
+        <!-- <button nz-button (click)="printFilters()">print filters</button> -->
+      </ng-container>
+    </nz-collapse-panel>
+  </nz-collapse>
 </nz-drawer>
-
 
 
 <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
@@ -146,7 +150,8 @@
       <nz-form-control [nzSm]="24" [nzXs]="24">
         <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
           nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-          <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment"></nz-option>
+          <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName" [nzValue]="attachment">
+          </nz-option>
         </nz-select>
         <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
       </nz-form-control>
@@ -158,7 +163,7 @@
 <!-- reassignment modal -->
 <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
   (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user" *ngIf="managers">
-  <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager"/>
+  <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager" />
 
   <nz-list nzItemLayout="horizontal">
     <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
@@ -173,12 +178,9 @@
 
 
 <!-- timeline modal-->
-<nz-modal [(nzVisible)]="isTimelineModalVisible"
-  (nzOnCancel)="handleTimelineClose()"
-  nzTitle="History for Lead {{selectedLead?.externalId}}"
-  *ngIf="campaignList"
->
-  <nz-timeline *ngIf = "selectedLeadHistory?.history?.length > 0; else empty">
+<nz-modal [(nzVisible)]="isTimelineModalVisible" (nzOnCancel)="handleTimelineClose()"
+  nzTitle="History for Lead {{selectedLead?.externalId}}" *ngIf="campaignList">
+  <nz-timeline *ngIf="selectedLeadHistory?.history?.length > 0; else empty">
     <nz-timeline-item *ngFor="let element of selectedLeadHistory?.history">
       {{element.note}}
     </nz-timeline-item>
@@ -192,3 +194,24 @@
 <ng-template #empty>
   <nz-empty></nz-empty>
 </ng-template>
+
+
+<ion-fab horizontal="end" vertical="bottom" slot="fixed" style="position: absolute; bottom: 70px; z-index: 999;">
+  <ion-fab-button color="primary">
+    <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <!-- create lead -->
+    <ion-fab-button color="primary" (click)="handleCreateLead()">
+      <!-- filter -->
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button color="primary">
+      <!-- followup -->
+      <ion-icon name="alarm-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button color="primary" (click)="showFilterDrawer = true">
+      <ion-icon name="filter"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

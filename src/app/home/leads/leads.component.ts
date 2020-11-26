@@ -15,6 +15,8 @@ import { LeadsService } from "../leads.service";
 import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
+import { ToastController } from "@ionic/angular";
+import { ToastService } from "ng-zorro-antd-mobile";
 const { Share } = Plugins;
 
 @Component({
@@ -32,48 +34,60 @@ export class LeadsComponent implements OnInit {
     private fb: FormBuilder,
     private usersService: UsersService,
     private campaignService: CampaignService,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    public toast: ToastService
   ) {}
 
   page: number = 1;
   perPage: number = 15;
   tagPlaceHolder = 3;
+  showFilterDrawer = false;
+  showGlobalSearch = false;
 
   showCols = [];
   listOfColumns: ColumnItem[];
   listOfOption: any[] = [];
 
-  visible: boolean;
-  placement = "right";
   managers = null;
   isTimelineModalVisible = false;
 
   settingValue!: Setting;
+
+  /** @Todo this should be removed */
   settingForm: FormGroup;
+  leadFilter = {} as any;
   indeterminate = false;
   checked = false;
   listOfCurrentPageData: any[] = [];
 
   ngOnInit() {
     this.pubsub.$pub("HEADING", { heading: "Leads" });
-    this.visible = false;
+    this.populateCampaignDropdown("");
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initSettingForm();
     this.initEmailForm();
-    this.rerenderCols();
-    this.getAllLeadColumns();
     this.initRightClickActions();
     this.getBasicOverview();
     // this.initEtAutocomplete();
-    this.populateCampaignDropdown("");
   }
 
   campaignList: any[];
+  selectedCampaign: any;
   async populateCampaignDropdown(hint: string) {
     this.campaignList = await this.campaignService.populateCampaignDropdown(
       hint
     );
-    console.log(this.campaignList);
+
+    this.selectedCampaign = this.campaignList[this.campaignList.length - 1];
+    this.rerenderCols();
+    this.getAllLeadColumns();
+  }
+
+  async onCampaignSelect() {
+    const result = await this.leadsService.getLeadMappings(
+      this.selectedCampaign._id
+    );
+    this.typeDict = result.typeDict;
   }
 
   onItemChecked(id: string, checked: boolean): void {
@@ -92,7 +106,7 @@ export class LeadsComponent implements OnInit {
 
   onAllChecked(checked: boolean): void {
     if (checked)
-      this.listOfData.forEach((data: any) =>
+      this.leads.forEach((data: any) =>
         this.setOfCheckedId.add(data.externalId)
       );
     else this.setOfCheckedId = new Set<string>();
@@ -100,7 +114,7 @@ export class LeadsComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.checked = this.listOfData.every(({ externalId }) =>
+    this.checked = this.leads.every(({ externalId }) =>
       this.setOfCheckedId.has(externalId)
     );
   }
@@ -118,7 +132,7 @@ export class LeadsComponent implements OnInit {
     );
   }
 
-  listOfData: DataItem[] = [];
+  leads: DataItem[] = [];
   objectkeys = Object.keys;
 
   // showCols: this.showCols.filter(cols=>cols.checked).map(col=>col.value)
@@ -136,15 +150,16 @@ export class LeadsComponent implements OnInit {
   };
   isEmpty: boolean;
   getData() {
+    this.toast.info("Fetching leads");
     this.leadsService.getLeads(this.leadOptions).subscribe(
-      (response: any) => {
+      async (response: any) => {
         if (response.data.length === 0) {
           this.isEmpty = true;
         } else {
-          this.msg.info(`Retrieved ${response.data.length} leads`);
+          this.toast.hide();
           this.isEmpty = false;
           this.generateListOfCols(response.data[0]);
-          this.listOfData = response.data;
+          this.leads = response.data;
           this.total = response.total;
         }
       },
@@ -160,35 +175,34 @@ export class LeadsComponent implements OnInit {
       value: string;
       type: string;
       checked: boolean;
+      options: any[];
     };
   };
   dataLoaded: boolean = false;
   getAllLeadColumns() {
     this.loading = true;
-    this.leadsService
-      .getAllLeadColumns(this.settingForm.get("selectedCampaign").value._id)
-      .subscribe(
-        (mSchema: { paths: ILeadColumn[] }) => {
-          this.loading = false;
-          mSchema.paths.forEach((path: ILeadColumn) => {
-            this.showCols.push({
-              label: path.readableField,
-              value: path.internalField,
-              checked: path.checked,
-              type: path.type,
-            });
+    this.leadsService.getAllLeadColumns(this.selectedCampaign._id).subscribe(
+      (mSchema: { paths: ILeadColumn[] }) => {
+        this.loading = false;
+        mSchema.paths.forEach((path: ILeadColumn) => {
+          this.showCols.push({
+            label: path.readableField,
+            value: path.internalField,
+            checked: path.checked,
+            type: path.type,
           });
+        });
 
-          // for tables
-          this.typeDict = Object.assign(
-            {},
-            ...this.showCols.map((x) => ({ [x.value]: x }))
-          );
-        },
-        (error) => {
-          this.loading = false;
-        }
-      );
+        // for tables
+        this.typeDict = Object.assign(
+          {},
+          ...this.showCols.map((x) => ({ [x.value]: x }))
+        );
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
   }
 
   // get the mapper here and change the names, the key value pairs for data elements will not change
@@ -202,12 +216,6 @@ export class LeadsComponent implements OnInit {
 
   createLead() {
     this.router.navigate(["welcome", "leads", "create"]);
-  }
-
-  updateLead(data) {
-    this.router.navigate(["welcome", "leads", "create"], {
-      queryParams: { id: data.externalId },
-    });
   }
 
   listOfSwitch = [
@@ -251,14 +259,6 @@ export class LeadsComponent implements OnInit {
   onPageIndexChange(page: number) {
     this.page = page;
     this.getData();
-  }
-
-  open(): void {
-    this.visible = true;
-  }
-
-  close(): void {
-    this.visible = false;
   }
 
   handleSearchTerm() {
@@ -412,6 +412,27 @@ export class LeadsComponent implements OnInit {
       text: "Really awesome stuff ",
       url: "https://thefosstech.com",
       dialogTitle: "Share with buddies",
+    });
+  }
+
+  closeFilterDrawer() {
+    this.showFilterDrawer = false;
+  }
+
+  handleLeadEdit(lead) {
+    this.router.navigate(["home", "solo"], {
+      queryParams: {
+        campaignId: this.selectedCampaign._id,
+        leadId: lead._id,
+      },
+    });
+  }
+
+  handleCreateLead() {
+    this.router.navigate(["home", "lead-create"], {
+      queryParams: {
+        campaignId: this.selectedCampaign._id,
+      },
     });
   }
 }

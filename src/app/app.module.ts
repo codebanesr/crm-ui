@@ -15,7 +15,12 @@ import { authInterceptorProviders } from "./helpers/auth.interceptor";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { en_US, NZ_I18N } from "ng-zorro-antd/i18n";
-import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
+import {
+  LOCAL_PROVIDER_TOKEN,
+  NgZorroAntdMobileModule,
+} from "ng-zorro-antd-mobile";
+import { CallNumber } from "@ionic-native/call-number/ngx";
+import { Contacts } from "@ionic-native/contacts/ngx";
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -32,10 +37,13 @@ import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
     BrowserAnimationsModule,
   ],
   providers: [
+    CallNumber,
+    Contacts,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: NZ_I18N, useValue: en_US },
+    { provide: LOCAL_PROVIDER_TOKEN, useValue: en_US },
     authInterceptorProviders,
   ],
   bootstrap: [AppComponent],

@@ -20,8 +20,15 @@ import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
 import { NzTreeNode } from "ng-zorro-antd/tree";
 import { ActivatedRoute } from "@angular/router";
+import { CallNumber } from "@ionic-native/call-number/ngx";
 const { Geolocation } = Plugins;
 import { en_US, ToastService } from "ng-zorro-antd-mobile";
+import {
+  Contacts,
+  Contact,
+  ContactField,
+  ContactName,
+} from "@ionic-native/contacts/ngx";
 
 @Component({
   selector: "app-lead-solo",
@@ -35,7 +42,9 @@ export class LeadSoloComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UsersService,
     private activatedRoute: ActivatedRoute,
-    private toast: ToastService
+    private toast: ToastService,
+    private callNumber: CallNumber,
+    private contacts: Contacts
   ) {}
 
   modelFields: Array<field> = [];
@@ -50,7 +59,7 @@ export class LeadSoloComponent implements OnInit {
     attributes: this.modelFields,
   };
 
-  selectedCampaign: string;
+  selectedCampaignId: string;
   selectedLead: ILead;
   typeDict: any;
   objectkeys = Object.keys;
@@ -82,13 +91,29 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
+  onPhoneClick(number: string) {
+    console.log(number);
+    this.callNumber
+      .callNumber(number.trim(), true)
+      .then((res) => console.log("Launched dialer!", res))
+      .catch((err) => console.log("Error launching dialer", err));
+  }
+
+  selectedCampaign = {} as any;
   subscribeToQueryParamChange() {
     this.activatedRoute.queryParams.subscribe(
       async (data) => {
-        this.selectedCampaign = data.campaignId;
+        this.selectedCampaignId = data.campaignId;
+
         await this.getLeadMappings();
         this.getDispositionForCampaign();
-        this.fetchNextLead();
+
+        // if leadId is sent from leads component ts then fetch that lead, also once lead is fetched clear the query params
+        if (data.leadId) {
+          this.fetchLeadById(data.leadId);
+        } else {
+          this.fetchNextLead();
+        }
         console.log("logging query params", data);
       },
       (error) => {
@@ -121,7 +146,7 @@ export class LeadSoloComponent implements OnInit {
   }
 
   getDispositionForCampaign() {
-    this.campaignService.getDisposition(this.selectedCampaign).subscribe(
+    this.campaignService.getDisposition(this.selectedCampaignId).subscribe(
       (data: any) => {
         this.callDispositions = data.options;
       },
@@ -137,11 +162,11 @@ export class LeadSoloComponent implements OnInit {
   leadGroups: { label: string; value: string[]; _id: string }[] = [];
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings(
-      this.selectedCampaign
+      this.selectedCampaignId
     );
 
     const campaignObject = this.campaignList.filter(
-      (element) => element._id === this.selectedCampaign
+      (element) => element._id === this.selectedCampaignId
     );
 
     this.leadGroups = campaignObject[0]?.groups;
@@ -275,11 +300,11 @@ export class LeadSoloComponent implements OnInit {
   handleLeadStatusChange(event) {}
 
   showAppliedFiltersOnNoResult = false;
-  fetchNextLead(event?) {
+  fetchNextLead() {
     this.showAppliedFiltersOnNoResult = false;
     this.toast.loading("Fetching next lead");
     this.leadsService
-      .fetchNextLead(this.selectedCampaign, this.typeDict, this.leadFilter)
+      .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter)
       .subscribe(
         (data: any) => {
           this.toast.hide();
@@ -292,6 +317,20 @@ export class LeadSoloComponent implements OnInit {
           console.log(error);
         }
       );
+  }
+
+  fetchLeadById(id: string) {
+    this.toast.info("Fetching lead");
+    this.leadsService.getLeadById(id).subscribe(
+      (data: ILead) => {
+        this.toast.hide();
+        this.selectedLead = data;
+      },
+      (err) => {
+        this.toast.hide();
+        console.log(err);
+      }
+    );
   }
 
   emailForm: FormGroup;
@@ -395,12 +434,30 @@ export class LeadSoloComponent implements OnInit {
 
     /** @Todo validate form before submitting, also add backend validation */
     console.log(this.contactForm.value, this.selectedLead.contact);
+
+    // in case backend sends an empty array, should not happen but is possible sometimes
+    this.selectedLead.contact = this.selectedLead.contact || [];
     this.selectedLead.contact.push(this.contactForm.value);
 
     this.leadsService
       .addContact(this.selectedLead._id, this.contactForm.value)
       .subscribe(
         (success) => {
+          let contact: Contact = this.contacts.create();
+
+          contact.name = new ContactName(
+            null,
+            this.contactForm.get("label").value,
+            ""
+          );
+          contact.phoneNumbers = [
+            new ContactField("mobile", this.contactForm.get("value").value),
+          ];
+          contact.save().then(
+            () => this.toast.info("saved to phone"),
+            (error: any) => this.toast.info("Error saving contact to phone")
+          );
+
           this.toast.success("Updated contact information");
         },
         (error) => {
@@ -450,4 +507,7 @@ export class LeadSoloComponent implements OnInit {
     }
     return `${dateStr} ${timeStr}`;
   }
+
+  handleDateOpenChange(event) {}
+  handleDatePanelChange(event) {}
 }

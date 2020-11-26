@@ -140,12 +140,28 @@
     ora "5.0.0"
     rxjs "6.6.2"
 
+"@angular/animations@^10.0.14":
+  version "10.2.3"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-10.2.3.tgz#eb12630b530ff861577ead9470c066bb37cd8655"
+  integrity sha512-UP3aynCSkFqEJfZ9bQMyBIVo4mm5EuIHL6NfMqhqLQankKKnc25Pi3a7heq0xzV1EoAxGSd3UBn36Y8Jjav2fg==
+  dependencies:
+    tslib "^2.0.0"
+
 "@angular/animations@^10.1.4":
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-10.2.0.tgz#7d60e8261cccc9a348699f23bc40b8d5c569baaa"
   integrity sha512-lKjC2Jm2Al4GCW2zKutdskMWqe5S23gknPvp65ybmR5D1Pz/YgzDOHXmTHqDn5qXJgzpFt/fJgNi805XrAOm4g==
   dependencies:
     tslib "^2.0.0"
+
+"@angular/cdk@^10.1.3":
+  version "10.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-10.2.7.tgz#0ff82eb91b2653ea26909c57a460d4593b44f186"
+  integrity sha512-ZQjDfTRTn7JuAKsf3jiIdU2XBaxxGBi/ZWYv5Pb3HCl6B4PISsIE5VWRhkoUogoAB0MiFHpjnWeIqknJEm11YQ==
+  dependencies:
+    tslib "^2.0.0"
+  optionalDependencies:
+    parse5 "^5.0.0"
 
 "@angular/cdk@^10.2.4":
   version "10.2.5"
@@ -1111,6 +1127,27 @@
   integrity sha512-xQyJSZo50+aAvX3ZsX5h2xJDjz1LQxGT0A6/qD1pqJVEUeDhzdfYMbxCPWbmqSONZXddHtwrTiIsjq1Wd+ukuQ==
   dependencies:
     tslib "^1.9.0"
+
+"@ionic-native/call-directory@^5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/call-directory/-/call-directory-5.30.0.tgz#005465fc9b76a0d4e69ec416d8b91c79881fc72c"
+  integrity sha512-2brzsdE8kUAamEIeNAIMh/dLvu4iyB49zkNE7Whg/UB8JMUe1LRXf/0XtV3MPRo2w+6EodxI0Yu7XKAaKZy8pQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/call-number@^5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/call-number/-/call-number-5.30.0.tgz#97e1b52798e1e1b085c9e0e5fa4caeab1b7d7bf0"
+  integrity sha512-P3IkHj7xAIVyYitDnRa9aTYJSQ4xTSJ/dBCm3RXM9NARLnCDNgKDXQBKWxHhPAgFp0M3VxkI67WsbRI/BQjwiQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/contacts@^5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/contacts/-/contacts-5.30.0.tgz#f668f124923786add32e919b866faa19c6ab8047"
+  integrity sha512-PZO4gV98oeMpEi6ZHHWVuHwdI2JgkEnttV+Wc1De7upyuJEo0r580fuly+eoEHAo3aweDk8v3TvI9ScU7CLUww==
+  dependencies:
+    "@types/cordova" latest
 
 "@ionic-native/core@^5.0.0":
   version "5.29.0"
@@ -2302,6 +2339,11 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
+call-number@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/call-number/-/call-number-1.0.1.tgz#bf9daae487fd6a5573f89aa3655fbe8af036afd2"
+  integrity sha1-v52q5If9alVz+JqjZV++ivA2r9I=
+
 caller-callsite@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/caller-callsite/-/caller-callsite-2.0.0.tgz#847e0fce0a223750a9a027c54b33731ad3154134"
@@ -2849,6 +2891,11 @@ copy-webpack-plugin@^6.0.3:
     schema-utils "^3.0.0"
     serialize-javascript "^5.0.1"
     webpack-sources "^1.4.3"
+
+cordova-plugin-contacts@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-contacts/-/cordova-plugin-contacts-3.0.1.tgz#37aadabec93c982c04a3dcda0e4f1cfa096a84ab"
+  integrity sha1-N6ravsk8mCwEo9zaDk8c+glqhKs=
 
 core-js-compat@^3.6.2:
   version "3.6.5"
@@ -6063,6 +6110,16 @@ next-tick@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
+
+ng-zorro-antd-mobile@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/ng-zorro-antd-mobile/-/ng-zorro-antd-mobile-3.0.3.tgz#c514774453a236de5ece371d8d9dbc57ae2c4f0c"
+  integrity sha512-xWDt36BMuvyY8POfhhM+Xl5+v9vbGlXLoJ0hDrjrvDJuGP2CW/NHQN2tuybDoSPaRjZL8SRrWFHUD0lH1LOWYQ==
+  dependencies:
+    "@angular/animations" "^10.0.14"
+    "@angular/cdk" "^10.1.3"
+    "@ant-design/icons-angular" "^10.0.0"
+    tslib "^2.0.0"
 
 ng-zorro-antd@^10.0.0:
   version "10.0.2"
