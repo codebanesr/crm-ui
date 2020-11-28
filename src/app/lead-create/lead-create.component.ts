@@ -1,7 +1,11 @@
 import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { ToastService } from "ng-zorro-antd-mobile";
 import { NzMessageService } from "ng-zorro-antd/message";
+import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
+import { ClassValidationError } from "../home/interfaces/global.interfaces";
 import { ILead } from "../home/interfaces/leads.interface";
 import { LeadsService } from "../home/leads.service";
 
@@ -15,18 +19,24 @@ export class LeadCreateComponent implements OnInit {
     private leadsService: LeadsService,
     private campaignService: CampaignService,
     private msgService: NzMessageService,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private toastService: ToastService,
+    private fb: FormBuilder
   ) {}
 
-  selectedCampaign: string;
-  selectedLead: ILead = {} as any;
+  selectedCampaign: ICampaign;
+  selectedLead: ILead = {
+    contact: [],
+  } as any;
   typeDict: any;
   objectkeys = Object.keys;
   dateMode: string = "time";
   loadingCampaignList = false;
   campaignList: any[] = [];
   callDispositions;
+  isContactDrawerVisible = false;
   ngOnInit(): void {
+    this.initContactForm();
     this.subscribeToQueryParamChange();
   }
 
@@ -34,8 +44,8 @@ export class LeadCreateComponent implements OnInit {
     this.loadingCampaignList = true;
     this.campaignService
       .getCampaignById(campaignId)
-      .subscribe(async (campaign) => {
-        console.log(campaign);
+      .subscribe(async (campaign: ICampaign) => {
+        this.selectedCampaign = campaign;
       });
     await this.getLeadMappings(campaignId);
   }
@@ -46,6 +56,7 @@ export class LeadCreateComponent implements OnInit {
         this.callDispositions = data.options;
       },
       (error) => {
+        this.toastService.fail("Failed to fetch Disposition");
         console.log(error);
       }
     );
@@ -67,11 +78,22 @@ export class LeadCreateComponent implements OnInit {
 
   handleLeadSubmission(lead: ILead) {
     /** @Todo all updates should move to lead-solo component, its already implemented there */
-    // this.leadsService.updateLead(lead.externalId, lead).subscribe(data => {
-    //   this.msgService.success("Successfully updated lead");
-    // }, ({error}: {error: ClassValidationError}) => {
-    //     this.msgService.error(error.message[0]);
-    // });
+    this.toastService.show("Saving lead");
+    this.leadsService
+      .createLead(
+        lead,
+        this.selectedCampaign._id,
+        this.selectedCampaign.campaignName
+      )
+      .subscribe(
+        (data) => {
+          this.toastService.show("Lead saved Successfully");
+          this.msgService.success("Successfully updated lead");
+        },
+        ({ error }: { error: ClassValidationError }) => {
+          this.toastService.fail("Failed to create lead");
+        }
+      );
   }
 
   handleDispositionTreeEvent(event) {
@@ -96,5 +118,62 @@ export class LeadCreateComponent implements OnInit {
 
     this.camapaignId = campaignId;
     this.populateCampaignDropdown(this.camapaignId);
+  }
+
+  contactForm!: FormGroup;
+  initContactForm() {
+    this.contactForm = this.fb.group({
+      label: [null, [Validators.required]],
+      value: [null, [Validators.required]],
+      category: [null, [Validators.required]],
+    });
+  }
+
+  submitContactForm(addNext: boolean) {
+    for (const i in this.contactForm.controls) {
+      this.contactForm.controls[i].markAsDirty();
+      this.contactForm.controls[i].updateValueAndValidity();
+    }
+
+    /** @Todo validate form before submitting, also add backend validation */
+    console.log(this.contactForm.value, this.selectedLead.contact);
+
+    // in case backend sends an empty array, should not happen but is possible sometimes
+    this.selectedLead.contact = this.selectedLead.contact || [];
+    this.selectedLead.contact.push(this.contactForm.value);
+
+    // this.leadsService
+    //   .addContact(this.selectedLead._id, this.contactForm.value)
+    //   .subscribe(
+    //     (success) => {
+    //       let contact: Contact = this.contacts.create();
+
+    //       contact.name = new ContactName(
+    //         null,
+    //         this.contactForm.get("label").value,
+    //         ""
+    //       );
+    //       contact.phoneNumbers = [
+    //         new ContactField("mobile", this.contactForm.get("value").value),
+    //       ];
+    //       contact.save().then(
+    //         () => this.toast.info("saved to phone"),
+    //         (error: any) => this.toast.info("Error saving contact to phone")
+    //       );
+
+    //       this.toastService.success("Updated contact information");
+    //     },
+    //     (error) => {
+    //       this.selectedLead.contact.pop();
+    //       this.toastService.fail("Failed to update contact information");
+    //     }
+    //   );
+
+    /** @Todo check for form errors */
+    if (addNext) {
+      return this.contactForm.reset();
+    }
+
+    this.isContactDrawerVisible = false;
   }
 }

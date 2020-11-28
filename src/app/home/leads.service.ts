@@ -141,4 +141,11 @@ export class LeadsService {
       contact
     );
   }
+
+  createLead(lead, campaignId: string, campaignName: string) {
+    return this.http.post(
+      `${environment.apiUrl}/lead/create/${campaignId}/${campaignName}`,
+      lead
+    );
+  }
 }

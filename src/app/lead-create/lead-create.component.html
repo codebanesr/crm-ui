@@ -1,54 +1,95 @@
 <nz-divider></nz-divider>
-<ng-container *ngIf="typeDict">
-  <nz-descriptions nzTitle="Lead Info" nzBordered=true>
-    <ng-container *ngFor="let leadKey of objectkeys(typeDict)">
-      <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-        <ng-container [ngSwitch]="typeDict[leadKey].type">
-          <ng-container *ngSwitchCase="'date'">
-            <nz-date-picker
-              [nzMode]="dateMode"
-              [(ngModel)]="selectedLead[leadKey]"
-              [nzDisabled]="isDisabled(leadKey)"
-              nzShowTime
-              (nzOnOpenChange)="handleDateOpenChange($event)"
-              (nzOnPanelChange)="handleDatePanelChange($event)"
-            >
-            </nz-date-picker>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'number'">
-            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"/>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'string'">
-            <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
-          </ng-container>
-
-
-          <ng-container *ngSwitchCase="'select'">
-            <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-              <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option"></nz-option>
-            </nz-select>
-
-          </ng-container>
-
-        </ng-container>
-
+<WingBlank class="scrollable" style="margin-bottom: 35px;">
+  <div *ngIf="typeDict">
+    <nz-descriptions nzTitle="Lead Info" nzBordered=true>
+      <nz-descriptions-item nzTitle="Contact Info">
+        <nz-collapse nzHeader="Contact Info">
+          <nz-collapse-panel nzHeader="Contact Information" nzShowArrow="false">
+            <ng-container *ngFor="let contact of selectedLead.contact">
+              <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
+                <ion-icon name="call"></ion-icon>
+                <i class="icon ion-ios-telephone"></i> &nbsp;
+                {{contact.value}}
+              </ion-button>
+              <a *ngIf="contact.category!=='mobile'"> {{contact.value}}</a>
+            </ng-container>
+            <button nz-button nzSize='small' style="float: right;" (click)="isContactDrawerVisible = true">Add
+              Contact</button>
+          </nz-collapse-panel>
+        </nz-collapse>
       </nz-descriptions-item>
-    </ng-container>
-    <nz-descriptions-item nzTitle="Disposition">
-      <nz-tag nzColor="#55acee">
-        <i nz-icon nzType="twitter"></i>
-        <span>{{selectedLead["disposition"]}}</span>
-      </nz-tag>
-      <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)"></nz-tree>
-    </nz-descriptions-item>
+      <ng-container *ngFor="let leadKey of objectkeys(typeDict)">
+        <ng-container *ngIf="['string', 'number', 'date', 'select'].includes(typeDict[leadKey].type)">
+          <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+            <ng-container [ngSwitch]="typeDict[leadKey].type">
+              <ng-container *ngSwitchCase="'date'">
+                <input nz-input [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)" type="datetime-local">
+              </ng-container>
+  
+              <ng-container *ngSwitchCase="'number'">
+                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+              </ng-container>
+  
+              <ng-container *ngSwitchCase="'string'">
+                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                  [disabled]="isDisabled(leadKey)" />
+              </ng-container>
+  
+  
+              <ng-container *ngSwitchCase="'select'">
+                <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                  <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
+                  </nz-option>
+                </nz-select>
+  
+              </ng-container>
+  
+            </ng-container>
+          </nz-descriptions-item>
+        </ng-container>
+      </ng-container>
+      
+      <nz-descriptions-item nzTitle="Remark" nzSpan=2>
+        <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
+          <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
+        </nz-input-group>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
 
-    <nz-descriptions-item nzTitle="Remark" nzSpan=2>
-      <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
-        <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
-      </nz-input-group>
-    </nz-descriptions-item>
-  </nz-descriptions>
-  <a nz-button nzType="link" (click)="handleLeadSubmission(selectedLead)">Submit Change</a>
-</ng-container>
+  <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)">Submit</ion-button>
+</WingBlank>
+
+<nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="isContactDrawerVisible=false"
+  (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
+  <form nz-form [formGroup]="contactForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Label</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Label!">
+        <input id="label" type="text" nz-input formControlName="label" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Value</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Value!">
+        <input id="value" type="text" nz-input formControlName="value" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzFor="category" nzRequired>category</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter category of contact">
+        <nz-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
+          <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
+          <nz-option nzValue="email" nzLabel="Email"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <ng-template #contactModalFooter>
+    <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>
+    <button nz-button nzType="primary" (click)="submitContactForm(true)">Add Another</button>
+  </ng-template>
+</nz-modal>
