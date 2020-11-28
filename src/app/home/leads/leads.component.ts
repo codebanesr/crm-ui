@@ -55,7 +55,6 @@ export class LeadsComponent implements OnInit {
 
   /** @Todo this should be removed */
   settingForm: FormGroup;
-  leadFilter = {} as any;
   indeterminate = false;
   checked = false;
   listOfCurrentPageData: any[] = [];
@@ -150,6 +149,8 @@ export class LeadsComponent implements OnInit {
   };
   isEmpty: boolean;
   getData() {
+    /** @Todo please prevent big typedict from being passed, look for an alternate route */
+    this.leadOptions["typeDict"] = this.typeDict;
     this.toast.info("Fetching leads");
     this.leadsService.getLeads(this.leadOptions).subscribe(
       async (response: any) => {

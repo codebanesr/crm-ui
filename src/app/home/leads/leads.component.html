@@ -84,25 +84,25 @@
             <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
               <ng-container [ngSwitch]="typeDict[key].type">
                 <ng-container *ngSwitchCase="'date'">
-                  <input type="datetime-local" nz-input [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
+                  <input type="datetime-local" nz-input [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}">
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'number'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
                     [ngModelOptions]="{standalone: true}" />
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'string'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
                     [ngModelOptions]="{standalone: true}" />
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'tel'">
-                  <input nz-input [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}" />
+                  <input nz-input [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'select'">
-                  <nz-select nzMode="default" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
+                  <nz-select nzMode="default" [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}">
                     <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
                     </nz-option>
                   </nz-select>
@@ -112,6 +112,7 @@
           </nz-descriptions>
         </ng-container>
         <!-- <button nz-button (click)="printFilters()">print filters</button> -->
+        <ion-button expand="block" (click)="getData()">Submit</ion-button>
       </ng-container>
     </nz-collapse-panel>
   </nz-collapse>

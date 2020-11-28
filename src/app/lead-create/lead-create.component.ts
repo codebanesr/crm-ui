@@ -8,6 +8,7 @@ import { CampaignService } from "../home/campaign.service";
 import { ClassValidationError } from "../home/interfaces/global.interfaces";
 import { ILead } from "../home/interfaces/leads.interface";
 import { LeadsService } from "../home/leads.service";
+import { difference } from "lodash";
 
 @Component({
   selector: "app-lead-create",
@@ -35,6 +36,7 @@ export class LeadCreateComponent implements OnInit {
   campaignList: any[] = [];
   callDispositions;
   isContactDrawerVisible = false;
+  otherData = [];
   ngOnInit(): void {
     this.initContactForm();
     this.subscribeToQueryParamChange();
@@ -47,7 +49,35 @@ export class LeadCreateComponent implements OnInit {
       .subscribe(async (campaign: ICampaign) => {
         this.selectedCampaign = campaign;
       });
-    await this.getLeadMappings(campaignId);
+    this.getLeadMappings(campaignId);
+  }
+
+  showOtherData = false;
+  evaluateOtherData() {
+    this.showOtherData = !this.showOtherData;
+
+    if (!this.showOtherData) {
+      this.selectedCampaign.groups = this.selectedCampaign.groups.filter(
+        (g) => g.label !== "More"
+      );
+      return;
+    }
+
+    const alreadyIncluded = [];
+    this.selectedCampaign.groups.forEach((g) => {
+      alreadyIncluded.push(g.value);
+    });
+
+    this.otherData = difference(
+      this.objectkeys(this.typeDict),
+      alreadyIncluded
+    );
+
+    this.selectedCampaign.groups.push({
+      label: "More",
+      value: this.otherData,
+      _id: "0",
+    });
   }
 
   getDispositionForCampaign(campaignName: string) {

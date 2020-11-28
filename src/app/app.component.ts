@@ -21,11 +21,6 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: "logo-steam",
     },
     {
-      title: "Single Lead",
-      url: "/home/solo",
-      icon: "paper-plane",
-    },
-    {
       title: "All Users",
       url: "/home/users",
       icon: "trash",

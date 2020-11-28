@@ -18,43 +18,44 @@
           </nz-collapse-panel>
         </nz-collapse>
       </nz-descriptions-item>
-      <ng-container *ngFor="let leadKey of objectkeys(typeDict)">
-        <ng-container *ngIf="['string', 'number', 'date', 'select'].includes(typeDict[leadKey].type)">
-          <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-            <ng-container [ngSwitch]="typeDict[leadKey].type">
-              <ng-container *ngSwitchCase="'date'">
-                <input nz-input [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)" type="datetime-local">
-              </ng-container>
-  
-              <ng-container *ngSwitchCase="'number'">
-                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-              </ng-container>
-  
-              <ng-container *ngSwitchCase="'string'">
-                <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                  [disabled]="isDisabled(leadKey)" />
-              </ng-container>
-  
-  
-              <ng-container *ngSwitchCase="'select'">
-                <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                  <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
-                  </nz-option>
-                </nz-select>
-  
-              </ng-container>
-  
-            </ng-container>
-          </nz-descriptions-item>
-        </ng-container>
-      </ng-container>
-      
-      <nz-descriptions-item nzTitle="Remark" nzSpan=2>
-        <nz-input-group class="ant-input-affix-wrapper-textarea-with-clear-btn">
-          <textarea nz-input [(ngModel)]="selectedLead['remark']" placeholder="textarea with clear icon"></textarea>
-        </nz-input-group>
-      </nz-descriptions-item>
     </nz-descriptions>
+
+    <ng-container *ngFor="let g of selectedCampaign?.groups">
+      <nz-descriptions nzBordered=true [nzTitle]="g.label">
+        <ng-container *ngFor="let leadKey of g.value">
+          <ng-container *ngIf="['string', 'number', 'date', 'select'].includes(typeDict[leadKey].type)">
+            <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+              <ng-container [ngSwitch]="typeDict[leadKey].type">
+                <ng-container *ngSwitchCase="'date'">
+                  <input nz-input [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
+                    type="datetime-local">
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'number'">
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'string'">
+                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                    [disabled]="isDisabled(leadKey)" />
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase="'select'">
+                  <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                    <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
+                    </nz-option>
+                  </nz-select>
+
+                </ng-container>
+
+              </ng-container>
+            </nz-descriptions-item>
+          </ng-container>
+        </ng-container>
+      </nz-descriptions>
+    </ng-container>
+    <button nz-button nzSize='sm' (click)="evaluateOtherData()">{{this.showOtherData ? 'Show Less': 'Show More'}}</button>
   </div>
 
   <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)">Submit</ion-button>
