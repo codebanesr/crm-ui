@@ -1,10 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { CampaignService } from "../campaign.service";
@@ -30,6 +25,7 @@ import {
   ContactName,
 } from "@ionic-native/contacts/ngx";
 
+import { isEmpty } from "lodash";
 @Component({
   selector: "app-lead-solo",
   templateUrl: "./lead-solo.component.html",
@@ -48,6 +44,7 @@ export class LeadSoloComponent implements OnInit {
   ) {}
 
   modelFields: Array<field> = [];
+  isEmpty = isEmpty;
   formModel: ModelInterface = {
     name: "App name...",
     description: "App Description...",

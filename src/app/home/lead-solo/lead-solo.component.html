@@ -5,8 +5,8 @@
       </nz-option>
     </nz-select> -->
 
-    <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
-    <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a>
+    <!-- <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
+    <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a> -->
     <ng-container *ngIf="leadFilter">
       <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)"
         [nzColor]="'magenta'">
@@ -16,6 +16,7 @@
     </ng-container>
   </div>
 
+  <nz-empty *ngIf="isEmpty(selectedLead)"></nz-empty>
   <nz-page-header class="site-page-header" *ngIf="selectedLead">
     <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}}</nz-page-header-title>
     <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
@@ -100,7 +101,7 @@
             </nz-collapse>
           </ng-container>
           <nz-collapse>
-            <nz-collapse-panel [nzHeader]="'Lead History'" *ngIf="selectedLead.history.length>0">
+            <nz-collapse-panel [nzHeader]="'Lead History'" *ngIf="selectedLead?.history?.length>0">
               <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
                 <WhiteSpace size='lg'></WhiteSpace>
                 <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
@@ -303,7 +304,7 @@
                   </nz-form-item>
                 </form>
               </WingBlank>
-            </nz-collapse-panel>
+            </nz-collapse-panel> 
           </nz-collapse>
 
           <nz-button-group style="margin-top: 5px;">
@@ -315,6 +316,11 @@
             <button nzType="primary" nz-button nzSize="default" (click)="handleLeadSubmission(selectedLead, true)">Save
               & Next</button>
           </nz-button-group>
+          <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="showFilterDrawer=!showFilterDrawer">
+            <ion-fab-button>
+              <ion-icon name="filter"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>         
         </div>
       </div>
     </nz-page-header-content>
@@ -358,7 +364,7 @@
             </nz-descriptions-item>
           </nz-descriptions>
         </ng-container>
-        <button nz-button (click)="printFilters()">print filters</button>
+        <button nz-button (click)="fetchNextLead()">Submit</button>
       </ng-container>
     </nz-collapse-panel>
   </nz-collapse>
