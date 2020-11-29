@@ -1,0 +1,16 @@
+<ion-list>
+  <ion-item *ngFor="let t of transactions">
+    <!-- <ion-label>{{t.createdAt | date}}</ion-label>
+    <ion-label>{{t.geoLocation.coordinates[0]}}, {{t.geoLocation.coordinates[1]}}</ion-label> -->
+      <ion-button (click)="showLead(t.lead);">Show Lead</ion-button>
+    <ion-item>
+      <ion-label>
+        <p>{{t.createdAt | date}}</p>
+        <span>{{t.geoLocation.coordinates[0]}}, {{t.geoLocation.coordinates[1]}}</span>
+        <h3>I'm a big deal</h3>
+        <p>Notes if any</p>
+      </ion-label>
+    </ion-item>
+
+  </ion-item>
+</ion-list>

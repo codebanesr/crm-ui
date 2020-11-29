@@ -16,6 +16,11 @@ export class AppComponent implements OnInit, OnDestroy {
   public selectedIndex = 0;
   public appPages = [
     {
+      title: "Transactions",
+      url: "/home/transactions",
+      icon: "logo-steam",
+    },
+    {
       title: "Leads",
       url: "/home",
       icon: "logo-steam",

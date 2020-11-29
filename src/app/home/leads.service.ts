@@ -148,4 +148,19 @@ export class LeadsService {
       lead
     );
   }
+
+  getTransactions(
+    pagination: {
+      page: number;
+      perPage: number;
+      sortBy: string;
+      sortOrder: string;
+    },
+    filters: any
+  ) {
+    return this.http.post(`${environment.apiUrl}/lead/transactions`, {
+      pagination,
+      filters,
+    });
+  }
 }

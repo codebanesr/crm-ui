@@ -7,6 +7,7 @@ import { InvoiceComponent } from "../invoice/invoice.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { OrganizationComponent } from "../organization/organization.component";
 import { SignupComponent } from "../signup/signup.component";
+import { TransactionsComponent } from "../transactions/transactions.component";
 import { UsersComponent } from "../users/users.component";
 import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { HomePage } from "./home.page";
@@ -67,6 +68,11 @@ const routes: Routes = [
   {
     path: "followup",
     component: FollowupComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "transactions",
+    component: TransactionsComponent,
     pathMatch: "full",
   },
 ];

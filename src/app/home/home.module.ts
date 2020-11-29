@@ -18,6 +18,7 @@ import { FollowupComponent } from "../followup/followup.component";
 import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
 import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
+import { TransactionsComponent } from "../transactions/transactions.component";
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { LeadCreateComponent } from "../lead-create/lead-create.component";
     InvoiceComponent,
     WelcomeSlidesComponent,
     LeadCreateComponent,
+    TransactionsComponent,
   ],
 })
 export class HomePageModule {}

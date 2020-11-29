@@ -224,7 +224,7 @@ export class LeadSoloComponent implements OnInit {
       return false;
     }
 
-    this.leadsService.updateLead(lead.externalId, updateObj).subscribe(
+    this.leadsService.updateLead(lead._id, updateObj).subscribe(
       (data) => {
         // clean user reassigment once done
         this.selectedUserForReassignment = null;
