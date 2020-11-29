@@ -28,7 +28,7 @@
                 <WingBlank size='sm'>
                   <nz-collapse>
                     <nz-collapse-panel nzHeader="Contact Information" nzShowArrow="false">
-                      <nz-descriptions nzBordered="true" [nzSize]="'small'" style="background-color: snow;">
+                      <nz-descriptions nzBordered="true" [nzSize]="'middle'" style="background-color: snow;">
                         <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
                           {{contact['value']}}
                         </nz-descriptions-item>
@@ -39,7 +39,7 @@
   
                     <ng-container *ngFor="let g of leadGroups">
                       <nz-collapse-panel [nzHeader]="g.label" key="g.label" nzShowArrow="false">
-                        <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'small'">
+                        <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'middle'">
                           <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
                             <ng-container *ngIf="g.value.includes(leadKey)">
                               <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
@@ -100,7 +100,7 @@
             </nz-collapse>
           </ng-container>
           <nz-collapse>
-            <nz-collapse-panel [nzHeader]="'Lead History'" *ngIf="selectedLead.history">
+            <nz-collapse-panel [nzHeader]="'Lead History'" *ngIf="selectedLead.history.length>0">
               <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
                 <WhiteSpace size='lg'></WhiteSpace>
                 <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
