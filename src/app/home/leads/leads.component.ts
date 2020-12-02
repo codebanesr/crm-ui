@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
@@ -6,7 +6,6 @@ import {
   NzDropdownMenuComponent,
 } from "ng-zorro-antd/dropdown";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { PubsubService } from "src/app/pubsub.service";
 import { CampaignService } from "../campaign.service";
@@ -15,14 +14,15 @@ import { LeadsService } from "../leads.service";
 import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
-import { ToastController } from "@ionic/angular";
 import { ToastService } from "ng-zorro-antd-mobile";
+import { MyDataSource } from "./lead-cdk";
 const { Share } = Plugins;
 
 @Component({
   selector: "app-leads",
   templateUrl: "./leads.component.html",
   styleUrls: ["./leads.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadsComponent implements OnInit {
   setOfCheckedId = new Set<string>();
@@ -159,7 +159,6 @@ export class LeadsComponent implements OnInit {
         } else {
           this.toast.hide();
           this.isEmpty = false;
-          this.generateListOfCols(response.data[0]);
           this.leads = response.data;
           this.total = response.total;
         }
@@ -204,15 +203,6 @@ export class LeadsComponent implements OnInit {
         this.loading = false;
       }
     );
-  }
-
-  // get the mapper here and change the names, the key value pairs for data elements will not change
-  generateListOfCols(row) {
-    this.listOfColumns = Object.keys(row).map((key) => {
-      return {
-        name: key,
-      };
-    });
   }
 
   createLead() {
@@ -349,8 +339,9 @@ export class LeadsComponent implements OnInit {
 
   total: number = 1000;
   loading = false;
-  onQueryParamsChange(page: number): void {
-    this.leadOptions.page = page;
+  onQueryParamsChange(paginator): void {
+    // console.log(page);
+    this.leadOptions.page = paginator.pageIndex;
     this.getData();
   }
 

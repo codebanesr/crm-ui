@@ -19,9 +19,12 @@ import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
 import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { TransactionsComponent } from "../transactions/transactions.component";
+import { DemoMaterialModule } from "../material/material.module";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   imports: [
+    ScrollingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -29,6 +32,7 @@ import { TransactionsComponent } from "../transactions/transactions.component";
     HomePageRoutingModule,
     ModantdModule,
     NgZorroAntdMobileModule,
+    DemoMaterialModule,
   ],
   declarations: [
     FollowupComponent,

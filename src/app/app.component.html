@@ -1,10 +1,10 @@
 <ion-app>
-  <ion-fab vertical="top" horizontal="right" slot="fixed" expand="block" (click)="openMenu()">
+  <!-- <ion-fab vertical="top" horizontal="right" slot="fixed" expand="block" (click)="openMenu()">
     <ion-fab-button style="transform: scale(0.7) translateY(-25px) translateX(-7px);">
       <ion-icon name="arrow-forward-outline"></ion-icon>
     </ion-fab-button>
 
-  </ion-fab>
+  </ion-fab> -->
 
   <ion-menu side="start" content-id="main-content" menuId="first">
     <ion-content>
@@ -16,8 +16,52 @@
       </ion-list>
     </ion-content>
   </ion-menu>
+
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Molecule</span>
+      <span class="example-spacer"></span>
+          <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      <mat-icon>favorite</mat-icon>
+      </button>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+          <mat-icon>share</mat-icon>
+        </button>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
   <nz-layout id="main-content">
-    <h4 nz-typography class="header-class">{{heading}}</h4>
+    <!-- <h4 nz-typography class="header-class">{{heading}}</h4> -->
     <ion-router-outlet class="inner-content"></ion-router-outlet>
+    <ion-tabs>
+      <ion-tabs>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button tab="schedule">
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label>Schedule</ion-label>
+            <ion-badge>6</ion-badge>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="speakers">
+            <ion-icon name="person-circle"></ion-icon>
+            <ion-label>Speakers</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="map">
+            <ion-icon name="map"></ion-icon>
+            <ion-label>Map</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="about">
+            <ion-icon name="information-circle"></ion-icon>
+            <ion-label>About</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
+    </ion-tabs>
   </nz-layout>
 </ion-app>
+

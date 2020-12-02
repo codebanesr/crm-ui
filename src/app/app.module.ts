@@ -21,6 +21,7 @@ import {
 } from "ng-zorro-antd-mobile";
 import { CallNumber } from "@ionic-native/call-number/ngx";
 import { Contacts } from "@ionic-native/contacts/ngx";
+import { DemoMaterialModule } from "./material/material.module";
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -35,6 +36,7 @@ import { Contacts } from "@ionic-native/contacts/ngx";
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    DemoMaterialModule,
   ],
   providers: [
     CallNumber,

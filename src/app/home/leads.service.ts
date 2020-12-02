@@ -16,7 +16,13 @@ export enum INTERVAL {
 export class LeadsService {
   constructor(private http: HttpClient) {}
 
-  getLeads(options): Observable<{ results: any[] }> {
+  getLeads(options: {
+    page: number;
+    perPage: number;
+    showCols?: string[];
+    searchTerm: string;
+    filters?: any;
+  }): Observable<{ results: any[] }> {
     return this.http.post<{ results: any[] }>(
       `${environment.apiUrl}/lead/findAll`,
       options

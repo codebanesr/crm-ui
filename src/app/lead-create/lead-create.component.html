@@ -1,10 +1,13 @@
 <nz-divider></nz-divider>
 <WingBlank class="scrollable" style="margin-bottom: 35px;">
   <div *ngIf="typeDict">
-    <nz-descriptions nzTitle="Lead Info" nzBordered=true>
+    <!-- <nz-descriptions nzTitle="Lead Info" nzBordered=true>
       <nz-descriptions-item nzTitle="Contact Info">
         <nz-collapse nzHeader="Contact Info">
-          <nz-collapse-panel nzHeader="Contact Information" nzShowArrow="false">
+          <ng-template #contactInfo>
+            <button mat-raised-button style="height: 100%; width: 100%;">Add Contact</button>
+          </ng-template>
+          <nz-collapse-panel [nzHeader]="contactInfo" nzShowArrow="false">
             <ng-container *ngFor="let contact of selectedLead.contact">
               <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
                 <ion-icon name="call"></ion-icon>
@@ -18,43 +21,79 @@
           </nz-collapse-panel>
         </nz-collapse>
       </nz-descriptions-item>
-    </nz-descriptions>
-
-    <ng-container *ngFor="let g of selectedCampaign?.groups">
-      <nz-descriptions nzBordered=true [nzTitle]="g.label">
-        <ng-container *ngFor="let leadKey of g.value">
-          <ng-container *ngIf="['string', 'number', 'date', 'select'].includes(typeDict[leadKey].type)">
-            <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-              <ng-container [ngSwitch]="typeDict[leadKey].type">
-                <ng-container *ngSwitchCase="'date'">
-                  <input nz-input [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
-                    type="datetime-local">
-                </ng-container>
-
-                <ng-container *ngSwitchCase="'number'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                </ng-container>
-
-                <ng-container *ngSwitchCase="'string'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                    [disabled]="isDisabled(leadKey)" />
-                </ng-container>
-
-
-                <ng-container *ngSwitchCase="'select'">
-                  <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                    <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
-                    </nz-option>
-                  </nz-select>
-
-                </ng-container>
-
-              </ng-container>
-            </nz-descriptions-item>
-          </ng-container>
+    </nz-descriptions> -->
+    <mat-card>
+      <mat-card-content>
+        <h2>
+          Contact Information
+          <button mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon" (click)="isContactDrawerVisible = true">
+            <mat-icon>add_ic_call</mat-icon>
+          </button>      
+        </h2>
+        <ng-container *ngFor="let contact of selectedLead.contact">
+          <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
+            <ion-icon name="call"></ion-icon>
+            <i class="icon ion-ios-telephone"></i> &nbsp;
+            {{contact.value}}
+          </ion-button>
+          <a *ngIf="contact.category!=='mobile'"> {{contact.value}}</a>
         </ng-container>
-      </nz-descriptions>
-    </ng-container>
+        <br>
+      </mat-card-content>
+    </mat-card>
+  
+
+    
+      <mat-tab-group mat-align-tabs="start">
+        <mat-tab [label]="g.label" *ngFor="let g of selectedCampaign?.groups">
+          <nz-descriptions nzBordered=true nzSize="small">
+            <ng-container *ngFor="let leadKey of g.value">
+              <ng-container *ngIf="['string', 'number', 'date', 'select'].includes(typeDict[leadKey].type)">
+                <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+                  <ng-container [ngSwitch]="typeDict[leadKey].type">
+                    <ng-container *ngSwitchCase="'date'">
+                      <mat-form-field>
+                        <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
+                        type="datetime-local">
+                      </mat-form-field>
+                    </ng-container>
+    
+                    <ng-container *ngSwitchCase="'number'">
+                      <mat-form-field>
+                        <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                      </mat-form-field>
+                    </ng-container>
+    
+                    <ng-container *ngSwitchCase="'string'">
+                      <mat-form-field>
+                        <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                          [disabled]="isDisabled(leadKey)" />
+                      </mat-form-field>
+                    </ng-container>
+    
+    
+                    <ng-container *ngSwitchCase="'select'">
+                      <mat-form-field>
+                        <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                          <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
+                          </nz-option>
+                        </nz-select>
+                      </mat-form-field>
+
+    
+                    </ng-container>
+    
+                  </ng-container>
+                </nz-descriptions-item>
+              </ng-container>
+            </ng-container>
+          </nz-descriptions>
+        </mat-tab>
+      </mat-tab-group>
+
+
+      
+    
     <button nz-button nzSize='sm' (click)="evaluateOtherData()">{{this.showOtherData ? 'Show Less': 'Show More'}}</button>
   </div>
 
@@ -62,7 +101,7 @@
 </WingBlank>
 
 <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="isContactDrawerVisible=false"
-  (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
+  (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '20px' }" [nzFooter]="contactModalFooter">
   <form nz-form [formGroup]="contactForm">
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Label</nz-form-label>

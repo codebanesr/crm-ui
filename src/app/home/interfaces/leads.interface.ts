@@ -10,7 +10,7 @@ export interface ILead {
   customerEmail: string;
   email: string;
   firstName: string;
-  followUp: string;
+  followUp: string | Date;
   lastName: string;
   leadStatus: string;
   phoneNumber: string;
@@ -19,21 +19,11 @@ export interface ILead {
   remarks: string;
   source: string;
   updatedAt: string;
-  history: [
-    {
-      geoLocation: {
-        coordinates: number[];
-      };
-      createdAt: string;
-      _id: string;
-      notes: string;
-      newUser: string;
-      requestedInformation: { [key: string]: string }[];
-    }
-  ];
+  nextAction: string;
   contact: {
     label: string;
     value: string;
     category: string;
   }[];
+  history: any;
 }

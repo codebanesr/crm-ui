@@ -24,6 +24,7 @@ import {
   ContactField,
   ContactName,
 } from "@ionic-native/contacts/ngx";
+import * as moment from "moment";
 
 import { isEmpty } from "lodash";
 @Component({
@@ -264,24 +265,52 @@ export class LeadSoloComponent implements OnInit {
   }
 
   showFab = false;
+  followUpAction = false;
+  appointmentAction = false;
+  salesCallAction = false;
+  showFormAction = false;
+  showFollowUpInput = false;
   handleDispositionTreeEvent(event) {
+    // ["followUp", "appointment", "salesCall"]
     if (event.node.isLeaf) {
       const links = this.getLinks(event.node);
       this.selectedLead.leadStatus = links.reverse().join(" / ");
       const action = event.node.origin.action;
+      console.log(action);
+
       this.resetAllActionHandlers();
-      if (action) {
-        switch (action) {
-          case "showForm":
-            this.actions.isInformationRequested = true;
-            break;
-          default:
-            console.log("no action matched");
-        }
+      if (action?.includes("followUp")) {
+      }
+
+      if (action?.includes("appointment")) {
+      }
+
+      if (action?.includes("salesCall")) {
+      }
+
+      if (action?.includes("showForm")) {
+        this.actions.isInformationRequested = true;
       }
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
     }
     event.node.isExpanded = !event.node.isExpanded;
+  }
+
+  today = new Date().toISOString();
+  handleFollowUp(event) {
+    console.log(event, event.target.value, event.currentTarget.value);
+    if (event.target.value == 1) {
+      this.selectedLead.followUp = moment().toDate();
+    } else if (event.target.value == 2) {
+      // after 10 mins
+      this.selectedLead.followUp = moment().add(10, "minutes").toDate();
+    } else if (event.target.value == 3) {
+      // 1 hr
+      this.selectedLead.followUp = moment().add(1, "hour").toDate();
+    } else if (event.target.value == 4) {
+      // tomorrow
+      this.selectedLead.followUp = moment().add(24, "hours").toDate();
+    }
   }
 
   fabTransition() {

@@ -7,13 +7,24 @@ import { LeadSoloComponent } from "../home/lead-solo/lead-solo.component";
 import { LeadsService } from "../home/leads.service";
 
 interface IHistory {
-  lead: string;
+  oldUser: string;
   newUser: string;
-  requestedInformation: any[];
-  createdAt: string;
+  lead: string;
+  campaignName: string;
+  prospectName: string;
+  phoneNumber: string;
+  followUp: String;
+  direction: String;
+  notes: string;
+  callRecordUrl: string;
   geoLocation: { coordinates: string[] };
+  leadStatus: string;
+  attachment: string;
+  requestedInformation?: { [key: string]: string }[];
+  active: boolean;
+  createdAt: string;
+  nextAction?: string;
 }
-
 @Component({
   selector: "app-transactions",
   templateUrl: "./transactions.component.html",
@@ -30,7 +41,12 @@ export class TransactionsComponent implements OnInit {
   pagination = { sortBy: "createdAt", sortOrder: "ASC", page: 1, perPage: 20 };
   filters = {};
   histories: any[] = [];
+  objectKeys = Object.keys;
   ngOnInit() {
+    this.getTransactions();
+  }
+
+  getTransactions() {
     this.leadService
       .getTransactions(this.pagination, this.filters)
       .subscribe((histories: IHistory[]) => {
@@ -45,5 +61,23 @@ export class TransactionsComponent implements OnInit {
         campaignId: "5f89dd4c3d90afc740368088",
       },
     });
+  }
+
+  leadMapping = {
+    geoLocation: "Location",
+    createdAt: "Created At",
+    _id: "Transaction Id",
+    lead: "Lead Id",
+    notes: "Notes",
+    newUser: "Assigned To",
+    prospectName: "Name",
+    leadStatus: "Status",
+    followUp: "Scheduled",
+    nextAction: "Action",
+  };
+
+  handlePageChange(page: number) {
+    this.pagination.page = page;
+    this.getTransactions();
   }
 }

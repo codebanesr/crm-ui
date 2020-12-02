@@ -201,7 +201,30 @@
       <ul nz-menu>
         <li nz-menu-item (click)="deleteNode()">Delete This</li>
         <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
-        <li nz-menu-item (click)="addParentNode()">Added Parent</li>
+        
+          <!-- <nz-select
+            style="margin: 0px; padding: 0px"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select an Action"
+            [(ngModel)]="selectedAction"
+            (ngModelChange)="attachAction()"
+          >
+            <nz-option nzLabel="Show Form" nzValue="showForm"></nz-option>
+            <nz-option nzLabel="Follow Up" nzValue="followUp"></nz-option>
+            <nz-option nzLabel="On Site Appointment" nzValue="onSiteAppointment"></nz-option>
+            <nz-option nzLabel="Sales Call" nzValue="salesCall"></nz-option>
+          </nz-select> -->
+          <ion-item nz-menu-item>
+            <ion-label>Actions</ion-label>
+            <ion-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
+              <ion-select-option value="showForm">Show Form</ion-select-option>
+              <ion-select-option value="followUp">FollowUp</ion-select-option>
+              <ion-select-option value="appointment">Appointment</ion-select-option>
+              <ion-select-option value="salesCall">SalesCall</ion-select-option>
+            </ion-select>
+          </ion-item>
+        
         <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
       </ul>
     </nz-dropdown-menu>
@@ -234,8 +257,8 @@
     <span *ngIf="node.isLeaf" (contextmenu)="contextMenu($event, menu)">
       <i nz-icon nzType="file"></i>
       <span class="file-name">{{ node.title }}</span>
-      <span class="file-desc" *ngIf="node.origin.action">{{
-        node.origin.action | lowercase
+      <span class="file-desc" *ngIf="isArray(node.origin.action)">{{
+        node.origin.action
       }}</span>
     </span>
   </span>

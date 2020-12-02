@@ -11,10 +11,13 @@
     overflow-x: hidden;
 }
 
-.pagination-component {
-    width: 200px;
-    position: fixed;
-    margin-top: calc(100vh - 50px);
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+  
+
+.lead-edit-btn {
+    height: 30px; line-height: 30px; margin-right: 20px; margin-bottom: 10px;
+  }
+
+  .example-viewport{
+    height: 100%;
+    width: 100%;
+  }

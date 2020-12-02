@@ -1,4 +1,9 @@
-import { NzTableSortOrder, NzTableSortFn, NzTableFilterList, NzTableFilterFn } from 'ng-zorro-antd/table/public-api';
+import {
+  NzTableSortOrder,
+  NzTableSortFn,
+  NzTableFilterList,
+  NzTableFilterFn,
+} from "ng-zorro-antd/table/public-api";
 
 export interface ColumnItem {
   name: string;
@@ -11,6 +16,7 @@ export interface ColumnItem {
 export interface DataItem {
   externalId: string;
   firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   amount: number;
@@ -19,35 +25,37 @@ export interface DataItem {
   active: boolean;
 }
 
-
 export const listOfColumns: ColumnItem[] = [
   {
-    name: 'Name',
+    name: "Name",
     sortOrder: null,
-    sortFn: (a: DataItem, b: DataItem) => a.firstName.localeCompare(b.firstName),
+    sortFn: (a: DataItem, b: DataItem) =>
+      a.firstName.localeCompare(b.firstName),
     // listOfFilter: [
     //   { text: 'Joe', value: 'Joe' },
     //   { text: 'Jim', value: 'Jim' }
     // ],
-    filterFn: (list: string[], item: DataItem) => list.some(name => item.firstName.indexOf(name) !== -1)
+    filterFn: (list: string[], item: DataItem) =>
+      list.some((name) => item.firstName.indexOf(name) !== -1),
   },
   {
-    name: 'Email',
+    name: "Email",
     sortOrder: null,
-    sortFn: (a: DataItem, b: DataItem) => a.email.localeCompare(b.email)
+    sortFn: (a: DataItem, b: DataItem) => a.email.localeCompare(b.email),
   },
   {
-    name: 'Phone Number',
-    sortFn: (a:DataItem, b: DataItem) => a.phoneNumber.localeCompare(b.phoneNumber)
+    name: "Phone Number",
+    sortFn: (a: DataItem, b: DataItem) =>
+      a.phoneNumber.localeCompare(b.phoneNumber),
   },
   {
-    name: 'Amount',
-    sortFn: (a:DataItem, b: DataItem) => a.amount - b.amount
+    name: "Amount",
+    sortFn: (a: DataItem, b: DataItem) => a.amount - b.amount,
   },
   {
-    name: 'Follow up'
+    name: "Follow up",
   },
   {
-    name: 'Description'
-  }
+    name: "Description",
+  },
 ];

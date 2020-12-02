@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { isArray } from 'lodash';
 import {
   NzContextMenuService,
   NzDropdownMenuComponent,
@@ -46,6 +47,8 @@ export class CampaignCreateComponent implements OnInit {
   recentUploads: string[] = [];
   hint: string | undefined;
   type: string;
+
+  isArray = isArray;
 
   tabSelected: string = "Lead Generation";
   configFiles: NzUploadListComponent[] = [];
