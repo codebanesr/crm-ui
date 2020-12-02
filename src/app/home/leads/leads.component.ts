@@ -15,17 +15,14 @@ import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
-import { MyDataSource } from "./lead-cdk";
 const { Share } = Plugins;
 
 @Component({
   selector: "app-leads",
   templateUrl: "./leads.component.html",
   styleUrls: ["./leads.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadsComponent implements OnInit {
-  setOfCheckedId = new Set<string>();
   constructor(
     private msg: NzMessageService,
     private leadsService: LeadsService,
@@ -89,35 +86,6 @@ export class LeadsComponent implements OnInit {
     this.typeDict = result.typeDict;
   }
 
-  onItemChecked(id: string, checked: boolean): void {
-    console.log(id);
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-
-  updateCheckedSet(id: string, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
-    }
-  }
-
-  onAllChecked(checked: boolean): void {
-    if (checked)
-      this.leads.forEach((data: any) =>
-        this.setOfCheckedId.add(data.externalId)
-      );
-    else this.setOfCheckedId = new Set<string>();
-    this.refreshCheckedStatus();
-  }
-
-  refreshCheckedStatus(): void {
-    this.checked = this.leads.every(({ externalId }) =>
-      this.setOfCheckedId.has(externalId)
-    );
-  }
-
   usersCount: number;
   initRightClickActions() {
     this.usersService.getUsers(0, 20, "abc", "asc").subscribe(
@@ -161,6 +129,26 @@ export class LeadsComponent implements OnInit {
           this.isEmpty = false;
           this.leads = response.data;
           this.total = response.total;
+          this.leadOptions.page = response.page;
+        }
+      },
+      (error) => {
+        this.msg.error("Some error occured while fetching leads");
+      }
+    );
+  }
+
+  appendData() {
+    this.leadsService.getLeads(this.leadOptions).subscribe(
+      async (response: any) => {
+        if (response.data.length === 0) {
+          this.isEmpty = true;
+        } else {
+          this.toast.hide();
+          this.isEmpty = false;
+          this.leads.push(...response.data);
+          this.total = response.total;
+          this.leadOptions.page = response.page;
         }
       },
       (error) => {
@@ -244,11 +232,6 @@ export class LeadsComponent implements OnInit {
       .filter((col) => col.checked)
       .map((col) => col.value);
 
-    this.getData();
-  }
-
-  onPageIndexChange(page: number) {
-    this.page = page;
     this.getData();
   }
 
@@ -426,5 +409,13 @@ export class LeadsComponent implements OnInit {
         campaignId: this.selectedCampaign._id,
       },
     });
+  }
+
+  loadMoreLeads(event) {
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
+    this.leadOptions.page += 1;
+    this.appendData();
   }
 }
