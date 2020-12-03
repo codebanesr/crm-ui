@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
@@ -6,7 +12,14 @@ import {
   NzDropdownMenuComponent,
 } from "ng-zorro-antd/dropdown";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  pairwise,
+  throttleTime,
+} from "rxjs/operators";
 import { PubsubService } from "src/app/pubsub.service";
 import { CampaignService } from "../campaign.service";
 import { ColumnItem, DataItem } from "../interfaces/listOfCols";
@@ -15,6 +28,7 @@ import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
+import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 const { Share } = Plugins;
 
 @Component({
@@ -22,7 +36,7 @@ const { Share } = Plugins;
   templateUrl: "./leads.component.html",
   styleUrls: ["./leads.component.scss"],
 })
-export class LeadsComponent implements OnInit {
+export class LeadsComponent implements OnInit, AfterViewInit {
   constructor(
     private msg: NzMessageService,
     private leadsService: LeadsService,
@@ -32,7 +46,8 @@ export class LeadsComponent implements OnInit {
     private usersService: UsersService,
     private campaignService: CampaignService,
     private pubsub: PubsubService,
-    public toast: ToastService
+    public toast: ToastService,
+    private ngZone: NgZone
   ) {}
 
   page: number = 1;
@@ -55,6 +70,7 @@ export class LeadsComponent implements OnInit {
   indeterminate = false;
   checked = false;
   listOfCurrentPageData: any[] = [];
+  @ViewChild("scroller") scroller: CdkVirtualScrollViewport;
 
   ngOnInit() {
     this.pubsub.$pub("HEADING", { heading: "Leads" });
@@ -64,7 +80,22 @@ export class LeadsComponent implements OnInit {
     this.initEmailForm();
     this.initRightClickActions();
     this.getBasicOverview();
-    // this.initEtAutocomplete();
+  }
+
+  ngAfterViewInit() {
+    this.scroller
+      .elementScrolled()
+      .pipe(
+        map(() => this.scroller.measureScrollOffset("bottom")),
+        pairwise(),
+        filter(([y1, y2]) => y2 < y1 && y2 < 140),
+        throttleTime(200)
+      )
+      .subscribe(() => {
+        this.ngZone.run(() => {
+          this.loadMoreLeads();
+        });
+      });
   }
 
   campaignList: any[];
@@ -140,13 +171,13 @@ export class LeadsComponent implements OnInit {
 
   appendData() {
     this.leadsService.getLeads(this.leadOptions).subscribe(
-      async (response: any) => {
+      (response: any) => {
         if (response.data.length === 0) {
           this.isEmpty = true;
         } else {
           this.toast.hide();
           this.isEmpty = false;
-          this.leads.push(...response.data);
+          this.leads = [...this.leads, ...response.data];
           this.total = response.total;
           this.leadOptions.page = response.page;
         }
@@ -410,12 +441,9 @@ export class LeadsComponent implements OnInit {
       },
     });
   }
-
-  loadMoreLeads(event) {
-    setTimeout(() => {
-      event.target.complete();
-    }, 500);
+  loadMoreLeads() {
     this.leadOptions.page += 1;
+    this.leadOptions.perPage = 50;
     this.appendData();
   }
 }
