@@ -70,11 +70,13 @@
                                       </ng-container> -->
 
                               <ng-container *ngSwitchCase="'select'">
-                                <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                                  <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
-                                    [nzValue]="option">
-                                  </nz-option>
-                                </nz-select>
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{selectedLead[leadKey].label}}</mat-label>
+                                  <mat-select>
+                                    <mat-option value="option" *ngFor="let option of typeDict[leadKey].options">
+                                      {{option}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
                               </ng-container>
                             </ng-container>
                           </nz-descriptions-item>
@@ -82,12 +84,7 @@
                       </ng-container>
                     </nz-descriptions>
                   </mat-tab>
-
-
                 </mat-tab-group>
-
-
-
               </mat-expansion-panel>
             </mat-accordion>
             <div style="background-color: whitesmoke;" style="padding-left: 3px;">
@@ -107,37 +104,35 @@
             </nz-tree>
 
             <mat-expansion-panel>
-              
+
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Followup
                 </mat-panel-title>
               </mat-expansion-panel-header>
-                  <nz-select style="width: 200px;" [(ngModel)]="selectedLead.nextAction">
-                    <nz-option nzValue="onSite" nzLabel="On Site Appointment"></nz-option>
-                    <nz-option nzValue="followUp" nzLabel="Follow Up"></nz-option>
-                    <nz-option nzValue="salesCall" nzLabel="Sales Call"></nz-option>
-                  </nz-select>
-                  <nz-form-item style="padding-left: 4px;">
-                    <nz-form-control nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
-                      <!-- {{selectedLead.followUp ? selectedLead.followUp : 'Select'}} -->
-                      <span style="font-weight: 700;">{{selectedLead.followUp | date: 'short'}}</span> &nbsp;
-                      <i nz-icon nzType="down"></i>
-                    </nz-form-control>
-                  </nz-form-item>
-             
-            </mat-expansion-panel>
 
-            <nz-dropdown-menu #menu="nzDropdownMenu">
-              <ul nz-menu (click)="handleFollowUp($event)">
-                <li nz-menu-item value="1">Now</li>
-                <li nz-menu-item value="2">After 10 minutes</li>
-                <li nz-menu-item value="3">After One Hour</li>
-                <li nz-menu-item value="4">Tomorrow</li>
-                <li nz-menu-divider></li>
-                <li nz-menu-item value="now" (click)="showFollowUpInput=true">Custom</li>
-              </ul>
-            </nz-dropdown-menu>
+              <mat-form-field appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)]="selectedLead.nextAction">
+                  <mat-option value="followUp">Follow Up</mat-option>
+                  <mat-option value="onSite">On Site</mat-option>
+                  <mat-option value="salesCall">Sales Call</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <p style="font-weight: 700;">{{selectedLead.followUp | date: 'short'}}&nbsp;<i nz-icon nzType="down"></i>
+              </p>
+              <mat-form-field appearance="fill">
+                <mat-label>Follow Up</mat-label>
+                <mat-select (selectionChange)="handleFollowUp($event)">
+                  <mat-option value="1">Now</mat-option>
+                  <mat-option value="2">After 10 minutes</mat-option>
+                  <mat-option value="3">After One Hour</mat-option>
+                  <mat-option value="4">Tomorrow</mat-option>
+                  <mat-option value="4" (click)="showFollowUpInput=true">Custom</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-expansion-panel>
 
             <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok" nzCancelText="Cancel"
               (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
@@ -175,8 +170,7 @@
               </div>
             </mat-expansion-panel>
 
-            <mat-expansion-panel
-              *ngIf="actions.isInformationRequested">
+            <mat-expansion-panel *ngIf="actions.isInformationRequested">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
@@ -193,133 +187,133 @@
                         <ng-container *ngFor="let item of formModel.attributes">
                           <ng-container [ngSwitch]="item.type">
 
-                            <nz-form-item *ngSwitchCase="'text'">
+                            <ng-container *ngSwitchCase="'text'">
                               <mat-label nzFor="email">{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSm]="14" [nzXs]="24">
-                                <input nz-input [id]="item.id" [(ngModel)]="item.value"
-                                  [ngModelOptions]="{standalone: true}" />
-                              </nz-form-control>
-                            </nz-form-item>
 
-                            <nz-form-item *ngSwitchCase="'email'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="email" id="{{item.name}}" [(ngModel)]="item.value"
-                                  placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
+                              <input matInput [id]="item.id" [(ngModel)]="item.value"
+                                [ngModelOptions]="{standalone: true}" />
 
-                            <nz-form-item *ngSwitchCase="'phone'">
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'email'">
                               <mat-label>{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'number'">
+
+                              <input matInput type="email" id="{{item.name}}" [(ngModel)]="item.value"
+                                placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
+
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'phone'">
                               <mat-label>{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="number" id="{{item.name}}" min="{{item.min}}"
-                                  [(ngModel)]="item.value" max="{{item.max}}" placeholder="{{item.placeholder}}"
-                                  [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'date'">
+
+                              <input matInput type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'number'">
                               <mat-label>{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input type="datetime-local" nz-input id="{{item.name}}" [(ngModel)]="item.value"
-                                  [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'datetime-local'">
+
+                              <input matInput type="number" id="{{item.name}}" min="{{item.min}}"
+                                [(ngModel)]="item.value" max="{{item.max}}" placeholder="{{item.placeholder}}"
+                                [ngModelOptions]="{standalone: true}">
+
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'date'">
                               <mat-label>{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input type="datetime-local" nz-input id="{{item.name}}" nzShowTime
-                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'textarea'">
+
+                              <input type="datetime-local" matInput id="{{item.name}}" [(ngModel)]="item.value"
+                                [ngModelOptions]="{standalone: true}">
+
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'datetime-local'">
                               <mat-label>{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <textarea nz-input placeholder="Controlled autosize"
-                                  [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
-                                  placeholder="{{item.placeholder}}" [(ngModel)]="item.value"
-                                  [ngModelOptions]="{standalone: true}">
+
+                              <input type="datetime-local" matInput id="{{item.name}}" nzShowTime
+                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'textarea'">
+                              <mat-label>{{item.label}}
+                              </mat-label>
+
+                              <textarea matInput placeholder="Controlled autosize"
+                                [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
+                                placeholder="{{item.placeholder}}" [(ngModel)]="item.value"
+                                [ngModelOptions]="{standalone: true}">
                                 </textarea>
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'file'">
+
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'file'">
                               <mat-label>{{item.label}} (File
                                 can't be uploaded right now)</mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                              </nz-form-control>
-                            </nz-form-item>
+
+                              <input matInput type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+
+                            </ng-container>
 
                             <div *ngSwitchCase="'paragraph'">
-                              <nz-form-item>
+                              <ng-container>
                                 <mat-label>{{item.label}}
                                 </mat-label>
-                                <nz-form-control>
-                                  <nz-input-group [nzSuffix]="inputClearTpl">
-                                    <input type="text" nz-input [(ngModel)]="item.value"
-                                      placeholder="input with clear icon" [(ngModel)]="item.value"
-                                      [ngModelOptions]="{standalone: true}" />
-                                  </nz-input-group>
-                                </nz-form-control>
-                              </nz-form-item>
+
+                                <nz-input-group [nzSuffix]="inputClearTpl">
+                                  <input type="text" matInput [(ngModel)]="item.value"
+                                    placeholder="input with clear icon" [(ngModel)]="item.value"
+                                    [ngModelOptions]="{standalone: true}" />
+                                </nz-input-group>
+
+                              </ng-container>
 
                               <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill"
                                   nzType="close-circle" *ngIf="item.value" (click)="item.value = null"></i>
                               </ng-template>
                             </div>
                             <div *ngSwitchCase="'autocomplete'">
-                              <nz-form-item>
+                              <ng-container>
                                 <mat-label>{{item.label}}
                                 </mat-label>
-                                <nz-form-control [nzSpan]="14">
-                                  <nz-select id="{{item.name}}" [(ngModel)]="item.value"
-                                    [ngModelOptions]="{standalone: true}">
-                                    <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label">
-                                    </nz-option>
-                                  </nz-select>
-                                </nz-form-control>
-                              </nz-form-item>
+
+                                <nz-select id="{{item.name}}" [(ngModel)]="item.value"
+                                  [ngModelOptions]="{standalone: true}">
+                                  <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label">
+                                  </nz-option>
+                                </nz-select>
+
+                              </ng-container>
                             </div>
                             <div *ngSwitchCase="'checkbox'">
-                              <nz-form-item>
+                              <ng-container>
                                 <mat-label>{{item.label}}
                                 </mat-label>
-                                <nz-form-control [nzSpan]="14">
-                                  <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
-                                    [nzValue]="v.value" [ngModelOptions]="{standalone: true}">
-                                    <span>{{v.label}}</span>
-                                  </label>
-                                </nz-form-control>
-                              </nz-form-item>
+
+                                <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
+                                  [nzValue]="v.value" [ngModelOptions]="{standalone: true}">
+                                  <span>{{v.label}}</span>
+                                </label>
+
+                              </ng-container>
                             </div>
-                            <nz-form-item *ngSwitchCase="'radio'">
+                            <ng-container *ngSwitchCase="'radio'">
                               <mat-label>{{item.label}}
                               </mat-label>
-                              <nz-form-control [nzSpan]="14">
-                                <nz-radio-group [(ngModel)]="item.value">
-                                  <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
-                                </nz-radio-group>
-                              </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item *ngSwitchCase="'button'">
-                              <nz-form-control [nzSpan]="14">
-                                <input nz-input type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}">
-                              </nz-form-control>
-                            </nz-form-item>
+
+                              <nz-radio-group [(ngModel)]="item.value">
+                                <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
+                              </nz-radio-group>
+
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'button'">
+
+                              <input matInput type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}">
+
+                            </ng-container>
                           </ng-container>
                         </ng-container>
                       </form>
@@ -330,48 +324,49 @@
             </mat-expansion-panel>
 
             <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Send Email
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <nz-form-item>
-                  <mat-label nzRequired style="font-weight: 700;">Select Email Template
-                  </mat-label>
-                  <nz-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
-                    <nz-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.templateName"></nz-option>
-                  </nz-select>
-                </nz-form-item>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Send Email
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <ng-container>
+                <mat-form-field appearance="fill">
+                  <mat-label nzRequired style="font-weight: 700;">Select Email Template</mat-label>
+                  <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
+                    <mat-option [value]="et" *ngFor="let et of emailTemplates">{{ et.templateName }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ng-container>
 
-                <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-                  <nz-form-item>
-                    <mat-label nzRequired>Subject</mat-label>
-                    <nz-form-control>
-                      <input nz-input placeholder="Write the subject of email" formControlName="subject" />
-                    </nz-form-control>
-                  </nz-form-item>
+              <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+                <mat-form-field>
+                  <mat-label nzRequired>Subject</mat-label>
 
-                  <nz-form-item>
-                    <mat-label nzRequired>Body</mat-label>
-                    <nz-form-control>
-                      <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-                        formControlName="content"></textarea>
-                    </nz-form-control>
-                  </nz-form-item>
-                  <nz-form-item>
-                    <mat-label nzRequired>Attachments</mat-label>
-                    <nz-form-control>
-                      <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-                        nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
-                        <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName"
-                          [nzValue]="attachment">
-                        </nz-option>
-                      </nz-select>
-                      <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
-                      </ng-template>
-                    </nz-form-control>
-                  </nz-form-item>
-                </form>
+                  <input matInput placeholder="Write the subject of email" formControlName="subject" />
+
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label nzRequired>Body</mat-label>
+
+                  <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                    formControlName="content"></textarea>
+
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label nzRequired>Attachments</mat-label>
+                  <mat-select multiple>
+                    <mat-option [value]="attachment" *ngFor="let attachment of attachments">{{ attachment.fileName }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+
+                <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
+                </ng-template>
+
+                <!-- </mat-form-field> -->
+              </form>
             </mat-expansion-panel>
           </mat-accordion>
 
@@ -463,29 +458,29 @@
 <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
   (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
   <form nz-form [formGroup]="contactForm">
-    <nz-form-item>
+    <mat-form-field>
       <mat-label nzRequired nzFor="note">Label</mat-label>
-      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Label!">
-        <input id="label" type="text" matInput formControlName="label" />
-      </nz-form-control>
-    </nz-form-item>
 
-    <nz-form-item>
+      <input id="label" type="text" matInput formControlName="label" />
+
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-label nzRequired nzFor="note">Value</mat-label>
-      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Value!">
-        <input id="value" type="text" matInput formControlName="value" />
-      </nz-form-control>
-    </nz-form-item>
 
-    <nz-form-item>
-      <mat-label nzFor="category" nzRequired>category</mat-label>
-      <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter category of contact">
-        <nz-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
-          <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
-          <nz-option nzValue="email" nzLabel="Email"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
+      <input id="value" type="text" matInput formControlName="value" />
+
+    </mat-form-field>
+
+    <!-- <mat-form-field> -->
+    <mat-label nzFor="category" nzRequired>category</mat-label>
+
+    <nz-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
+      <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
+      <nz-option nzValue="email" nzLabel="Email"></nz-option>
+    </nz-select>
+
+    <!-- </mat-form-field> -->
   </form>
   <ng-template #contactModalFooter>
     <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>

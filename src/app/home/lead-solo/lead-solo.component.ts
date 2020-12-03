@@ -298,16 +298,15 @@ export class LeadSoloComponent implements OnInit {
 
   today = new Date().toISOString();
   handleFollowUp(event) {
-    console.log(event, event.target.value, event.currentTarget.value);
-    if (event.target.value == 1) {
+    if (event.value == 1) {
       this.selectedLead.followUp = moment().toDate();
-    } else if (event.target.value == 2) {
+    } else if (event.value == 2) {
       // after 10 mins
       this.selectedLead.followUp = moment().add(10, "minutes").toDate();
-    } else if (event.target.value == 3) {
+    } else if (event.value == 3) {
       // 1 hr
       this.selectedLead.followUp = moment().add(1, "hour").toDate();
-    } else if (event.target.value == 4) {
+    } else if (event.value == 4) {
       // tomorrow
       this.selectedLead.followUp = moment().add(24, "hours").toDate();
     }
