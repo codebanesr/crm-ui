@@ -1,35 +1,14 @@
-.campaignContainer {
-  margin-top: 20px;
-  text-align: center;
-  background-color: snow;
-  margin-bottom: 45px;
+.custom-btn {
+  height: 29px;
+  line-height: 29px;
 }
 
-.pagination-block {
-  margin: 0 auto;
-  padding-bottom: 35px;
-}
 
-.top-row {
-  padding-top: 12px;
-  padding-bottom: 0px;
-  margin: 0 0 12 0;
-}
-
-nz-badge {
-  margin-right: 20px;
-}
-
-.head-example {
-  width: 42px;
-  height: 42px;
-  border-radius: 4px;
-  background: #eee;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.pb0pt0 {
-  padding-top: 0px;
-  padding-bottom: 0px;
+mat-list-item {
+  border: 1px solid whitesmoke;
+  box-shadow:  -1px 1px whitesmoke,
+         -2px 2px whitesmoke,
+         -3px 3px whitesmoke,
+         -4px 4px whitesmoke,
+         -5px 5px whitesmoke;
 }

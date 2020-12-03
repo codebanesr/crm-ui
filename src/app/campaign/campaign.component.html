@@ -1,70 +1,33 @@
-<div class="table-operations" style="padding-left: 10px;">
-  <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
-    <!-- <nz-form-item>
-      <nz-form-control>
-        <nz-input-group nzPrefixIcon="user">
-          <input nz-input formControlName="handlerEmail" [nzAutocomplete]="auto">
-          <nz-autocomplete [nzDataSource]="handlerEmailOpts" #auto></nz-autocomplete>
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item> -->
-    <nz-form-item class="top-row">
-      <nz-form-control>
-        <nz-select nzMode="multiple" nzPlaceHolder="Select campaigns" formControlName="campaigns" style="width: 200px;">
-          <nz-option *ngFor="let co of campaignOpts" [nzLabel]="co" [nzValue]="co"></nz-option>
-        </nz-select>
-      </nz-form-control>
+<!-- <mat-grid-list cols="2" rowHeight="2:1">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+  <mat-grid-tile>3</mat-grid-tile>
+  <mat-grid-tile>4</mat-grid-tile>
+</mat-grid-list>
+ -->
 
-    </nz-form-item>
+<mat-list role="list">
+  <mat-list-item role="listitem" *ngFor="let campaign of listOfData" style="height: 120px;">
+    <a mat-line style="font-weight: 550;">
+      {{campaign.campaignName | uppercase}}
+    </a>
 
-    <nz-form-item class="top-row">
-      <nz-form-control>
-        <button nz-button nzType="primary" [disabled]="!validateForm.valid">Search</button>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-</div>
-<div class="scrollable"> 
-  <ng-container *ngFor="let data of listOfData">
-    <nz-list nzItemLayout="horizontal" nzBordered="true" nzSize="small" [nzHeader]="campaignListHeader">
-      <nz-list-item style="padding-bottom: 4px; padding-top: 0px; margin-bottom: 4px;">
-        <ng-container *ngIf="!data.archived || ['manager', 'admin'].includes(roleType)" nzBordered>
-          <nz-list-item-meta>
-          <nz-list-item-meta-title>
 
-            <div nz-row nzJustify="space-between">
-              <div nz-col nzSpan="20">
-                <a style="font-size: smaller;">Follow-Up 
-                  <nz-tag [nzColor]="'green'">{{ quickStats[data.campaignName]?.followUp || 0 }}</nz-tag></a> &nbsp;
-                <nz-divider nzType="vertical"></nz-divider>
-                <a style="font-size: smaller;">
-                  Overdue <nz-tag [nzColor]="'red'">{{ quickStats[data.campaignName]?.overdue || 0  }}</nz-tag>
-                </a>
-              </div>
-              <div nz-col nzSpan="4" style="text-align: end;">
-                <button nz-button nzSize="small" nzType="primary" (click)="routeToSoloLead(data)">Browse</button>
-              </div>
-            </div>
-          </nz-list-item-meta-title>
-        </nz-list-item-meta>
-        </ng-container>
-      </nz-list-item>
-      <nz-list-empty *ngIf="listOfData.length === 0"></nz-list-empty>
-    </nz-list>
-    <ng-template #campaignListHeader>
-      <span (click)="gotoDetailedView(data)">
-        <div nz-row nzJustify="space-between">
-          <div nz-col nzSpan="20"><span style="font-weight: 700;">{{data.campaignName | uppercase}}</span></div>
-          <div nz-col nzSpan="4" style="text-align: end;">
-            <button nz-button nzSize="small"><i nz-icon nzType="edit"></i>Edit</button>
-          </div>
-        </div>
-      </span>
-    </ng-template>
-  </ng-container>
-</div>
+    <div mat-line style="padding-top: 10px;">
+      <span [matBadge]="quickStats[campaign.campaignName]?.followUp || 0 " matBadgeOverlap="false">Follow Ups</span>
+    </div>
 
-<div class="pagination-block" *ngIf="totalPage > 1">
-  <nz-pagination [nzPageIndex]="page" [nzTotal]="totalPage" nzShowSizeChanger [nzPageSize]="perPage"
-    (nzPageSizeChange)="onPageSizeChange($event)" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination>
-</div>
+    <div mat-line style="padding-top: 10px;">
+      <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0 " matBadgeColor="warn" matBadgeOverlap="false">Overdue</span>
+    </div>
+
+    <mat-action-list>
+      <button class="custom-btn" mat-raised-button color="primary" (click)="gotoDetailedView(campaign)">Edit</button> &nbsp;
+      <button class="custom-btn" mat-raised-button color="accent" (click)="routeToSoloLead(campaign)">Browse</button>
+    </mat-action-list>
+  </mat-list-item>
+</mat-list>
+<mat-paginator [length]="100"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

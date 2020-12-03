@@ -138,25 +138,6 @@ export class LeadsComponent implements OnInit {
     );
   }
 
-  appendData() {
-    this.leadsService.getLeads(this.leadOptions).subscribe(
-      async (response: any) => {
-        if (response.data.length === 0) {
-          this.isEmpty = true;
-        } else {
-          this.toast.hide();
-          this.isEmpty = false;
-          this.leads.push(...response.data);
-          this.total = response.total;
-          this.leadOptions.page = response.page;
-        }
-      },
-      (error) => {
-        this.msg.error("Some error occured while fetching leads");
-      }
-    );
-  }
-
   typeDict: {
     [key: string]: {
       label: string;
@@ -323,8 +304,13 @@ export class LeadsComponent implements OnInit {
   total: number = 1000;
   loading = false;
   onQueryParamsChange(paginator): void {
-    // console.log(page);
+    console.log(paginator);
     this.leadOptions.page = paginator.pageIndex;
+    this.perPage = paginator.pageSize;
+    this.leadOptions.perPage = paginator.pageSize;
+
+    this.leadOptions.page =
+      this.leadOptions.page <= 0 ? 1 : this.leadOptions.page;
     this.getData();
   }
 
@@ -409,13 +395,5 @@ export class LeadsComponent implements OnInit {
         campaignId: this.selectedCampaign._id,
       },
     });
-  }
-
-  loadMoreLeads(event) {
-    setTimeout(() => {
-      event.target.complete();
-    }, 500);
-    this.leadOptions.page += 1;
-    this.appendData();
   }
 }

@@ -21,7 +21,6 @@ export class CampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private toast: ToastService,
-    private fb: FormBuilder,
     private router: Router,
     private pubsub: PubsubService,
     private uploadService: UploadService
@@ -42,12 +41,7 @@ export class CampaignComponent implements OnInit {
     this.page = 1;
     this.perPage = 20;
     this.campaignOpts = ["default"];
-    this.validateForm = this.fb.group({
-      handlerEmail: [null],
-      campaigns: [],
-    });
 
-    this.initFormControlListeners();
 
     this.getCampaigns();
 
@@ -81,19 +75,6 @@ export class CampaignComponent implements OnInit {
   onPageSizeChange(size: number) {
     this.perPage = size;
     this.getCampaigns();
-  }
-
-  initFormControlListeners() {
-    this.validateForm
-      .get("handlerEmail")
-      .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((change) => {
-        this.campaignService
-          .getHandlerEmailHints(change)
-          .subscribe((handlerEmailOpts: string[]) => {
-            this.handlerEmailOpts = handlerEmailOpts;
-          });
-      });
   }
 
   getCampaigns() {
@@ -179,5 +160,10 @@ export class CampaignComponent implements OnInit {
         campaignName: data.campaignName,
       },
     });
+  }
+
+
+  handleCampaignChange(campaignName) {
+    console.log(campaignName);
   }
 }

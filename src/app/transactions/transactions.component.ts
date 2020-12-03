@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { PageEvent } from '@angular/material/paginator';
 import { Router } from "@angular/router";
 import { ModalController } from "@ionic/angular";
-import { CampaignService } from "../home/campaign.service";
-import { ILead } from "../home/interfaces/leads.interface";
-import { LeadSoloComponent } from "../home/lead-solo/lead-solo.component";
 import { LeadsService } from "../home/leads.service";
 
 interface IHistory {
@@ -76,8 +74,10 @@ export class TransactionsComponent implements OnInit {
     nextAction: "Action",
   };
 
-  handlePageChange(page: number) {
-    this.pagination.page = page;
+  perPage = 15;
+  handlePageChange(paginator: PageEvent) {
+    this.pagination.page = paginator.pageIndex;
+    this.pagination.perPage = this.perPage;
     this.getTransactions();
   }
 }

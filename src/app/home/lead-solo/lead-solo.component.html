@@ -24,66 +24,72 @@
       <div class="content">
         <div class="main">
           <ng-container>
-            <nz-collapse>
-              <nz-collapse-panel nzHeader="LEAD DETAILS" nzActive="false">
-                <WingBlank size='sm'>
-                  <nz-collapse>
-                    <nz-collapse-panel nzHeader="Contact Information" nzShowArrow="false">
-                      <nz-descriptions nzBordered="true" [nzSize]="'middle'" style="background-color: snow;">
-                        <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
-                          {{contact['value']}}
-                        </nz-descriptions-item>
-                      </nz-descriptions>
-                      <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add
-                        Contact</button>
-                    </nz-collapse-panel>
+            <mat-accordion>
+              <mat-expansion-panel hideToggle>
 
-                    <ng-container *ngFor="let g of leadGroups">
-                      <nz-collapse-panel [nzHeader]="g.label" key="g.label" nzShowArrow="false">
-                        <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'middle'">
-                          <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
-                            <ng-container *ngIf="g.value.includes(leadKey)">
-                              <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-                                <ng-container [ngSwitch]="typeDict[leadKey].type">
-                                  <ng-container *ngSwitchCase="'date'">
-                                    <input type="datetime-local" nz-input [(ngModel)]="selectedLead[leadKey]"
-                                      [disabled]="isDisabled(leadKey)" nzShowTime
-                                      (nzOnOpenChange)="handleDateOpenChange($event)"
-                                      (nzOnPanelChange)="handleDatePanelChange($event)">
-                                  </ng-container>
+                <mat-expansion-panel-header>
+                  <mat-panel-title style="font-weight: 500; font-size: 1.1rem;">
+                    Lead Information
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
 
-                                  <ng-container *ngSwitchCase="'number'">
-                                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                                  </ng-container>
+                <mat-tab-group>
+                  <mat-tab label="Contact">
+                    <nz-descriptions nzBordered="true" [nzSize]="'middle'" style="background-color: snow;">
+                      <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
+                        {{contact['value']}}
+                      </nz-descriptions-item>
+                    </nz-descriptions>
+                    <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add
+                      Contact</button>
+                  </mat-tab>
+                  <mat-tab [label]="g.label" *ngFor="let g of leadGroups">
+                    <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'middle'">
+                      <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
+                        <ng-container *ngIf="g.value.includes(leadKey)">
+                          <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
+                            <ng-container [ngSwitch]="typeDict[leadKey].type">
+                              <ng-container *ngSwitchCase="'date'">
+                                <input type="datetime-local" matInput [(ngModel)]="selectedLead[leadKey]"
+                                  [disabled]="isDisabled(leadKey)" nzShowTime
+                                  (nzOnOpenChange)="handleDateOpenChange($event)"
+                                  (nzOnPanelChange)="handleDatePanelChange($event)">
+                              </ng-container>
 
-                                  <ng-container *ngSwitchCase="'string'">
-                                    <input nz-input placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                                      [disabled]="isDisabled(leadKey)" />
-                                  </ng-container>
+                              <ng-container *ngSwitchCase="'number'">
+                                <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+                              </ng-container>
 
-                                  <!-- <ng-container *ngSwitchCase="'tel'">
+                              <ng-container *ngSwitchCase="'string'">
+                                <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                                  [disabled]="isDisabled(leadKey)" />
+                              </ng-container>
+
+                              <!-- <ng-container *ngSwitchCase="'tel'">
                                         <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
                                       </ng-container> -->
 
-                                  <ng-container *ngSwitchCase="'select'">
-                                    <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
-                                      <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
-                                        [nzValue]="option">
-                                      </nz-option>
-                                    </nz-select>
-                                  </ng-container>
-                                </ng-container>
-                              </nz-descriptions-item>
+                              <ng-container *ngSwitchCase="'select'">
+                                <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+                                  <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option"
+                                    [nzValue]="option">
+                                  </nz-option>
+                                </nz-select>
+                              </ng-container>
                             </ng-container>
-                          </ng-container>
-                        </nz-descriptions>
-                      </nz-collapse-panel>
-                    </ng-container>
-                  </nz-collapse>
-                </WingBlank>
-              </nz-collapse-panel>
-            </nz-collapse>
+                          </nz-descriptions-item>
+                        </ng-container>
+                      </ng-container>
+                    </nz-descriptions>
+                  </mat-tab>
 
+
+                </mat-tab-group>
+
+
+
+              </mat-expansion-panel>
+            </mat-accordion>
             <div style="background-color: whitesmoke;" style="padding-left: 3px;">
               <ng-container *ngFor="let contact of selectedLead.contact">
                 <ion-button color="success" size="small" (click)="onPhoneClick(contact.value)"
@@ -100,9 +106,13 @@
               style="background-color: whitesmoke;">
             </nz-tree>
 
-            <nz-collapse>
-              <nz-collapse-panel [nzHeader]="'Follow Up'">
-                <WingBlank>
+            <mat-expansion-panel>
+              
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Followup
+                </mat-panel-title>
+              </mat-expansion-panel-header>
                   <nz-select style="width: 200px;" [(ngModel)]="selectedLead.nextAction">
                     <nz-option nzValue="onSite" nzLabel="On Site Appointment"></nz-option>
                     <nz-option nzValue="followUp" nzLabel="Follow Up"></nz-option>
@@ -115,12 +125,11 @@
                       <i nz-icon nzType="down"></i>
                     </nz-form-control>
                   </nz-form-item>
-                </WingBlank>
-              </nz-collapse-panel>
-            </nz-collapse>
+             
+            </mat-expansion-panel>
 
             <nz-dropdown-menu #menu="nzDropdownMenu">
-              <ul nz-menu  (click)="handleFollowUp($event)">
+              <ul nz-menu (click)="handleFollowUp($event)">
                 <li nz-menu-item value="1">Now</li>
                 <li nz-menu-item value="2">After 10 minutes</li>
                 <li nz-menu-item value="3">After One Hour</li>
@@ -129,22 +138,21 @@
                 <li nz-menu-item value="now" (click)="showFollowUpInput=true">Custom</li>
               </ul>
             </nz-dropdown-menu>
-            
-            <nz-modal
-              [(nzVisible)]="showFollowUpInput"
-              nzTitle="Custom FollowUp"
-              nzOkText="Ok"
-              nzCancelText="Cancel"
-              (nzOnOk)="showFollowUpInput = false"
-              (nzOnCancel)="showFollowUpInput = false"
-            >             
-              <input type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp"
-                placeholder="followUp" [ngModelOptions]="{standalone: true}">
-          </nz-modal>
+
+            <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok" nzCancelText="Cancel"
+              (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
+              <input type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp" placeholder="followUp"
+                [ngModelOptions]="{standalone: true}">
+            </nz-modal>
 
           </ng-container>
-          <nz-collapse>
-            <nz-collapse-panel [nzHeader]="'Lead History'" *ngIf="selectedLead?.history?.length>0">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle *ngIf="selectedLead?.history?.length>0">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Lead History
+                </mat-panel-title>
+              </mat-expansion-panel-header>
               <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
                 <WhiteSpace size='lg'></WhiteSpace>
                 <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
@@ -165,16 +173,16 @@
                   </nz-timeline-item>
                 </nz-timeline>
               </div>
-            </nz-collapse-panel>
+            </mat-expansion-panel>
 
-            <ng-template #requiredTemplate>
-              <span>Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
-                  nz-icon nzType="star" nzTheme="fill"></i></span>
-            </ng-template>
-
-
-            <nz-collapse-panel [nzHeader]="requiredTemplate" [nzActive]="actions.isInformationRequested"
+            <mat-expansion-panel
               *ngIf="actions.isInformationRequested">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
+                    nz-icon nzType="star" nzTheme="fill"></i>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
               <div *ngIf="formModel" style="max-width:500px;">
                 <nz-page-header class="site-page-header" nzBackIcon>
                   <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
@@ -186,8 +194,8 @@
                           <ng-container [ngSwitch]="item.type">
 
                             <nz-form-item *ngSwitchCase="'text'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" nzFor="email">{{item.label}}
-                              </nz-form-label>
+                              <mat-label nzFor="email">{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSm]="14" [nzXs]="24">
                                 <input nz-input [id]="item.id" [(ngModel)]="item.value"
                                   [ngModelOptions]="{standalone: true}" />
@@ -195,8 +203,8 @@
                             </nz-form-item>
 
                             <nz-form-item *ngSwitchCase="'email'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <input nz-input type="email" id="{{item.name}}" [(ngModel)]="item.value"
                                   placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
@@ -204,16 +212,16 @@
                             </nz-form-item>
 
                             <nz-form-item *ngSwitchCase="'phone'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
                                   [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'number'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <input nz-input type="number" id="{{item.name}}" min="{{item.min}}"
                                   [(ngModel)]="item.value" max="{{item.max}}" placeholder="{{item.placeholder}}"
@@ -221,24 +229,24 @@
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'date'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <input type="datetime-local" nz-input id="{{item.name}}" [(ngModel)]="item.value"
                                   [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'datetime-local'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <input type="datetime-local" nz-input id="{{item.name}}" nzShowTime
                                   [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'textarea'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <textarea nz-input placeholder="Controlled autosize"
                                   [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
@@ -248,8 +256,8 @@
                               </nz-form-control>
                             </nz-form-item>
                             <nz-form-item *ngSwitchCase="'file'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}} (File
-                                can't be uploaded right now)</nz-form-label>
+                              <mat-label>{{item.label}} (File
+                                can't be uploaded right now)</mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <input nz-input type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
                                   [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
@@ -258,8 +266,8 @@
 
                             <div *ngSwitchCase="'paragraph'">
                               <nz-form-item>
-                                <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                                </nz-form-label>
+                                <mat-label>{{item.label}}
+                                </mat-label>
                                 <nz-form-control>
                                   <nz-input-group [nzSuffix]="inputClearTpl">
                                     <input type="text" nz-input [(ngModel)]="item.value"
@@ -275,8 +283,8 @@
                             </div>
                             <div *ngSwitchCase="'autocomplete'">
                               <nz-form-item>
-                                <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                                </nz-form-label>
+                                <mat-label>{{item.label}}
+                                </mat-label>
                                 <nz-form-control [nzSpan]="14">
                                   <nz-select id="{{item.name}}" [(ngModel)]="item.value"
                                     [ngModelOptions]="{standalone: true}">
@@ -288,8 +296,8 @@
                             </div>
                             <div *ngSwitchCase="'checkbox'">
                               <nz-form-item>
-                                <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                                </nz-form-label>
+                                <mat-label>{{item.label}}
+                                </mat-label>
                                 <nz-form-control [nzSpan]="14">
                                   <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
                                     [nzValue]="v.value" [ngModelOptions]="{standalone: true}">
@@ -299,8 +307,8 @@
                               </nz-form-item>
                             </div>
                             <nz-form-item *ngSwitchCase="'radio'">
-                              <nz-form-label [nzSm]="6" [nzRequired]="item.required" [nzSpan]="6">{{item.label}}
-                              </nz-form-label>
+                              <mat-label>{{item.label}}
+                              </mat-label>
                               <nz-form-control [nzSpan]="14">
                                 <nz-radio-group [(ngModel)]="item.value">
                                   <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
@@ -319,13 +327,17 @@
                   </nz-page-header-content>
                 </nz-page-header>
               </div>
-            </nz-collapse-panel>
+            </mat-expansion-panel>
 
-            <nz-collapse-panel [nzHeader]="'Send Email'" key="5">
-              <WingBlank>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Send Email
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
                 <nz-form-item>
-                  <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired style="font-weight: 700;">Select Email Template
-                  </nz-form-label>
+                  <mat-label nzRequired style="font-weight: 700;">Select Email Template
+                  </mat-label>
                   <nz-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
                     <nz-option *ngFor="let et of emailTemplates" [nzValue]="et" [nzLabel]="et.templateName"></nz-option>
                   </nz-select>
@@ -333,22 +345,22 @@
 
                 <form nz-form [formGroup]="emailForm" nzLayout="vertical">
                   <nz-form-item>
-                    <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
-                    <nz-form-control [nzSm]="24" [nzXs]="24">
+                    <mat-label nzRequired>Subject</mat-label>
+                    <nz-form-control>
                       <input nz-input placeholder="Write the subject of email" formControlName="subject" />
                     </nz-form-control>
                   </nz-form-item>
 
                   <nz-form-item>
-                    <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
-                    <nz-form-control [nzSm]="24" [nzXs]="24">
+                    <mat-label nzRequired>Body</mat-label>
+                    <nz-form-control>
                       <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                         formControlName="content"></textarea>
                     </nz-form-control>
                   </nz-form-item>
                   <nz-form-item>
-                    <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Attachments</nz-form-label>
-                    <nz-form-control [nzSm]="24" [nzXs]="24">
+                    <mat-label nzRequired>Attachments</mat-label>
+                    <nz-form-control>
                       <nz-select [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
                         nzPlaceHolder="Please select attachments from the dropdown" formControlName="attachments">
                         <nz-option *ngFor="let attachment of attachments" [nzLabel]="attachment.fileName"
@@ -360,9 +372,8 @@
                     </nz-form-control>
                   </nz-form-item>
                 </form>
-              </WingBlank>
-            </nz-collapse-panel>
-          </nz-collapse>
+            </mat-expansion-panel>
+          </mat-accordion>
 
           <nz-button-group style="margin-top: 5px;">
             <button nzType="danger" nz-button nzSize="default" (click)="showReassignmentDrawer()">Reassign</button>
@@ -401,17 +412,17 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'number'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+                  <input matInput placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
                     [ngModelOptions]="{standalone: true}" />
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'string'">
-                  <input nz-input placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+                  <input matInput placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
                     [ngModelOptions]="{standalone: true}" />
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'tel'">
-                  <input nz-input [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}" />
+                  <input matInput [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}" />
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'select'">
@@ -453,21 +464,21 @@
   (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
   <form nz-form [formGroup]="contactForm">
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Label</nz-form-label>
+      <mat-label nzRequired nzFor="note">Label</mat-label>
       <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Label!">
-        <input id="label" type="text" nz-input formControlName="label" />
+        <input id="label" type="text" matInput formControlName="label" />
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Value</nz-form-label>
+      <mat-label nzRequired nzFor="note">Value</mat-label>
       <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter Value!">
-        <input id="value" type="text" nz-input formControlName="value" />
+        <input id="value" type="text" matInput formControlName="value" />
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzFor="category" nzRequired>category</nz-form-label>
+      <mat-label nzFor="category" nzRequired>category</mat-label>
       <nz-form-control [nzSpan]="12" nzErrorTip="Please Enter category of contact">
         <nz-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
           <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
