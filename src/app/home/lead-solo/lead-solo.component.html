@@ -38,6 +38,7 @@
                     <mat-form-field class="example-full-width" class="example-full-width"
                       *ngFor="let contact of selectedLead.contact" appearance="outline">
                       <mat-placeholder>Search reports</mat-placeholder>
+                      <mat-label>{{contact.label}}</mat-label>
                       <input matInput [value]="contact.value">
 
                     </mat-form-field>

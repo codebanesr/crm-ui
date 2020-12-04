@@ -1,6 +1,7 @@
 <!-- The upper tab for choice of lead upload -->
 <div>
-  <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="open()" style="transform: scale(0.7); position: absolute; top: -5px; right: -2px;">
+  <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="open()"
+    style="transform: scale(0.7); position: absolute; top: -5px; right: -2px;">
     <ion-fab-button>
       <ion-icon name="cloud-download-outline"></ion-icon>
     </ion-fab-button>
@@ -8,103 +9,104 @@
 </div>
 
 <div style="padding: 10px;" class="scrollable">
-  <!-- <form nz-form>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>Type</nz-form-label>
-      <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
-        <nz-radio-group [(ngModel)]="tabSelected" [ngModelOptions]="{standalone: true}"
-          (ngModelChange)="handleFormTypeChange($event)" nzButtonStyle="solid">
-          <label nz-radio-button nzValue="Lead Generation">Lead Generation</label>
-          <label nz-radio-button nzValue="Custom Workflow">Custom Workflow</label>
-        </nz-radio-group>
-      </nz-form-control>
-    </nz-form-item>
-  </form> -->
-
-<!-- <a nz-button nzType="link" ><i nz-icon nzType="setting" nzTheme="outline"></i></a> -->
-
-  <!-- campaign for creating new campaign and upload tab for uploading campaign config -->
   <div class="scrollable" style="padding-bottom: 35px;">
     <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
-      <nz-form-item>
-        <nz-form-label [nzSpan]="7" nzRequired>Campaign Name</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzHasFeedback>
-          <input placeholder="input here" nz-input formControlName="campaignName" [nzAutocomplete]="auto" />
-          <nz-autocomplete #auto>
-            <nz-auto-option *ngFor="let option of options" [nzValue]="option?.campaignName">{{option?.campaignName}}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </nz-form-item>
+
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Campaign Name</mat-label>
+        <input placeholder="input here" matInput formControlName="campaignName" [readonly]="campaignId" />
+      </mat-form-field>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="7" nzRequired>Interval</nz-form-label>
+        <mat-label>Interval</mat-label>
         <nz-form-control [nzSpan]="12">
           <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker>
         </nz-form-control>
       </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="7" nzRequired>Comment</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzErrorTip="Please write something here!">
-          <textarea formControlName="comment" nz-input rows="2" placeholder="write any thing"></textarea>
-        </nz-form-control>
-      </nz-form-item>
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Comment</mat-label>
+
+        <textarea formControlName="comment" matInput rows="2" placeholder="write any thing"></textarea>
+
+      </mat-form-field>
 
       <nz-form-item>
-        <nz-form-label nzFor="Assignee" nzRequired [nzSpan]="7">
+        <mat-label>
           <span>
             Assignee
             <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
           </span>
-        </nz-form-label>
-        <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization">
-          <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" formControlName="assignees">
-            <nz-option *ngFor="let option of listOfUser" [nzLabel]="option.fullName" [nzValue]="option._id"
-              [nzHide]="!isNotSelected(option._id)"></nz-option>
-          </nz-select>
-        </nz-form-control>
+        </mat-label>
+        <mat-form-field appearance="fill" class="mat-full-width">
+          <mat-select placeHolder="Inserted are removed" formControlName="assignees" multiple>
+            <mat-option *ngFor="let option of listOfUser" [value]="option._id"
+              >{{option.fullName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
       </nz-form-item>
 
 
-      <nz-collapse>
-        <nz-collapse-panel [nzHeader]="'Disposition'" [nzActive]="false">
-          <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" nzDraggable nzBlockNode (nzOnDrop)="nzEvent($event)"
-            (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)" (contextmenu)="contextMenu($event, menu)">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Disposition
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" nzDraggable nzBlockNode
+            (nzOnDrop)="nzEvent($event)" (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)"
+            (contextmenu)="contextMenu($event, menu)">
           </nz-tree>
-        </nz-collapse-panel>
-        <nz-collapse-panel [nzHeader]="'Unique Attributes'" [nzActive]="false">
-          <nz-checkbox-group
-            [(ngModel)]="uniqueCols"
-            [ngModelOptions]="{ standalone: true }"
-          ></nz-checkbox-group>
-        </nz-collapse-panel>
-        <nz-collapse-panel [nzHeader]="'Editable Columns'" [nzActive]="false">
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Unique Attributes
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Editable Columns
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
-        </nz-collapse-panel>
+        </mat-expansion-panel>
 
-        <nz-collapse-panel [nzHeader]="'Browsable Columns'" [nzActive]="false">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Browsable Columns
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
-        </nz-collapse-panel>
+        </mat-expansion-panel>
 
-        <nz-collapse-panel [nzHeader]="'Assign To'" [nzActive]="false">
-          <nz-checkbox-group
-            [(ngModel)]="assignTo"
-            [ngModelOptions]="{ standalone: true }"
-          ></nz-checkbox-group>
-        </nz-collapse-panel>
-    
-        <nz-collapse-panel [nzHeader]="'Advanced Settings'" [nzActive]="false">
-          <nz-checkbox-group
-            [(ngModel)]="advancedSettings"
-            [ngModelOptions]="{ standalone: true }"
-          ></nz-checkbox-group>
-        </nz-collapse-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Assign To
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group>
+        </mat-expansion-panel>
 
-        <nz-collapse-panel nzHeader="Create Groups">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Advanced Settings
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel nzHeader="Create Groups">
           <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-            <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"/>
+            <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
           </nz-input-group>
 
           <ng-template #addOnAfterTemplate>
@@ -114,40 +116,43 @@
 
           <ng-container *ngFor="let g of groups">
             <nz-form-item>
-              <nz-form-label [nzFor]="g.label" [nzSpan]="7">
+              <mat-label>
                 <span>
-                  {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i>
+                  {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;"
+                    (click)="deleteGroup(g.label)"></i>
                   <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
                 </span>
-              </nz-form-label>
+              </mat-label>
               <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization">
                 <!-- formControlName="assignees" -->
-                <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}">
-                  <nz-option *ngFor="let option of allLeadCols" [nzLabel]="option.readableField" [nzValue]="option.internalField"
-                    [nzHide]="!isNotInGroup(option.internalField, g.value)"></nz-option>
+                <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" [(ngModel)]="g.value"
+                  [ngModelOptions]="{standalone: true}">
+                  <nz-option *ngFor="let option of allLeadCols" [nzLabel]="option.readableField"
+                    [nzValue]="option.internalField" [nzHide]="!isNotInGroup(option.internalField, g.value)">
+                  </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
           </ng-container>
-        </nz-collapse-panel>
+        </mat-expansion-panel>
 
-        <nz-collapse-panel nzHeader="Add Email Template Here">
+        <mat-expansion-panel nzHeader="Add Email Template Here">
           <form nz-form [formGroup]="emailForm" nzLayout="vertical">
             <nz-form-item>
-              <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Template Name</nz-form-label>
+              <mat-label>Template Name</mat-label>
               <input placeholder="Template Name" nz-input formControlName="templateName" />
             </nz-form-item>
 
 
             <nz-form-item>
-              <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
+              <mat-label>Subject</mat-label>
               <nz-form-control [nzSm]="24" [nzXs]="24">
                 <input nz-input placeholder="Write the subject of email" formControlName="subject" />
               </nz-form-control>
             </nz-form-item>
 
             <nz-form-item>
-              <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
+              <mat-label>Body</mat-label>
               <nz-form-control [nzSm]="24" [nzXs]="24">
                 <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                   formControlName="content"></textarea>
@@ -158,38 +163,43 @@
             </nz-upload>
           </form>
 
-            <!-- @Todo add functionality for submit without attachments -->
-            <button nz-button [nzType]="'danger'">Submit without attachments</button>
-            <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
-              [disabled]="fileList.length == 0" style="margin-top: 16px">
-              {{ uploading ? 'Uploading' : 'Use Attachments' }}
-            </button>
+          <!-- @Todo add functionality for submit without attachments -->
+          <button nz-button [nzType]="'danger'">Submit without attachments</button>
+          <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
+            [disabled]="fileList.length == 0" style="margin-top: 16px">
+            {{ uploading ? 'Uploading' : 'Use Attachments' }}
+          </button>
 
-        </nz-collapse-panel>
-        <nz-collapse-panel [nzHeader]="'Create Campaign form'" [nzActive]="false">
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Create Campaign form
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           Not available in mobile
-        </nz-collapse-panel>
-      </nz-collapse>
+        </mat-expansion-panel>
+      </mat-accordion>
       <br>
 
 
 
-      <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true
-        nzName="files" (click)="$event.stopImmediatePropagation();">
-        <button nz-button><i nz-icon nzType="upload"></i>Choose Campaign File</button>
-        <button nz-button nz-primary (click)="handleLeadFilesUpload();">go</button>
+      <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files"
+        (click)="$event.stopImmediatePropagation();">
+        <button mat-raised-button color="accent"><i nz-icon nzType="upload"></i>Choose Campaign File</button> &nbsp;
+        <button mat-raised-button color="primary" (click)="handleLeadFilesUpload();">go</button>
       </nz-upload>
-      
+
       <nz-form-item style="margin-top: 5px;">
         <nz-form-control [nzSpan]="12">
           <!-- hidden upload element -->
           <input type="file" #uploader (change)="captureCampaignConfigFile($event)" style="display: none;">
-          <button type="upload" id="myFile" nz-button nzType="default" (click)="uploader.click()">
+          <button type="upload" id="myFile" mat-raised-button color="accent" nzType="default" (click)="uploader.click()">
             <i nz-icon nzType="upload" nzTheme="outline"></i>
-              Upload Params
+            Upload Params
             <nz-badge [nzCount]="campaignFiles?.length" style="margin-left: 1px;"></nz-badge>
-          </button>
-          <button nz-button nzType="primary" [disabled]="!campaignForm.valid"
+          </button> &nbsp;
+          <button mat-raised-button nzType="primary" [disabled]="!campaignForm.valid" color="primary"
             (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
         </nz-form-control>
       </nz-form-item>
@@ -201,8 +211,8 @@
       <ul nz-menu>
         <li nz-menu-item (click)="deleteNode()">Delete This</li>
         <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
-        
-          <!-- <nz-select
+
+        <!-- <nz-select
             style="margin: 0px; padding: 0px"
             nzShowSearch
             nzAllowClear
@@ -215,16 +225,16 @@
             <nz-option nzLabel="On Site Appointment" nzValue="onSiteAppointment"></nz-option>
             <nz-option nzLabel="Sales Call" nzValue="salesCall"></nz-option>
           </nz-select> -->
-          <ion-item nz-menu-item>
-            <ion-label>Actions</ion-label>
-            <ion-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
-              <ion-select-option value="showForm">Show Form</ion-select-option>
-              <ion-select-option value="followUp">FollowUp</ion-select-option>
-              <ion-select-option value="appointment">Appointment</ion-select-option>
-              <ion-select-option value="salesCall">SalesCall</ion-select-option>
-            </ion-select>
-          </ion-item>
-        
+        <ion-item nz-menu-item>
+          <ion-label>Actions</ion-label>
+          <ion-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
+            <ion-select-option value="showForm">Show Form</ion-select-option>
+            <ion-select-option value="followUp">FollowUp</ion-select-option>
+            <ion-select-option value="appointment">Appointment</ion-select-option>
+            <ion-select-option value="salesCall">SalesCall</ion-select-option>
+          </ion-select>
+        </ion-item>
+
         <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
       </ul>
     </nz-dropdown-menu>
@@ -233,9 +243,11 @@
       (nzOnClose)="close()" nzHeight="90vh">
       <ng-container>
         <nz-list nzItemLayout="horizontal" [nzLoading]="false">
-          <nz-list-item *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect"> 
+          <nz-list-item *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect">
             <nz-list-item-meta-title>
-              <a style="cursor: pointer;">Uploaded <span style="color: cornflowerblue;">{{upload["label"]}}</span> by {{upload['email']}} at {{upload['createdAt']| date:'full'}} with action type {{upload['actionType']}}</a>
+              <a style="cursor: pointer;">Uploaded <span style="color: cornflowerblue;">{{upload["label"]}}</span> by
+                {{upload['email']}} at {{upload['createdAt']| date:'full'}} with action type
+                {{upload['actionType']}}</a>
             </nz-list-item-meta-title>
           </nz-list-item>
         </nz-list>
