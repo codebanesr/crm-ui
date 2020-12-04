@@ -35,59 +35,46 @@
 
                 <mat-tab-group>
                   <mat-tab label="Contact">
-                    <nz-descriptions nzBordered="true" [nzSize]="'middle'" style="background-color: snow;">
-                      <nz-descriptions-item *ngFor="let contact of selectedLead.contact" [nzTitle]="contact['label']">
-                        {{contact['value']}}
-                      </nz-descriptions-item>
-                    </nz-descriptions>
-                    <button nz-button nzSize='small' style="float: right;" (click)="showContactDrawer()">Add
+                    <mat-form-field class="example-full-width" class="example-full-width"
+                      *ngFor="let contact of selectedLead.contact" appearance="outline">
+                      <mat-placeholder>Search reports</mat-placeholder>
+                      <input matInput [value]="contact.value">
+
+                    </mat-form-field>
+                    <button mat-flat-button style="float: right;" (click)="showContactDrawer()">Add
                       Contact</button>
                   </mat-tab>
                   <mat-tab [label]="g.label" *ngFor="let g of leadGroups">
-                    <nz-descriptions nzBordered="true" nzLayout="vertical" [nzSize]="'middle'">
-                      <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
-                        <ng-container *ngIf="g.value.includes(leadKey)">
-                          <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-                            <ng-container [ngSwitch]="typeDict[leadKey].type">
-                              <ng-container *ngSwitchCase="'date'">
-                                <input type="datetime-local" matInput [(ngModel)]="selectedLead[leadKey]"
-                                  [disabled]="isDisabled(leadKey)" nzShowTime
-                                  (nzOnOpenChange)="handleDateOpenChange($event)"
-                                  (nzOnPanelChange)="handleDatePanelChange($event)">
-                              </ng-container>
 
-                              <ng-container *ngSwitchCase="'number'">
-                                <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                              </ng-container>
+                    <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
+                      <ng-container *ngIf="g.value.includes(leadKey)">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                          <ng-container *ngIf="typeDict[leadKey].type === 'string'">
+                            <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)">
+                          </ng-container>
 
-                              <ng-container *ngSwitchCase="'string'">
-                                <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                                  [disabled]="isDisabled(leadKey)" />
-                              </ng-container>
+                          <ng-container *ngIf="typeDict[leadKey].type === 'date'">
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker color="primary"></mat-datepicker>
+                          </ng-container>
 
-                              <!-- <ng-container *ngSwitchCase="'tel'">
-                                        <a nz-button nzType="primary" href="tel:{{selectedLead[leadKey]}}">{{selectedLead[leadKey]}}</a>
-                                      </ng-container> -->
-
-                              <ng-container *ngSwitchCase="'select'">
-                                <mat-form-field appearance="fill">
-                                  <mat-label>{{selectedLead[leadKey].label}}</mat-label>
-                                  <mat-select>
-                                    <mat-option value="option" *ngFor="let option of typeDict[leadKey].options">
-                                      {{option}}</mat-option>
-                                  </mat-select>
-                                </mat-form-field>
-                              </ng-container>
-                            </ng-container>
-                          </nz-descriptions-item>
-                        </ng-container>
+                          <ng-container *ngIf="typeDict[leadKey].type === 'select'">
+                            <mat-select [(ngModel)]="selectedLead[leadKey]">
+                              <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">{{option}}
+                              </mat-option>
+                            </mat-select>
+                          </ng-container>
+                        </mat-form-field>
                       </ng-container>
-                    </nz-descriptions>
+                    </ng-container>
+
                   </mat-tab>
                 </mat-tab-group>
               </mat-expansion-panel>
             </mat-accordion>
-            <div style="background-color: whitesmoke;" style="padding-left: 3px;">
+            <mat-card>
               <ng-container *ngFor="let contact of selectedLead.contact">
                 <ion-button color="success" size="small" (click)="onPhoneClick(contact.value)"
                   *ngIf="contact.category === 'mobile'">
@@ -96,12 +83,12 @@
                   {{contact.value}}
                 </ion-button>
               </ng-container>
-            </div>
+            </mat-card>
 
-
-            <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)" nzCheckable
-              style="background-color: whitesmoke;">
-            </nz-tree>
+            <mat-card>
+              <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
+              </nz-tree>
+            </mat-card>
 
             <mat-expansion-panel>
 
@@ -111,7 +98,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <mat-form-field appearance="fill">
+              <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Choose an option</mat-label>
                 <mat-select [(ngModel)]="selectedLead.nextAction">
                   <mat-option value="followUp">Follow Up</mat-option>
@@ -122,7 +109,7 @@
 
               <p style="font-weight: 700;">{{selectedLead.followUp | date: 'short'}}&nbsp;<i nz-icon nzType="down"></i>
               </p>
-              <mat-form-field appearance="fill">
+              <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Follow Up</mat-label>
                 <mat-select (selectionChange)="handleFollowUp($event)">
                   <mat-option value="1">Now</mat-option>
@@ -330,7 +317,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ng-container>
-                <mat-form-field appearance="fill">
+                <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label nzRequired style="font-weight: 700;">Select Email Template</mat-label>
                   <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
                     <mat-option [value]="et" *ngFor="let et of emailTemplates">{{ et.templateName }}</mat-option>
@@ -339,21 +326,21 @@
               </ng-container>
 
               <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-                <mat-form-field>
+                <mat-form-field class="example-full-width">
                   <mat-label nzRequired>Subject</mat-label>
 
                   <input matInput placeholder="Write the subject of email" formControlName="subject" />
 
                 </mat-form-field>
 
-                <mat-form-field>
+                <mat-form-field class="example-full-width">
                   <mat-label nzRequired>Body</mat-label>
 
                   <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                     formControlName="content"></textarea>
 
                 </mat-form-field>
-                <mat-form-field appearance="fill">
+                <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label nzRequired>Attachments</mat-label>
                   <mat-select multiple>
                     <mat-option [value]="attachment" *ngFor="let attachment of attachments">{{ attachment.fileName }}
@@ -458,32 +445,35 @@
 <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
   (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
   <form nz-form [formGroup]="contactForm">
-    <mat-form-field>
-      <mat-label nzRequired nzFor="note">Label</mat-label>
+    <mat-form-field class="example-full-width">
+      <mat-label nzRequired nzFor="note">Name</mat-label>
 
       <input id="label" type="text" matInput formControlName="label" />
 
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label nzRequired nzFor="note">Value</mat-label>
+    <mat-form-field class="example-full-width">
+      <mat-label nzRequired nzFor="note">Email / Mobile</mat-label>
 
       <input id="value" type="text" matInput formControlName="value" />
 
     </mat-form-field>
 
-    <!-- <mat-form-field> -->
-    <mat-label nzFor="category" nzRequired>category</mat-label>
+    <!-- <mat-form-field class="example-full-width"> -->
 
-    <nz-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
-      <nz-option nzValue="mobile" nzLabel="Mobile"></nz-option>
-      <nz-option nzValue="email" nzLabel="Email"></nz-option>
-    </nz-select>
+
+
+      <mat-label>Type of Contact</mat-label>
+      <mat-select formControlName="category" [(ngModel)]="defaultContactValue">
+        <mat-option value="mobile">Mobile</mat-option>
+        <mat-option value="email">Email</mat-option>
+      </mat-select>
+
 
     <!-- </mat-form-field> -->
   </form>
   <ng-template #contactModalFooter>
-    <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>
-    <button nz-button nzType="primary" (click)="submitContactForm(true)">Add Another</button>
+    <button mat-flat-button (click)="submitContactForm(false)">Save</button>
+    <button mat-flat-button (click)="submitContactForm(true)">Add Another</button>
   </ng-template>
 </nz-modal>

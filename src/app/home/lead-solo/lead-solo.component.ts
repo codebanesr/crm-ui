@@ -535,4 +535,13 @@ export class LeadSoloComponent implements OnInit {
 
   handleDateOpenChange(event) {}
   handleDatePanelChange(event) {}
+
+
+  defaultContactValue = "mobile"
+  getInputType(readableType) {
+    if(readableType.type === 'string') {
+      return 'text';
+    }
+    return readableType.type;
+  }
 }
