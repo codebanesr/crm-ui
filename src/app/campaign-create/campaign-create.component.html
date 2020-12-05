@@ -17,11 +17,18 @@
         <input placeholder="input here" matInput formControlName="campaignName" [readonly]="campaignId" />
       </mat-form-field>
 
-      <nz-form-item>
-        <mat-label>Interval</mat-label>
-        <nz-form-control [nzSpan]="12">
-          <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker>
-        </nz-form-control>
+      <nz-form-item>  
+          <!-- <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker> -->
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Enter start and end date</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate formControlName="startDate" placeholder="Start date">
+              <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        
       </nz-form-item>
 
       <mat-form-field class="mat-full-width" appearance="outline">
@@ -31,21 +38,19 @@
 
       </mat-form-field>
 
-      <nz-form-item>
-        <mat-label>
-          <span>
-            Assignee
-            <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
-          </span>
-        </mat-label>
-        <mat-form-field appearance="fill" class="mat-full-width">
-          <mat-select placeHolder="Inserted are removed" formControlName="assignees" multiple>
-            <mat-option *ngFor="let option of listOfUser" [value]="option._id"
-              >{{option.fullName}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-      </nz-form-item>
+     
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-select formControlName="assignees" placeholder="Assignees" [multiple]="true">
+          <mat-option>
+            <ngx-mat-select-search [formControl]="assigneeFilter" placeholderLabel="Jon Doe" 
+              noEntriesFoundLabel="'no matching assignee found'">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let option of filteredListOfUsers" [value]="option._id">
+            {{option.fullName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
 
       <mat-accordion>

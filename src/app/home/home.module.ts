@@ -21,9 +21,11 @@ import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { TransactionsComponent } from "../transactions/transactions.component";
 import { DemoMaterialModule } from "../material/material.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
   imports: [
+    NgxMatSelectSearchModule,
     ScrollingModule,
     CommonModule,
     FormsModule,

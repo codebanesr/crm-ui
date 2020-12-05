@@ -72,3 +72,12 @@ nz-descriptions-item {
 .example-full-width {
   width: 100%;
 }
+
+.mat-button-group {
+  display: table-cell;
+  width: 490px;
+}
+
+.mat-button-group .mat-button-base {
+  margin: 8px 8px 8px 0;
+}

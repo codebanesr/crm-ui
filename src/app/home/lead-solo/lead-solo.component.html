@@ -39,7 +39,7 @@
                       *ngFor="let contact of selectedLead.contact" appearance="outline">
                       <mat-placeholder>Search reports</mat-placeholder>
                       <mat-label>{{contact.label}}</mat-label>
-                      <input matInput [value]="contact.value">
+                      <input matInput [(ngModel)]="contact.value">
 
                     </mat-form-field>
                     <button mat-flat-button style="float: right;" (click)="showContactDrawer()">Add
@@ -49,24 +49,24 @@
 
                     <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
                       <ng-container *ngIf="g.value.includes(leadKey)">
-                        <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-form-field class="example-full-width" appearance="outline" *ngIf="['date', 'option', 'string'].includes(typeDict[leadKey].type)">
                           <mat-label>{{typeDict[leadKey].label}}</mat-label>
-                          <ng-container *ngIf="typeDict[leadKey].type === 'string'">
-                            <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)">
-                          </ng-container>
+                          
+                            <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)" *ngIf="typeDict[leadKey].type === 'string'"/>
+                          
 
-                          <ng-container *ngIf="typeDict[leadKey].type === 'date'">
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)">
+                          
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"  *ngIf="typeDict[leadKey].type === 'date'"/>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker color="primary"></mat-datepicker>
-                          </ng-container>
+                          
 
-                          <ng-container *ngIf="typeDict[leadKey].type === 'select'">
-                            <mat-select [(ngModel)]="selectedLead[leadKey]">
+                          
+                            <mat-select [(ngModel)]="selectedLead[leadKey]" *ngIf="typeDict[leadKey].type === 'select'">
                               <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">{{option}}
                               </mat-option>
                             </mat-select>
-                          </ng-container>
+                          
                         </mat-form-field>
                       </ng-container>
                     </ng-container>
@@ -165,6 +165,7 @@
                     nz-icon nzType="star" nzTheme="fill"></i>
                 </mat-panel-title>
               </mat-expansion-panel-header>
+              
               <div *ngIf="formModel" style="max-width:500px;">
                 <nz-page-header class="site-page-header" nzBackIcon>
                   <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
@@ -176,11 +177,9 @@
                           <ng-container [ngSwitch]="item.type">
 
                             <ng-container *ngSwitchCase="'text'">
-                              <mat-label nzFor="email">{{item.label}}
-                              </mat-label>
+                              <mat-label nzFor="email">{{item.label}}</mat-label>
 
-                              <input matInput [id]="item.id" [(ngModel)]="item.value"
-                                [ngModelOptions]="{standalone: true}" />
+                              <input matInput [id]="item.id" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
 
                             </ng-container>
 
@@ -188,8 +187,8 @@
                               <mat-label>{{item.label}}
                               </mat-label>
 
-                              <input matInput type="email" id="{{item.name}}" [(ngModel)]="item.value"
-                                placeholder="{{item.placeholder}}" [ngModelOptions]="{standalone: true}">
+                              <input matInput type="email" id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                placeholder="{{item.placeholder}}" />
 
                             </ng-container>
 
@@ -198,24 +197,20 @@
                               </mat-label>
 
                               <input matInput type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'number'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
+                              <mat-label>{{item.label}}</mat-label>
 
-                              <input matInput type="number" id="{{item.name}}" min="{{item.min}}"
-                                [(ngModel)]="item.value" max="{{item.max}}" placeholder="{{item.placeholder}}"
-                                [ngModelOptions]="{standalone: true}">
+                              <input matInput type="number" id="{{item.name}}" min="{{item.min}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" max="{{item.max}}" placeholder="{{item.placeholder}}" />
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'date'">
                               <mat-label>{{item.label}}
                               </mat-label>
 
-                              <input type="datetime-local" matInput id="{{item.name}}" [(ngModel)]="item.value"
-                                [ngModelOptions]="{standalone: true}">
+                              <input type="datetime-local" matInput id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'datetime-local'">
@@ -223,18 +218,16 @@
                               </mat-label>
 
                               <input type="datetime-local" matInput id="{{item.name}}" nzShowTime
-                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'textarea'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
+                              <mat-label>{{item.label}}</mat-label>
 
                               <textarea matInput placeholder="Controlled autosize"
                                 [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
-                                placeholder="{{item.placeholder}}" [(ngModel)]="item.value"
-                                [ngModelOptions]="{standalone: true}">
-                                </textarea>
+                                placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                ></textarea>
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'file'">
@@ -242,19 +235,17 @@
                                 can't be uploaded right now)</mat-label>
 
                               <input matInput type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
 
                             </ng-container>
 
                             <div *ngSwitchCase="'paragraph'">
                               <ng-container>
-                                <mat-label>{{item.label}}
-                                </mat-label>
+                                <mat-label>{{item.label}}</mat-label>
 
                                 <nz-input-group [nzSuffix]="inputClearTpl">
-                                  <input type="text" matInput [(ngModel)]="item.value"
-                                    placeholder="input with clear icon" [(ngModel)]="item.value"
-                                    [ngModelOptions]="{standalone: true}" />
+                                  <input type="text" matInput [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                    placeholder="input with clear icon" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
                                 </nz-input-group>
 
                               </ng-container>
@@ -265,24 +256,19 @@
                             </div>
                             <div *ngSwitchCase="'autocomplete'">
                               <ng-container>
-                                <mat-label>{{item.label}}
-                                </mat-label>
+                                <mat-label>{{item.label}}</mat-label>
 
-                                <nz-select id="{{item.name}}" [(ngModel)]="item.value"
-                                  [ngModelOptions]="{standalone: true}">
-                                  <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label">
-                                  </nz-option>
+                                <nz-select id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                  <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label"></nz-option>
                                 </nz-select>
-
                               </ng-container>
                             </div>
                             <div *ngSwitchCase="'checkbox'">
                               <ng-container>
-                                <mat-label>{{item.label}}
-                                </mat-label>
+                                <mat-label>{{item.label}}</mat-label>
 
                                 <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
-                                  [nzValue]="v.value" [ngModelOptions]="{standalone: true}">
+                                  [nzValue]="v.value" >
                                   <span>{{v.label}}</span>
                                 </label>
 
@@ -292,14 +278,14 @@
                               <mat-label>{{item.label}}
                               </mat-label>
 
-                              <nz-radio-group [(ngModel)]="item.value">
+                              <nz-radio-group [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
                                 <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
                               </nz-radio-group>
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'button'">
 
-                              <input matInput type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}">
+                              <input matInput type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}"/>
 
                             </ng-container>
                           </ng-container>
@@ -319,7 +305,7 @@
               </mat-expansion-panel-header>
               <ng-container>
                 <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label nzRequired style="font-weight: 700;">Select Email Template</mat-label>
+                  <mat-label>Select Email Template</mat-label>
                   <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
                     <mat-option [value]="et" *ngFor="let et of emailTemplates">{{ et.templateName }}</mat-option>
                   </mat-select>
@@ -328,22 +314,19 @@
 
               <form nz-form [formGroup]="emailForm" nzLayout="vertical">
                 <mat-form-field class="example-full-width">
-                  <mat-label nzRequired>Subject</mat-label>
-
+                  <mat-label>Subject</mat-label>
                   <input matInput placeholder="Write the subject of email" formControlName="subject" />
-
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
-                  <mat-label nzRequired>Body</mat-label>
-
+                  <mat-label>Body</mat-label>
                   <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                     formControlName="content"></textarea>
-
                 </mat-form-field>
+
                 <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label nzRequired>Attachments</mat-label>
-                  <mat-select multiple>
+                  <mat-label>Attachments</mat-label>
+                  <mat-select multiple formControlName="attachments">
                     <mat-option [value]="attachment" *ngFor="let attachment of attachments">{{ attachment.fileName }}
                     </mat-option>
                   </mat-select>
@@ -358,15 +341,14 @@
             </mat-expansion-panel>
           </mat-accordion>
 
-          <nz-button-group style="margin-top: 5px;">
-            <button nzType="danger" nz-button nzSize="default" (click)="showReassignmentDrawer()">Reassign</button>
 
-            <button nzType="primary" nz-button nzSize="default"
-              (click)="handleLeadSubmission(selectedLead, false)">Save</button>
+          <div class="mat-button-group">
+            <button mat-raised-button (click)="showReassignmentDrawer()" color="warn">Reassign</button>
+            <button mat-raised-button (click)="handleLeadSubmission(selectedLead, false)" color="primary">Save</button>
+            <button mat-raised-button (click)="handleLeadSubmission(selectedLead, true)" color="accent">Save & Next</button>
+          </div>
 
-            <button nzType="primary" nz-button nzSize="default" (click)="handleLeadSubmission(selectedLead, true)">Save
-              & Next</button>
-          </nz-button-group>
+
           <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="showFilterDrawer=!showFilterDrawer">
             <ion-fab-button>
               <ion-icon name="filter"></ion-icon>
@@ -455,17 +437,11 @@
 
     <mat-form-field class="example-full-width">
       <mat-label nzRequired nzFor="note">Email / Mobile</mat-label>
-
       <input id="value" type="text" matInput formControlName="value" />
-
     </mat-form-field>
 
-    <!-- <mat-form-field class="example-full-width"> -->
-
-
-
       <mat-label>Type of Contact</mat-label>
-      <mat-select formControlName="category" [(ngModel)]="defaultContactValue">
+      <mat-select formControlName="category">
         <mat-option value="mobile">Mobile</mat-option>
         <mat-option value="email">Email</mat-option>
       </mat-select>

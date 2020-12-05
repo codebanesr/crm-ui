@@ -1,21 +1,21 @@
 <div class="scrollable" style="height: 90vh;">
-  <nz-collapse nzAccordion nzGhost>
-    <nz-collapse-panel *ngFor="let t of transactions" [nzHeader]="extraTpl" [nzActive]="t.active">
-      <nz-descriptions nzSize="small" nzBordered>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let t of transactions">
+      <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
+      <button mat-flat-button nzType="primary" style="float: right;" (click)="showLead(t.lead)">Edit</button>
+      <mat-list>
         <ng-container *ngFor="let k of objectKeys(t)">
-          <nz-descriptions-item [nzTitle]="leadMapping[k]" *ngIf="k!=='requestedInformation' && leadMapping[k]">
-            <!-- {{t[k]}} -->
-            <span *ngIf="['createdAt', 'followUp'].includes(k)">{{t[k] | date: 'full'}}</span>
-            <span *ngIf="!['createdAt', 'followUp'].includes(k)">{{t[k]}}</span>
-          </nz-descriptions-item>
+          <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->
+            <mat-form-field appearance="outline" class="mat-full-width">
+                <mat-label>{{leadMapping[k]}}</mat-label>
+                <input matInput [value]="t[k] | date: 'short'" *ngIf="['createdAt', 'followUp'].includes(k)" readonly>
+                <input matInput [value]="t[k]" *ngIf="!['createdAt', 'followUp'].includes(k)" readonly>
+            </mat-form-field>
+          <!-- </mat-list-item> -->
         </ng-container>
-      </nz-descriptions>
-      <ng-template #extraTpl>
-        <span>{{t.prospectName?.split(' ')[0]}}</span>
-        <button nz-button nzType="primary" style="float: right;" (click)="showLead(t.lead)">Edit</button>
-      </ng-template>
-    </nz-collapse-panel>
-  </nz-collapse>
+      </mat-list>
+    </mat-expansion-panel>
+    </mat-accordion>
   <mat-paginator 
     [length]="100"
     [pageSize]="10"

@@ -72,6 +72,8 @@ export class TransactionsComponent implements OnInit {
     leadStatus: "Status",
     followUp: "Scheduled",
     nextAction: "Action",
+    requestedInformation: "Information Requested",
+    organization: "Organization"
   };
 
   perPage = 15;
@@ -81,3 +83,6 @@ export class TransactionsComponent implements OnInit {
     this.getTransactions();
   }
 }
+
+
+

@@ -85,7 +85,7 @@ export class LeadSoloComponent implements OnInit {
     this.contactForm = this.fb.group({
       label: [null, [Validators.required]],
       value: [null, [Validators.required]],
-      category: [null, [Validators.required]],
+      category: ['mobile', [Validators.required]],
     });
   }
 

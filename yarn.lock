@@ -154,7 +154,7 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/cdk@^10.1.3":
+"@angular/cdk@^10.1.3", "@angular/cdk@^10.2.7":
   version "10.2.7"
   resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-10.2.7.tgz#0ff82eb91b2653ea26909c57a460d4593b44f186"
   integrity sha512-ZQjDfTRTn7JuAKsf3jiIdU2XBaxxGBi/ZWYv5Pb3HCl6B4PISsIE5VWRhkoUogoAB0MiFHpjnWeIqknJEm11YQ==
@@ -259,6 +259,13 @@
   version "10.0.14"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-10.0.14.tgz#b9c33d27dcd11e2bb0c5453df1e7b334a0896a94"
   integrity sha512-QQLYUjD0T6u2hLNYXUEUbupAGsz5egmhCAckaQojvXCe3SLL/hQsrK4odrNuspy7TvMB0H5ZNEHGlF6m/WLZ3g==
+
+"@angular/material@^10.2.7":
+  version "10.2.7"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-10.2.7.tgz#b84aeeca997dc64fbcc7969540e22434315bab68"
+  integrity sha512-uk6JkRrKHaM9VFMzX7pWC83YNLVgXPB3D8U1yjSOafCdWwrRZgUHGr8MPlSILCr3o2nxgg5SsKdWcWwHuXXUZA==
+  dependencies:
+    tslib "^2.0.0"
 
 "@angular/platform-browser-dynamic@~10.0.0":
   version "10.0.14"
@@ -6141,6 +6148,13 @@ ng-zorro-antd@^10.0.0:
     date-fns "^2.10.0"
     resize-observer-polyfill "^1.5.1"
     tslib "^2.0.0"
+
+ngx-mat-select-search@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/ngx-mat-select-search/-/ngx-mat-select-search-3.1.4.tgz#f948b7c934637eac16c44e390a82511e2dce3ade"
+  integrity sha512-yQPalWj8+K2SVZW7wlmknHlCdpbVMDv7L9PW1Apwd2ISIzyOjAzj0DBe+UQF4KzkgHcTAV9InEuqJc31ApuOQA==
+  dependencies:
+    tslib "^1.9.0"
 
 nice-try@^1.0.4:
   version "1.0.5"

@@ -22,6 +22,7 @@
     "@angular/platform-browser": "~10.0.0",
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
+    "@angular/service-worker": "~10.0.0",
     "@capacitor/android": "^2.4.2",
     "@capacitor/core": "2.4.2",
     "@ionic-native/call-directory": "^5.30.0",
@@ -40,6 +41,7 @@
     "moment": "^2.29.1",
     "ng-zorro-antd": "^10.0.0",
     "ng-zorro-antd-mobile": "^3.0.3",
+    "ngx-mat-select-search": "^3.1.4",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

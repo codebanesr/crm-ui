@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { isArray } from 'lodash';
 import {
@@ -83,7 +83,7 @@ export class CampaignCreateComponent implements OnInit {
   ];
 
   groups = [];
-
+  assigneeFilter: FormControl;
   ngOnInit() {
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
@@ -104,6 +104,7 @@ export class CampaignCreateComponent implements OnInit {
 
     this.suggestCampaignNames();
     this.initUsersList();
+    this.assigneeFilter = new FormControl();
   }
 
   campaignId: string;
@@ -170,7 +171,8 @@ export class CampaignCreateComponent implements OnInit {
       comment: [""],
       type: ["Lead Generation"],
       assignees: [[]],
-      interval: [[], [Validators.required]],
+      startDate: [null, [Validators.required]],
+      endDate: [null, [Validators.required]],
     });
 
     this.campaignForm
@@ -482,11 +484,19 @@ export class CampaignCreateComponent implements OnInit {
 
   usersCount = 0;
   listOfUser: any[] = [];
+  filteredListOfUsers = [];
   initUsersList() {
     this.usersService.getAllUsersHack().subscribe(
       (data: any) => {
         this.listOfUser = data[0].users;
+        this.filteredListOfUsers = this.listOfUser;
         this.usersCount = data[0]?.metadata?.total;
+
+        this.assigneeFilter.valueChanges.subscribe(change=>{
+          this.filteredListOfUsers = this.listOfUser.filter((user)=>{
+            return user.fullName.indexOf(change)> -1
+          })
+        })
       },
       (error) => {
         console.log(error);

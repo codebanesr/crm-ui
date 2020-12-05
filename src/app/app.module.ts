@@ -22,6 +22,8 @@ import {
 import { CallNumber } from "@ionic-native/call-number/ngx";
 import { Contacts } from "@ionic-native/contacts/ngx";
 import { DemoMaterialModule } from "./material/material.module";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -37,6 +39,7 @@ import { DemoMaterialModule } from "./material/material.module";
     HttpClientModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     CallNumber,
