@@ -27,7 +27,8 @@ export class UsersComponent implements OnInit {
   loading = true;
   pageSize = 10;
   pageIndex = 1;
-  selectedInterval = null;
+  startDate = null;
+  endDate = null;
   filterGender = [
     { text: "male", value: "male" },
     { text: "female", value: "female" },
@@ -50,8 +51,13 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  navigate(userid: string) {
-    this.router.navigate(["signup"], { queryParams: { userid } });
+  editUser(userid: string) {
+    this.router.navigate(["home", "users", "signup"], { queryParams: { userid } });
+  }
+
+
+  createNewUser() {
+    this.router.navigate(["home", "users","signup"]);
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
@@ -119,7 +125,7 @@ export class UsersComponent implements OnInit {
         page: 1,
         perPage: 100,
         campaignName: this.selectedCampaign?.campaignName,
-        interval: this.selectedInterval,
+        interval: [this.startDate, this.endDate],
         userEmail: this.selectedUser.email,
       })
       .subscribe(

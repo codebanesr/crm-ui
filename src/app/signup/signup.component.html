@@ -1,72 +1,68 @@
-<ion-content style="max-height: 90vh; overflow-y: scroll;">
-  <WingBlank>
-    <form [formGroup]="signupForm" (ngSubmit)="submitForm()">
-      <ion-item>
-        <ion-label position="floating">Full Name</ion-label>
-        <ion-input  formControlName="fullName"></ion-input>
-      </ion-item>
-    
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input  formControlName="email" type="email"></ion-input>
-      </ion-item>
-  
-       <ion-item>
-        <ion-label position="floating">Password</ion-label>
-        <ion-input  formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password"></ion-input>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label position="floating">Confirm Password</ion-label>
-        <ion-input type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()" type="password"></ion-input>
-        <div *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
-          Two passwords that you enter is inconsistent!
-        </div>
-      </ion-item>
-    
-      <ion-item>
-        <ion-label position="floating">Role Type</ion-label>
-        <ion-select formControlName="roleType">
-          <ion-select-option value="frontline">Frontline</ion-select-option>
-          <ion-select-option value="manager">Manager</ion-select-option>
-          <ion-select-option value="seniorManager">Senior Manager</ion-select-option>
-        </ion-select>
-      </ion-item>
-    
-      <ion-item>
-        <ion-label position="floating">Reports To</ion-label>
-        <ion-select formControlName="reportsTo">
-          <ion-select-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-    
-  
-  
-      <ion-item>
-        <ion-label position="floating">Roles</ion-label>
-        <ion-select formControlName="roles" multiple="true">
-          <ion-select-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label position="floating">Manages</ion-label>
-        <ion-select formControlName="manages" multiple="true">
-          <ion-select-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-  
-  
-      <ion-item>
-        <ion-label position="floating">Mobile Number</ion-label>
-        <ion-input  formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel"></ion-input>
-      </ion-item>
-  
-      <ion-button>
-        Register
-      </ion-button>
-    </form>
-  </WingBlank>
 
-</ion-content>
+  <form [formGroup]="signupForm" (ngSubmit)="submitForm()" style="height: 90vh; overflow-y: scroll; margin: 6px; padding: 6px;">
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Full Name</mat-label>
+      <input matInput formControlName="fullName" />
+    </mat-form-field>
   
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password" />
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()"
+        type="password" />
+      <mat-error *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
+        Two passwords that you enter is inconsistent!
+      </mat-error>
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Role Type</mat-label>
+      <mat-select formControlName="roleType">
+        <mat-option value="frontline">Frontline</mat-option>
+        <mat-option value="manager">Manager</mat-option>
+        <mat-option value="seniorManager">Senior Manager</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Reports To</mat-label>
+      <mat-select formControlName="reportsTo">
+        <mat-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+  
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="roles" multiple="true">
+        <mat-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Manages</mat-label>
+      <mat-select formControlName="manages" multiple="true">
+        <mat-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Mobile Number</mat-label>
+      <input matInput formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel" />
+    </mat-form-field>
+  
+    <button mat-raised-button color="primary">
+      Register
+    </button>
+  </form>

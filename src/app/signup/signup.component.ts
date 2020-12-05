@@ -113,7 +113,7 @@ export class SignupComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(
       (data) => {
         this.userid = data.userid;
-        this.usersService.getUserById(this.userid).subscribe((data) => {
+        this.userid && this.usersService.getUserById(this.userid).subscribe((data) => {
           this.signupForm.patchValue(data);
         });
       },
