@@ -124,7 +124,7 @@ export class UsersComponent implements OnInit {
       .getFollowUps({
         page: 1,
         perPage: 100,
-        campaignName: this.selectedCampaign?.campaignName,
+        campaignId: this.selectedCampaign?._id,
         interval: [this.startDate, this.endDate],
         userEmail: this.selectedUser.email,
       })

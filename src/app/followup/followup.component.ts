@@ -4,6 +4,7 @@ import { CampaignService } from "../home/campaign.service";
 import { ILead } from "../home/interfaces/leads.interface";
 import { LeadsService } from "../home/leads.service";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: "app-followup",
@@ -22,23 +23,32 @@ export class FollowupComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getLeadMappings();
     this.populateCampaignDropdown("");
   }
 
-  onLeadSelectionChange() {
-    this.getLeadMappings();
+  onLeadSelectionChange(event) {
     this.getFollowUps();
   }
 
   total: number;
+  // startDate: string;
+  // endDate: string;
+
+  startDate: string;
+  endDate: string;
+  selectedCampaignId = 'all';
+
   getFollowUps() {
+    // a^b; if either startDate or endDate is undefined return, if none is defined fetch all leads irrespective of campaign
+    if(!!this.startDate !== !!this.endDate) {
+      return;
+    }
     this.leadService
       .getFollowUps({
         page: this.page,
         perPage: this.perPage,
-        interval: this.selectedInterval,
-        campaignName: this.selectedCampaign?.campaignName,
+        interval: [this.startDate, this.endDate],
+        campaignId: this.selectedCampaignId || this.selectedCampaign._id
       })
       .subscribe(
         (result) => {
@@ -65,13 +75,7 @@ export class FollowupComponent implements OnInit {
 
   leadStatusOptions: string[];
   typeDict = null;
-  async getLeadMappings() {
-    const { typeDict } = await this.leadService.getLeadMappings(
-      this.selectedCampaign._id
-    );
-    this.typeDict = typeDict;
-    this.leadStatusOptions = this.typeDict.leadStatus.options;
-  }
+
 
   perPage = 20;
   page = 1;
@@ -80,8 +84,11 @@ export class FollowupComponent implements OnInit {
     this.getFollowUps();
   }
 
-  onPageIndexChange(index: number) {
-    this.page = index;
+  handlePaginationEvent(paginator: PageEvent) {
+    this.page = paginator.pageIndex;
     this.getFollowUps();
   }
+
+  displayedColumns: string[] = ['campaign', 'firstName', 'leadStatus', 'email'];
 }
+

@@ -119,18 +119,18 @@ export class LeadsService {
   getFollowUps({
     page,
     perPage,
-    campaignName,
+    campaignId,
     interval,
     userEmail,
   }: {
-    campaignName?: string;
+    campaignId?: string;
     interval?: string[];
     userEmail?: string;
     page: number;
     perPage: number;
   }) {
     return this.http.post(`${environment.apiUrl}/lead/followUp`, {
-      campaignName,
+      campaignId,
       interval,
       userEmail,
       page,

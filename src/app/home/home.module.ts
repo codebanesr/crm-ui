@@ -22,6 +22,7 @@ import { TransactionsComponent } from "../transactions/transactions.component";
 import { DemoMaterialModule } from "../material/material.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ProfileComponent } from '../profile/profile.component';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     DemoMaterialModule,
   ],
   declarations: [
+    ProfileComponent,
     FollowupComponent,
     HomePage,
     LeadSoloComponent,

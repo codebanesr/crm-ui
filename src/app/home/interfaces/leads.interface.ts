@@ -1,6 +1,7 @@
 export interface ILead {
   _id: string;
   externalId: string;
+  fullName: string;
   __v: number;
   address: string;
   amount: string;

@@ -6,6 +6,7 @@ import { FollowupComponent } from "../followup/followup.component";
 import { InvoiceComponent } from "../invoice/invoice.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { OrganizationComponent } from "../organization/organization.component";
+import { ProfileComponent } from '../profile/profile.component';
 import { SignupComponent } from "../signup/signup.component";
 import { TransactionsComponent } from "../transactions/transactions.component";
 import { UsersComponent } from "../users/users.component";
@@ -75,6 +76,11 @@ const routes: Routes = [
     component: TransactionsComponent,
     pathMatch: "full",
   },
+  {
+    path: "profile",
+    component: ProfileComponent,
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
