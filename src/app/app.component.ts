@@ -5,7 +5,8 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Router } from "@angular/router";
 import { PubsubService } from "./pubsub.service";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
+import { AuthenticationService } from 'src/authentication.service';
 
 @Component({
   selector: "app-root",
@@ -79,7 +80,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private statusBar: StatusBar,
     private router: Router,
     private menuController: MenuController,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    private authService: AuthenticationService
   ) {
     this.initializeApp();
   }
@@ -96,14 +98,23 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   heading: string = "Leads";
+  
+  isLoggedIn$: Observable<boolean>;
   subz: Subscription;
   ngOnInit() {
     this.subz = this.pubsub.$sub("HEADING", (data) => {
       this.heading = data.heading;
     });
+
+    this.isLoggedIn$ = this.authService.isLoggedIn;
   }
 
   ngOnDestroy() {
     this.subz.unsubscribe();
+
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }
