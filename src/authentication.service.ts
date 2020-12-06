@@ -21,16 +21,8 @@ export class AuthenticationService  {
     return this.currentUserSubject.value;
   }
 
-  private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  get isLoggedIn() {
-    return this.loggedIn.asObservable();
-  }
-
-
 
   login(email: string, password: string) {
-    this.loggedIn.next(true);
     return this.http.post<any>(`${environment.apiUrl}/user/login`, { email, password })
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -63,10 +55,20 @@ export class AuthenticationService  {
 
   logout() {
     // remove user from local storage to log user out
-    this.loggedIn.next(false);
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
 
     this.router.navigate(['login']);
+  }
+
+
+  public visible = true;
+
+  showNav() {
+    this.visible = true;
+  }
+
+  hideNav() {
+    this.visible = false;
   }
 }

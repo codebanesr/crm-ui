@@ -1,5 +1,5 @@
 <ion-app>
-  <ion-menu side="start" content-id="main-content" menuId="first">
+  <ion-menu side="start" content-id="main-content" menuId="first"  *ngIf="authService.visible">
     <ion-content>
       <ion-list>
         <ion-item *ngFor="let o of appPages" (click)="routeTo(o.url)">
@@ -15,7 +15,7 @@
     </ion-content>
   </ion-menu>
 
-  <mat-toolbar color="primary" *ngIf="isLoggedIn$ | async as isLoggedIn">
+  <mat-toolbar color="primary" *ngIf="authService.visible">
     <mat-toolbar-row>
       <span>Molecule</span>
       <span class="example-spacer"></span>
@@ -34,9 +34,9 @@
   <nz-layout id="main-content">
     <!-- <h4 nz-typography class="header-class">{{heading}}</h4> -->
     <ion-router-outlet class="inner-content"></ion-router-outlet>
-    <ion-tabs *ngIf="isLoggedIn$ | async as isLoggedIn">
+    <ion-tabs>
       <ion-tabs>
-        <ion-tab-bar slot="bottom">
+        <ion-tab-bar slot="bottom" *ngIf="authService.visible">
           <ion-tab-button [routerLink]="['home', 'campaign', 'list']">
             <span class="material-icons">
               campaign

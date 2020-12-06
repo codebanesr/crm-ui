@@ -32,7 +32,7 @@ export class LeadsComponent implements OnInit {
     private usersService: UsersService,
     private campaignService: CampaignService,
     private pubsub: PubsubService,
-    public toast: ToastService
+    public toast: ToastService,
   ) {}
 
   page: number = 1;

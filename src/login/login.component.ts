@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MenuController } from "@ionic/angular";
 import { ToastService } from "ng-zorro-antd-mobile";
-import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from "../authentication.service";
 
 @Component({
@@ -56,6 +54,7 @@ export class LoginComponent implements OnInit {
   submitLoginForm(username: string, password: string) {
     this.authService.login(username, password).subscribe(
       (data: any) => {
+        this.authService.showNav();
         // this.msg.success("Successfully Logged In");
         this.toast.success("Login Successful");
         const currentUser = localStorage.getItem("currentUser");
@@ -90,6 +89,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.hideNav();
     this.nextAction = this.formView.signup;
     this.validateForm = this.fb.group({
       username: [null, [Validators.required, Validators.email]],
