@@ -7,7 +7,7 @@
   </mat-card-header>
   <ng-container [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
 
-    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.username">
+    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.username" appearance="outline">
       <mat-label>Email</mat-label>
       <input type="email" matInput formControlName="username" placeholder="Ex. pat@example.com">
       <mat-error *ngIf="validateForm.get('username').hasError('email') && !validateForm.hasError('required')">
@@ -19,13 +19,13 @@
     </mat-form-field>
 
 
-    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.password">
+    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.password" appearance="outline">
       <mat-label>Password</mat-label>
       <input type="password" matInput formControlName="password" placeholder="strong password">
     </mat-form-field>
 
 
-    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.confirmPassword">
+    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.confirmPassword" appearance="outline">
       <mat-label>Confirm Password</mat-label>
       <input type="password" matInput formControlName="confirmPassword" placeholder="confirm password">
     </mat-form-field>

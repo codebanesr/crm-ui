@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from "@angular/router";
-import { ModalController } from "@ionic/angular";
+import { MenuController, ModalController } from "@ionic/angular";
 import { LeadsService } from "../home/leads.service";
 
 interface IHistory {
@@ -32,7 +32,8 @@ export class TransactionsComponent implements OnInit {
   constructor(
     private leadService: LeadsService,
     public modalController: ModalController,
-    private router: Router
+    private router: Router,
+    private menu: MenuController
   ) {}
 
   transactions: IHistory[] = [];
@@ -61,6 +62,7 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
+  showFiller = false;
   leadMapping = {
     geoLocation: "Location",
     createdAt: "Created At",
@@ -82,6 +84,12 @@ export class TransactionsComponent implements OnInit {
     this.pagination.perPage = this.perPage;
     this.getTransactions();
   }
+
+  openTransactionFilter() {
+    // this.menu.enable(true, 'transactionFilter')
+    this.menu.open('transactionFilter');
+  }
+
 }
 
 
