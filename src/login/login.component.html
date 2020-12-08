@@ -1,8 +1,10 @@
-<nz-card nzHoverable [nzCover]="coverTemplate" style="height: 90vh; position: relative; max-width: 500px;
-top: 50%;
--ms-transform: translateY(-50%);
-transform: translateY(-50%);">
-  <nz-card-meta nzTitle="Welcome to Molecule" style="text-align: center; padding-bottom: 40px;"></nz-card-meta>
+<mat-card style="position: absolute; top: 50%; transform: translateY(-50%);">
+  <!-- <nz-card-meta nzTitle="Welcome to Molecule" style="text-align: center; padding-bottom: 40px;"></nz-card-meta> -->
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Welcome To Molecule</mat-card-title>
+    <mat-card-subtitle>Leader Choice</mat-card-subtitle>
+  </mat-card-header>
   <ng-container [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
 
     <mat-form-field class="example-full-width" *ngIf="fieldsToShow.username">
@@ -47,7 +49,7 @@ transform: translateY(-50%);">
   </ng-container>
   <button style="margin-top: 10px;" (click)="submitForm()" mat-raised-button color="primary">{{buttonText}}</button>
   <button (click)="this.onFormTypeChange(nextAction)" mat-flat-button> {{nextAction}} </button>
-</nz-card>
+</mat-card>
 <ng-template #coverTemplate>
   <img alt="example" src="assets/icon/transparent_logo.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>
 </ng-template>

@@ -71,7 +71,8 @@
               Unique Attributes
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group>
+          <!-- <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+          <mat-slide-toggle *ngFor="let col of uniqueCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
         </mat-expansion-panel>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -79,7 +80,8 @@
               Editable Columns
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+          <!-- <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
+          <mat-slide-toggle *ngFor="let col of editableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
@@ -88,7 +90,8 @@
               Browsable Columns
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group>
+          <!-- <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
+          <mat-slide-toggle *ngFor="let col of browsableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
@@ -97,7 +100,8 @@
               Assign To
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group>
+          <!-- <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+          <mat-slide-toggle *ngFor="let col of assignTo" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
@@ -106,7 +110,8 @@
               Advanced Settings
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group>
+          <!-- <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+          <mat-slide-toggle *ngFor="let col of advancedSettings" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
         </mat-expansion-panel>
 
         <mat-expansion-panel nzHeader="Create Groups">
