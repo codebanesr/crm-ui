@@ -1,47 +1,78 @@
-<ion-menu side="end" contentId="transactionFilter" id="transactionFilter" id="transactionFilter">
-  <ion-header>
-    <ion-toolbar color="danger">
-      <ion-title>End Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-      <ion-item>Menu Item</ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
+<button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
+<mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
+  <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
+    <mat-toolbar class="header">
+      <mat-toolbar-row>
+        <span>Third Line</span>
+        <span class="filter-toolbar-spacer"></span>
+        <mat-icon class="filter-toolbar-icon" aria-hidden="false" aria-label="Example close icon" (click)="drawer.toggle()">close</mat-icon>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="contents">
+      <form [formGroup]="transactionForm" (submit)="onTransactionFilterSubmit()">
+        <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-select formControlName="campaign" placeholder="Campaign">
+            <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
+              {{option.campaignName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-<ion-router-outlet id="transactionFilter" transactionFilter></ion-router-outlet>
+        <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-label>Prospect Name</mat-label>
+          <input placeholder="input here" matInput formControlName="prospectName" />
+        </mat-form-field>
 
 
-<button mat-flat-button (click)="openTransactionFilter()">Open transaction filter</button>
-<div class="scrollable" style="height: 90vh;">
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let t of transactions">
-      <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
-      <button mat-flat-button nzType="primary" style="float: right;" (click)="showLead(t.lead)">Edit</button>
-      <mat-list>
-        <ng-container *ngFor="let k of objectKeys(t)">
-          <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->
-            <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-label>Enter start and end date</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="startDate" placeholder="Start date">
+            <input matEndDate formControlName="endDate" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
+            <mat-option>
+              <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe" 
+                noEntriesFoundLabel="'no matching assignee found'">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let option of listOfHandlers" [value]="option._id">
+              {{option.fullName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button type="submit">Submit</button>
+      </form>
+    </div>
+  </mat-drawer>
+
+  <div class="main contents">
+    <div class="scrollable" style="height: 90vh;">
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let t of transactions">
+          <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
+          <button mat-flat-button nzType="primary" style="float: right;" (click)="showLead(t.lead)">Edit</button>
+          <mat-list>
+            <ng-container *ngFor="let k of objectKeys(t)">
+              <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->
+              <mat-form-field appearance="outline" class="mat-full-width">
                 <mat-label>{{leadMapping[k]}}</mat-label>
                 <input matInput [value]="t[k] | date: 'short'" *ngIf="['createdAt', 'followUp'].includes(k)" readonly>
                 <input matInput [value]="t[k]" *ngIf="!['createdAt', 'followUp'].includes(k)" readonly>
-            </mat-form-field>
-          <!-- </mat-list-item> -->
-        </ng-container>
-      </mat-list>
-    </mat-expansion-panel>
-    </mat-accordion>
-  <mat-paginator 
-    [length]="100"
-    [pageSize]="10"
-    [pageSizeOptions]="[5, 10, 25, 100]"
-    (page)="handlePageChange($event)"
-  >
-</mat-paginator>
-</div>
+              </mat-form-field>
+              <!-- </mat-list-item> -->
+            </ng-container>
+          </mat-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePageChange($event)">
+      </mat-paginator>
+    </div>
+  </div>
+</mat-drawer-container>
