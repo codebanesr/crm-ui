@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ICampaign } from '../campaign/campaign.interface';
+import { CampaignService } from '../home/campaign.service';
 import { LeadsService } from '../home/leads.service';
 import { SignupComponent } from '../signup/signup.component';
 
@@ -23,8 +25,11 @@ export class MappingComponent implements OnInit {
 
   constructor(
     private leadService: LeadsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public campaignObj: {campaign: ICampaign},
+    private campaignService: CampaignService
   ) { }
+
 
   elementTypes = [
     {label: "String", value: "string"},
@@ -39,10 +44,9 @@ export class MappingComponent implements OnInit {
     this.getLeadMapping();
   }
 
-
   async getLeadMapping() {
     /** @Todo */
-    const result = await this.leadService.getLeadMappings("5f89dd4c3d90afc740368088");
+    const result = await this.leadService.getLeadMappings(this.campaignObj.campaign._id);
     this.configs = result.mSchema.paths;
     console.log(this.configs)
   }
@@ -59,7 +63,24 @@ export class MappingComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       this.configs.push({readableField: result.configLabel, internalField: result.configLabel, type: result.configType})
+      this.handleConfigChange({readableField: result.configLabel, internalField: result.configLabel, type: result.configType});
     });
+  }
+
+  
+  handleConfigChange(e) {
+    this.campaignService.updateConfigs(e, this.campaignObj.campaign._id, this.campaignObj.campaign.campaignName).subscribe(data=>{
+      console.log(data);
+    }, error=>{
+      this.configs = this.configs.filter(c=>{
+        return c.internalField!==e.internalField;
+      })
+      console.log(error)
+    });
+  }
+
+  closeModal() {
+    this.dialog.closeAll();
   }
 }
 

@@ -219,6 +219,8 @@
 
 
 
+      <button mat-raised-button color="accent" class="mat-full-width" (click)="displayParamModal()"> Add More Params</button>
+      <br>
       <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files"
         (click)="$event.stopImmediatePropagation();">
         <button mat-raised-button color="accent"><i nz-icon nzType="upload"></i>Choose Campaign File</button> &nbsp;

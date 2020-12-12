@@ -33,11 +33,8 @@ export class LeadsService {
     return this.http.post(`${environment.apiUrl}/lead`, body);
   }
 
-  getAllLeadColumns(campaignType?: string) {
-    let reqUrl = `${environment.apiUrl}/lead/getAllLeadColumns`;
-    if (campaignType) {
-      reqUrl += `?campaignType=${campaignType}`;
-    }
+  getAllLeadColumns(campaignId: string) {
+    let reqUrl = `${environment.apiUrl}/lead/getAllLeadColumns/${campaignId}`;
     return this.http.get(reqUrl);
   }
 

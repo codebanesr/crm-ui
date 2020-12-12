@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { isArray } from 'lodash';
 import {
@@ -17,6 +18,7 @@ import { CampaignService } from "../home/campaign.service";
 import { ModelInterface } from "../home/interfaces/global.interfaces";
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from "../home/users.service";
+import { MappingComponent } from "../mapping/mapping.component";
 import { PubsubService } from "../pubsub.service";
 import { UploadService } from "../upload.service";
 
@@ -35,7 +37,8 @@ export class CampaignCreateComponent implements OnInit {
     private msg: NzMessageService,
     private nzContextMenuService: NzContextMenuService,
     private activatedRouter: ActivatedRoute,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private dialogCtrl: MatDialog
   ) {}
   campaignForm: FormGroup;
 
@@ -102,7 +105,7 @@ export class CampaignCreateComponent implements OnInit {
       .get("type")
       .valueChanges.subscribe((data) => console.log(data));
 
-    this.suggestCampaignNames();
+    // this.suggestCampaignNames();
     this.initUsersList();
     this.assigneeFilter = new FormControl();
   }
@@ -154,16 +157,16 @@ export class CampaignCreateComponent implements OnInit {
       }
     );
   }
-  suggestCampaignNames(hint = undefined) {
-    this.campaignService.getAllCampaignTypes(hint).subscribe(
-      (campaignOpts: any[]) => {
-        this.options = campaignOpts;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
+  // suggestCampaignNames(hint = undefined) {
+  //   this.campaignService.getAllCampaignTypes(hint).subscribe(
+  //     (campaignOpts: any[]) => {
+  //       this.options = campaignOpts;
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
   initCampaignForm() {
     this.campaignForm = this.fb.group({
@@ -175,13 +178,13 @@ export class CampaignCreateComponent implements OnInit {
       endDate: [null, [Validators.required]],
     });
 
-    this.campaignForm
-      .get("campaignName")
-      .valueChanges.pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((hint) => {
-        this.hint = hint;
-        this.suggestCampaignNames(hint);
-      });
+    // this.campaignForm
+    //   .get("campaignName")
+    //   .valueChanges.pipe(debounceTime(500), distinctUntilChanged())
+    //   .subscribe((hint) => {
+    //     this.hint = hint;
+    //     this.suggestCampaignNames(hint);
+    //   });
   }
 
   submitForm(value: any): void {
@@ -590,5 +593,17 @@ export class CampaignCreateComponent implements OnInit {
 
   deleteGroup(label: string) {
     this.groups = this.groups.filter((g) => g.label !== label);
+  }
+
+  displayParamModal() {
+    this.dialogCtrl.open(MappingComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      data: {
+        campaign: this.campaign
+      }
+    })
   }
 }

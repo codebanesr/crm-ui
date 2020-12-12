@@ -44,15 +44,6 @@ export class CampaignComponent implements OnInit {
 
 
     this.getCampaigns();
-
-    this.campaignService.getAllCampaignTypes().subscribe(
-      (campaignOpts: any[]) => {
-        this.campaignOpts = campaignOpts;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
   }
   listOfColumns: ColumnItem[] = [
     { name: "Campaign Name" },

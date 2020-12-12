@@ -70,11 +70,13 @@
       <i nz-icon nzType="mail" nzTheme="outline" style="font-size: large;"></i> &nbsp;
       <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)" style="font-size: large;"></ion-icon>
   
-      <p *ngFor="let key of objectkeys(lead)">
-        <ng-container *ngIf="typeDict[key]?.value">
-          {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
-        </ng-container>
-      </p>
+      
+        <p *ngFor="let key of objectkeys(lead)">
+          <ng-container *ngIf="typeDict && typeDict[key]?.value">
+            {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+          </ng-container>
+        </p>
+      
     </mat-expansion-panel>
     <mat-paginator [length]="total"
                 (page)="onQueryParamsChange($event)"
@@ -96,6 +98,13 @@
       </nz-option>
     </nz-select>
   
+
+    <mat-card>
+      <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
+      </nz-tree>
+    </mat-card>
+
+
     <nz-collapse [nzBordered]="false">
       <nz-collapse-panel [nzHeader]="'Lead Filter'" [nzActive]="false">
         <ng-container *ngIf="typeDict">

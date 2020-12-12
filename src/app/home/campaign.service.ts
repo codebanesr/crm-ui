@@ -39,11 +39,11 @@ export class CampaignService {
     );
   }
 
-  getAllCampaignTypes(hint?: string | undefined) {
-    return this.http.get(
-      `${environment.apiUrl}/campaign/autocomplete/suggestTypes?hint=${hint}`
-    );
-  }
+  // getAllCampaignTypes(hint?: string | undefined) {
+  //   return this.http.get(
+  //     `${environment.apiUrl}/campaign/autocomplete/suggestTypes?hint=${hint}`
+  //   );
+  // }
 
   getAllEmailTemplates(campaignId: string) {
     return this.http.get(
@@ -159,5 +159,10 @@ export class CampaignService {
 
   archiveCampaign(data) {
     return this.http.post(`${environment.apiUrl}/campaign/archive`, data);
+  }
+
+
+  updateConfigs(configsToUpdate, campaignId: string, campaignName: string) {
+    return this.http.patch(`${environment.apiUrl}/campaign/addConfigs/${campaignId}/${campaignName}`, configsToUpdate);
   }
 }

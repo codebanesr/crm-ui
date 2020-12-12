@@ -15,6 +15,8 @@ import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
+import { ICampaign } from "src/app/campaign/campaign.interface";
+import { NzTreeNode } from "ng-zorro-antd/tree";
 const { Share } = Plugins;
 
 @Component({
@@ -41,7 +43,6 @@ export class LeadsComponent implements OnInit {
   showFilterDrawer = false;
   showGlobalSearch = false;
 
-  showCols = [];
   listOfColumns: ColumnItem[];
   listOfOption: any[] = [];
 
@@ -68,13 +69,14 @@ export class LeadsComponent implements OnInit {
   }
 
   campaignList: any[];
-  selectedCampaign: any;
+  selectedCampaign: ICampaign;
   async populateCampaignDropdown(hint: string) {
     this.campaignList = await this.campaignService.populateCampaignDropdown(
       hint
     );
 
     this.selectedCampaign = this.campaignList[this.campaignList.length - 1];
+    this.getDispositionForCampaign();
     this.rerenderCols();
     this.getAllLeadColumns();
   }
@@ -102,7 +104,6 @@ export class LeadsComponent implements OnInit {
   leads: DataItem[] = [];
   objectkeys = Object.keys;
 
-  // showCols: this.showCols.filter(cols=>cols.checked).map(col=>col.value)
   leadOptions: {
     page: number;
     perPage: number;
@@ -148,32 +149,50 @@ export class LeadsComponent implements OnInit {
     };
   };
   dataLoaded: boolean = false;
-  getAllLeadColumns() {
+  async getAllLeadColumns() {
     this.loading = true;
-    this.leadsService.getAllLeadColumns(this.selectedCampaign._id).subscribe(
-      (mSchema: { paths: ILeadColumn[] }) => {
-        this.loading = false;
-        mSchema.paths.forEach((path: ILeadColumn) => {
-          this.showCols.push({
-            label: path.readableField,
-            value: path.internalField,
-            checked: path.checked,
-            type: path.type,
-          });
-        });
+    // this.leadsService.getAllLeadColumns(this.selectedCampaign._id).subscribe(
+    //   (mSchema: { paths: ILeadColumn[] }) => {
+    //     this.loading = false;
+    //     mSchema.paths.forEach((path: ILeadColumn) => {
+    //       this.showCols.push({
+    //         label: path.readableField,
+    //         value: path.internalField,
+    //         checked: path.checked,
+    //         type: path.type,
+    //       });
+    //     });
 
-        // for tables
-        this.typeDict = Object.assign(
-          {},
-          ...this.showCols.map((x) => ({ [x.value]: x }))
-        );
-      },
-      (error) => {
-        this.loading = false;
-      }
-    );
+    //     // for tables
+    //     this.typeDict = Object.assign(
+    //       {},
+    //       ...this.showCols.map((x) => ({ [x.value]: x }))
+    //     );
+    //   },
+    //   (error) => {
+    //     this.loading = false;
+    //   }
+    // );
+
+    const result = await this.leadsService.getLeadMappings(this.selectedCampaign._id);
+    this.typeDict = result.typeDict;
   }
 
+  getLinks(node: NzTreeNode): string[] {
+    const links = [];
+    while (node.parentNode !== null) {
+      links.push(node.origin.title);
+      node = node.parentNode;
+    }
+
+    return links;
+  }
+
+  handleDispositionTreeEvent (event) {
+    const dispositionFilter = this.getLinks(event);
+    console.log(dispositionFilter);
+  }
+  
   createLead() {
     this.router.navigate(["welcome", "leads", "create"]);
   }
@@ -209,10 +228,7 @@ export class LeadsComponent implements OnInit {
   }
 
   rerenderCols() {
-    this.leadOptions.showCols = this.showCols
-      .filter((col) => col.checked)
-      .map((col) => col.value);
-
+    this.leadOptions.showCols = this.selectedCampaign.browsableCols;
     this.getData();
   }
 
@@ -395,5 +411,17 @@ export class LeadsComponent implements OnInit {
         campaignId: this.selectedCampaign._id,
       },
     });
+  }
+
+  callDispositions;
+  getDispositionForCampaign() {
+    this.campaignService.getDisposition(this.selectedCampaign._id).subscribe(
+      (data: any) => {
+        this.callDispositions = data.options;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }
