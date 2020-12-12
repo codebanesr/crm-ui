@@ -144,10 +144,10 @@ export class LeadsComponent implements OnInit {
     if(event.node._children.length > 0) {
       if(this.selectedKeys.includes(event.node.key)) {
         this.selectedKeys = [];
-        return;
+      }else{
+        this.selectedKeys = event.node._children.map(c=>c.key);
+        this.selectedKeys.push(event.node.key);
       }
-      this.selectedKeys = event.node._children.map(c=>c.key);
-      this.selectedKeys.push(event.node.key);
     }else{
       // if key already exists remove it from selected keys otherwise add it
       if(this.selectedKeys.includes(event.node.key)) {
