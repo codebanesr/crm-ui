@@ -1,0 +1,20 @@
+<div  style="height: 90vh; overflow-y: scroll;">
+  <ng-container *ngFor="let e of configs">
+    <div style="display: flex; margin: 2px; padding: 2px;">
+      <mat-form-field style="flex: 1;" class="mat-small-width" appearance="outline">
+        <mat-label>{{e.internalField}}</mat-label>
+        <input matInput [value]="e.readableField">
+      </mat-form-field>
+    
+      
+      &nbsp;&nbsp;
+      <mat-form-field style="flex: 1" class="mat-small-width" appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="e.type">
+          <mat-option *ngFor="let type of elementTypes" [value]="type.value">{{type.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </ng-container>
+  <button mat-flat-button (click)="openDialog()">Add Field</button>
+</div>

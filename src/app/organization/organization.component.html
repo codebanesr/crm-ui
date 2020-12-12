@@ -1,22 +1,30 @@
-<div class="scrollable">
-  <form nz-form [formGroup]="signupForm" (ngSubmit)="submitForm()">
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzFor="fullName" nzRequired>
-        <span>
-          Full Name
-          <i nz-icon nz-tooltip nzTooltipTitle="What do you want other to call you" nzType="question-circle"
-            nzTheme="outline"></i>
-        </span>
-      </nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your nickname!">
-        <input nz-input id="fullName" formControlName="fullName" />
-      </nz-form-control>
-    </nz-form-item>  
+<ion-content>
+  <div class="scrollable">
+    <mat-toolbar-row>
+      <h2 style="margin: 0 auto;">Enter Organizational Details</h2>
+    </mat-toolbar-row>
   
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzRequired nzFor="organizationName">Organization Name</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-        <input nz-input formControlName="organizationName" id="organizationName" />
+    <img (click)="csvInput.click()" [src]="organizationImage.value" alt="" [srcset]="organizationImage.value" class="rounded" name="organizationImage">
+    
+    <!-- <span class="material-icons overlay" (click)="csvInput.click()">
+      camera_alt
+    </span> -->
+  
+    <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="handleIconClick($event)" accept=".jpg,.jpeg,.png,.tif,.tiff,.gif"/>
+    <form [formGroup]="organizationForm" (ngSubmit)="submitForm()">
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>
+          Full Name
+        </mat-label>
+  
+        <input matInput id="fullName" formControlName="fullName" />
+  
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label nzRequired nzFor="organizationName">Organization Name</mat-label>
+  
+        <input matInput formControlName="organizationName" id="organizationName" />
         <ng-template #userErrorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">
             Please input your username!
@@ -25,93 +33,58 @@
             The username is redundant!
           </ng-container>
         </ng-template>
-      </nz-form-control>
-    </nz-form-item>
   
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-        <input nz-input formControlName="email" id="email" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Password</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
-        <input nz-input type="password" id="password" formControlName="password"
-          (ngModelChange)="updateConfirmValidator()" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
-        <input nz-input type="password" formControlName="checkPassword" id="checkPassword" />
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label class="mobile_ant_label" nzRequired nzFor="email">E-mail</mat-label>
+  
+        <input matInput formControlName="email" id="email" name="email"/>
+  
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label class="mobile_ant_label" nzFor="password" nzRequired>Password</mat-label>
+  
+        <input matInput type="password" id="password" formControlName="password"
+          (ngModelChange)="updateConfirmValidator()" name="password"/>
+  
+      </mat-form-field>
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label class="mobile_ant_label" nzFor="checkPassword" nzRequired>Confirm Password</mat-label>
+  
+        <input matInput type="password" formControlName="checkPassword" id="checkPassword" />
         <ng-template #errorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">
             Please confirm your password!
           </ng-container>
-          <ng-container *ngIf="control.hasError('confirm')">
+          <mat-error *ngIf="control.hasError('confirm')">
             Two passwords that you enter is inconsistent!
-          </ng-container>
+          </mat-error>
         </ng-template>
-      </nz-form-control>
-    </nz-form-item>
   
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Phone Number</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="signupForm.controls['phoneNumber']"
-      nzErrorTip="Please input your phone number!">
-      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
-        <ng-template #addOnBeforeTemplate>
-          <nz-select formControlName="phoneNumberPrefix" nzValue="+91" class="phone-select">
-            <nz-option nzLabel="+91" nzValue="+91"></nz-option>
-            <nz-option nzLabel="+87" nzValue="+87"></nz-option>
-          </nz-select>
-        </ng-template>
-        <input formControlName="phoneNumber" id="phoneNumber" nz-input />
-      </nz-input-group>
-    </nz-form-control>
-    </nz-form-item>
+      </mat-form-field>
   
-
-
-
-
-    <nz-form-item class="m0 p0">
-      <nz-form-label class="mobile_ant_label" [nzSm]="6" [nzXs]="24" nzFor="otp" nzRequired>Enter OTP</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="signupForm.controls['otp']"
-        nzErrorTip="Please Enter the otp sent to your mobile!">
-        <nz-row nzJustify="space-between">
-          <nz-col nzFlex="3"> 
-            <nz-input-group>
-              <input formControlName="otp" id="otp" nz-input />
-            </nz-input-group>
-          </nz-col>
-          <nz-col nzFlex="1">
-            <button nz-button nzType="default" (click)="onPhoneNumberEnter()">Get OTP</button>
-          </nz-col>
-        </nz-row>
-      </nz-form-control>
-    </nz-form-item>
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Mobile Number</mat-label>
+        <input type="text" matInput formControlName="phoneNumber">
+        <mat-error *ngIf="phoneNumber.hasError('required')">
+          OTP is <strong>required</strong>
+        </mat-error>
   
   
-    <nz-row nzJustify="space-around" nzAlign="middle">
-      <nz-col nzFlex=3>
-        <nz-form-item nz-row class="register-area">
-          <nz-form-control>
-            <label nz-checkbox formControlName="agree">
-              <span>I have read the <a>agreement</a></span>
-            </label>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-col>
+        <button matSuffix mat-flat-button color="accent" (click)="onPhoneNumberEnter()">Generate OTP</button>
+      </mat-form-field>
 
-      <nz-col nzFlex=1>
-        <nz-form-item nz-row class="register-area">
-          <nz-form-control>
-            <button nz-button nzType="primary">Register</button>
-          </nz-form-control>
-        </nz-form-item>
-      </nz-col>
-    </nz-row>
-  </form>
-</div>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>OTP</mat-label>
+        <input type="email" matInput formControlName="otp" placeholder="1ABFFD">
+        <mat-error *ngIf="otp.hasError('required')">
+          OTP is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary">Register</button>
+    </form>
+  </div>
+</ion-content>

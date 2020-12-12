@@ -5,6 +5,7 @@ import { CampaignComponent } from "../campaign/campaign.component";
 import { FollowupComponent } from "../followup/followup.component";
 import { InvoiceComponent } from "../invoice/invoice.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
+import { MappingComponent } from "../mapping/mapping.component";
 import { OrganizationComponent } from "../organization/organization.component";
 import { ProfileComponent } from '../profile/profile.component';
 import { SignupComponent } from "../signup/signup.component";
@@ -80,6 +81,11 @@ const routes: Routes = [
     path: "profile",
     component: ProfileComponent,
     pathMatch: 'full'
+  },
+  {
+    path: "mapping",
+    pathMatch: 'full',
+    component: MappingComponent
   }
 ];
 

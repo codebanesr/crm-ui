@@ -1,14 +1,20 @@
-.mobile_ant_label {
-    margin-top: 6px;
-    padding: 0px;
-}
-
-
-.register-area {
-    padding: 0;
-    margin: 6px;
-}
 
 .scrollable {
     padding: 0px 16px;
+}
+
+.rounded {
+    // transform: scale(0.5);
+    border-radius: 50%;
+    height: 150px;
+    padding-bottom: 10px;
+    position: relative;
+    left: 50%;
+    max-width: 200px;
+    transform: translateX(-50%);
+}
+
+
+.overlay {
+    position: relative;
 }

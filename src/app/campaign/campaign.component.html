@@ -1,33 +1,27 @@
-<!-- <mat-grid-list cols="2" rowHeight="2:1">
-  <mat-grid-tile>1</mat-grid-tile>
-  <mat-grid-tile>2</mat-grid-tile>
-  <mat-grid-tile>3</mat-grid-tile>
-  <mat-grid-tile>4</mat-grid-tile>
-</mat-grid-list>
- -->
-
-<mat-list role="list">
-  <mat-list-item role="listitem" *ngFor="let campaign of listOfData" style="height: 120px;">
-    <a mat-line style="font-weight: 550;">
-      {{campaign.campaignName | uppercase}}
-    </a>
-
-
-    <div mat-line style="padding-top: 10px;">
-      <span [matBadge]="quickStats[campaign.campaignName]?.followUp || 0 " matBadgeOverlap="false">Follow Ups</span>
-    </div>
-
-    <div mat-line style="padding-top: 10px;">
-      <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0 " matBadgeColor="warn" matBadgeOverlap="false">Overdue</span>
-    </div>
-
-    <mat-action-list>
-      <button class="custom-btn" mat-raised-button color="primary" (click)="gotoDetailedView(campaign)">Edit</button> &nbsp;
-      <button class="custom-btn" mat-raised-button color="accent" (click)="routeToSoloLead(campaign)">Browse</button>
-    </mat-action-list>
-  </mat-list-item>
-</mat-list>
-<mat-paginator [length]="100"
-              [pageSize]="10"
-              [pageSizeOptions]="[5, 10, 25, 100]">
-</mat-paginator>
+<ion-content>
+  <mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let campaign of listOfData" style="height: 120px;">
+      <a mat-line style="font-weight: 550;">
+        {{campaign.campaignName | uppercase}}
+      </a>
+  
+  
+      <div mat-line style="padding-top: 10px;">
+        <span [matBadge]="quickStats[campaign.campaignName]?.followUp || 0 " matBadgeOverlap="false">Follow Ups</span>
+      </div>
+  
+      <div mat-line style="padding-top: 10px;">
+        <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0 " matBadgeColor="warn" matBadgeOverlap="false">Overdue</span>
+      </div>
+  
+      <mat-action-list>
+        <button class="custom-btn" mat-raised-button color="primary" (click)="gotoDetailedView(campaign)">Edit</button> &nbsp;
+        <button class="custom-btn" mat-raised-button color="accent" (click)="routeToSoloLead(campaign)">Browse</button>
+      </mat-action-list>
+    </mat-list-item>
+  </mat-list>
+  <mat-paginator [length]="100"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</ion-content>

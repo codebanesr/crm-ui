@@ -44,7 +44,7 @@ export class TransactionsComponent implements OnInit {
 
   transactions: IHistory[] = [];
   pagination = { sortBy: "createdAt", sortOrder: "ASC", page: 1, perPage: 20 };
-  filters = {};
+  
   histories: any[] = [];
   objectKeys = Object.keys;
 
@@ -55,7 +55,7 @@ export class TransactionsComponent implements OnInit {
   startDate = new FormControl();
   endDate = new FormControl();
   prospectName = new FormControl();
-  handler = new FormControl();
+  handler = new FormControl([]);
   campaign = new FormControl()
 
   ngOnInit() {
@@ -76,7 +76,6 @@ export class TransactionsComponent implements OnInit {
     this.userService.getAllUsersHack().subscribe((result: any)=>{
       this.tempUserList = result[0].users;
       this.listOfHandlers = result[0].users;
-      console.log(this.tempUserList)
     });
 
     this.handlerFilter.valueChanges.subscribe((value: string) => {
@@ -101,7 +100,7 @@ export class TransactionsComponent implements OnInit {
 
   getTransactions() {
     this.leadService
-      .getTransactions(this.pagination, this.filters)
+      .getTransactions(this.pagination, this.transactionForm?.value)
       .subscribe((histories: IHistory[]) => {
         this.transactions = histories;
       });
@@ -143,11 +142,6 @@ export class TransactionsComponent implements OnInit {
     this.menu.enable(true, 'transactionFilter')
     this.menu.open('transactionFilter');
   }
-
-  onTransactionFilterSubmit() {
-    console.log(this.transactionForm.value);
-  }
-
 }
 
 

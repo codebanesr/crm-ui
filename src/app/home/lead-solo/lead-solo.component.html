@@ -313,18 +313,18 @@
               </ng-container>
 
               <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="mat-full-width">
                   <mat-label>Subject</mat-label>
                   <input matInput placeholder="Write the subject of email" formControlName="subject" />
                 </mat-form-field>
 
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="mat-full-width">
                   <mat-label>Body</mat-label>
                   <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                     formControlName="content"></textarea>
                 </mat-form-field>
 
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="mat-full-width" appearance="fill">
                   <mat-label>Attachments</mat-label>
                   <mat-select multiple formControlName="attachments">
                     <mat-option [value]="attachment" *ngFor="let attachment of attachments">{{ attachment.fileName }}

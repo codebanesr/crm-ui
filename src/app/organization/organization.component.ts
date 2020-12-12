@@ -7,6 +7,7 @@ import { AuthenticationService } from 'src/authentication.service';
 import { UsersService } from '../home/users.service';
 import { OrganizationService } from '../organization.service';
 import { PubsubService } from '../pubsub.service';
+import { UploadService } from '../upload.service';
 
 @Component({
   selector: 'app-organization',
@@ -15,15 +16,16 @@ import { PubsubService } from '../pubsub.service';
 })
 export class OrganizationComponent implements OnInit {
 
-  signupForm!: FormGroup;
+  organizationForm!: FormGroup;
 
   submitForm(): void {
-    for (const i in this.signupForm.controls) {
-      this.signupForm.controls[i].markAsDirty();
-      this.signupForm.controls[i].updateValueAndValidity();
+    console.log(this.organizationForm.value);
+    for (const i in this.organizationForm.controls) {
+      this.organizationForm.controls[i].markAsDirty();
+      this.organizationForm.controls[i].updateValueAndValidity();
     }
 
-    this.organizationService.createOrganizationAndAdmin(this.signupForm.value).subscribe(
+    this.organizationService.createOrganizationAndAdmin(this.organizationForm.value).subscribe(
       (data: any) => {
         this.msg.success('Your Account has been registered');
         this.router.navigate(['login']);
@@ -37,14 +39,14 @@ export class OrganizationComponent implements OnInit {
   updateConfirmValidator(): void {
     /** wait for refresh value */
     Promise.resolve().then(() =>
-      this.signupForm.controls.checkPassword.updateValueAndValidity()
+      this.organizationForm.controls.checkPassword.updateValueAndValidity()
     );
   }
 
   confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { required: true };
-    } else if (control.value !== this.signupForm.controls.password.value) {
+    } else if (control.value !== this.password.value) {
       return { confirm: true, error: true };
     }
     return {};
@@ -56,12 +58,12 @@ export class OrganizationComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthenticationService,
     private organizationService: OrganizationService,
     private msg: NzMessageService,
     private router: Router,
     private usersService: UsersService,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    private uploadService: UploadService
   ) {}
 
   attributeValidator = (label: string) => {
@@ -87,26 +89,34 @@ export class OrganizationComponent implements OnInit {
 
   organizationNameValidator = this.attributeValidator('organizationName');
 
+
+  organizationImage = new FormControl('/assets/icon/noimage.jpg');
+  email = new FormControl(null, [Validators.required, Validators.email]);
+  password= new FormControl([null], [Validators.required]);
+  checkPassword= new FormControl([null], [Validators.required, this.confirmationValidator]);
+  fullName= new FormControl([null], [Validators.required]);
+  organizationName= new FormControl([''],
+    [
+      Validators.required,
+      Validators.maxLength(12),
+      Validators.minLength(6),
+    ],
+    [this.organizationNameValidator]);
+  phoneNumber= new FormControl([null], [Validators.required]);
+  otp= new FormControl(null, [Validators.required]);
+  agree= new FormControl([false]);
   ngOnInit(): void {
     this.pubsub.$pub("HEADING", {heading: "Create Organization"});
-    this.signupForm = this.fb.group({
-      email: [null, [Validators.email, Validators.required]],
-      password: [null, [Validators.required]],
-      checkPassword: [null, [Validators.required, this.confirmationValidator]],
-      fullName: [null, [Validators.required]],
-      organizationName: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(12),
-          Validators.minLength(6),
-        ],
-        [this.organizationNameValidator],
-      ],
-      phoneNumberPrefix: ['+91'],
-      phoneNumber: [null, [Validators.required]],
-      otp: [null, Validators.required],
-      agree: [false],
+    this.organizationForm = this.fb.group({
+      email: this.email,
+      password: this.password,
+      checkPassword: this.checkPassword,
+      fullName: this.fullName,
+      organizationName: this.organizationName,
+      phoneNumber: this.phoneNumber,
+      otp: this.otp,
+      agree: this.agree,
+      organizationImage: this.organizationImage
     });
     this.initUsersList();
   }
@@ -128,10 +138,10 @@ export class OrganizationComponent implements OnInit {
   }
 
   onPhoneNumberEnter() {
-    const prefix = this.signupForm.get('phoneNumberPrefix').value;
-    const phoneNumber = this.signupForm.get('phoneNumber').value;
+    // const prefix = this.organizationForm.get('phoneNumberPrefix').value;
+    const phoneNumber = this.phoneNumber.value;
 
-    this.organizationService.generateAndReceiveOtp(prefix+""+phoneNumber).subscribe(data=>{
+    this.organizationService.generateAndReceiveOtp(phoneNumber).subscribe(data=>{
       console.log(data);
       this.msg.success("Successfully sent otp to your mobile");
     }, error=>{
@@ -142,5 +152,11 @@ export class OrganizationComponent implements OnInit {
 
   onPhoneNumberCancel() {
     console.log("Cancelled otp")
+  }
+
+  async handleIconClick(event) {
+    const result: any = await this.uploadService.uploadFile(`${this.organizationName.value}_${new Date().getTime()}`, event.target.files[0]);
+    this.organizationImage.setValue(result.Location);
+    console.log(this.organizationForm.value, this.organizationImage.value);
   }
 }

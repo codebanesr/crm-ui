@@ -9,7 +9,7 @@
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="contents">
-      <form [formGroup]="transactionForm" (submit)="onTransactionFilterSubmit()">
+      <form [formGroup]="transactionForm" (submit)="getTransactions()">
         <mat-form-field appearance="outline" class="mat-full-width">
           <mat-select formControlName="campaign" placeholder="Campaign">
             <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
@@ -42,7 +42,7 @@
                 noEntriesFoundLabel="'no matching assignee found'">
               </ngx-mat-select-search>
             </mat-option>
-            <mat-option *ngFor="let option of listOfHandlers" [value]="option._id">
+            <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
               {{option.fullName}}
             </mat-option>
           </mat-select>

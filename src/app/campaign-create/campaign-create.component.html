@@ -94,6 +94,31 @@
           <mat-slide-toggle *ngFor="let col of browsableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
         </mat-expansion-panel>
 
+
+        <!-- For changes to group refer https://github.com/shanurrahman/crm-ui/blob/8b3fd4192ba2e5e610cac69365d3435dffa4e04b/src/app/campaign-create/campaign-create.component.html -->
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Create Campaign Groups
+          </mat-expansion-panel-header>
+          <ng-container *ngFor="let g of groups">
+            <mat-form-field class="mat-full-width">
+              <mat-label>
+                <span>
+                  {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i>
+                  <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
+                </span>
+              </mat-label>
+              <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
+                <!-- formControlName="assignees" -->
+                <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
+                </mat-select>
+              <!-- </nz-form-control> -->
+            </mat-form-field>
+          </ng-container>
+
+        </mat-expansion-panel>
+
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>

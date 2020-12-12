@@ -10,6 +10,7 @@ import { AuthenticationService } from "../authentication.service";
   styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
+  hide = true;
   validateForm: FormGroup;
   formView = {
     login: "login",

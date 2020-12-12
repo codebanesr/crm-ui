@@ -23,6 +23,7 @@ import { DemoMaterialModule } from "../material/material.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ProfileComponent } from '../profile/profile.component';
+import { AddConfigComponent, MappingComponent } from "../mapping/mapping.component";
 
 @NgModule({
   imports: [
@@ -52,6 +53,8 @@ import { ProfileComponent } from '../profile/profile.component';
     WelcomeSlidesComponent,
     LeadCreateComponent,
     TransactionsComponent,
+    MappingComponent,
+    AddConfigComponent
   ],
 })
 export class HomePageModule {}
