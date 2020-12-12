@@ -152,9 +152,9 @@ export class LeadsComponent implements OnInit {
       // if key already exists remove it from selected keys otherwise add it
       if(this.selectedKeys.includes(event.node.key)) {
         this.selectedKeys = this.selectedKeys.filter(k=>k!==event.node.key);
-        return;
+      }else{
+        this.selectedKeys.push(event.node.key);
       }
-      this.selectedKeys.push(event.node.key);
     }
 
     this.leadOptions.filters["leadStatusKeys"] = this.selectedKeys;
