@@ -92,11 +92,10 @@
   <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
     (nzOnClose)="closeFilterDrawer()">
   
-    <nz-select nzMode="default" [nzPlaceHolder]="'select campaign'" [(ngModel)]="selectedCampaign"
+    <mat-select nzMode="default" [(ngModel)]="selectedCampaign"
       (ngModelChange)="onCampaignSelect()" style="width: 200px;">
-      <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign">
-      </nz-option>
-    </nz-select>
+      <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
+    </mat-select>
   
 
     <mat-card>
@@ -105,48 +104,53 @@
     </mat-card>
 
 
-    <nz-collapse [nzBordered]="false">
-      <nz-collapse-panel [nzHeader]="'Lead Filter'" [nzActive]="false">
-        <ng-container *ngIf="typeDict">
+    <mat-accordion>
+      <mat-expansion-panel  *ngIf="typeDict">
+        <mat-expansion-panel-header>
+          Lead Filter
+        </mat-expansion-panel-header>
+        
           <ng-container *ngFor="let key of objectkeys(typeDict)">
-            <nz-descriptions nzLayout="vertical">
-              <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
-                <ng-container [ngSwitch]="typeDict[key].type">
-                  <ng-container *ngSwitchCase="'date'">
-                    <input type="datetime-local" nz-input [(ngModel)]="leadOptions.filters[key]"
-                      [ngModelOptions]="{standalone: true}">
+              <!-- <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label"> -->
+                <mat-form-field *ngIf="typeDict[key].value && typeDict[key].label" class="mat-full-width" appearance="outline">
+                  <mat-label>{{typeDict[key].label}}</mat-label>
+                  <ng-container [ngSwitch]="typeDict[key].type">
+                    <ng-container *ngSwitchCase="'date'">
+                      <input matInput type="datetime-local" matInput [(ngModel)]="leadOptions.filters[key]"
+                        [ngModelOptions]="{standalone: true}">
+                    </ng-container>
+    
+                    <ng-container *ngSwitchCase="'number'">
+                      <input matInput placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
+                        [ngModelOptions]="{standalone: true}" />
+                    </ng-container>
+    
+                    <ng-container *ngSwitchCase="'string'">
+                      <input matInput placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
+                        [ngModelOptions]="{standalone: true}" />
+                    </ng-container>
+    
+                    <ng-container *ngSwitchCase="'tel'">
+                      <input matInput [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'geo'">
+                      <input matInput [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
+                    </ng-container>
+    
+                    <ng-container *ngSwitchCase="'select'">
+                      <mat-select [(ngModel)]="leadOptions.filters[key]"
+                        [ngModelOptions]="{standalone: true}">
+                        <mat-option *ngFor="let option of typeDict[key].options" [value]="option">{{option}}</mat-option>
+                      </mat-select>
+                    </ng-container>
                   </ng-container>
-  
-                  <ng-container *ngSwitchCase="'number'">
-                    <input nz-input placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
-                      [ngModelOptions]="{standalone: true}" />
-                  </ng-container>
-  
-                  <ng-container *ngSwitchCase="'string'">
-                    <input nz-input placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
-                      [ngModelOptions]="{standalone: true}" />
-                  </ng-container>
-  
-                  <ng-container *ngSwitchCase="'tel'">
-                    <input nz-input [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
-                  </ng-container>
-  
-                  <ng-container *ngSwitchCase="'select'">
-                    <nz-select nzMode="default" [(ngModel)]="leadOptions.filters[key]"
-                      [ngModelOptions]="{standalone: true}">
-                      <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
-                      </nz-option>
-                    </nz-select>
-                  </ng-container>
-                </ng-container>
-              </nz-descriptions-item>
-            </nz-descriptions>
+                </mat-form-field>
+                
           </ng-container>
-          <!-- <button nz-button (click)="printFilters()">print filters</button> -->
-          <ion-button expand="block" (click)="getData()">Submit</ion-button>
-        </ng-container>
-      </nz-collapse-panel>
-    </nz-collapse>
+          <button mat-flat-button color="primary" (click)="getData()">Submit</button>
+      </mat-expansion-panel>
+    </mat-accordion>
   </nz-drawer>
   
   

@@ -124,7 +124,7 @@ export class CampaignCreateComponent implements OnInit {
       (campaign: ICampaign) => {
         this.initDispositionCore(campaign._id);
         this.campaign = campaign;
-        this.groups = this.campaign.groups;
+        this.groups = this.campaign.groups || [];
 
         /** This also calls the get campaigns api, jo readable field aur internal field ka mapping hai iske bina bhi hosakta hai */
         this.getAllLeadColumns();
