@@ -275,8 +275,8 @@ export class LeadSoloComponent implements OnInit {
     if (event.node.isLeaf) {
       const links = this.getLinks(event.node);
       this.selectedLead.leadStatus = links.reverse().join(" / ");
+      this.selectedLead["leadStatusKeys"] = event.node.origin.key;
       const action = event.node.origin.action;
-      console.log(action);
 
       this.resetAllActionHandlers();
       if (action?.includes("followUp")) {
@@ -292,9 +292,11 @@ export class LeadSoloComponent implements OnInit {
         this.actions.isInformationRequested = true;
       }
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
+    
+      event.node.isExpanded = !event.node.isExpanded;
     }
-    event.node.isExpanded = !event.node.isExpanded;
   }
+
 
   today = new Date().toISOString();
   handleFollowUp(event) {

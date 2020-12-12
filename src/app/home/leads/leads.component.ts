@@ -16,7 +16,7 @@ import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
 import { ICampaign } from "src/app/campaign/campaign.interface";
-import { NzTreeNode } from "ng-zorro-antd/tree";
+import { NzFormatEmitEvent, NzTreeNode } from "ng-zorro-antd/tree";
 const { Share } = Plugins;
 
 @Component({
@@ -139,6 +139,28 @@ export class LeadsComponent implements OnInit {
     );
   }
 
+  selectedKeys = []
+  nodeClickEvent(event: any) {
+    if(event.node._children.length > 0) {
+      if(this.selectedKeys.includes(event.node.key)) {
+        this.selectedKeys = [];
+        return;
+      }
+      this.selectedKeys = event.node._children.map(c=>c.key);
+      this.selectedKeys.push(event.node.key);
+    }else{
+      // if key already exists remove it from selected keys otherwise add it
+      if(this.selectedKeys.includes(event.node.key)) {
+        this.selectedKeys = this.selectedKeys.filter(k=>k!==event.node.key);
+        return;
+      }
+      this.selectedKeys.push(event.node.key);
+    }
+
+    this.leadOptions.filters["leadStatusKeys"] = this.selectedKeys;
+    console.log(this.leadOptions.filters)
+  }
+
   typeDict: {
     [key: string]: {
       label: string;
@@ -178,21 +200,6 @@ export class LeadsComponent implements OnInit {
     this.typeDict = result.typeDict;
   }
 
-  getLinks(node: NzTreeNode): string[] {
-    const links = [];
-    while (node.parentNode !== null) {
-      links.push(node.origin.title);
-      node = node.parentNode;
-    }
-
-    return links;
-  }
-
-  handleDispositionTreeEvent (event) {
-    const dispositionFilter = this.getLinks(event);
-    console.log(dispositionFilter);
-  }
-  
   createLead() {
     this.router.navigate(["welcome", "leads", "create"]);
   }

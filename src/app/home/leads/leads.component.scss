@@ -21,3 +21,14 @@
     height: 100%;
     width: 100%;
   }
+
+
+  ::ng-deep .ant-tree .ant-tree-treenode:first-of-type {
+    display: none;
+  }
+
+  .pull-left {
+    position: relative;
+    left: -27px;
+    width: 270px;
+  }

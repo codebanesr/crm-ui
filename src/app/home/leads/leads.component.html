@@ -1,7 +1,8 @@
 <ion-content>
-  <SearchBar [(ngModel)]="leadOptions.searchTerm" [placeholder]="'Search'" [maxLength]="8" (change)="handleSearchTerm()">
+  <SearchBar [(ngModel)]="leadOptions.searchTerm" [placeholder]="'Search'" [maxLength]="8"
+    (change)="handleSearchTerm()">
   </SearchBar>
-  
+
   <!-- <nz-collapse [nzBordered]="true" *ngIf="leads" class="scrollable">
     <nz-collapse-panel [nzShowArrow]="false" *ngFor="let lead of leads" [nzHeader]="accordianheader"
       [nzActive]="lead.active" (contextmenu)="contextMenu($event, menu)">
@@ -53,8 +54,8 @@
   
     </nz-collapse-panel>
   </nz-collapse> -->
-  
-  
+
+
   <mat-accordion style="overflow-y: scroll;">
     <mat-expansion-panel (opened)="lead.panelOpenState = true" (closed)="lead.panelOpenState = false"
       *ngFor="let lead of leads" hideToggle>
@@ -63,97 +64,105 @@
           {{lead?.firstName}} {{lead?.lastName}}
         </mat-panel-title>
         <mat-panel-description style="text-align: end;">
-  
+
         </mat-panel-description>
       </mat-expansion-panel-header>
       <button mat-raised-button color="primary" (click)="handleLeadEdit(lead)" class="lead-edit-btn">Edit Lead</button>
       <i nz-icon nzType="mail" nzTheme="outline" style="font-size: large;"></i> &nbsp;
-      <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)" style="font-size: large;"></ion-icon>
-  
-      
-        <p *ngFor="let key of objectkeys(lead)">
-          <ng-container *ngIf="typeDict && typeDict[key]?.value">
-            {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
-          </ng-container>
-        </p>
-      
+      <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)" style="font-size: large;">
+      </ion-icon>
+
+
+      <p *ngFor="let key of objectkeys(lead)">
+        <ng-container *ngIf="typeDict && typeDict[key]?.value">
+          {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+        </ng-container>
+      </p>
+
     </mat-expansion-panel>
-    <mat-paginator [length]="total"
-                (page)="onQueryParamsChange($event)"
-                [pageSize]="perPage"
-                [pageSizeOptions]="[5, 10, 25, 100]">
+    <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
+      [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
   </mat-accordion>
-  
+
   <!-- <mat-paginator class="pagination-component" [length]="total" [(pageSize)]="perPage" (page)="onQueryParamsChange($event)"></mat-paginator> -->
   <nz-empty *ngIf="isEmpty"></nz-empty>
-  
-  
+
+
   <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
     (nzOnClose)="closeFilterDrawer()">
-  
-    <mat-select nzMode="default" [(ngModel)]="selectedCampaign"
-      (ngModelChange)="onCampaignSelect()" style="width: 200px;">
+
+    <mat-select nzMode="default" [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()"
+      style="width: 200px;">
       <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
     </mat-select>
-  
-
-    <mat-card>
-      <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
-      </nz-tree>
-    </mat-card>
 
 
     <mat-accordion>
-      <mat-expansion-panel  *ngIf="typeDict">
+      <mat-expansion-panel *ngIf="typeDict">
         <mat-expansion-panel-header>
           Lead Filter
         </mat-expansion-panel-header>
-        
-          <ng-container *ngFor="let key of objectkeys(typeDict)">
-              <!-- <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label"> -->
-                <mat-form-field *ngIf="typeDict[key].value && typeDict[key].label" class="mat-full-width" appearance="outline">
-                  <mat-label>{{typeDict[key].label}}</mat-label>
-                  <ng-container [ngSwitch]="typeDict[key].type">
-                    <ng-container *ngSwitchCase="'date'">
-                      <input matInput type="datetime-local" matInput [(ngModel)]="leadOptions.filters[key]"
-                        [ngModelOptions]="{standalone: true}">
-                    </ng-container>
-    
-                    <ng-container *ngSwitchCase="'number'">
-                      <input matInput placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
-                        [ngModelOptions]="{standalone: true}" />
-                    </ng-container>
-    
-                    <ng-container *ngSwitchCase="'string'">
-                      <input matInput placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
-                        [ngModelOptions]="{standalone: true}" />
-                    </ng-container>
-    
-                    <ng-container *ngSwitchCase="'tel'">
-                      <input matInput [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
-                    </ng-container>
 
-                    <ng-container *ngSwitchCase="'geo'">
-                      <input matInput [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
-                    </ng-container>
-    
-                    <ng-container *ngSwitchCase="'select'">
-                      <mat-select [(ngModel)]="leadOptions.filters[key]"
-                        [ngModelOptions]="{standalone: true}">
-                        <mat-option *ngFor="let option of typeDict[key].options" [value]="option">{{option}}</mat-option>
-                      </mat-select>
-                    </ng-container>
-                  </ng-container>
-                </mat-form-field>
-                
-          </ng-container>
-          <button mat-flat-button color="primary" (click)="getData()">Submit</button>
+        <ng-container *ngFor="let key of objectkeys(typeDict)">
+          <!-- <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label"> -->
+          <mat-form-field *ngIf="typeDict[key].value && typeDict[key].label" class="mat-full-width"
+            appearance="outline">
+            <mat-label>{{typeDict[key].label}}</mat-label>
+            <ng-container [ngSwitch]="typeDict[key].type">
+              <ng-container *ngSwitchCase="'date'">
+                <input matInput type="datetime-local" matInput [(ngModel)]="leadOptions.filters[key]"
+                  [ngModelOptions]="{standalone: true}">
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'number'">
+                <input matInput placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
+                  [ngModelOptions]="{standalone: true}" />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'string'">
+                <input matInput placeholder="Basic usage" [(ngModel)]="leadOptions.filters[key]"
+                  [ngModelOptions]="{standalone: true}" />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'tel'">
+                <input matInput [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'geo'">
+                <input matInput [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}" />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'select'">
+                <mat-select [(ngModel)]="leadOptions.filters[key]" [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let option of typeDict[key].options" [value]="option">{{option}}</mat-option>
+                </mat-select>
+              </ng-container>
+            </ng-container>
+          </mat-form-field>
+
+        </ng-container>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Disposition Filter
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <!-- <mat-chip color="accent" selected>{{leadOptions.filters["dispositionFilter"]}}</mat-chip> -->
+        <nz-tree 
+          nzMultiple 
+          [nzData]="callDispositions" 
+          (nzClick)="nodeClickEvent($event)"
+          [nzSelectedKeys]="selectedKeys"
+          class="pull-left"
+        ></nz-tree>
       </mat-expansion-panel>
     </mat-accordion>
+    <button mat-raised-button color="primary" (click)="getData()" class="mat-full-width" style="margin-top: 4px;">Submit</button>
   </nz-drawer>
-  
-  
+
+
   <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
   <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
     <form nz-form [formGroup]="emailForm" nzLayout="vertical">
@@ -166,14 +175,14 @@
           </nz-auto-option>
         </nz-autocomplete>
       </nz-form-item>
-  
+
       <nz-form-item>
         <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Subject</nz-form-label>
         <nz-form-control [nzSm]="24" [nzXs]="24">
           <input nz-input placeholder="Write the subject of email" formControlName="subject" />
         </nz-form-control>
       </nz-form-item>
-  
+
       <nz-form-item>
         <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Body</nz-form-label>
         <nz-form-control [nzSm]="24" [nzXs]="24">
@@ -194,13 +203,14 @@
       </nz-form-item>
     </form>
   </nz-modal>
-  
-  
+
+
   <!-- reassignment modal -->
   <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
     (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user" *ngIf="managers">
-    <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager" name="selectedManager" />
-  
+    <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager"
+      name="selectedManager" />
+
     <nz-list nzItemLayout="horizontal">
       <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
         <nz-list-item-meta [nzDescription]="manager.email">
@@ -210,9 +220,9 @@
     </nz-list>
     <div *nzModalFooter></div>
   </nz-modal>
-  
-  
-  
+
+
+
   <!-- timeline modal-->
   <nz-modal [(nzVisible)]="isTimelineModalVisible" (nzOnCancel)="handleTimelineClose()"
     nzTitle="History for Lead {{selectedLead?.externalId}}" *ngIf="campaignList">
@@ -222,16 +232,16 @@
       </nz-timeline-item>
     </nz-timeline>
   </nz-modal>
-  
+
   <ng-template #dotTemplate>
     <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
   </ng-template>
-  
+
   <ng-template #empty>
     <nz-empty></nz-empty>
   </ng-template>
-  
-  
+
+
   <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="position: absolute; bottom: 70px;">
     <ion-fab-button>
       <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
