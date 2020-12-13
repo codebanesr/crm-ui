@@ -101,8 +101,8 @@ export class CampaignComponent implements OnInit {
     this.quickStats = result.quickStatsAgg;
     for (let d of result.data) {
       this.listOfData.push({
-        startDate: d.interval[0],
-        endDate: d.interval[1],
+        startDate: d.startDate,
+        endDate: d.endDate,
         createdBy: d.createdBy,
         campaignName: d.campaignName,
         archived: d.archived,
