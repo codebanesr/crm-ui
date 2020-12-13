@@ -76,10 +76,7 @@ export class CampaignService {
     const req = new HttpRequest(
       "POST",
       `${environment.apiUrl}/campaign/createCampaignAndDisposition`,
-      formData,
-      {
-        // reportProgress: true
-      }
+      formData
     );
     return this.http
       .request(req)

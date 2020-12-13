@@ -40,6 +40,7 @@
 
      
       <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Assignees</mat-label>
         <mat-select formControlName="assignees" placeholder="Assignees" [multiple]="true">
           <mat-option>
             <ngx-mat-select-search [formControl]="assigneeFilter" placeholderLabel="Jon Doe" 
@@ -100,20 +101,22 @@
           <mat-expansion-panel-header>
             Create Campaign Groups
           </mat-expansion-panel-header>
+          <!-- <mat-form-field> -->
+            <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"/>
+          <!-- </mat-form-field> -->
+          <button mat-icon-button (click)="handleGroupAdd($event)">Add</button>
+
           <ng-container *ngFor="let g of groups">
+            <span><i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i></span>
             <mat-form-field class="mat-full-width">
               <mat-label>
                 <span>
-                  {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i>
-                  <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
+                  {{g.label}}
                 </span>
               </mat-label>
-              <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
-                <!-- formControlName="assignees" -->
-                <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}">
-                  <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
-                </mat-select>
-              <!-- </nz-form-control> -->
+              <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}" *ngIf="allLeadCols">
+                <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
+              </mat-select>
             </mat-form-field>
           </ng-container>
 
@@ -141,7 +144,7 @@
 
         <mat-expansion-panel nzHeader="Create Groups">
           <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-            <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
+            <input type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
           </nz-input-group>
 
           <ng-template #addOnAfterTemplate>
@@ -150,7 +153,7 @@
 
 
           <ng-container *ngFor="let g of groups">
-            <nz-form-item>
+            <mat-form-field>
               <mat-label>
                 <span>
                   {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;"
@@ -158,41 +161,40 @@
                   <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
                 </span>
               </mat-label>
-              <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization">
+              <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
                 <!-- formControlName="assignees" -->
-                <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" [(ngModel)]="g.value"
+                <!-- [nzLabel]="option.readableField" -->
+                <mat-select multiple placeHolder="Inserted are removed" [(ngModel)]="g.value"
                   [ngModelOptions]="{standalone: true}">
-                  <nz-option *ngFor="let option of allLeadCols" [nzLabel]="option.readableField"
-                    [nzValue]="option.internalField" [nzHide]="!isNotInGroup(option.internalField, g.value)">
-                  </nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
+                  <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
+                </mat-select>
+              <!-- </nz-form-control> -->
+            </mat-form-field>
           </ng-container>
         </mat-expansion-panel>
 
         <mat-expansion-panel nzHeader="Add Email Template Here">
           <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-            <nz-form-item>
+            <mat-form-field>
               <mat-label>Template Name</mat-label>
-              <input placeholder="Template Name" nz-input formControlName="templateName" />
-            </nz-form-item>
+              <input placeholder="Template Name" matInput formControlName="templateName" />
+            </mat-form-field>
 
 
-            <nz-form-item>
+            <mat-form-field>
               <mat-label>Subject</mat-label>
               <nz-form-control [nzSm]="24" [nzXs]="24">
-                <input nz-input placeholder="Write the subject of email" formControlName="subject" />
+                <input matInput placeholder="Write the subject of email" formControlName="subject" />
               </nz-form-control>
-            </nz-form-item>
+            </mat-form-field>
 
-            <nz-form-item>
+            <mat-form-field>
               <mat-label>Body</mat-label>
               <nz-form-control [nzSm]="24" [nzXs]="24">
-                <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                   formControlName="content"></textarea>
               </nz-form-control>
-            </nz-form-item>
+            </mat-form-field>
             <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
               <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
             </nz-upload>
@@ -272,7 +274,7 @@
           </ion-select>
         </ion-item>
 
-        <input nz-input placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
+        <input matInput placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
       </ul>
     </nz-dropdown-menu>
 

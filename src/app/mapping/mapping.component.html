@@ -1,5 +1,5 @@
 <div  style="height: 90vh; overflow-y: scroll;">
-  <h1>{{campaignObj.campaign.campaignName}}</h1>
+  <h1>{{campaignObj?.campaign?.campaignName}}</h1>
   <ng-container *ngFor="let e of configs">
     <div style="display: flex; margin: 2px; padding: 2px;">
       <mat-form-field style="flex: 1;" class="mat-small-width" appearance="outline">
