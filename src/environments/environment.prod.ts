@@ -4,8 +4,9 @@
 
 export const environment = {
   production: true,
-  // apiUrl: "http://15.207.52.199:5182"
   apiUrl: "http://13.232.152.87:3000",
+  accessKeyId: "AKIARGBOXP35BONONB4J",
+  secretAccessKey: "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",
 };
 
 /*

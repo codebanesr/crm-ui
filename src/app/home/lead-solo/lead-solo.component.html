@@ -34,7 +34,7 @@
                 </mat-expansion-panel-header>
 
                 <mat-tab-group>
-                  <mat-tab label="Contact">
+                  <!-- <mat-tab label="Contact">
                     <mat-form-field class="example-full-width" class="example-full-width"
                       *ngFor="let contact of selectedLead.contact" appearance="outline">
                       <mat-placeholder>Search reports</mat-placeholder>
@@ -44,18 +44,16 @@
                     </mat-form-field>
                     <button mat-flat-button style="float: right;" (click)="showContactDrawer()">Add
                       Contact</button>
-                  </mat-tab>
+                  </mat-tab> -->
                   <mat-tab [label]="g.label" *ngFor="let g of leadGroups">
-
+                    <div style="height: 10px;"></div>
                     <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
                       <ng-container *ngIf="g.value.includes(leadKey)">
                         <mat-form-field class="example-full-width" appearance="outline" *ngIf="['date', 'option', 'string'].includes(typeDict[leadKey].type)">
-                          <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                            <mat-label>{{typeDict[leadKey].label}}</mat-label>
                           
                             <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)" *ngIf="typeDict[leadKey].type === 'string'"/>
-                          
-
-                          
+                                                    
                             <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"  *ngIf="typeDict[leadKey].type === 'date'"/>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker color="primary"></mat-datepicker>
@@ -76,20 +74,27 @@
               </mat-expansion-panel>
             </mat-accordion>
             <mat-card>
-              <ng-container *ngFor="let contact of selectedLead.contact">
-                <ion-button color="success" size="small" (click)="onPhoneClick(contact.value)"
-                  *ngIf="contact.category === 'mobile'">
-                  <ion-icon name="call"></ion-icon>
-                  <i class="icon ion-ios-telephone"></i> &nbsp;
-                  {{contact.value}}
-                </ion-button>
+              <ng-container *ngFor="let key of contactGroup?.value">
+                <div *ngIf="isMobile(selectedLead[key])">
+                  <button style="margin-bottom: 2px; margin-right: 4px;" mat-button color="primary" mat-flat-button (click)="onPhoneClick(selectedLead[key])" >
+                    <ion-icon name="call"></ion-icon>
+                    <i class="icon ion-ios-telephone"></i> &nbsp;
+                    {{selectedLead[key]}}
+                  </button>
+
+                  <a href="whatsapp://send?phone={{selectedLead[key]}}" mat-raised-button mat-icon-button><ion-icon style="font-size: 1.3rem;font-weight: 800;" name="logo-whatsapp"></ion-icon></a>
+                </div>
+                <!-- <div *ngIf="isEmail(selectedLead[key])">
+                  <button mat-raised-button><ion-icon name="mail-outline"></ion-icon> {{selectedLead[key]}} </button>
+                </div> -->
               </ng-container>
             </mat-card>
 
-            <mat-card>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>Dispositions</mat-expansion-panel-header>
               <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
               </nz-tree>
-            </mat-card>
+            </mat-expansion-panel>
 
             <mat-expansion-panel>
 
@@ -122,7 +127,7 @@
               </mat-form-field>
             </mat-expansion-panel>
 
-            <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok" 
+            <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok" nzCancelText="cancel"
               (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
               <input type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp" placeholder="followUp"
                 [ngModelOptions]="{standalone: true}">

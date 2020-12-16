@@ -164,7 +164,7 @@
 
 
   <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
-  <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" nzCancelText="cancel">
     <form nz-form [formGroup]="emailForm" nzLayout="vertical">
       <nz-form-item>
         <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
@@ -211,7 +211,7 @@
     <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager"
       name="selectedManager" />
 
-    <nz-list nzItemLayout="horizontal">
+    <nz-list nzItemLayout="horizontal" *ngIf="managers">
       <nz-list-item *ngFor="let manager of managers" (click)="reassignLead(manager)">
         <nz-list-item-meta [nzDescription]="manager.email">
         </nz-list-item-meta>

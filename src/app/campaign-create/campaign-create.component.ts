@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { isArray } from 'lodash';
 import {
   NzContextMenuService,
@@ -38,7 +38,8 @@ export class CampaignCreateComponent implements OnInit {
     private nzContextMenuService: NzContextMenuService,
     private activatedRouter: ActivatedRoute,
     private uploadService: UploadService,
-    private dialogCtrl: MatDialog
+    private dialogCtrl: MatDialog,
+    private router: Router
   ) {}
   campaignForm: FormGroup;
 
@@ -66,7 +67,53 @@ export class CampaignCreateComponent implements OnInit {
   fileList: NzUploadListComponent[] = [];
 
   attachments: any;
-  demoDispositionNodes: any[] = [];
+  demoDispositionNodes: any[] = [
+    {
+      title: 'Interested',
+      key: 'interested',
+      children: [
+        {
+          title: 'Hot',
+          key: 'hot',
+          isLeaf: true
+        },
+        {
+          title: 'warm',
+          key: 'warm',
+          isLeaf: true
+        },
+        {
+          title: 'cold',
+          key: 'cold',
+          isLeaf: true
+        },{
+          title: 'won',
+          key: 'won',
+          isLeaf: true
+        }
+      ]
+    },{
+      title: 'Not Interested',
+      key: 'NI',
+      children: [
+        {
+          title: 'Too Costly',
+          key: 'TC',
+          isLeaf: true
+        },
+        {
+          title: 'Already bought',
+          key: 'AB',
+          isLeaf: true
+        },
+        {
+          title: 'Using Another CRM',
+          key: 'uacrm',
+          isLeaf: true
+        }
+      ]
+    }
+  ];
 
   // campaignOptions: any = [];
   assignTo = [
@@ -118,7 +165,7 @@ export class CampaignCreateComponent implements OnInit {
     if (!id) {
       return;
     }
-    this.submitText = "Update";
+    this.submitText = "Update Campaign Details";
     this.campaignId = id;
     this.campaignService.getCampaignById(id).subscribe(
       (campaign: ICampaign) => {
@@ -170,6 +217,7 @@ export class CampaignCreateComponent implements OnInit {
 
   initCampaignForm() {
     this.campaignForm = this.fb.group({
+      _id: [null],
       campaignName: ["", [Validators.required]],
       comment: [""],
       type: ["Lead Generation"],
@@ -315,8 +363,9 @@ export class CampaignCreateComponent implements OnInit {
       return;
     }
 
+    const isNew = this.campaignId ? false: true;
     const formData = {
-      isNew: this.campaignId?false: true,
+      isNew: isNew,
       campaignInfo: this.campaignForm.value,
       groups: this.groups,
       formModel: this.formModel,
@@ -326,13 +375,22 @@ export class CampaignCreateComponent implements OnInit {
       uniqueCols: this.uniqueCols.filter((c) => c.checked).map((c) => c.value),
       editableCols: this.editableCols.filter((c) => c.checked).map((c) => c.value),
       browsableCols: this.browsableCols.filter((c) => c.checked).map((c) => c.value),
-
     };
+
+    if(isNew) {
+      // delete id of campaign being passed as null and also prevent null value being passed to backend
+      delete formData.campaignInfo._id;
+      this.groups.push({
+        label: 'contact',
+        value: ['customerEmail', 'mobilePhone']
+      })
+    }
     
     this.campaignService.createCampaignAndDisposition(formData).subscribe(
       (response: any) => {
         this.uploading = false;
         this.msg.success("Lead Files uploaded successfully.");
+        this.router.navigate(["home", "campaign", "list"]);
       },
       () => {
         this.uploading = false;
@@ -354,7 +412,8 @@ export class CampaignCreateComponent implements OnInit {
     this.campaignService
       .uploadMultipleLeadFiles({
         files: result,
-        campaignName: this.campaignForm.get("campaignName").value,
+        campaignId: this.campaignForm.get("_id").value,
+        campaignName: this.campaignForm.get("campaignName").value
       })
       .subscribe(
         (response: any) => {

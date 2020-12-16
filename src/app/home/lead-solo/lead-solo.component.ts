@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+
 import { CampaignService } from "../campaign.service";
 import {
   ClassValidationError,
@@ -26,7 +25,7 @@ import {
 } from "@ionic-native/contacts/ngx";
 import * as moment from "moment";
 
-import { isEmpty } from "lodash";
+import { isEmpty, isString } from "lodash";
 @Component({
   selector: "app-lead-solo",
   templateUrl: "./lead-solo.component.html",
@@ -157,6 +156,7 @@ export class LeadSoloComponent implements OnInit {
   // leadStatusOptions: string[];
   // selectedLeadStatus: string;
   enabledKeys;
+  contactGroup: {label: string, value: string[], _id: string};
   leadGroups: { label: string; value: string[]; _id: string }[] = [];
   async getLeadMappings() {
     const { typeDict } = await this.leadsService.getLeadMappings(
@@ -168,6 +168,7 @@ export class LeadSoloComponent implements OnInit {
     );
 
     this.leadGroups = campaignObject[0]?.groups;
+    this.contactGroup = this.leadGroups.filter(g=>g.label === 'contact')[0];
     this.formModel = campaignObject[0]?.formModel;
 
     this.enabledKeys = campaignObject[0]?.editableCols;
@@ -545,5 +546,17 @@ export class LeadSoloComponent implements OnInit {
       return 'text';
     }
     return readableType.type;
+  }
+
+
+  isEmail(s) {
+    return isString(s) && s.indexOf("@") > 0;
+  }
+
+  isMobile(m) {
+    if(!m)
+      return false;
+    const regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+    return regex.test(m);
   }
 }

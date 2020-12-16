@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { environment } from "src/environments/environment";
 
 declare let AWS: any;
 
@@ -7,8 +8,8 @@ declare let AWS: any;
 })
 export class UploadService {
   bucket = new AWS.S3({
-    accessKeyId: "AKIARGBOXP35BONONB4J",
-    secretAccessKey: "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",
+    accessKeyId: environment.accessKeyId,
+    secretAccessKey: environment.secretAccessKey,
     region: "ap-south-1",
   });
 
