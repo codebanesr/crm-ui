@@ -3,7 +3,7 @@
   <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
     <mat-toolbar class="header">
       <mat-toolbar-row>
-        <span>Third Line</span>
+        <span>Filters</span>
         <span class="filter-toolbar-spacer"></span>
         <mat-icon class="filter-toolbar-icon" aria-hidden="false" aria-label="Example close icon" (click)="drawer.toggle()">close</mat-icon>
       </mat-toolbar-row>
@@ -11,6 +11,7 @@
     <div class="contents">
       <form [formGroup]="transactionForm" (submit)="getTransactions()">
         <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-label>Campaign</mat-label>
           <mat-select formControlName="campaign" placeholder="Campaign">
             <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
               {{option.campaignName}}
@@ -36,6 +37,7 @@
 
 
         <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-label>Assigned To</mat-label>
           <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
             <mat-option>
               <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe" 
@@ -57,7 +59,7 @@
       <mat-accordion>
         <mat-expansion-panel *ngFor="let t of transactions">
           <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
-          <button mat-flat-button nzType="primary" style="float: right;" (click)="showLead(t.lead)">Edit</button>
+          <button mat-flat-button nzType="primary" style="float: right;" (click)="showLead(t.lead, t.campaign)">Edit</button>
           <mat-list>
             <ng-container *ngFor="let k of objectKeys(t)">
               <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->

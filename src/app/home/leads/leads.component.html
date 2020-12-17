@@ -65,12 +65,13 @@
     <mat-expansion-panel (opened)="lead.panelOpenState = true" (closed)="lead.panelOpenState = false"
       *ngFor="let lead of leads" hideToggle>
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{lead?.firstName}} {{lead?.lastName}}
+        <mat-panel-title style="width: 100%;">
+          <span>{{lead?.firstName}} {{lead?.lastName}}</span>
+          <span class="spacer"></span>
+          
+            <mat-chip color="primary" style="width: 70px; background-color: cornflowerblue;border-radius: 20%; text-align: center;">{{lead.leadStatus | uppercase}}</mat-chip>
+          
         </mat-panel-title>
-        <mat-panel-description style="text-align: end;">
-
-        </mat-panel-description>
       </mat-expansion-panel-header>
       <button mat-raised-button color="primary" (click)="handleLeadEdit(lead)" class="lead-edit-btn">Edit Lead</button>
       <i nz-icon nzType="mail" nzTheme="outline" style="font-size: large;"></i> &nbsp;

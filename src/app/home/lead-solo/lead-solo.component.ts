@@ -213,6 +213,7 @@ export class LeadSoloComponent implements OnInit {
           [fld.label]: fld.value,
         };
       }),
+      campaignId: this.selectedCampaign._id
     };
 
     if (this.selectedUserForReassignment) {
@@ -298,6 +299,8 @@ export class LeadSoloComponent implements OnInit {
       }
       // this.validateForm.patchValue({ leadStatus: event.node.origin.title });
     
+      event.node.isExpanded = !event.node.isExpanded;
+    }else{
       event.node.isExpanded = !event.node.isExpanded;
     }
   }

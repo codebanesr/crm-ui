@@ -14,6 +14,7 @@ export interface ColumnItem {
 }
 
 export interface DataItem {
+  leadStatus: string;
   externalId: string;
   firstName: string;
   lastName: string;

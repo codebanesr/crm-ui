@@ -25,6 +25,7 @@ interface IHistory {
   active: boolean;
   createdAt: string;
   nextAction?: string;
+  campaign: string;
 }
 @Component({
   selector: "app-transactions",
@@ -106,11 +107,11 @@ export class TransactionsComponent implements OnInit {
       });
   }
 
-  async showLead(leadId: string) {
+  async showLead(leadId: string, campaignId: string) {
     this.router.navigate(["home", "solo"], {
       queryParams: {
         leadId,
-        campaignId: "5f89dd4c3d90afc740368088",
+        campaignId,
       },
     });
   }

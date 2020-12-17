@@ -53,172 +53,174 @@
         </mat-select>
       </mat-form-field>
 
-
-      <button mat-flat-button class="mat-full-width" (click)="displayParamModal()" style="padding-bottom: 2px;"> Add More Params</button>
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Disposition
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" nzDraggable nzBlockNode
-            (nzOnDrop)="nzEvent($event)" (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)"
-            (contextmenu)="contextMenu($event, menu)">
-          </nz-tree>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Unique Attributes
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!-- <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
-          <mat-slide-toggle *ngFor="let col of uniqueCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Editable Columns
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!-- <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
-          <mat-slide-toggle *ngFor="let col of editableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Browsable Columns
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!-- <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
-          <mat-slide-toggle *ngFor="let col of browsableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-        </mat-expansion-panel>
-
-
-        <!-- For changes to group refer https://github.com/shanurrahman/crm-ui/blob/8b3fd4192ba2e5e610cac69365d3435dffa4e04b/src/app/campaign-create/campaign-create.component.html -->
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Create Campaign Groups
-          </mat-expansion-panel-header>
-          <!-- <mat-form-field> -->
-            <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"/>
-          <!-- </mat-form-field> -->
-          <button mat-icon-button (click)="handleGroupAdd($event)">Add</button>
-
-          <ng-container *ngFor="let g of groups">
-            <span><i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i></span>
-            <mat-form-field class="mat-full-width">
-              <mat-label>
-                <span>
-                  {{g.label}}
-                </span>
-              </mat-label>
-              <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}" *ngIf="allLeadCols">
-                <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </ng-container>
-
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Assign To
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!-- <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
-          <mat-slide-toggle *ngFor="let col of assignTo" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Advanced Settings
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <!-- <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
-          <mat-slide-toggle *ngFor="let col of advancedSettings" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel nzHeader="Create Groups">
-          <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
-            <input type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
-          </nz-input-group>
-
-          <ng-template #addOnAfterTemplate>
-            <span (click)="handleGroupAdd($event)">Add</span>
-          </ng-template>
-
-
-          <ng-container *ngFor="let g of groups">
-            <mat-form-field>
-              <mat-label>
-                <span>
-                  {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;"
-                    (click)="deleteGroup(g.label)"></i>
-                  <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
-                </span>
-              </mat-label>
-              <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
-                <!-- formControlName="assignees" -->
-                <!-- [nzLabel]="option.readableField" -->
-                <mat-select multiple placeHolder="Inserted are removed" [(ngModel)]="g.value"
-                  [ngModelOptions]="{standalone: true}">
+      <!-- the block below is only to be shown for campaign update case -->
+      <ng-container *ngIf="this.campaignId">
+        <button mat-flat-button class="mat-full-width" (click)="displayParamModal()" style="padding-bottom: 2px;"> Add More Params</button>
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Disposition
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" nzDraggable nzBlockNode
+              (nzOnDrop)="nzEvent($event)" (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)"
+              (contextmenu)="contextMenu($event, menu)">
+            </nz-tree>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Unique Attributes
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of uniqueCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Editable Columns
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of editableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Browsable Columns
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of browsableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+  
+  
+          <!-- For changes to group refer https://github.com/shanurrahman/crm-ui/blob/8b3fd4192ba2e5e610cac69365d3435dffa4e04b/src/app/campaign-create/campaign-create.component.html -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              Create Campaign Groups
+            </mat-expansion-panel-header>
+            <!-- <mat-form-field> -->
+              <input type="text" nz-input [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"/>
+            <!-- </mat-form-field> -->
+            <button mat-icon-button (click)="handleGroupAdd($event)">Add</button>
+  
+            <ng-container *ngFor="let g of groups">
+              <span><i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;" (click)="deleteGroup(g.label)"></i></span>
+              <mat-form-field class="mat-full-width">
+                <mat-label>
+                  <span>
+                    {{g.label}}
+                  </span>
+                </mat-label>
+                <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}" *ngIf="allLeadCols">
                   <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
                 </mat-select>
-              <!-- </nz-form-control> -->
-            </mat-form-field>
-          </ng-container>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Add Email Template
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-            <mat-form-field class="mat-full-width" appearance="outline">
-              <mat-label>Template Name</mat-label>
-              <input matInput formControlName="templateName" />
-            </mat-form-field>
-
-
-            <mat-form-field class="mat-full-width" appearance="outline">
-              <mat-label>Subject</mat-label>
-              <input matInput formControlName="subject" />
-            </mat-form-field>
-
-            <mat-form-field class="mat-full-width" appearance="outline">
-              <mat-label>Body</mat-label>
-                <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
-                  formControlName="content"></textarea>
-            </mat-form-field>
-            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
-              <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
-            </nz-upload>
-          </form>
-
-          <!-- @Todo add functionality for submit without attachments -->
-          <button nz-button [nzType]="'danger'">Submit without attachments</button>
-          <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
-            [disabled]="fileList.length == 0" style="margin-top: 16px">
-            {{ uploading ? 'Uploading' : 'Use Attachments' }}
-          </button>
-
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Create Campaign form
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          Not available in mobile
-        </mat-expansion-panel>
-      </mat-accordion>
+              </mat-form-field>
+            </ng-container>
+  
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Assign To
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of assignTo" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Advanced Settings
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of advancedSettings" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel nzHeader="Create Groups">
+            <nz-input-group [nzAddOnAfter]="addOnAfterTemplate">
+              <input type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
+            </nz-input-group>
+  
+            <ng-template #addOnAfterTemplate>
+              <span (click)="handleGroupAdd($event)">Add</span>
+            </ng-template>
+  
+  
+            <ng-container *ngFor="let g of groups">
+              <mat-form-field>
+                <mat-label>
+                  <span>
+                    {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;"
+                      (click)="deleteGroup(g.label)"></i>
+                    <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
+                  </span>
+                </mat-label>
+                <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
+                  <!-- formControlName="assignees" -->
+                  <!-- [nzLabel]="option.readableField" -->
+                  <mat-select multiple placeHolder="Inserted are removed" [(ngModel)]="g.value"
+                    [ngModelOptions]="{standalone: true}">
+                    <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
+                  </mat-select>
+                <!-- </nz-form-control> -->
+              </mat-form-field>
+            </ng-container>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Add Email Template
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>Template Name</mat-label>
+                <input matInput formControlName="templateName" />
+              </mat-form-field>
+  
+  
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>Subject</mat-label>
+                <input matInput formControlName="subject" />
+              </mat-form-field>
+  
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>Body</mat-label>
+                  <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                    formControlName="content"></textarea>
+              </mat-form-field>
+              <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
+                <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
+              </nz-upload>
+            </form>
+  
+            <!-- @Todo add functionality for submit without attachments -->
+            <button nz-button [nzType]="'danger'">Submit without attachments</button>
+            <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
+              [disabled]="fileList.length == 0" style="margin-top: 16px">
+              {{ uploading ? 'Uploading' : 'Use Attachments' }}
+            </button>
+  
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Create Campaign form
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            Not available in mobile
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container>
       <br>
 
 
