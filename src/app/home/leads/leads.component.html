@@ -1,7 +1,12 @@
 <ion-content>
-  <SearchBar [(ngModel)]="leadOptions.searchTerm" [placeholder]="'Search'" [maxLength]="8"
+  <!-- <SearchBar [(ngModel)]="leadOptions.searchTerm" [placeholder]="'Search'" [maxLength]="8"
     (change)="handleSearchTerm()">
-  </SearchBar>
+  </SearchBar> -->
+
+   
+    <ion-searchbar placeholder="Filter Leads" (change)="handleSearchTerm()" showCancelButton="focus" [(ngModel)]="leadOptions.searchTerm"></ion-searchbar>
+  
+
 
   <!-- <nz-collapse [nzBordered]="true" *ngIf="leads" class="scrollable">
     <nz-collapse-panel [nzShowArrow]="false" *ngFor="let lead of leads" [nzHeader]="accordianheader"
@@ -164,7 +169,7 @@
 
 
   <!-- form will adjust according to the modal size so let everything be at 24 grid size -->
-  <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" nzCancelText="cancel">
+  <!-- <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" nzCancelText="cancel">
     <form nz-form [formGroup]="emailForm" nzLayout="vertical">
       <nz-form-item>
         <nz-form-label [nzSm]="24" [nzXs]="24" nzRequired>Search By Email Subject</nz-form-label>
@@ -202,11 +207,11 @@
         </nz-form-control>
       </nz-form-item>
     </form>
-  </nz-modal>
+  </nz-modal> -->
 
 
   <!-- reassignment modal -->
-  <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
+  <!-- <nz-modal [nzStyle]="{ top: '20px' }" [(nzVisible)]="isReassignmentModalVisible" nzWidth="300"
     (nzOnCancel)="handleReassignmentCancel()" nzTitle="Pick a user" *ngIf="managers">
     <input nz-input placeholder="Enter user name" nzSize="small" [formControl]="selectedManager"
       name="selectedManager" />
@@ -219,23 +224,23 @@
       <nz-list-empty *ngIf="!managers || managers.length === 0"></nz-list-empty>
     </nz-list>
     <div *nzModalFooter></div>
-  </nz-modal>
+  </nz-modal> -->
 
 
 
   <!-- timeline modal-->
-  <nz-modal [(nzVisible)]="isTimelineModalVisible" (nzOnCancel)="handleTimelineClose()"
+  <!-- <nz-modal [(nzVisible)]="isTimelineModalVisible" (nzOnCancel)="handleTimelineClose()"
     nzTitle="History for Lead {{selectedLead?.externalId}}" *ngIf="campaignList">
     <nz-timeline *ngIf="selectedLeadHistory?.history?.length > 0; else empty">
       <nz-timeline-item *ngFor="let element of selectedLeadHistory?.history">
         {{element.note}}
       </nz-timeline-item>
     </nz-timeline>
-  </nz-modal>
+  </nz-modal> -->
 
-  <ng-template #dotTemplate>
+  <!-- <ng-template #dotTemplate>
     <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
-  </ng-template>
+  </ng-template> -->
 
   <ng-template #empty>
     <nz-empty></nz-empty>

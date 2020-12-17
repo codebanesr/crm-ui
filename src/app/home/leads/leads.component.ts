@@ -16,7 +16,6 @@ import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
 import { ICampaign } from "src/app/campaign/campaign.interface";
-import { NzFormatEmitEvent, NzTreeNode } from "ng-zorro-antd/tree";
 const { Share } = Plugins;
 
 @Component({
@@ -62,9 +61,9 @@ export class LeadsComponent implements OnInit {
     this.populateCampaignDropdown("");
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initSettingForm();
-    this.initEmailForm();
+    // this.initEmailForm();
     this.initRightClickActions();
-    this.getBasicOverview();
+    // this.getBasicOverview();
     // this.initEtAutocomplete();
   }
 
@@ -302,27 +301,27 @@ export class LeadsComponent implements OnInit {
   }
 
   selectedLead: any;
-  isReassignmentModalVisible;
-  selectedManager: FormControl;
-  openReassignModal(leadData, bulkReassign: boolean = false) {
-    this.selectedLead = leadData;
-    this.selectedManager = new FormControl(null);
-    this.selectedManager.valueChanges.subscribe((data) => {
-      console.log(data);
-    });
-    this.isReassignmentModalVisible = true;
-    // now show managers on modal, wait for a manager to click and send for reassignment also set the typings file now, its required
-  }
+  // isReassignmentModalVisible;
+  // selectedManager: FormControl;
+  // openReassignModal(leadData, bulkReassign: boolean = false) {
+  //   this.selectedLead = leadData;
+  //   this.selectedManager = new FormControl(null);
+  //   this.selectedManager.valueChanges.subscribe((data) => {
+  //     console.log(data);
+  //   });
+  //   this.isReassignmentModalVisible = true;
+  //   // now show managers on modal, wait for a manager to click and send for reassignment also set the typings file now, its required
+  // }
 
-  handleReassignmentCancel() {
-    this.isReassignmentModalVisible = false;
-  }
+  // handleReassignmentCancel() {
+  //   this.isReassignmentModalVisible = false;
+  // }
 
-  handleTimelineClose() {
-    this.isTimelineModalVisible = false;
-  }
+  // handleTimelineClose() {
+  //   this.isTimelineModalVisible = false;
+  // }
 
-  handleReassignmentSubmit() {}
+  // handleReassignmentSubmit() {}
 
   total: number = 1000;
   loading = false;
@@ -337,33 +336,33 @@ export class LeadsComponent implements OnInit {
     this.getData();
   }
 
-  basicOverview: any;
-  getBasicOverview() {
-    this.leadsService.getBasicOverview().subscribe(
-      (basicOverview) => {
-        this.basicOverview = basicOverview;
-      },
-      (error) => {
-        console.log(error.messsage);
-      }
-    );
-  }
+  // basicOverview: any;
+  // getBasicOverview() {
+  //   this.leadsService.getBasicOverview().subscribe(
+  //     (basicOverview) => {
+  //       this.basicOverview = basicOverview;
+  //     },
+  //     (error) => {
+  //       console.log(error.messsage);
+  //     }
+  //   );
+  // }
 
-  selectedEmailTemplate: any;
-  populateEmailModal(event) {
-    console.log(typeof event, event.nzValue);
-    this.selectedEmailTemplate = event.nzValue;
+  // selectedEmailTemplate: any;
+  // populateEmailModal(event) {
+  //   console.log(typeof event, event.nzValue);
+  //   this.selectedEmailTemplate = event.nzValue;
 
-    this.attachments = this.selectedEmailTemplate.attachments;
-    this.emailForm.patchValue({
-      subject: this.selectedEmailTemplate.subject,
-      content: this.selectedEmailTemplate.content,
-    });
-  }
+  //   this.attachments = this.selectedEmailTemplate.attachments;
+  //   this.emailForm.patchValue({
+  //     subject: this.selectedEmailTemplate.subject,
+  //     content: this.selectedEmailTemplate.content,
+  //   });
+  // }
 
-  emailTemplates: any;
-  etFormControl = new FormControl([null]);
-  attachments: any[] = [];
+  // emailTemplates: any;
+  // etFormControl = new FormControl([null]);
+  // attachments: any[] = [];
   // initEtAutocomplete() {
   //   this.etFormControl.valueChanges
   //     .pipe(debounceTime(500), distinctUntilChanged())
@@ -376,19 +375,19 @@ export class LeadsComponent implements OnInit {
   //     });
   // }
 
-  emailForm: FormGroup;
-  emailModel;
-  initEmailForm() {
-    this.emailForm = this.fb.group({
-      subject: [null],
-      content: [null],
-      attachments: [null],
-    });
-  }
+  // emailForm: FormGroup;
+  // emailModel;
+  // initEmailForm() {
+  //   this.emailForm = this.fb.group({
+  //     subject: [null],
+  //     content: [null],
+  //     attachments: [null],
+  //   });
+  // }
 
-  submitEmailForm(model) {
-    console.log(model);
-  }
+  // submitEmailForm(model) {
+  //   console.log(model);
+  // }
 
   async onSocialShareClick(event, data) {
     await Share.share({

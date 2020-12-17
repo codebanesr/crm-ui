@@ -34,31 +34,21 @@
                 </mat-expansion-panel-header>
 
                 <mat-tab-group>
-                  <!-- <mat-tab label="Contact">
-                    <mat-form-field class="example-full-width" class="example-full-width"
-                      *ngFor="let contact of selectedLead.contact" appearance="outline">
-                      <mat-placeholder>Search reports</mat-placeholder>
-                      <mat-label>{{contact.label}}</mat-label>
-                      <input matInput [(ngModel)]="contact.value">
-
-                    </mat-form-field>
-                    <button mat-flat-button style="float: right;" (click)="showContactDrawer()">Add
-                      Contact</button>
-                  </mat-tab> -->
                   <mat-tab [label]="g.label" *ngFor="let g of leadGroups">
                     <div style="height: 10px;"></div>
                     <ng-container *ngFor="let leadKey of objectkeys(selectedLead)" key="leadKey">
                       <ng-container *ngIf="g.value.includes(leadKey)">
-                        <mat-form-field class="example-full-width" appearance="outline" *ngIf="['date', 'option', 'string'].includes(typeDict[leadKey].type)">
+                        <mat-form-field class="example-full-width" appearance="outline" *ngIf="['date', 'option', 'string', 'tel'].includes(typeDict[leadKey].type)">
                             <mat-label>{{typeDict[leadKey].label}}</mat-label>
                           
                             <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)" *ngIf="typeDict[leadKey].type === 'string'"/>
-                                                    
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"  *ngIf="typeDict[leadKey].type === 'date'"/>
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker color="primary"></mat-datepicker>
-                          
-
+                            <input matInput type="tel" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)" *ngIf="typeDict[leadKey].type === 'tel'"/>
+                            
+                            <ng-container *ngIf="typeDict[leadKey].type === 'date'">
+                              <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
+                              <mat-datepicker #picker color="primary"></mat-datepicker>
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            </ng-container>
                           
                             <mat-select [(ngModel)]="selectedLead[leadKey]" *ngIf="typeDict[leadKey].type === 'select'">
                               <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">{{option}}
@@ -92,7 +82,7 @@
 
             <mat-expansion-panel>
               <mat-expansion-panel-header>Dispositions</mat-expansion-panel-header>
-              <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)">
+              <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)"  *ngIf="callDispositions">
               </nz-tree>
             </mat-expansion-panel>
 
@@ -129,8 +119,10 @@
 
             <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok" nzCancelText="cancel"
               (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
-              <input type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp" placeholder="followUp"
-                [ngModelOptions]="{standalone: true}">
+
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <input matInput type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp" placeholder="followUp" />
+              </mat-form-field>
             </nz-modal>
 
           </ng-container>

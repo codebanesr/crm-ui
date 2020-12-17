@@ -174,27 +174,28 @@
           </ng-container>
         </mat-expansion-panel>
 
-        <mat-expansion-panel nzHeader="Add Email Template Here">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Add Email Template
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-            <mat-form-field>
+            <mat-form-field class="mat-full-width" appearance="outline">
               <mat-label>Template Name</mat-label>
-              <input placeholder="Template Name" matInput formControlName="templateName" />
+              <input matInput formControlName="templateName" />
             </mat-form-field>
 
 
-            <mat-form-field>
+            <mat-form-field class="mat-full-width" appearance="outline">
               <mat-label>Subject</mat-label>
-              <nz-form-control [nzSm]="24" [nzXs]="24">
-                <input matInput placeholder="Write the subject of email" formControlName="subject" />
-              </nz-form-control>
+              <input matInput formControlName="subject" />
             </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field class="mat-full-width" appearance="outline">
               <mat-label>Body</mat-label>
-              <nz-form-control [nzSm]="24" [nzXs]="24">
                 <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
                   formControlName="content"></textarea>
-              </nz-form-control>
             </mat-form-field>
             <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
               <button nz-button><i nz-icon nzType="upload"></i>Select File</button>

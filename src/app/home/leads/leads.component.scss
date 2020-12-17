@@ -1,8 +1,3 @@
-::ng-deep .ant-descriptions-item {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-}
-
 
 
 .scrollable {
@@ -20,11 +15,6 @@
   .example-viewport{
     height: 100%;
     width: 100%;
-  }
-
-
-  ::ng-deep .ant-tree .ant-tree-treenode:first-of-type {
-    display: none;
   }
 
   .pull-left {

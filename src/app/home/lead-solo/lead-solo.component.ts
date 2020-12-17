@@ -25,7 +25,7 @@ import {
 } from "@ionic-native/contacts/ngx";
 import * as moment from "moment";
 
-import { isEmpty, isString } from "lodash";
+import { difference, isEmpty, isString } from "lodash";
 @Component({
   selector: "app-lead-solo",
   templateUrl: "./lead-solo.component.html",
@@ -167,12 +167,16 @@ export class LeadSoloComponent implements OnInit {
       (element) => element._id === this.selectedCampaignId
     );
 
+    /** modified on Dec 17 please verify if it breaks anything */
+    this.selectedCampaign = campaignObject[0];
+
     this.leadGroups = campaignObject[0]?.groups;
     this.contactGroup = this.leadGroups.filter(g=>g.label === 'contact')[0];
     this.formModel = campaignObject[0]?.formModel;
 
     this.enabledKeys = campaignObject[0]?.editableCols;
     this.typeDict = typeDict;
+    this.evaluateOtherData();
     this.populateEmailTemplateDropdown(campaignObject[0]);
   }
 
@@ -558,5 +562,35 @@ export class LeadSoloComponent implements OnInit {
       return false;
     const regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
     return regex.test(m);
+  }
+
+
+  showOtherData = false;
+  otherData = [];
+  evaluateOtherData() {
+    this.showOtherData = !this.showOtherData;
+
+    if (!this.showOtherData) {
+      this.selectedCampaign.groups = this.selectedCampaign.groups.filter(
+        (g) => g.label !== "More"
+      );
+      return;
+    }
+
+    const alreadyIncluded = [];
+    this.selectedCampaign.groups.forEach((g) => {
+      alreadyIncluded.push(g.value);
+    });
+
+    this.otherData = difference(
+      this.objectkeys(this.typeDict),
+      alreadyIncluded
+    );
+
+    this.selectedCampaign.groups.push({
+      label: "More",
+      value: this.otherData,
+      _id: "0",
+    });
   }
 }

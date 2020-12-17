@@ -23,28 +23,10 @@ nz-descriptions-item {
   margin-top: 0px;
 }
 
-::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
-  padding: 5px 32px;
-}
-
-::ng-deep
-  .ant-descriptions-bordered.ant-descriptions-small
-  .ant-descriptions-item-label {
-  padding: 3px 16px;
-}
-
-::ng-deep bordered.ant-descriptions-small .ant-descriptions-item-content {
-  padding: 3px 16px;
-}
-
 [nz-form] {
   max-width: 600px;
 }
 
-::ng-deep .am-list-item .am-list-line .am-list-extra {
-  // background-color: red;
-  transform: translateX(-75px);
-}
 
 .ant-form-item {
   margin-bottom: 6px;
@@ -53,21 +35,6 @@ nz-descriptions-item {
 .ant-col-sm-24.ant-form-item-label {
   padding: 0 0 1px;
 }
-
-::ng-deep .ant-collapse-content > .ant-collapse-content-box {
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-bottom: 7px;
-  padding-top: 7px;
-}
-
-// ::ng-deep nz-tree-node:first-child {
-//   background-color: white;
-//   color: white;
-//   pointer-events: none;
-//   margin-top: -30px;
-// }
-
 
 .example-full-width {
   width: 100%;
