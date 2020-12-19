@@ -88,13 +88,22 @@
 
             <mat-expansion-panel>
               <mat-expansion-panel-header>Upload Documents</mat-expansion-panel-header>
-              <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link.split("/").reverse()[0]}}</a>
+              <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link}}</a>
+              <a [href]="link" *ngFor="let link of uploadedDocsLink" style="display: block;">{{link}}</a>
               <!-- <img [src]="link" *ngFor="let link of selectedLead.documentLinks" style="height: 200px; width: 200px;"> -->
               <div class="clearfix">
-                <nz-upload [nzMultiple]='true' [nzLimit]="5" [(nzFileList)]="uploadDocs" [nzBeforeUpload]="beforeDocUpload">
-                  <button nz-button>Upload</button>
-                </nz-upload>
-                <button mat-stroked-button color="primary" style="float: right;" (click)="takePicture($event)">Take Picture</button>
+                <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+                  <input
+                    type="file"
+                    #fileInput
+                    (change)="handleDocumentUpload($event.target.files[0])"
+                    hidden="true"
+                    accept="image/*"
+                  />
+                  <ion-fab-button (click)="selectImageSource()">
+                    <ion-icon name="add"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
               </div>
 
             </mat-expansion-panel>

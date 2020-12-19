@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
@@ -8,7 +8,7 @@ import {
 } from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 import { LeadsService } from "../leads.service";
-import { Plugins, CameraResultType } from "@capacitor/core";
+import { Plugins, CameraResultType, CameraSource } from "@capacitor/core";
 import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
@@ -28,6 +28,9 @@ import * as moment from "moment";
 import { difference, isEmpty, isString } from "lodash";
 import { NzUploadFile } from "ng-zorro-antd/upload";
 import { UploadService } from "src/app/upload.service";
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { ActionSheetController, Platform } from "@ionic/angular";
+defineCustomElements(window);
 
 @Component({
   selector: "app-lead-solo",
@@ -44,9 +47,12 @@ export class LeadSoloComponent implements OnInit {
     private toast: ToastService,
     private callNumber: CallNumber,
     private contacts: Contacts,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private actionSheetCtrl: ActionSheetController,
+    // private filePath: FilePath
   ) {}
 
+  @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
   modelFields: Array<field> = [];
   isEmpty = isEmpty;
   formModel: ModelInterface = {
@@ -231,11 +237,14 @@ export class LeadSoloComponent implements OnInit {
     if (!isSubmissionValid) {
       return false;
     }
-
-    // if there are attachments handle those first
-    const documentLinks = await this.handleDocumentUpload();
+    
+    /** @Todo change this logic into something more manageable
+     * 
+     */
+    // await this.handleDocumentUpload()
+    const documentLinks = this.uploadedDocsLink;
     updateObj.lead.documentLinks = documentLinks;
-
+    // 
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
       (data) => {
         // clean user reassigment once done
@@ -609,52 +618,91 @@ export class LeadSoloComponent implements OnInit {
   }
 
 
-  uploadDocs = [];
   uploadedDocsLink = [];
   docsUploaded = false;
   uploading = false;
-  async handleDocumentUpload(): Promise<string[]> {
-    if(this.uploadDocs.length === 0) {
-      return;
-    }
-
-    const filePromises = this.uploadDocs.map((doc) => {
-      return this.uploadService.uploadFile("leads", doc);
-    });
-
-    const uploadedDocs= await Promise.all(filePromises);
-    const uploadedDocsLink = uploadedDocs.map((l: {Location: string})=>{
-      return l.Location;
-    })
-
-    return uploadedDocsLink;
+  async handleDocumentUpload(file: File): Promise<void> {
+    const { Location } = await this.uploadService.uploadFile("attachments", file);
+    this.uploadedDocsLink.push(Location);
   } 
 
-  beforeDocUpload = (file: NzUploadFile): boolean => {
-    this.uploadDocs = this.uploadDocs.concat(file);
-    console.log(this.uploadDocs);
-    return false;
-  };
-
-  async takePicture(event) {
+  async addImage(source: CameraSource) {
     const image = await Camera.getPhoto({
-      quality: 100,
-      allowEditing: true,
+      quality: 20,
+      allowEditing: false,
       resultType: CameraResultType.Uri,
-      saveToGallery: true,
-      promptLabelPhoto: new Date().toDateString(),
-      promptLabelPicture: new Date().toDateString(),
+      source
     });
+ 
+    this.uploadService.getFileFromUri(image.webPath).subscribe(async file=>{
+      const timestamp = new Date().getTime();
+      const result:any = await this.uploadService.uploadArrayBuffer(file, `${timestamp}.${image.format}`);
+      this.uploadedDocsLink.push(result.Location);
+    })
+  }
+
+  async selectImageSource() {
+    const buttons = [
+      {
+        text: "Take Photo",
+        icon: "camera",
+        handler: () => {
+          this.addImage(CameraSource.Camera);
+        },
+      },
+      {
+        text: "Choose From Photos Photo",
+        icon: "image",
+        handler: () => {
+          this.addImage(CameraSource.Photos);
+        },
+      },
+      {
+        text: "Choose a File",
+        icon: "attach",
+        handler: () => {
+          this.fileInput.nativeElement.click();
+        },
+      },
+    ];
+ 
+    // Only allow file selection inside a browser
+    
+  
+ 
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Select Image Source',
+      buttons
+    });
+    await actionSheet.present();
+  }
 
 
-    // console.log(this.dataURItoBlob(image.webPath));
-    // image.webPath will contain a path that can be set as an image src.
-    // You can access the original file using image.path, which can be
-    // passed to the Filesystem API to read the raw data of the image,
-    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-    // var imageUrl = image.webPath;
-    // Can be set to the src of an image now
-    // imageElement.src = imageUrl;
-    this.uploadDocs.push(image);
+  b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+ 
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+ 
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+ 
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+ 
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
+
+  blobToFile(theBlob: Blob, fileName:string): File {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+    return <File>theBlob;
   }
 }
