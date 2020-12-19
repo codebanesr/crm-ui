@@ -242,7 +242,8 @@ export class LeadSoloComponent implements OnInit {
      * 
      */
     // await this.handleDocumentUpload()
-    const documentLinks = this.uploadedDocsLink;
+    let documentLinks = this.uploadedDocsLink;
+    documentLinks = []
     updateObj.lead.documentLinks = documentLinks;
     // 
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
