@@ -26,5 +26,5 @@ export interface ILead {
     value: string;
     category: string;
   }[];
-  history: any;
+  documentLinks: string[]
 }

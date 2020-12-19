@@ -8,14 +8,14 @@ import {
 } from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 import { LeadsService } from "../leads.service";
-import { Plugins } from "@capacitor/core";
+import { Plugins, CameraResultType } from "@capacitor/core";
 import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
 import { NzTreeNode } from "ng-zorro-antd/tree";
 import { ActivatedRoute } from "@angular/router";
 import { CallNumber } from "@ionic-native/call-number/ngx";
-const { Geolocation } = Plugins;
+const { Geolocation, Camera } = Plugins;
 import { en_US, ToastService } from "ng-zorro-antd-mobile";
 import {
   Contacts,
@@ -26,6 +26,9 @@ import {
 import * as moment from "moment";
 
 import { difference, isEmpty, isString } from "lodash";
+import { NzUploadFile } from "ng-zorro-antd/upload";
+import { UploadService } from "src/app/upload.service";
+
 @Component({
   selector: "app-lead-solo",
   templateUrl: "./lead-solo.component.html",
@@ -40,7 +43,8 @@ export class LeadSoloComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toast: ToastService,
     private callNumber: CallNumber,
-    private contacts: Contacts
+    private contacts: Contacts,
+    private uploadService: UploadService
   ) {}
 
   modelFields: Array<field> = [];
@@ -228,6 +232,10 @@ export class LeadSoloComponent implements OnInit {
       return false;
     }
 
+    // if there are attachments handle those first
+    const documentLinks = await this.handleDocumentUpload();
+    updateObj.lead.documentLinks = documentLinks;
+
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
       (data) => {
         // clean user reassigment once done
@@ -343,7 +351,7 @@ export class LeadSoloComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.toast.hide();
-          this.selectedLead = data.result;
+          this.selectedLead = data.lead;
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }
@@ -354,12 +362,14 @@ export class LeadSoloComponent implements OnInit {
       );
   }
 
+  selectedLeadHistory = [];
   fetchLeadById(id: string) {
     this.toast.info("Fetching lead");
     this.leadsService.getLeadById(id).subscribe(
-      (data: ILead) => {
+      (data: {lead: ILead, leadHistory: any[]}) => {
         this.toast.hide();
-        this.selectedLead = data;
+        this.selectedLead = data.lead;
+        this.selectedLeadHistory = data.leadHistory;
       },
       (err) => {
         this.toast.hide();
@@ -473,6 +483,7 @@ export class LeadSoloComponent implements OnInit {
     // in case backend sends an empty array, should not happen but is possible sometimes
     this.selectedLead.contact = this.selectedLead.contact || [];
     this.selectedLead.contact.push(this.contactForm.value);
+
 
     this.leadsService
       .addContact(this.selectedLead._id, this.contactForm.value)
@@ -595,5 +606,55 @@ export class LeadSoloComponent implements OnInit {
       value: this.otherData,
       _id: "0",
     });
+  }
+
+
+  uploadDocs = [];
+  uploadedDocsLink = [];
+  docsUploaded = false;
+  uploading = false;
+  async handleDocumentUpload(): Promise<string[]> {
+    if(this.uploadDocs.length === 0) {
+      return;
+    }
+
+    const filePromises = this.uploadDocs.map((doc) => {
+      return this.uploadService.uploadFile("leads", doc);
+    });
+
+    const uploadedDocs= await Promise.all(filePromises);
+    const uploadedDocsLink = uploadedDocs.map((l: {Location: string})=>{
+      return l.Location;
+    })
+
+    return uploadedDocsLink;
+  } 
+
+  beforeDocUpload = (file: NzUploadFile): boolean => {
+    this.uploadDocs = this.uploadDocs.concat(file);
+    console.log(this.uploadDocs);
+    return false;
+  };
+
+  async takePicture(event) {
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: true,
+      resultType: CameraResultType.Uri,
+      saveToGallery: true,
+      promptLabelPhoto: new Date().toDateString(),
+      promptLabelPicture: new Date().toDateString(),
+    });
+
+
+    // console.log(this.dataURItoBlob(image.webPath));
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    // var imageUrl = image.webPath;
+    // Can be set to the src of an image now
+    // imageElement.src = imageUrl;
+    this.uploadDocs.push(image);
   }
 }

@@ -87,6 +87,19 @@
             </mat-expansion-panel>
 
             <mat-expansion-panel>
+              <mat-expansion-panel-header>Upload Documents</mat-expansion-panel-header>
+              <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link.split("/").reverse()[0]}}</a>
+              <!-- <img [src]="link" *ngFor="let link of selectedLead.documentLinks" style="height: 200px; width: 200px;"> -->
+              <div class="clearfix">
+                <nz-upload [nzMultiple]='true' [nzLimit]="5" [(nzFileList)]="uploadDocs" [nzBeforeUpload]="beforeDocUpload">
+                  <button nz-button>Upload</button>
+                </nz-upload>
+                <button mat-stroked-button color="primary" style="float: right;" (click)="takePicture($event)">Take Picture</button>
+              </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
 
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -127,7 +140,7 @@
 
           </ng-container>
           <mat-accordion>
-            <mat-expansion-panel *ngIf="selectedLead?.history?.length>0">
+            <mat-expansion-panel *ngIf="selectedLeadHistory?.length>0">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Lead History
@@ -142,7 +155,7 @@
                 </ion-fab>
                 <nz-timeline>
                   <nz-timeline-item nzColor="green"
-                    *ngFor="let h of selectedLead.history?.reverse().slice(0, historyLimit)">
+                    *ngFor="let h of selectedLeadHistory?.reverse().slice(0, historyLimit)">
                     <p>
                       Created at {{h.createdAt | date:"medium"}}
                     </p>
