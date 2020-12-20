@@ -14,11 +14,12 @@ export class AgentService {
     private sanitizer: DomSanitizer
   ) { }
 
-  listAgentActions(skip: number, fileType?: string) {
+  listAgentActions(skip: number, campaignId: string, fileType?: string) {
     let url = `${environment.apiUrl}/agent/listActions?skip=${skip}`;
     if(fileType) {
       url+=`&fileType=${fileType}`;
     }
+    url += `&campaign=${campaignId}`;
     return this.http.get(url);
   }
 

@@ -140,18 +140,6 @@ export class CampaignCreateComponent implements OnInit {
 
     this.initEmailForm();
 
-    this.agentService.listAgentActions(0, "campaignSchema").subscribe(
-      (list: any) => {
-        this.recentUploads = list;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    this.campaignForm
-      .get("type")
-      .valueChanges.subscribe((data) => console.log(data));
-
     // this.suggestCampaignNames();
     this.initUsersList();
     this.assigneeFilter = new FormControl();
@@ -182,6 +170,20 @@ export class CampaignCreateComponent implements OnInit {
         this.msg.error("Failed to fetch data for ticket id ", id);
       }
     );
+  }
+
+  getUploadedFiles() {
+    this.agentService.listAgentActions(0,  this.campaignId, "campaignSchema").subscribe(
+      (list: any) => {
+        this.recentUploads = list;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    // this.campaignForm
+    //   .get("type")
+    //   .valueChanges.subscribe((data) => console.log(data));
   }
 
   patchCompainValues(campaign: any) {

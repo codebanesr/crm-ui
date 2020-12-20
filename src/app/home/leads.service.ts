@@ -152,6 +152,22 @@ export class LeadsService {
     );
   }
 
+  downloadAllTransactions( pagination: {
+      page: number;
+      perPage: number;
+      sortBy: string;
+      sortOrder: string;
+    },
+    filters: any
+  ) {
+    const url = `${environment.apiUrl}/lead/transactions?isStreamable=true`;
+    this.http.post(url, {pagination, filters},{responseType: 'arraybuffer'}).subscribe(data=>{
+      const blob = new Blob([data], {type: 'application/octet-stream'});
+      saveAs(blob, "transactions.xlsx");
+    })
+  }
+
+
   getTransactions(
     pagination: {
       page: number;

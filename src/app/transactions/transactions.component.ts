@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from "@angular/router";
 import { MenuController, ModalController } from "@ionic/angular";
+import { AgentService } from "../agent.service";
 import { CampaignService } from '../home/campaign.service';
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from '../home/users.service';
@@ -40,7 +41,7 @@ export class TransactionsComponent implements OnInit {
     private menu: MenuController,
     private fb: FormBuilder,
     private campaignService: CampaignService,
-    private userService: UsersService
+    private userService: UsersService,
   ) {}
 
   transactions: IHistory[] = [];
@@ -65,6 +66,10 @@ export class TransactionsComponent implements OnInit {
     this.initCampaignList();
     this.initHandlerList();
   }
+
+  downloadTransactions() {
+    this.leadService.downloadAllTransactions(this.pagination, this.transactionForm?.value);
+  }  
 
   initCampaignList() {
     this.campaignService.getCampaigns(1, 20, {}, '', '').subscribe((result: any) =>{
