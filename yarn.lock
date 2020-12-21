@@ -1150,6 +1150,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@ionic-native/battery-status@^5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/battery-status/-/battery-status-5.30.0.tgz#0790bef28fba8e0f688b5f2895435052323de013"
+  integrity sha512-okHwgiM7zcSigf/X32CAi4M5azqHODHXmPLSDWrqr92Ur10lCmhl6CDzQCfnEW0WyfHUMQ1xJGQASG4YFldAKw==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/call-directory@^5.30.0":
   version "5.30.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/call-directory/-/call-directory-5.30.0.tgz#005465fc9b76a0d4e69ec416d8b91c79881fc72c"
@@ -2935,6 +2942,11 @@ copy-webpack-plugin@^6.0.3:
     schema-utils "^3.0.0"
     serialize-javascript "^5.0.1"
     webpack-sources "^1.4.3"
+
+cordova-plugin-battery-status@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-battery-status/-/cordova-plugin-battery-status-2.0.3.tgz#68924b329b644ddcd76b2be7ec4e00b9801effb7"
+  integrity sha512-H1vSLWbDb/qivGPVV/sjAaDnF8VEoa1uOYdrTJpYrs9vRAe3S37y8Fa5LoBuKkspWiQ5P3D8q+iTnsPF0UAO7g==
 
 cordova-plugin-contacts@^3.0.1:
   version "3.0.1"

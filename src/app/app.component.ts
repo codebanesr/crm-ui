@@ -6,7 +6,9 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { Router } from "@angular/router";
 import { PubsubService } from "./pubsub.service";
 import { Subscription } from "rxjs";
-import { AuthenticationService } from 'src/authentication.service';
+import { AuthenticationService } from "src/authentication.service";
+import { BatteryStatus } from "@ionic-native/battery-status/ngx";
+import { AgentService } from "./agent.service";
 
 @Component({
   selector: "app-root",
@@ -82,6 +84,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private menuController: MenuController,
     private pubsub: PubsubService,
     public authService: AuthenticationService,
+    private batteryStatus: BatteryStatus,
+    private agentService: AgentService
   ) {
     this.initializeApp();
   }
@@ -98,18 +102,27 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   heading: string = "Leads";
-  
+
   showNav: boolean = false;
   subz: Subscription;
+  batteryStatusSubz: Subscription;
   ngOnInit() {
     this.subz = this.pubsub.$sub("HEADING", (data) => {
       this.heading = data.heading;
     });
+
+    this.batteryStatusSubz = this.batteryStatus
+      .onChange()
+      .subscribe((status) => {
+        this.agentService.updateBatteryStatus(status.level).subscribe((res) => {
+          console.log(res);
+        });
+      });
   }
 
   ngOnDestroy() {
     this.subz.unsubscribe();
-
+    this.batteryStatusSubz.unsubscribe();
   }
 
   logout() {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
+import { BatteryStatusResponse } from '@ionic-native/battery-status/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,10 @@ export class AgentService {
       const blob = new Blob([data], { type: 'application/octet-stream' });
       saveAs(blob, fileName+".xlsx");
     })
+  }
+
+
+  updateBatteryStatus(batLvl: Number) {
+    return this.http.post(`${environment.apiUrl}/agent/batteryStatus`, status);
   }
 }
