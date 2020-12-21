@@ -30,6 +30,8 @@ import { NzUploadFile } from "ng-zorro-antd/upload";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { ActionSheetController, Platform } from "@ionic/angular";
+import { MatDialog } from "@angular/material/dialog";
+import { GeomarkerComponent } from "src/app/geomarker/geomarker.component";
 defineCustomElements(window);
 
 @Component({
@@ -49,6 +51,7 @@ export class LeadSoloComponent implements OnInit {
     private contacts: Contacts,
     private uploadService: UploadService,
     private actionSheetCtrl: ActionSheetController,
+    public dialog: MatDialog
     // private filePath: FilePath
   ) {}
 
@@ -259,6 +262,18 @@ export class LeadSoloComponent implements OnInit {
         this.toast.fail(error.message[0]);
       }
     );
+  }
+
+  openMap(coordinates) {
+    this.dialog.open(GeomarkerComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      data: {
+        coordinates: [{lat: coordinates[0], lng: coordinates[1]}]
+      }
+    });
   }
 
   checkSubmissionStatus(): boolean {

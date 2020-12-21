@@ -24,6 +24,7 @@ import { Contacts } from "@ionic-native/contacts/ngx";
 import { DemoMaterialModule } from "./material/material.module";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -42,6 +43,7 @@ import { environment } from '../environments/environment';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
     CallNumber,
     Contacts,
     StatusBar,

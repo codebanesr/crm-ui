@@ -168,7 +168,7 @@
                     <p>
                       Created at {{h.createdAt | date:"medium"}}
                     </p>
-                    <p>Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</p>
+                    <a (click)="openMap(h.geoLocation.coordinates)">Coordinates: {{h.geoLocation.coordinates[0] + ", "+ h.geoLocation.coordinates[1]}}</a>
                     <p style="width: 100%;">{{h.notes}}</p>
                     <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">{{jsonStringify(el)}}
                     </p>

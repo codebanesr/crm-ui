@@ -1,0 +1,22 @@
+<!-- (mapClick)="addMarker($event)" -->
+
+<div style="height: 100%;">
+  <button mat-icon-button mat-dialog-close
+    style="position: absolute; z-index: 11; right: 10px;"  
+  >x</button>
+  <google-map height="100%"
+    width="100%"
+    [center]="center"
+    [zoom]="zoom"
+    (mapMousemove)="move($event)"
+    (mapRightclick)="removeLastMarker()">
+  <map-marker #marker
+        *ngFor="let markerPosition of markerPositions"
+        [position]="markerPosition"
+        [options]="markerOptions"
+        (mapClick)="openInfoWindow(marker)"></map-marker>
+
+  <map-polyline [path]="vertices"></map-polyline>
+  <map-info-window>Info Window content</map-info-window>
+  </google-map>
+</div>

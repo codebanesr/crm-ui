@@ -24,9 +24,12 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ProfileComponent } from '../profile/profile.component';
 import { AddConfigComponent, MappingComponent } from "../mapping/mapping.component";
+import { GeomarkerComponent } from "../geomarker/geomarker.component";
+import {GoogleMapsModule} from '@angular/google-maps';
 
 @NgModule({
   imports: [
+    GoogleMapsModule,
     NgxMatSelectSearchModule,
     ScrollingModule,
     CommonModule,
@@ -40,6 +43,7 @@ import { AddConfigComponent, MappingComponent } from "../mapping/mapping.compone
   ],
   declarations: [
     ProfileComponent,
+    GeomarkerComponent,
     FollowupComponent,
     HomePage,
     LeadSoloComponent,

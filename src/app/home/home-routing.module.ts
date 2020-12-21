@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { CampaignCreateComponent } from "../campaign-create/campaign-create.component";
 import { CampaignComponent } from "../campaign/campaign.component";
 import { FollowupComponent } from "../followup/followup.component";
+import { GeomarkerComponent } from "../geomarker/geomarker.component";
 import { InvoiceComponent } from "../invoice/invoice.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { MappingComponent } from "../mapping/mapping.component";
@@ -17,6 +18,11 @@ import { LeadSoloComponent } from "./lead-solo/lead-solo.component";
 import { LeadsComponent } from "./leads/leads.component";
 
 const routes: Routes = [
+  {
+    path: "geomarker",
+    component: GeomarkerComponent,
+    pathMatch: "full",
+  },
   {
     path: "welcome-slides",
     component: WelcomeSlidesComponent,
