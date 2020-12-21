@@ -34,6 +34,6 @@ export class AgentService {
 
 
   updateBatteryStatus(batLvl: Number) {
-    return this.http.post(`${environment.apiUrl}/agent/batteryStatus`, status);
+    return this.http.post(`${environment.apiUrl}/agent/batteryStatus`, {batLvl});
   }
 }

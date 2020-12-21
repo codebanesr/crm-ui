@@ -25,6 +25,7 @@ import { DemoMaterialModule } from "./material/material.module";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { BatteryStatus } from "@ionic-native/battery-status/ngx";
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -44,6 +45,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
+    BatteryStatus,
     CallNumber,
     Contacts,
     StatusBar,
