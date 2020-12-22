@@ -17,6 +17,7 @@ export class LeadsService {
   constructor(private http: HttpClient) {}
 
   getLeads(options: {
+    campaignId: string;
     page: number;
     perPage: number;
     showCols?: string[];

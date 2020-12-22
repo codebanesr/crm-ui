@@ -81,10 +81,16 @@ export class LeadsComponent implements OnInit {
   }
 
   async onCampaignSelect() {
-    const result = await this.leadsService.getLeadMappings(
-      this.selectedCampaign._id
-    );
-    this.typeDict = result.typeDict;
+    this.leadOptions.campaignId = this.selectedCampaign._id;
+    this.getData();
+
+    // if all campaigns option is selected do not call this api
+    if(this.selectedCampaign._id !== 'all') {
+      const result = await this.leadsService.getLeadMappings(
+        this.selectedCampaign._id
+      );
+      this.typeDict = result.typeDict;
+    }
   }
 
   usersCount: number;
@@ -105,6 +111,7 @@ export class LeadsComponent implements OnInit {
 
   leadOptions: {
     page: number;
+    campaignId: string;
     perPage: number;
     showCols?: string[];
     searchTerm: string;
@@ -114,6 +121,7 @@ export class LeadsComponent implements OnInit {
     perPage: this.perPage || 1,
     searchTerm: "",
     filters: { assigned: true },
+    campaignId: 'all'
   };
   isEmpty: boolean;
   getData() {
