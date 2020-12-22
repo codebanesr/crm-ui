@@ -9,6 +9,12 @@ import { Subscription } from "rxjs";
 import { AuthenticationService } from "src/authentication.service";
 import { BatteryStatus } from "@ionic-native/battery-status/ngx";
 import { AgentService } from "./agent.service";
+import {
+  BackgroundGeolocation,
+  BackgroundGeolocationConfig,
+  BackgroundGeolocationEvents,
+  BackgroundGeolocationResponse,
+} from "@ionic-native/background-geolocation/ngx";
 
 @Component({
   selector: "app-root",
@@ -85,7 +91,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private pubsub: PubsubService,
     public authService: AuthenticationService,
     private batteryStatus: BatteryStatus,
-    private agentService: AgentService
+    private agentService: AgentService,
+    private backgroundGeolocation: BackgroundGeolocation
   ) {
     this.initializeApp();
   }
@@ -104,8 +111,10 @@ export class AppComponent implements OnInit, OnDestroy {
   heading: string = "Leads";
 
   showNav: boolean = false;
+
   subz: Subscription;
   batteryStatusSubz: Subscription;
+
   ngOnInit() {
     this.subz = this.pubsub.$sub("HEADING", (data) => {
       this.heading = data.heading;
@@ -118,9 +127,37 @@ export class AppComponent implements OnInit, OnDestroy {
           console.log(res);
         });
       });
+
+    const config: BackgroundGeolocationConfig = {
+      desiredAccuracy: 10,
+      stationaryRadius: 20,
+      distanceFilter: 30,
+      debug: false, //  enable this hear sounds for background-geolocation life-cycle.
+      stopOnTerminate: false, // enable this to clear background location settings when the app terminates,
+      notificationText: "Tracking Geolocation",
+    };
+
+    this.backgroundGeolocation.configure(config).then(() => {
+      console.log("promise for background geolocation resolved");
+      this.backgroundGeolocation
+        .on(BackgroundGeolocationEvents.location)
+        .subscribe((location: BackgroundGeolocationResponse) => {
+          this.agentService.addVisitTrack({coordinate: {lat: location.latitude, lng: location.longitude}}).subscribe(vt=>{
+            console.log("added visit track", vt);
+          })
+        });
+    }).catch(e=>{
+      console.log("error occured while starting background location");
+    });
+
+
+    this.backgroundGeolocation.start();
   }
 
   ngOnDestroy() {
+    console.log(
+      "finishing all tasks, destroying app component, geolocation and battery wont work"
+    );
     this.subz.unsubscribe();
     this.batteryStatusSubz.unsubscribe();
   }

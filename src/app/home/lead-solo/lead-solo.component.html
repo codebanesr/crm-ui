@@ -72,7 +72,7 @@
                     {{selectedLead[key]}}
                   </button>
 
-                  <a href="whatsapp://send?phone={{selectedLead[key]}}" mat-raised-button mat-icon-button><ion-icon style="font-size: 1.3rem;font-weight: 800;" name="logo-whatsapp"></ion-icon></a>
+                  <a [href]="getSafeWhatsAppUrl(selectedLead[key])" mat-raised-button mat-icon-button><ion-icon style="font-size: 1.3rem;font-weight: 800;" name="logo-whatsapp"></ion-icon></a>
                 </div>
                 <!-- <div *ngIf="isEmail(selectedLead[key])">
                   <button mat-raised-button><ion-icon name="mail-outline"></ion-icon> {{selectedLead[key]}} </button>

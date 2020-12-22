@@ -32,6 +32,7 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { ActionSheetController, Platform } from "@ionic/angular";
 import { MatDialog } from "@angular/material/dialog";
 import { GeomarkerComponent } from "src/app/geomarker/geomarker.component";
+import { DomSanitizer } from "@angular/platform-browser";
 defineCustomElements(window);
 
 @Component({
@@ -51,7 +52,8 @@ export class LeadSoloComponent implements OnInit {
     private contacts: Contacts,
     private uploadService: UploadService,
     private actionSheetCtrl: ActionSheetController,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _sanitizer: DomSanitizer
     // private filePath: FilePath
   ) {}
 
@@ -263,6 +265,11 @@ export class LeadSoloComponent implements OnInit {
       }
     );
   }
+
+  getSafeWhatsAppUrl(phoneNumber: string) {
+    return this._sanitizer.bypassSecurityTrustUrl(`whatsapp://send?phone=${phoneNumber}`);
+  }
+
 
   openMap(coordinates) {
     this.dialog.open(GeomarkerComponent, {

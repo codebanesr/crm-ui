@@ -26,6 +26,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { BatteryStatus } from "@ionic-native/battery-status/ngx";
+import { BackgroundGeolocation } from "@ionic-native/background-geolocation/ngx";
+
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -45,6 +47,7 @@ import { BatteryStatus } from "@ionic-native/battery-status/ngx";
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
+    {provide: BackgroundGeolocation, useClass: BackgroundGeolocation},
     BatteryStatus,
     CallNumber,
     Contacts,

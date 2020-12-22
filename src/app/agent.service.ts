@@ -36,4 +36,14 @@ export class AgentService {
   updateBatteryStatus(batLvl: Number) {
     return this.http.post(`${environment.apiUrl}/agent/batteryStatus`, {batLvl});
   }
+
+
+  addVisitTrack(payload: {coordinate: {lat: number, lng: number}}) {
+    return this.http.post(`${environment.apiUrl}/agent/visitTrack`, payload);
+  }
+
+
+  getVisitTrack(userIds: string[]) {
+    return this.http.post(`${environment.apiUrl}/agent/visitTrack/get`, userIds);
+  }
 }
