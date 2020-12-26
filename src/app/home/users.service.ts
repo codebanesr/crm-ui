@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { ResellerOrganization } from "../reseller/reseller-list/reseller-organization.interface";
 import { User } from "./interfaces/user";
 
 @Injectable({
@@ -36,6 +37,12 @@ export class UsersService {
   getAllUsersHack() {
     return this.http.get<{ results: User[] }>(`${environment.apiUrl}/user`);
   }
+
+
+  getAllResellers() {
+    return this.http.get<{ results: User[] }>(`${environment.apiUrl}/reseller`);
+  }
+
   transformFilterObjectToQueryParams(paramObject) {
     return Object.keys(paramObject)
       .map((key) => key + "=" + paramObject[key])
@@ -73,5 +80,14 @@ export class UsersService {
       userEmail,
       dateRange,
     });
+  }
+
+  createReseller(resellerData: any) {
+    return this.http.post(`${environment.apiUrl}/user/reseller`, resellerData);
+  }
+
+
+  getAllResellerOrganizations() {
+    return this.http.get(`${environment.apiUrl}/organization/reseller`);
   }
 }

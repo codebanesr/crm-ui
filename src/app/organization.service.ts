@@ -33,4 +33,8 @@ export class OrganizationService {
     });
   }
   
+
+  updateOrganizationQuota(quotaObj) {
+    return this.http.post(`${environment.apiUrl}/organization/quota`, quotaObj);
+  }
 }

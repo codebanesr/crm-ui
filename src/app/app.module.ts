@@ -34,7 +34,6 @@ import { BackgroundGeolocation } from "@ionic-native/background-geolocation/ngx"
   entryComponents: [],
   imports: [
     ModantdModule,
-    NgZorroAntdMobileModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

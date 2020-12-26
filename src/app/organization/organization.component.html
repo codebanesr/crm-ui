@@ -11,7 +11,7 @@
     </span> -->
   
     <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="handleIconClick($event)" accept=".jpg,.jpeg,.png,.tif,.tiff,.gif"/>
-    <form [formGroup]="organizationForm" (ngSubmit)="submitForm()">
+    <form [formGroup]="organizationForm">
       <mat-form-field appearance="outline" class="mat-full-width">
         <mat-label>
           Full Name
@@ -22,9 +22,9 @@
       </mat-form-field>
   
       <mat-form-field appearance="outline" class="mat-full-width">
-        <mat-label nzRequired nzFor="organizationName">Organization Name</mat-label>
+        <mat-label nzRequired nzFor="name">Organization Name</mat-label>
   
-        <input matInput formControlName="organizationName" id="organizationName" />
+        <input matInput formControlName="name" id="name" />
         <ng-template #userErrorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">
             Please input your username!
@@ -84,7 +84,7 @@
         </mat-error>
       </mat-form-field>
   
-      <button mat-raised-button color="primary">Register</button>
+      <button mat-raised-button color="primary" (click)="submitForm()">Register</button>
     </form>
   </div>
 </ion-content>

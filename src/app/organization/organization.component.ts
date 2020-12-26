@@ -87,7 +87,7 @@ export class OrganizationComponent implements OnInit {
       });
   };
 
-  organizationNameValidator = this.attributeValidator('organizationName');
+  organizationNameValidator = this.attributeValidator('name');
 
 
   organizationImage = new FormControl('/assets/icon/noimage.jpg');
@@ -95,7 +95,7 @@ export class OrganizationComponent implements OnInit {
   password= new FormControl([null], [Validators.required]);
   checkPassword= new FormControl([null], [Validators.required, this.confirmationValidator]);
   fullName= new FormControl([null], [Validators.required]);
-  organizationName= new FormControl([''],
+  name= new FormControl([''],
     [
       Validators.required,
       Validators.maxLength(12),
@@ -112,7 +112,7 @@ export class OrganizationComponent implements OnInit {
       password: this.password,
       checkPassword: this.checkPassword,
       fullName: this.fullName,
-      organizationName: this.organizationName,
+      name: this.name,
       phoneNumber: this.phoneNumber,
       otp: this.otp,
       agree: this.agree,
@@ -155,7 +155,7 @@ export class OrganizationComponent implements OnInit {
   }
 
   async handleIconClick(event) {
-    const result: any = await this.uploadService.uploadFile(`${this.organizationName.value}_${new Date().getTime()}`, event.target.files[0]);
+    const result: any = await this.uploadService.uploadFile(`${this.name.value}_${new Date().getTime()}`, event.target.files[0]);
     this.organizationImage.setValue(result.Location);
     console.log(this.organizationForm.value, this.organizationImage.value);
   }

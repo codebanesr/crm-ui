@@ -8,11 +8,24 @@
     <!-- <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
     <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a> -->
     <ng-container *ngIf="leadFilter">
-      <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)"
+      <!-- <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)"
         [nzColor]="'magenta'">
         {{typeDict[key].label}} :
         {{typeDict[key].type === 'date' ? ((leadFilter[key][0]|date)+" to "+(leadFilter[key][1]|date)): leadFilter[key]}}
-      </nz-tag>
+      </nz-tag> -->
+
+        <mat-chip-list #chipList aria-label="Fruit selection">
+          <mat-chip
+            *ngFor="let key of objectkeys(leadFilter);"
+            [selectable]="true"
+            [removable]="true"
+            (removed)="handleTagRemoval(key)">
+            {{typeDict[key].label}} :
+            {{typeDict[key].type === 'date' ? ((leadFilter[key][0]|date)+" to "+(leadFilter[key][1]|date)): leadFilter[key]}}
+            <mat-icon matChipRemove>x</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      
     </ng-container>
   </div>
 
@@ -244,7 +257,7 @@
                               <mat-label>{{item.label}}</mat-label>
 
                               <textarea matInput placeholder="Controlled autosize"
-                                [nzAutosize]="{ minRows: 3, maxRows: 5 }" id="{{item.name}}"
+                                id="{{item.name}}"
                                 placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
                                 ></textarea>
 
@@ -261,45 +274,42 @@
                             <div *ngSwitchCase="'paragraph'">
                               <ng-container>
                                 <mat-label>{{item.label}}</mat-label>
-
-                                <nz-input-group [nzSuffix]="inputClearTpl">
-                                  <input type="text" matInput [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                <input matInput type="text" matInput [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
                                     placeholder="input with clear icon" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
-                                </nz-input-group>
-
                               </ng-container>
-
-                              <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill"
-                                  nzType="close-circle" *ngIf="item.value" (click)="item.value = null"></i>
-                              </ng-template>
                             </div>
                             <div *ngSwitchCase="'autocomplete'">
                               <ng-container>
                                 <mat-label>{{item.label}}</mat-label>
 
-                                <nz-select id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                                  <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label"></nz-option>
-                                </nz-select>
+                                <mat-select id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                  <mat-option *ngFor="let v of item.values" [value]="v.value"> {{v.label}} </mat-option>
+                                </mat-select>
                               </ng-container>
                             </div>
                             <div *ngSwitchCase="'checkbox'">
                               <ng-container>
                                 <mat-label>{{item.label}}</mat-label>
 
-                                <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
+                                <!-- <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
                                   [nzValue]="v.value" >
                                   <span>{{v.label}}</span>
-                                </label>
+                                </label> -->
+                                <mat-checkbox [(ngModel)]="v.value" *ngFor="let v of item.values">
+                                  {{v.label}}
+                                </mat-checkbox>
 
                               </ng-container>
                             </div>
                             <ng-container *ngSwitchCase="'radio'">
                               <mat-label>{{item.label}}
                               </mat-label>
-
-                              <nz-radio-group [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                                <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
-                              </nz-radio-group>
+                              <mat-radio-group
+                                aria-labelledby="molecule-design-radio" [(ngModel)]="item.value">
+                                <mat-radio-button class="example-radio-button" *ngFor="let v of item.values" [value]="v.value">
+                                  {{v.label}}
+                                </mat-radio-button>
+                              </mat-radio-group>
 
                             </ng-container>
                             <ng-container *ngSwitchCase="'button'">
@@ -339,7 +349,7 @@
 
                 <mat-form-field class="mat-full-width">
                   <mat-label>Body</mat-label>
-                  <textarea matInput placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+                  <textarea matInput placeholder="Controlled autosize"
                     formControlName="content"></textarea>
                 </mat-form-field>
 
@@ -382,17 +392,26 @@
 
 <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
   (nzOnClose)="closeFilterDrawer()">
-  <nz-collapse [nzBordered]="false">
-    <nz-collapse-panel [nzHeader]="'Lead Filter'" [nzActive]="false">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Lead Filter
+      </mat-expansion-panel-header>
       <ng-container *ngIf="typeDict">
         <ng-container *ngFor="let key of objectkeys(typeDict)">
           <nz-descriptions nzLayout="vertical">
             <nz-descriptions-item *ngIf="typeDict[key]" [nzTitle]="typeDict[key].label">
               <ng-container [ngSwitch]="typeDict[key].type">
                 <ng-container *ngSwitchCase="'date'">
-                  <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
+                  <!-- <nz-range-picker [nzMode]="dateMode" [(ngModel)]="leadFilter[key]"
                     [ngModelOptions]="{standalone: true}">
-                  </nz-range-picker>
+                  </nz-range-picker> -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput [matDatepicker]="picker"  [(ngModel)]="leadFilter[key]">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'number'">
@@ -410,10 +429,11 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'select'">
-                  <nz-select nzMode="default" [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
-                    <nz-option *ngFor="let option of typeDict[key].options" [nzLabel]="option" [nzValue]="option">
-                    </nz-option>
-                  </nz-select>
+                  <mat-select [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
+                    <mat-option matInput *ngFor="let option of typeDict[key].options" [value]="option">
+                      {{option}}
+                    </mat-option>
+                  </mat-select>
                 </ng-container>
               </ng-container>
             </nz-descriptions-item>
@@ -421,27 +441,20 @@
         </ng-container>
         <button nz-button (click)="fetchNextLead()">Submit</button>
       </ng-container>
-    </nz-collapse-panel>
-  </nz-collapse>
+    </mat-expansion-panel>
+  </mat-accordion>
 </nz-drawer>
 
 
 <!-- user reassignment drawer -->
 <nz-drawer [nzClosable]="false" [nzVisible]="isReassignmentDrawerVisible" nzPlacement="bottom" nzHeight="80vh"
   (nzOnClose)="closeReassignmentDrawer()">
-  <ul nz-list [nzDataSource]="usersForReassignment" nzSize="small">
-    <nz-list-header>
-      <h2>Reassign handler</h2>
-    </nz-list-header>
-    <li nz-list-item *ngFor="let user of usersForReassignment" nzNoFlex>
-      <ul nz-list-item-actions>
-        <nz-list-item-action>
-          <a>Select</a>
-        </nz-list-item-action>
-      </ul>
-      {{ user.email }}
-    </li>
-  </ul>
+  <h3>Users</h3>
+  <mat-selection-list #shoes [multiple]="false">
+    <mat-list-option *ngFor="let user of usersForReassignment">
+      {{user.email}}
+    </mat-list-option>
+  </mat-selection-list>
 </nz-drawer>
 
 <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"

@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path: 'reseller',
+    loadChildren: () => import('./reseller/reseller.module').then(m=>m.ResellerModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

@@ -23,41 +23,31 @@
         Two passwords that you enter is inconsistent!
       </mat-error>
     </mat-form-field>
-    
+
+    <!-- company name -->
     <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Internal Roles</mat-label>
-      <mat-select formControlName="roleType">
-        <mat-option value="admin">Admin</mat-option>
-        <mat-option value="frontline">Frontline</mat-option>
-        <mat-option value="manager">Manager</mat-option>
-        <mat-option value="seniorManager">Senior Manager</mat-option>
-      </mat-select>
+      <mat-label>Company Name</mat-label>
+      <input matInput formControlName="companyName" />
+    </mat-form-field>
+
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Domain</mat-label>
+      <input matInput formControlName="domain" />
+      <mat-error *ngIf="signupForm.controls.domain.hasError('required')">
+        Domain is required!
+      </mat-error>
     </mat-form-field>
   
+    <!-- address -->
     <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Reports To</mat-label>
-      <mat-select formControlName="reportsTo">
-        <mat-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</mat-option>
-      </mat-select>
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" />
+      <mat-error *ngIf="signupForm.controls.address.hasError('required')">
+        Address is required!
+      </mat-error>
     </mat-form-field>
-  
-  
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Ext. Roles</mat-label>
-      <mat-select formControlName="roles" multiple="true">
-        <mat-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Manages</mat-label>
-      <mat-select formControlName="manages" multiple="true">
-        <mat-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  
-  
+
+    <!-- KYC space -->
     <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Mobile Number</mat-label>
       <input matInput formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel" />
