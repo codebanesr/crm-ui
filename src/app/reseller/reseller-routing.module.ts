@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { CreateResellerComponent } from "./create-reseller/create-reseller.component";
-import { ResellerOrganizationList } from "./reseller-list/reseller-list.component";
+import { ResellerOrganizationList } from "./reseller-organization-list/reseller-organization-list.component";
 
 const routes: Routes = [
   {

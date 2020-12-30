@@ -104,7 +104,9 @@ export class LeadSoloComponent implements OnInit {
   }
 
   onPhoneClick(number: string) {
-    console.log(number);
+    if(number.length<=10 && !number.startsWith('+')) {
+      number = '+91' + number;
+    }
     this.callNumber
       .callNumber(number.trim(), true)
       .then((res) => console.log("Launched dialer!", res))
@@ -267,6 +269,9 @@ export class LeadSoloComponent implements OnInit {
   }
 
   getSafeWhatsAppUrl(phoneNumber: string) {
+    if(phoneNumber.length<=10 && !phoneNumber.startsWith('+')) {
+      phoneNumber = '+91'
+    }
     return this._sanitizer.bypassSecurityTrustUrl(`whatsapp://send?phone=${phoneNumber}`);
   }
 

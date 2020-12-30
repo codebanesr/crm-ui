@@ -4,7 +4,7 @@
 
 export const environment = {
   production: true,
-  apiUrl: "http://13.232.152.87:3000",
+  apiUrl: "https://moleculesystem.com/api",
   accessKeyId: "AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
 };

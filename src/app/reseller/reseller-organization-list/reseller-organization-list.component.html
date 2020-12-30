@@ -74,6 +74,10 @@
 
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-data="row">
+    <button mat-menu-item (click)="getAllTransactions(data)">
+      <mat-icon>payment</mat-icon>
+      <span>Last 10 Payments</span>
+    </button>
     <button mat-menu-item>
       <mat-icon>receipt_long</mat-icon>
       <span>Send Invoice</span>

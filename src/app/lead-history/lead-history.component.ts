@@ -29,11 +29,11 @@ interface IHistory {
   campaign: string;
 }
 @Component({
-  selector: "app-transactions",
-  templateUrl: "./transactions.component.html",
-  styleUrls: ["./transactions.component.scss"],
+  selector: "app-lead-history",
+  templateUrl: "./lead-history.component.html",
+  styleUrls: ["./lead-history.component.scss"],
 })
-export class TransactionsComponent implements OnInit {
+export class LeadHistoryComponent implements OnInit {
   constructor(
     private leadService: LeadsService,
     public modalController: ModalController,

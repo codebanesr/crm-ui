@@ -1,24 +1,23 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UsersService } from 'src/app/home/users.service';
 import { ResellerOrganization } from './reseller-organization.interface';
 import * as moment from "moment";
 import { OrganizationService } from 'src/app/organization.service';
-
-
-
+import { IRowData, ITransaction } from './organization-list.interfaces';
 
 @Component({
-  selector: 'app-reseller-list',
-  templateUrl: './reseller-list.component.html',
-  styleUrls: ['./reseller-list.component.scss'],
+  selector: 'app-reseller-organization-list',
+  templateUrl: './reseller-organization-list.component.html',
+  styleUrls: ['./reseller-organization-list.component.scss'],
 })
 export class ResellerOrganizationList implements OnInit {
 
   constructor(
     private userService: UsersService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public organizationService: OrganizationService,
   ) { }
 
   resellerOrganizations: ResellerOrganization[];
@@ -39,6 +38,31 @@ export class ResellerOrganizationList implements OnInit {
     })
   }
 
+  transactions: ITransaction[] = [];
+  getAllTransactions(data: any) {
+    console.log(data);
+    this.organizationService.getAllTransactions(data.orgId).subscribe((result: ITransaction[])=>{
+      this.transactions = result;
+      this.openResellerTransactionModal();
+    }, error=>{
+      console.log(error);
+    });
+
+  }
+
+  openResellerTransactionModal() {
+    const dialogRef = this.dialog.open(ResellerTransactionModal, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '100%',
+      width: '100%',
+      data: this.transactions
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("dialog closed", result);
+    });
+  }
 
   openAddUserQuota(rowData): void {
     console.log(rowData)
@@ -52,19 +76,6 @@ export class ResellerOrganizationList implements OnInit {
       console.log(result);
     });
   }
-}
-
-
-interface IRowData {
-  createdAt: Date,
-  credit: number,
-  orgId: string,
-  orgName: string,
-  resellerId: string,
-  resellerName: string,
-  updatedAt: Date,
-  __v: number,
-  _id: string
 }
 
 @Component({
@@ -84,22 +95,30 @@ export class AddUserQuotaDialog implements OnInit{
     this.dialogRef.close();
   }
 
+  addUserQuota() {
+    this.organizationService.updateOrganizationQuota(this.activationForm.getRawValue()).subscribe(data=>{
+      console.log(data);
+    }, error=>{
+      console.log(error);
+    })
+  }
+
   ngOnInit() {
     this.initActivationForm();
   }
 
-
   activationForm: FormGroup;
   perUserRate = new FormControl(1500, []);
-  discount = new FormControl(20, []);
-  seats = new FormControl(5, []);
-  total = new FormControl({value: 0, disabled: true}, []);
-  months = new FormControl(1, [])
-  
+  discount = new FormControl(20, [Validators.required]);
+  seats = new FormControl(5, [Validators.required]);
+  total = new FormControl({value: 0, disabled: true}, [Validators.required]);
+  months = new FormControl(1, [Validators.required])
+  organization = new FormControl({value: this.data.orgId, disabled: true}, [Validators.required])  
   initActivationForm() {
     // value change wont be fired first time
     this.calculateTotalPrice();
     this.activationForm = this.fb.group({
+      organization: this.organization,
       perUserRate: this.perUserRate,
       discount: this.discount,
       seats: this.seats,
@@ -111,16 +130,13 @@ export class AddUserQuotaDialog implements OnInit{
       this.calculateTotalPrice();
     });
 
-
     this.discount.valueChanges.subscribe(data=>{
       this.calculateTotalPrice();
     });
 
-
     this.seats.valueChanges.subscribe(data=>{
       this.calculateTotalPrice();
     });
-
 
     this.months.valueChanges.subscribe(data=>{
       console.log(moment().add(data, 'M'))
@@ -128,6 +144,9 @@ export class AddUserQuotaDialog implements OnInit{
     })
   }
 
+  handleActivationFormSubmit() {
+    console.log("is this in use")
+  }
 
   calculateTotalPrice() {
     const discount = this.discount.value;
@@ -138,9 +157,46 @@ export class AddUserQuotaDialog implements OnInit{
     const total = perUserRate * (1-0.01*discount) * seats * months;
     this.total.setValue(total);
   }
+}
 
 
-  handleActivationFormSubmit() {  
-    this.organizationService.updateOrganizationQuota(this.activationForm.value);
+@Component({
+  selector: 'reseller-transaction-modal',
+  templateUrl: 'reseller-transaction-modal.html',
+  styles: [`
+    table {
+      width: 100%;
+    }
+    .mat-column-filler {
+      padding: 0 8px;
+      font-size: 10px;
+      text-align: center;
+    }
+    
+    .mat-header-cell, .mat-footer-cell, .mat-cell {
+      min-width: 80px;
+      box-sizing: border-box;
+    }
+    
+    .mat-header-row, .mat-footer-row, .mat-row {
+      min-width: 1920px; /* 24 columns, 80px each */
+    }`
+  ]
+})
+export class ResellerTransactionModal implements OnInit{
+
+  constructor(
+    public dialogRef: MatDialogRef<ResellerTransactionModal>,
+    @Inject(MAT_DIALOG_DATA) public transactions: ITransaction[]
+  ) {}
+
+  displayedColumns: string[] = ['seats', 'perUserRate', 'discount', 'total', 'expiresOn'];
+  ngOnInit() {
+    console.log(this.transactions);
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }
+

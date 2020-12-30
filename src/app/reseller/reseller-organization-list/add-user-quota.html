@@ -2,6 +2,10 @@
 <div mat-dialog-content>
   <form [formGroup]="activationForm" (submit)="handleActivationFormSubmit()">
     <mat-form-field>
+      <mat-label>Organization Id</mat-label>
+      <input matInput formControlName="organization" />
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Base Price</mat-label>
       <input matInput formControlName="perUserRate" />
     </mat-form-field>
@@ -29,5 +33,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.resellerId" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="data.resellerId" cdkFocusInitial (click)="addUserQuota()">Add</button>
 </div>

@@ -37,4 +37,9 @@ export class OrganizationService {
   updateOrganizationQuota(quotaObj) {
     return this.http.post(`${environment.apiUrl}/organization/quota`, quotaObj);
   }
+
+
+  getAllTransactions(organization: string) {
+    return this.http.get(`${environment.apiUrl}/organization/transactions?organization=${organization}`);
+  }
 }

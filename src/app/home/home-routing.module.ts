@@ -10,7 +10,7 @@ import { MappingComponent } from "../mapping/mapping.component";
 import { OrganizationComponent } from "../organization/organization.component";
 import { ProfileComponent } from '../profile/profile.component';
 import { SignupComponent } from "../signup/signup.component";
-import { TransactionsComponent } from "../transactions/transactions.component";
+import { LeadHistoryComponent } from "../lead-history/lead-history.component";
 import { UsersComponent } from "../users/users.component";
 import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { HomePage } from "./home.page";
@@ -80,7 +80,7 @@ const routes: Routes = [
   },
   {
     path: "transactions",
-    component: TransactionsComponent,
+    component: LeadHistoryComponent,
     pathMatch: "full",
   },
   {

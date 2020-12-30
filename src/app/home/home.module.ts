@@ -18,7 +18,7 @@ import { FollowupComponent } from "../followup/followup.component";
 import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
 import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
-import { TransactionsComponent } from "../transactions/transactions.component";
+import { LeadHistoryComponent } from "../lead-history/lead-history.component";
 import { DemoMaterialModule } from "../material/material.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -56,7 +56,7 @@ import {GoogleMapsModule} from '@angular/google-maps';
     InvoiceComponent,
     WelcomeSlidesComponent,
     LeadCreateComponent,
-    TransactionsComponent,
+    LeadHistoryComponent,
     MappingComponent,
     AddConfigComponent
   ],
