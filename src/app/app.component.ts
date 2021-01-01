@@ -82,6 +82,10 @@ export class AppComponent implements OnInit, OnDestroy {
       title: "Create Reseller",
       url: "/reseller/create",
       icon: "trash",
+    }, {
+      title: "Track Users",
+      url: "/reports/tracker",
+      icon: "trash",
     }
   ];
 
