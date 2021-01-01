@@ -24,4 +24,10 @@
                 [pageSize]="10"
                 [pageSizeOptions]="[5, 10, 25, 100]">
   </mat-paginator>
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
 </ion-content>

@@ -637,4 +637,12 @@ export class CampaignCreateComponent implements OnInit {
       }
     })
   }
+
+
+  doRefresh(event) {
+    setTimeout(() => {
+      this.subscribeToQueryParamChange();
+      event.target.complete();
+    }, 500);
+  }
 }

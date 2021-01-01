@@ -58,6 +58,13 @@ export class CampaignComponent implements OnInit {
     return item.name;
   }
 
+  doRefresh(event) {
+    setTimeout(() => {
+      this.ngOnInit();
+      event.target.complete();
+    }, 500);
+  }
+
   onPageIndexChange(index: number) {
     this.page = index;
     this.getCampaigns();

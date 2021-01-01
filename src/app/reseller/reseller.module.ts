@@ -6,9 +6,6 @@ import { DemoMaterialModule } from '../material/material.module';
 import { ResellerRoutingModule } from './reseller-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
-
-
 @NgModule({
   declarations: [
     ResellerOrganizationList,

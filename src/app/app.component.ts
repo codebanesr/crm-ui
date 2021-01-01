@@ -74,6 +74,15 @@ export class AppComponent implements OnInit, OnDestroy {
       url: "/home/followup",
       icon: "trash",
     },
+    {
+      title: "List Reseller",
+      url: "/reseller/organization/list",
+      icon: "trash",
+    },    {
+      title: "Create Reseller",
+      url: "/reseller/create",
+      icon: "trash",
+    }
   ];
 
   routeTo(url: string) {
