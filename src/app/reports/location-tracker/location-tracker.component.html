@@ -1,5 +1,31 @@
 <button mat-flat-button (click)="drawer.toggle()">Filter Results</button>
 
+
+<!-- (mapClick)="addMarker($event)" -->
+
+<div style="height: 100%;">
+  <!-- <button mat-icon-button mat-dialog-close
+    style="position: absolute; z-index: 11; right: 10px;"  
+  >x</button> -->
+  <google-map height="100%"
+    width="100%"
+    [center]="center"
+    [zoom]="zoom"
+    (mapMousemove)="move($event)"
+    (mapRightclick)="removeLastMarker()">
+  <map-marker #marker
+        *ngFor="let markerPosition of markerPositions"
+        [position]="markerPosition"
+        [options]="markerOptions"
+        (mapClick)="openInfoWindow(marker)"></map-marker>
+
+  <map-polyline [path]="vertices"></map-polyline>
+  <map-info-window>Info Window content</map-info-window>
+  </google-map>
+</div>
+
+
+
 <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
   <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
     <mat-toolbar class="header">
@@ -10,7 +36,7 @@
       </mat-toolbar-row>
     </mat-toolbar>
     <div class="contents">
-      <form [formGroup]="transactionForm" (submit)="getVisitTrack()">
+      <form [formGroup]="filterForm" (submit)="getVisitTrack()">
         <mat-form-field appearance="outline" class="mat-full-width">
           <mat-label>Campaign</mat-label>
           <mat-select formControlName="campaign" placeholder="Campaign">
@@ -20,10 +46,10 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="mat-full-width">
+        <!-- <mat-form-field appearance="outline" class="mat-full-width">
           <mat-label>Prospect Name</mat-label>
           <input placeholder="input here" matInput formControlName="prospectName" />
-        </mat-form-field>
+        </mat-form-field> -->
 
 
         <mat-form-field appearance="outline" class="mat-full-width">
@@ -39,14 +65,14 @@
 
         <mat-form-field appearance="outline" class="mat-full-width">
           <mat-label>Assigned To</mat-label>
-          <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
+          <mat-select formControlName="userIds" placeholder="Users" [multiple]="true">
             <mat-option>
               <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe" 
                 noEntriesFoundLabel="'no matching assignee found'">
               </ngx-mat-select-search>
             </mat-option>
-            <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
-              {{option.fullName}}
+            <mat-option *ngFor="let user of listOfUsers" [value]="user._id">
+              {{user.fullName}}
             </mat-option>
           </mat-select>
         </mat-form-field>

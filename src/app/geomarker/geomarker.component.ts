@@ -1,11 +1,6 @@
 import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Plugins } from '@capacitor/core';
-
-
-const { Geolocation } = Plugins;
-
 @Component({
   selector: 'app-geomarker',
   templateUrl: './geomarker.component.html',

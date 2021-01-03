@@ -180,6 +180,30 @@
                 </mat-form-field>
               </ng-container>
             </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                Autodial Settings
+              </mat-expansion-panel-header>
+
+              <form [formGroup]="autodialForm">
+                <div style="margin-bottom: 14px;">
+                  <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
+                </div>
+                <mat-form-field class="mat-full-width" appearance="outline">
+                  <mat-label aria-placeholder="Max followup / day"> Max followup / day</mat-label>
+                  <input type="number" matInput formControlName="mfupd"/>
+                </mat-form-field>
+                <mat-form-field class="mat-full-width" appearance="outline">
+                  <mat-label> Call Preview Time / seconds</mat-label>
+                  <input type="number" matInput formControlName="cpts"/>
+                </mat-form-field>
+                <mat-form-field class="mat-full-width" appearance="outline">
+                  <mat-label> Call disposition time / seconds</mat-label>
+                  <input type="number" matInput formControlName="cdts"/>
+                </mat-form-field>
+              </form>
+            </mat-expansion-panel>
     
             <mat-expansion-panel>
               <mat-expansion-panel-header>

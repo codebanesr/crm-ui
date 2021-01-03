@@ -37,7 +37,7 @@
     <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Reports To</mat-label>
       <mat-select formControlName="reportsTo">
-        <mat-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</mat-option>
+        <mat-option *ngFor="let user of listOfOption" [value]="user._id">{{user.fullName}}</mat-option>
       </mat-select>
     </mat-form-field>
   
@@ -53,7 +53,7 @@
     <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Manages</mat-label>
       <mat-select formControlName="manages" multiple="true">
-        <mat-option *ngFor="let user of listOfOption" [value]="user.email">{{user.fullName}}</mat-option>
+        <mat-option *ngFor="let user of listOfOption" [value]="user._id">{{user.fullName}}</mat-option>
       </mat-select>
     </mat-form-field>
   

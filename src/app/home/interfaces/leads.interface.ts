@@ -14,7 +14,7 @@ export interface ILead {
   followUp: string | Date;
   lastName: string;
   leadStatus: string;
-  phoneNumber: string;
+  mobilePhone: string;
   phoneNumberPrefix: string;
   product: string;
   remarks: string;

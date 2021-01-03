@@ -27,65 +27,66 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       title: "Transactions",
       url: "/home/transactions",
-      icon: "logo-steam",
+      icon: "card_membership",
     },
     {
       title: "Leads",
       url: "/home",
-      icon: "logo-steam",
+      icon: "person_search",
     },
     {
       title: "All Users",
       url: "/home/users",
-      icon: "trash",
+      icon: "supervisor_account",
     },
     {
       title: "Slides",
       url: "/home/welcome-slides",
-      icon: "trash",
+      icon: "pages",
     },
     {
       title: "Add User",
       url: "/home/users/signup",
-      icon: "heart",
+      icon: "person_add_alt_1",
     },
     {
       title: "List Campaigns",
       url: "/home/campaign/list",
-      icon: "archive",
+      icon: "format_list_bulleted",
     },
     {
       title: "Create Campaign",
       url: "/home/campaigns/create",
-      icon: "trash",
+      icon: "playlist_add",
     },
     {
       title: "Create Organization",
       url: "/home/create-organization",
-      icon: "paper-plane",
+      icon: "corporate_fare",
     },
     {
       title: "Invoice",
       url: "/home/invoice",
-      icon: "trash",
+      icon: "receipt",
     },
     {
       title: "Followup",
       url: "/home/followup",
-      icon: "trash",
+      icon: "pending_actions",
     },
     {
       title: "List Reseller",
       url: "/reseller/organization/list",
-      icon: "trash",
+      icon: "format_list_numbered",
     },    {
       title: "Create Reseller",
       url: "/reseller/create",
-      icon: "trash",
-    }, {
+      icon: "add_business",
+    }, 
+    {
       title: "Track Users",
       url: "/reports/tracker",
-      icon: "trash",
+      icon: "timeline",
     }
   ];
 

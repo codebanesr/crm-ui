@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
@@ -30,9 +30,11 @@ import { NzUploadFile } from "ng-zorro-antd/upload";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { ActionSheetController, Platform } from "@ionic/angular";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { GeomarkerComponent } from "src/app/geomarker/geomarker.component";
 import { DomSanitizer } from "@angular/platform-browser";
+import { CountdownComponent } from "ngx-countdown";
+import { EAutodial } from "./autodial.interface";
 defineCustomElements(window);
 
 @Component({
@@ -104,11 +106,13 @@ export class LeadSoloComponent implements OnInit {
   }
 
   onPhoneClick(number: string) {
-    if(number.length<=10 && !number.startsWith('+')) {
+    if(number?.length<=10 && !number.startsWith('+')) {
       number = '+91' + number;
+
+      number = number.toString().trim();
     }
     this.callNumber
-      .callNumber(number.trim(), true)
+      .callNumber(number, true)
       .then((res) => console.log("Launched dialer!", res))
       .catch((err) => console.log("Error launching dialer", err));
   }
@@ -215,6 +219,10 @@ export class LeadSoloComponent implements OnInit {
     return true;
   }
 
+  handleEvent(e) {
+    console.log(e)
+  }
+
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
     const geoLocation = await Geolocation.getCurrentPosition();
     const updateObj = {
@@ -275,6 +283,21 @@ export class LeadSoloComponent implements OnInit {
     return this._sanitizer.bypassSecurityTrustUrl(`whatsapp://send?phone=${phoneNumber}`);
   }
 
+  openAutodial() {
+    const dialogRef = this.dialog.open(LeadAutodial, {
+      data: {
+        lead: this.selectedLead
+      }
+    });
+
+
+    dialogRef.afterClosed().subscribe((result: {event: EAutodial, data: any})=>{
+      if(result.event === EAutodial.callNumber) {
+        console.log("calling number", this.selectedLead.mobilePhone);
+        this.onPhoneClick(this.selectedLead.mobilePhone)
+      }
+    })
+  }
 
   openMap(coordinates) {
     this.dialog.open(GeomarkerComponent, {
@@ -732,5 +755,32 @@ export class LeadSoloComponent implements OnInit {
     b.lastModifiedDate = new Date();
     b.name = fileName;
     return <File>theBlob;
+  }
+}
+
+
+interface ICountdown {
+  action: string,
+  left: number,
+  status: number,
+  text: string
+}
+@Component({
+  selector: 'lead-countdown-dialog',
+  templateUrl: './lead-countdown-dialog.html',
+})
+export class LeadAutodial {
+  @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
+  
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public lead: ILead,
+    public dialogRef: MatDialogRef<LeadAutodial>,
+  ) {}
+
+
+  handleCountdown(e: ICountdown) {
+    if(e.action === 'done') {
+      this.dialogRef.close({event: EAutodial.callNumber, data:{}});
+    }
   }
 }

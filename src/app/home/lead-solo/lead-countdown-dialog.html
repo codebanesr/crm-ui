@@ -1,0 +1,7 @@
+<h1 style="text-align: center;" mat-dialog-title>Autodial Active</h1>
+
+<h1 style="text-align: center; color: red"><countdown #cd1 [config]="{leftTime: 7}" (event)="handleCountdown($event)"></countdown></h1>
+<button (click)="cd1.pause()"  mat-flat-button color="accent">Pause</button>
+<button (click)="cd1.resume()"  mat-flat-button color="primary">Resume</button>
+<button (click)="cd1.stop()"  mat-flat-button color="warn">Stop</button>
+<!-- <button (click)="cd1.restart()"  mat-flat-button>restart</button> -->

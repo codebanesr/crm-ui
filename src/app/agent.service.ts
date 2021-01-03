@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
@@ -39,11 +39,19 @@ export class AgentService {
 
 
   addVisitTrack(payload: {coordinate: {lat: number, lng: number}}) {
-    return this.http.post(`${environment.apiUrl}/agent/visitTrack`, payload);
+    const accessToken = JSON.parse(localStorage.getItem("currentUser")).accessToken;
+    const headerDict = {
+      'Authorization': `Bearer ${accessToken}`
+    }
+    
+    const requestOptions = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headerDict), 
+    };    
+    return this.http.post(`${environment.apiUrl}/agent/visitTrack`, payload, requestOptions);
   }
 
 
-  getVisitTrack(userIds: string[]) {
-    return this.http.post(`${environment.apiUrl}/agent/visitTrack/get`, userIds);
+  getVisitTrack(filters: any) {
+    return this.http.post(`${environment.apiUrl}/agent/visitTrack/get`, filters);
   }
 }

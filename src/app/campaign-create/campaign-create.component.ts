@@ -135,6 +135,7 @@ export class CampaignCreateComponent implements OnInit {
   groups = [];
   assigneeFilter: FormControl;
   ngOnInit() {
+    this.initAutodialForm();
     this.initCampaignForm();
     this.subscribeToQueryParamChange();
 
@@ -170,6 +171,16 @@ export class CampaignCreateComponent implements OnInit {
         this.msg.error("Failed to fetch data for ticket id ", id);
       }
     );
+  }
+
+  autodialForm: FormGroup;
+  initAutodialForm() {
+    this.autodialForm = this.fb.group({
+      active: new FormControl(false), //active
+      mfupd: new FormControl(2), // max followup per day
+      cpts: new FormControl(), //call preview time in seconds
+      cdts: new FormControl() // call disposition time in seconds
+    })
   }
 
   getUploadedFiles() {
@@ -377,6 +388,7 @@ export class CampaignCreateComponent implements OnInit {
       uniqueCols: this.uniqueCols.filter((c) => c.checked).map((c) => c.value),
       editableCols: this.editableCols.filter((c) => c.checked).map((c) => c.value),
       browsableCols: this.browsableCols.filter((c) => c.checked).map((c) => c.value),
+      autodialSettings: this.autodialForm.value
     };
 
     if(isNew) {

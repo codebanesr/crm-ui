@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HomePage } from "./home.page";
 
 import { HomePageRoutingModule } from "./home-routing.module";
-import { LeadSoloComponent } from "./lead-solo/lead-solo.component";
+import { LeadAutodial, LeadSoloComponent } from "./lead-solo/lead-solo.component";
 import { LeadsComponent } from "./leads/leads.component";
 import { ModantdModule } from "./modantd/modantd.module";
 import { UsersComponent } from "../users/users.component";
@@ -26,10 +26,13 @@ import { ProfileComponent } from '../profile/profile.component';
 import { AddConfigComponent, MappingComponent } from "../mapping/mapping.component";
 import { GeomarkerComponent } from "../geomarker/geomarker.component";
 import {GoogleMapsModule} from '@angular/google-maps';
+import { CountdownModule } from 'ngx-countdown';
+
 
 @NgModule({
   imports: [
     GoogleMapsModule,
+    CountdownModule,
     NgxMatSelectSearchModule,
     ScrollingModule,
     CommonModule,
@@ -58,7 +61,8 @@ import {GoogleMapsModule} from '@angular/google-maps';
     LeadCreateComponent,
     LeadHistoryComponent,
     MappingComponent,
-    AddConfigComponent
+    AddConfigComponent,
+    LeadAutodial,
   ],
 })
 export class HomePageModule {}
