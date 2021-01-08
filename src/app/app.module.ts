@@ -27,6 +27,7 @@ import { environment } from '../environments/environment';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { BatteryStatus } from "@ionic-native/battery-status/ngx";
 import { BackgroundGeolocation } from "@ionic-native/background-geolocation/ngx";
+import { CallLog } from "@ionic-native/call-log/ngx";
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { BackgroundGeolocation } from "@ionic-native/background-geolocation/ngx"
     {provide: BackgroundGeolocation, useClass: BackgroundGeolocation},
     BatteryStatus,
     CallNumber,
+    CallLog,
     Contacts,
     StatusBar,
     SplashScreen,

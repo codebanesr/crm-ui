@@ -1,13 +1,5 @@
 <nz-content class="parent">
   <div class="top">    
-    <button mat-flat-button (click)="openAutodial()"> Autodial</button>
-    <!-- <nz-select nzMode="default" nzPlaceHolder="Inserted are removed" [(ngModel)]="selectedCampaign">
-      <nz-option *ngFor="let campaign of campaignList" [nzLabel]="campaign.campaignName" [nzValue]="campaign._id">
-      </nz-option>
-    </nz-select> -->
-
-    <!-- <a nz-button nzType="link" (click)="fetchNextLead()">Fetch Lead</a>
-    <a nz-button nzType="link" (click)="openFilterDrawer()">Add Filters</a> -->
     <ng-container *ngIf="leadFilter">
       <!-- <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)"
         [nzColor]="'magenta'">
@@ -452,7 +444,7 @@
   (nzOnClose)="closeReassignmentDrawer()">
   <h3>Users</h3>
   <mat-selection-list #shoes [multiple]="false">
-    <mat-list-option *ngFor="let user of usersForReassignment">
+    <mat-list-option *ngFor="let user of usersForReassignment" (click)="assignTo(user)">
       {{user.email}}
     </mat-list-option>
   </mat-selection-list>

@@ -13,7 +13,7 @@ import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
 import { NzTreeNode } from "ng-zorro-antd/tree";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CallNumber } from "@ionic-native/call-number/ngx";
 const { Geolocation, Camera } = Plugins;
 import { en_US, ToastService } from "ng-zorro-antd-mobile";
@@ -35,6 +35,10 @@ import { GeomarkerComponent } from "src/app/geomarker/geomarker.component";
 import { DomSanitizer } from "@angular/platform-browser";
 import { CountdownComponent } from "ngx-countdown";
 import { EAutodial } from "./autodial.interface";
+import { CallLog } from '@ionic-native/call-log/ngx';
+
+declare let PhoneCallTrap: any;
+
 defineCustomElements(window);
 
 @Component({
@@ -55,7 +59,8 @@ export class LeadSoloComponent implements OnInit {
     private uploadService: UploadService,
     private actionSheetCtrl: ActionSheetController,
     public dialog: MatDialog,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private callLog: CallLog
     // private filePath: FilePath
   ) {}
 
@@ -94,6 +99,35 @@ export class LeadSoloComponent implements OnInit {
     this.initEmailForm();
     this.fetchUsersForReassignment();
     this.initContactForm();
+
+    this.initCallTrap();
+  }
+
+
+  initCallTrap() {
+    const today = new Date();
+    const pastHour = new Date(today);
+    pastHour.setHours(today.getHours() - 1);
+    const fromTime = pastHour.getTime();
+
+    PhoneCallTrap.onCall((state) => {
+      switch (state) {
+          case "RINGING":
+              break;
+          case "OFFHOOK":
+                break;
+    
+          case "IDLE":
+              const record = this.callLog.getCallLog([{ 
+                name: "number",
+                value: `%91%`,
+                operator: "like"
+              }]);
+
+              console.log("PhoneCallTrap phone", JSON.stringify(record));
+              break;
+        }
+    });  
   }
 
   contactForm!: FormGroup;
@@ -113,11 +147,11 @@ export class LeadSoloComponent implements OnInit {
     }
     this.callNumber
       .callNumber(number, true)
-      .then((res) => console.log("Launched dialer!", res))
+      .then((res) => {console.log("Launched dialer!", res) })
       .catch((err) => console.log("Error launching dialer", err));
   }
 
-  selectedCampaign = {} as any;
+  selectedCampaign: ICampaign;
   subscribeToQueryParamChange() {
     this.activatedRoute.queryParams.subscribe(
       async (data) => {
@@ -190,6 +224,7 @@ export class LeadSoloComponent implements OnInit {
 
     /** modified on Dec 17 please verify if it breaks anything */
     this.selectedCampaign = campaignObject[0];
+    this.openAutodial();
 
     this.leadGroups = campaignObject[0]?.groups;
     this.contactGroup = this.leadGroups.filter(g=>g.label === 'contact')[0];
@@ -285,8 +320,9 @@ export class LeadSoloComponent implements OnInit {
 
   openAutodial() {
     const dialogRef = this.dialog.open(LeadAutodial, {
+      disableClose: true,
       data: {
-        lead: this.selectedLead
+        autodialSettings: this.selectedCampaign.autodialSettings
       }
     });
 
@@ -729,6 +765,16 @@ export class LeadSoloComponent implements OnInit {
   }
 
 
+  assignTo(user) {
+    console.log(this.selectedLead.email, user.email, this.selectedLead);
+    this.leadsService.reassignLead(this.selectedLead.email, user.email, this.selectedLead).subscribe(data=>{
+      console.log(data);
+    }, error=>{
+      console.log(error);
+    });
+  }
+
+
   b64toBlob(b64Data, contentType = '', sliceSize = 512) {
     const byteCharacters = atob(b64Data);
     const byteArrays = [];
@@ -769,14 +815,24 @@ interface ICountdown {
   selector: 'lead-countdown-dialog',
   templateUrl: './lead-countdown-dialog.html',
 })
-export class LeadAutodial {
+export class LeadAutodial implements OnInit{
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
   
   constructor(
-    @Inject(MAT_DIALOG_DATA) public lead: ILead,
+    @Inject(MAT_DIALOG_DATA) public data: Pick<ICampaign, 'autodialSettings'>,
     public dialogRef: MatDialogRef<LeadAutodial>,
+    private router: Router
   ) {}
 
+
+  ngOnInit() {
+    console.log(this.data.autodialSettings)
+  }
+
+  navigateToCampaignList() {
+    this.dialogRef.close();
+    this.router.navigate(["home", "campaign", "list"]);
+  }
 
   handleCountdown(e: ICountdown) {
     if(e.action === 'done') {

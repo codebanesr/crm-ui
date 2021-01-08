@@ -17,4 +17,10 @@ export interface ICampaign {
   startDate: string;
   endDate: string;
   groups: { label: string; value: string[]; _id: string }[];
+  autodialSettings: {
+    active: boolean,
+    cdts: number,
+    cpts: number,
+    mfupd: number
+  }
 }
