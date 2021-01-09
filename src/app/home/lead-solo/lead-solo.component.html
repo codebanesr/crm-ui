@@ -367,7 +367,11 @@
           <div class="mat-button-group">
             <button mat-raised-button (click)="showReassignmentDrawer()" color="warn">Reassign</button>
             <button mat-raised-button (click)="handleLeadSubmission(selectedLead, false)" color="primary">Save</button>
-            <button mat-raised-button (click)="handleLeadSubmission(selectedLead, true)" color="accent">Save & Next</button>
+            <button mat-raised-button 
+              *ngIf="!browsableState"
+              (click)="handleLeadSubmission(selectedLead, true)" 
+              color="accent"
+            >Save & Next</button>
           </div>
 
 

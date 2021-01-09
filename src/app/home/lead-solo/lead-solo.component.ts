@@ -37,6 +37,7 @@ import { CountdownComponent } from "ngx-countdown";
 import { EAutodial } from "./autodial.interface";
 import { CallLog } from '@ionic-native/call-log/ngx';
 import { ICallRecord } from "./call-record.interface";
+import { environment } from "src/environments/environment";
 
 declare let PhoneCallTrap: any;
 
@@ -107,30 +108,32 @@ export class LeadSoloComponent implements OnInit {
 
 
   initCallTrap() {
-    PhoneCallTrap.onCall(state => {
-      switch (state) {
-          case "RINGING":
-              break;
-          case "OFFHOOK":
+    if(environment.platform !== 'web') {
+      PhoneCallTrap.onCall(state => {
+        switch (state) {
+            case "RINGING":
                 break;
-    
-          case "IDLE":
-              console.log("PhoneCallTrap idle state :: printing logs");
-              this.platform.ready().then(() => {
-
-                this.callLog.hasReadPermission().then(hasPermission => {
-                  if (!hasPermission) {
-                    this.callLog.requestReadPermission().then(results => {
+            case "OFFHOOK":
+                  break;
+      
+            case "IDLE":
+                console.log("PhoneCallTrap idle state :: printing logs");
+                this.platform.ready().then(() => {
+  
+                  this.callLog.hasReadPermission().then(hasPermission => {
+                    if (!hasPermission) {
+                      this.callLog.requestReadPermission().then(results => {
+                        this.getPhoneCallLogs();
+                      }).catch(e => alert(" requestReadPermission " + JSON.stringify(e)));
+                    } else {
                       this.getPhoneCallLogs();
-                    }).catch(e => alert(" requestReadPermission " + JSON.stringify(e)));
-                  } else {
-                    this.getPhoneCallLogs();
-                  }
-                }).catch(e => alert(" hasReadPermission " + JSON.stringify(e)));
-              });
-              break;
-        }
-    });  
+                    }
+                  }).catch(e => alert(" hasReadPermission " + JSON.stringify(e)));
+                });
+                break;
+          }
+      });
+    }  
   }
 
   async getPhoneCallLogs() {
@@ -336,7 +339,14 @@ export class LeadSoloComponent implements OnInit {
     return this._sanitizer.bypassSecurityTrustUrl(`whatsapp://send?phone=${phoneNumber}`);
   }
 
+  browsableState = false;
   openAutodial() {
+    const queryParams = this.activatedRoute.snapshot.queryParams;
+    if(queryParams.isBrowsed) {
+      this.browsableState = true;
+      return;
+    }
+
     const dialogRef = this.dialog.open(LeadAutodial, {
       disableClose: true,
       data: {
@@ -839,12 +849,11 @@ export class LeadAutodial implements OnInit{
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Pick<ICampaign, 'autodialSettings'>,
     public dialogRef: MatDialogRef<LeadAutodial>,
-    private router: Router
+    private router: Router,
   ) {}
 
-
   ngOnInit() {
-    console.log(this.data.autodialSettings)
+    console.log(this.data.autodialSettings);
   }
 
   navigateToCampaignList() {

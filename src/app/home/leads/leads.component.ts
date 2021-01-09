@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
@@ -413,6 +413,7 @@ export class LeadsComponent implements OnInit {
   handleLeadEdit(lead) {
     this.router.navigate(["home", "solo"], {
       queryParams: {
+        isBrowsed: true,
         campaignId: this.selectedCampaign._id,
         leadId: lead._id,
       },
