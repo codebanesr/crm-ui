@@ -36,6 +36,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { CountdownComponent } from "ngx-countdown";
 import { EAutodial } from "./autodial.interface";
 import { CallLog } from '@ionic-native/call-log/ngx';
+import { ICallRecord } from "./call-record.interface";
 
 declare let PhoneCallTrap: any;
 
@@ -60,7 +61,8 @@ export class LeadSoloComponent implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     public dialog: MatDialog,
     private _sanitizer: DomSanitizer,
-    private callLog: CallLog
+    private callLog: CallLog,
+    private platform: Platform
     // private filePath: FilePath
   ) {}
 
@@ -105,12 +107,7 @@ export class LeadSoloComponent implements OnInit {
 
 
   initCallTrap() {
-    const today = new Date();
-    const pastHour = new Date(today);
-    pastHour.setHours(today.getHours() - 1);
-    const fromTime = pastHour.getTime();
-
-    PhoneCallTrap.onCall((state) => {
+    PhoneCallTrap.onCall(state => {
       switch (state) {
           case "RINGING":
               break;
@@ -118,16 +115,34 @@ export class LeadSoloComponent implements OnInit {
                 break;
     
           case "IDLE":
-              const record = this.callLog.getCallLog([{ 
-                name: "number",
-                value: `%91%`,
-                operator: "like"
-              }]);
+              console.log("PhoneCallTrap idle state :: printing logs");
+              this.platform.ready().then(() => {
 
-              console.log("PhoneCallTrap phone", JSON.stringify(record));
+                this.callLog.hasReadPermission().then(hasPermission => {
+                  if (!hasPermission) {
+                    this.callLog.requestReadPermission().then(results => {
+                      this.getPhoneCallLogs();
+                    }).catch(e => alert(" requestReadPermission " + JSON.stringify(e)));
+                  } else {
+                    this.getPhoneCallLogs();
+                  }
+                }).catch(e => alert(" hasReadPermission " + JSON.stringify(e)));
+              });
               break;
         }
     });  
+  }
+
+  async getPhoneCallLogs() {
+    if(this.selectedLead && this.callTime) {
+      const record:ICallRecord[] = await this.callLog.getCallLog([{
+        name: "date",
+        value: this.callTime,
+        operator: ">=",
+      }]);
+
+      console.log("PhoneCallTrap phone", JSON.stringify(record), "\n", this.callTime);
+    }
   }
 
   contactForm!: FormGroup;
@@ -139,12 +154,15 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
+  callTime: string;
   onPhoneClick(number: string) {
     if(number?.length<=10 && !number.startsWith('+')) {
       number = '+91' + number;
 
       number = number.toString().trim();
     }
+
+    this.callTime = new Date().getTime().toString();
     this.callNumber
       .callNumber(number, true)
       .then((res) => {console.log("Launched dialer!", res) })
