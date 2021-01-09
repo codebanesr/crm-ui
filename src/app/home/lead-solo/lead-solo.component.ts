@@ -26,10 +26,9 @@ import {
 import * as moment from "moment";
 
 import { difference, isEmpty, isString } from "lodash";
-import { NzUploadFile } from "ng-zorro-antd/upload";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
-import { ActionSheetController, Platform } from "@ionic/angular";
+import { ActionSheetController, LoadingController, Platform } from "@ionic/angular";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { GeomarkerComponent } from "src/app/geomarker/geomarker.component";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -63,8 +62,8 @@ export class LeadSoloComponent implements OnInit {
     public dialog: MatDialog,
     private _sanitizer: DomSanitizer,
     private callLog: CallLog,
-    private platform: Platform
-    // private filePath: FilePath
+    private platform: Platform,
+    private loadingCtrl: LoadingController
   ) {}
 
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
@@ -88,7 +87,7 @@ export class LeadSoloComponent implements OnInit {
   dateMode: string = "date";
   loadingCampaignList = false;
   campaignList: ICampaign[] = [];
-  callDispositions;
+  callDispositions: any;
   isVisible = false;
   jsonStringify = JSON.stringify;
   locale = en_US;
@@ -102,7 +101,6 @@ export class LeadSoloComponent implements OnInit {
     this.initEmailForm();
     this.fetchUsersForReassignment();
     this.initContactForm();
-
     this.initCallTrap();
   }
 
@@ -136,6 +134,8 @@ export class LeadSoloComponent implements OnInit {
     }  
   }
 
+
+  callRecord: ICallRecord;
   async getPhoneCallLogs() {
     if(this.selectedLead && this.callTime) {
       const record:ICallRecord[] = await this.callLog.getCallLog([{
@@ -143,8 +143,8 @@ export class LeadSoloComponent implements OnInit {
         value: this.callTime,
         operator: ">=",
       }]);
-
-      console.log("PhoneCallTrap phone", JSON.stringify(record), "\n", this.callTime);
+      
+      this.callRecord = record[0];
     }
   }
 
@@ -302,6 +302,13 @@ export class LeadSoloComponent implements OnInit {
     }
 
     updateObj["emailForm"] = this.emailForm.value;
+
+    /** @Todo such cases should be covered in not connected */
+    updateObj["callRecord"] = {
+      number: this.callRecord?.number || 0,
+      duration: this.callRecord?.duration || 0,
+      type: this.callRecord?.type || 2
+    };
 
     // any condition that has to be validated before submitting the form goes into this;
     const isSubmissionValid = this.checkSubmissionStatus();

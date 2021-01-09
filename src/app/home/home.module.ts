@@ -64,5 +64,6 @@ import { CountdownModule } from 'ngx-countdown';
     AddConfigComponent,
     LeadAutodial,
   ],
+  providers: []
 })
 export class HomePageModule {}

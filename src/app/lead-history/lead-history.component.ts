@@ -104,11 +104,13 @@ export class LeadHistoryComponent implements OnInit {
   }
 
 
+  total = 50;
   getTransactions() {
     this.leadService
       .getTransactions(this.pagination, this.transactionForm?.value)
-      .subscribe((histories: IHistory[]) => {
-        this.transactions = histories;
+      .subscribe(({response, total} : {response: IHistory[], total: number}) => {
+        this.transactions = response;
+        this.total = total;
       });
   }
 
@@ -119,6 +121,11 @@ export class LeadHistoryComponent implements OnInit {
         campaignId,
       },
     });
+  }
+
+  callType: {
+    1: "Incoming",
+    2: "Outgoing"
   }
 
   showFiller = false;
@@ -134,10 +141,13 @@ export class LeadHistoryComponent implements OnInit {
     followUp: "Scheduled",
     nextAction: "Action",
     requestedInformation: "Information Requested",
-    organization: "Organization"
+    organization: "Organization",
+    duration: "Call Duration",
+    type: "Call Band",
+    number: "Phone Number"
   };
 
-  perPage = 15;
+  perPage = 20;
   handlePageChange(paginator: PageEvent) {
     this.pagination.page = paginator.pageIndex;
     this.pagination.perPage = this.perPage;
