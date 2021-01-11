@@ -6244,6 +6244,13 @@ ngx-countdown@^11.0.1:
   dependencies:
     tslib "^2.0.0"
 
+ngx-drag-drop@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-drag-drop/-/ngx-drag-drop-2.0.0.tgz#65d970229964803726fb7b9af4aec24005c810c7"
+  integrity sha512-t+4/eiC8zaXKqU1ruNfFEfGs1GpMNwpffD0baopvZFKjQHCb5rhNqFilJ54wO4T0OwGp4/RnsVhlcxe1mX6UJg==
+  dependencies:
+    tslib "^1.9.0"
+
 ngx-mat-select-search@^3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/ngx-mat-select-search/-/ngx-mat-select-search-3.1.4.tgz#f948b7c934637eac16c44e390a82511e2dce3ade"

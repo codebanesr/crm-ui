@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('./reports/reports.module').then(m=>m.ReportsModule)
   },
   {
+    path: 'builder',
+    loadChildren: () => import('./shared/shared.module').then(m=>m.SharedModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
