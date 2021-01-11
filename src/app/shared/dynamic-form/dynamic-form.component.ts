@@ -30,7 +30,7 @@ export class DynamicFormComponent implements OnInit {
   fieldModels: Array<field> = [
     {
       type: 'text',
-      icon: 'font-colors',
+      icon: 'invert_colors',
       label: 'Text',
       description: 'Enter your name',
       placeholder: 'Enter your name',
@@ -39,7 +39,7 @@ export class DynamicFormComponent implements OnInit {
     },
     {
       type: 'email',
-      icon: 'mail',
+      icon: 'email',
       required: true,
       label: 'Email',
       description: 'Enter your email',
@@ -50,7 +50,7 @@ export class DynamicFormComponent implements OnInit {
     },
     {
       type: 'phone',
-      icon: 'mobile',
+      icon: 'phone',
       label: 'Phone',
       description: 'Enter your phone',
       placeholder: 'Enter your phone',
@@ -61,7 +61,7 @@ export class DynamicFormComponent implements OnInit {
     {
       type: 'number',
       label: 'Number',
-      icon: 'field-number',
+      icon: 'format_list_numbered',
       description: 'Age',
       placeholder: 'Enter your age',
       value: '20',
@@ -70,25 +70,25 @@ export class DynamicFormComponent implements OnInit {
     },
     {
       type: 'date',
-      icon: 'calendar',
+      icon: 'calendar_today',
       label: 'Date',
       placeholder: 'Date',
     },
     {
       type: 'datetime-local',
-      icon: 'field-time',
+      icon: 'more_time',
       label: 'DateTime',
       placeholder: 'Date Time',
     },
     {
       type: 'textarea',
-      icon: 'file-text',
+      icon: 'file_copy',
       label: 'Textarea',
     },
     {
       value: '',
       type: 'paragraph',
-      icon: 'line-height',
+      icon: 'line_weight',
       label: 'Paragraph',
       placeholder: 'Type your text to display here only',
     },
@@ -96,7 +96,7 @@ export class DynamicFormComponent implements OnInit {
       type: 'checkbox',
       required: true,
       label: 'Checkbox',
-      icon: 'ordered-list',
+      icon: 'check_circle_outline',
       description: 'Checkbox',
       inline: true,
       values: [
@@ -112,7 +112,7 @@ export class DynamicFormComponent implements OnInit {
     },
     {
       type: 'radio',
-      icon: 'unordered-list',
+      icon: 'radio_button_checked',
       label: 'Radio',
       description: 'Radio boxes',
       values: [
@@ -149,12 +149,12 @@ export class DynamicFormComponent implements OnInit {
     },
     {
       type: 'file',
-      icon: 'upload',
+      icon: 'cloud_upload',
       label: 'File Upload',
     },
     {
       type: 'button',
-      icon: 'paper-clip',
+      icon: 'done_all',
       label: 'Submit',
     },
   ];

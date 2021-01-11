@@ -5,7 +5,10 @@
         <div (dndEnd)="onDragEnd($event)"  [dndDraggable]="item" [dndEffectAllowed]="'copy'">
           <nz-row>
             <nz-col>
-              <i nz-icon nzTheme="outline" style="font-size: 1.5rem;">{{item.icon}}</i>
+              <!-- <i nz-icon nzTheme="outline" style="font-size: 1.5rem;">{{item.icon}}</i> -->
+              <span class="material-icons">
+                {{item.icon}}
+              </span>
               <nz-divider nzType="vertical"></nz-divider>
             </nz-col>
             <nz-col>
