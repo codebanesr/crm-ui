@@ -128,7 +128,7 @@ export class DynamicFormComponent implements OnInit {
     },
     {
       type: 'autocomplete',
-      icon: 'bars',
+      icon: 'tab_unselected',
       label: 'Select',
       description: 'Select',
       placeholder: 'Select',
