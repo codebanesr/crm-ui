@@ -19,26 +19,26 @@
   </div>
   <div nz-col nzSpan="20">
     <form nz-form style="width: 80%; margin-left: 10%;">
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzRequired nzFor="name">Form Name</nz-form-label>
-        <nz-form-control [nzSpan]="14" [nzOffset]="6">
-          <input nz-input name="formName" type="text" (ngModelChange)="onModelChange()" [(ngModel)]="model.name"
-            [ngModelOptions]="{standalone: true}" />
-        </nz-form-control>
-      </nz-form-item>
+      <mat-form-field>
+        <mat-label>Form Name</mat-label>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzRequired nzFor="description">Description</nz-form-label>
-        <nz-form-control [nzSpan]="14" [nzOffset]="6">
-          <input nz-input type="text" (ngModelChange)="onModelChange()" [(ngModel)]="model.description"
-            name="description" [ngModelOptions]="{standalone: true}" />
-        </nz-form-control>
-      </nz-form-item>
+        <input matInput name="formName" type="text" (ngModelChange)="onModelChange()" [(ngModel)]="model.name"
+          [ngModelOptions]="{standalone: true}" />
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+
+        <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="model.description" name="description"
+          [ngModelOptions]="{standalone: true}" />
+
+      </mat-form-field>
     </form>
 
     <!--a dropzone-->
     <!--to allow dropping content that is not [dndDraggable] set dndAllowExternal to true-->
-    <form nz-form dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event,model.attributes)"
+    <form dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event,model.attributes)"
       class="dndDropArea" [ngClass]="{'empty':model.attributes.length == 0}">
 
       <div class="field" *ngFor="let item of model.attributes;let i= index;" (dndStart)="onDragStart($event)"
@@ -46,110 +46,127 @@
         [dndEffectAllowed]="'all'" [dndDraggable]="item">
         <div nz-row>
           <div nz-col nzSpan="22">
-            <nz-form-item *ngIf="item.type=='text'">
-              <nz-form-label [nzSpan]="6" [nzRequired]="item.required" nzFor="email">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <input nz-input name="email" type="text" id="{{item.name}}" placeholder="{{item.placeholder}}">
-              </nz-form-control>
-            </nz-form-item>
+            <mat-form-field *ngIf="item.type=='text'">
+              <mat-label>{{item.label}}</mat-label>
 
-            <nz-form-item *ngIf="item.type=='email'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <input nz-input type="email" id="{{item.name}}" placeholder="{{item.placeholder}}">
-              </nz-form-control>
-            </nz-form-item>
+              <input matInput name="email" type="text" id="{{item.name}}" placeholder="{{item.placeholder}}">
 
-            <nz-form-item *ngIf="item.type=='phone'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <input nz-input type="text" id="{{item.name}}" placeholder="{{item.placeholder}}">
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item *ngIf="item.type=='number'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="number" id="{{item.name}}"
-                  min="{{item.min}}" max="{{item.max}}" placeholder="{{item.placeholder}}"></nz-form-control>
-            </nz-form-item>
-            <nz-form-item *ngIf="item.type=='date'">
-              <nz-form-label [nzSpan]="6" [nzRequired]="item.required">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <nz-date-picker nz-input type="date" id="{{item.name}}"></nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item *ngIf="item.type=='datetime-local'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <nz-date-picker nz-input type="date" id="{{item.name}}" nzShowTime></nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item *ngIf="item.type=='textarea'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-              <nz-form-control [nzOffset]="6" [nzSpan]="14">
-                <textarea nz-input placeholder="Controlled autosize" id="{{item.name}}"
-                  placeholder="{{item.placeholder}}">
+            </mat-form-field>
+
+            <mat-form-field *ngIf="item.type=='email'">
+              <mat-label>{{item.label}}</mat-label>
+
+              <input matInput type="email" id="{{item.name}}" placeholder="{{item.placeholder}}">
+
+            </mat-form-field>
+
+            <mat-form-field *ngIf="item.type=='phone'">
+              <mat-label>{{item.label}}</mat-label>
+
+              <input matInput type="text" id="{{item.name}}" placeholder="{{item.placeholder}}">
+
+            </mat-form-field>
+            <mat-form-field *ngIf="item.type=='number'">
+              <mat-label>{{item.label}}</mat-label>
+              <input matInput type="number" id="{{item.name}}" min="{{item.min}}" max="{{item.max}}"
+                placeholder="{{item.placeholder}}">
+            </mat-form-field>
+
+            <mat-form-field class="mat-full-width" appearance="fill" *ngIf="item.type=='date'">
+              <mat-label>{{item.label}}</mat-label>
+              <input matInput [matDatepicker]="picker" [id]="item.name">
+              <mat-datepicker-toggle matSuffix [for]="picker">
+                <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="item.type=='datetime-local'" class="mat-full-width" appearance="fill">
+                <mat-label>{{item.label}}</mat-label>
+                <input matInput [matDatepicker]="picker" [id]="item.name">
+                <mat-datepicker-toggle matSuffix [for]="picker">
+                  <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+
+
+            </mat-form-field>
+            <mat-form-field *ngIf="item.type=='textarea'">
+              <mat-label>{{item.label}}</mat-label>
+
+              <textarea matInput placeholder="Controlled autosize" id="{{item.name}}"
+                placeholder="{{item.placeholder}}">
                   </textarea>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item *ngIf="item.type=='file'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}} (File can't be uploaded right now)
-              </nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <input nz-input type="file" id="{{item.name}}" placeholder="{{item.placeholder}}">
-              </nz-form-control>
-            </nz-form-item>
+
+            </mat-form-field>
+            <mat-form-field *ngIf="item.type=='file'">
+              <mat-label>{{item.label}} (File can't be uploaded right now)
+              </mat-label>
+
+              <input matInput type="file" id="{{item.name}}" placeholder="{{item.placeholder}}">
+
+            </mat-form-field>
 
             <div *ngIf="item.type=='paragraph'">
               <div *ngIf="item.type=='paragraph'">
-                <nz-form-item>
-                  <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-                  <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                    <nz-input-group [nzSuffix]="inputClearTpl">
-                      <input type="text" nz-input (ngModelChange)="onModelChange()" [(ngModel)]="item.value"
-                        placeholder="input with clear icon" />
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-form-field>
+                  <mat-label>{{item.label}}</mat-label>
+
+                  <input type="text" matInput (ngModelChange)="onModelChange()" [(ngModel)]="item.value"
+                    placeholder="input with clear icon" [ngModelOptions]="{standalone: true}"/>
+                </mat-form-field>
 
                 <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
                     *ngIf="item.value" (click)="item.value = null"></i></ng-template>
               </div>
             </div>
             <div *ngIf="item.type=='autocomplete'">
-              <nz-form-item>
-                <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-                <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                  <nz-select id="{{item.name}}">
-                    <nz-option *ngFor="let v of item.values" [nzValue]="v.value" [nzLabel]="v.label"></nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </nz-form-item>
+              <mat-form-field>
+                <mat-label>{{item.label}}</mat-label>
+
+                <mat-select id="{{item.name}}">
+                  <mat-option *ngFor="let v of item.values" [value]="v.value">
+                    {{v.label}}
+                  </mat-option>
+                  <!-- <nz-option [nzValue]="v.value" [nzLabel]="v.label"></nz-option> -->
+                </mat-select>
+
+              </mat-form-field>
             </div>
             <div *ngIf="item.type=='checkbox'">
-              <nz-form-item>
-                <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-                <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                  <label nz-checkbox *ngFor="let v of item.values" nz-checkbox (ngModelChange)="onModelChange()"
-                    [(ngModel)]="v.value" [ngModelOptions]="{standalone: true}">
-                    <span>{{v.label}}</span>
-                  </label>
-                </nz-form-control>
-              </nz-form-item>
+              <!-- <mat-form-field>
+                <mat-label>{{item.label}}</mat-label>
+
+                <mat-label nz-checkbox *ngFor="let v of item.values" nz-checkbox (ngModelChange)="onModelChange()"
+                  [(ngModel)]="v.value" [ngModelOptions]="{standalone: true}">
+                  <span>{{v.label}}</span>
+                </mat-label>
+
+              </mat-form-field> -->
+              <section class="example-section">
+                <mat-checkbox 
+                  *ngFor="let v of item.values"
+                  (ngModelChange)="onModelChange()"
+                  [(ngModel)]="v.value" [ngModelOptions]="{standalone: true}"
+                >{{v.label}}</mat-checkbox>
+              </section>
             </div>
-            <nz-form-item *ngIf="item.type=='radio'">
-              <nz-form-label [nzRequired]="item.required" [nzSpan]="6">{{item.label}}</nz-form-label>
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <nz-radio-group (ngModelChange)="onModelChange()" [(ngModel)]="item.value">
-                  <label *ngFor="let v of item.values" nz-radio [nzValue]="v.value">{{v.label}}</label>
-                </nz-radio-group>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item *ngIf="item.type=='button'" class="btn-cont">
-              <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <input nz-input type="{{item.subtype}}" (click)="submit()" value="{{item.label}}"
-                  class="btn btn-primary" id="{{item.name}}">
-              </nz-form-control>
-            </nz-form-item>
+            <div *ngIf="item.type=='radio'">
+              <mat-label>{{item.label}}</mat-label>
+              <mat-radio-group 
+                (ngModelChange)="onModelChange()" 
+                [(ngModel)]="item.value" 
+                name="matradio"
+              >
+                <mat-radio-button [value]="v.value" *ngFor="let v of item.values">{{v.label}}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-form-field *ngIf="item.type=='button'" class="btn-cont">
+
+              <input matInput type="{{item.subtype}}" (click)="submit()" value="{{item.label}}" class="btn btn-primary"
+                id="{{item.name}}">
+
+            </mat-form-field>
           </div>
           <div nz-col nzSpan="2">
             <span class="material-icons" *ngIf="item.toggle" (click)="item.toggle=false">
@@ -164,61 +181,62 @@
             </span>
           </div>
         </div>
-        <form nz-form *ngIf="item.toggle" style="padding: 15px; background: #d6d6d629;">
+        <div *ngIf="item.toggle" style="padding: 15px; background: #d6d6d629;">
           <div class="form-group">
-            <label>Required</label>
-            <nz-switch (ngModelChange)="onModelChange()" [(ngModel)]="item.required"
-              [ngModelOptions]="{standalone: true}"></nz-switch>
+            <mat-label>Required</mat-label>
+              <mat-slide-toggle [(ngModel)]="item.required" [ngModelOptions]="{standalone: true}">
+                Required
+              </mat-slide-toggle>
             <span class="pull-right ucfirst">{{item.type}}</span>
           </div>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24">Label</nz-form-label>
-            <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text" (ngModelChange)="onModelChange()"
-                [(ngModel)]="item.label" [ngModelOptions]="{standalone: true}" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24">Name</nz-form-label>
-            <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text" (ngModelChange)="onModelChange()"
-                [(ngModel)]="item.name" [ngModelOptions]="{standalone: true}" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24">Placeholder</nz-form-label>
-            <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text" (ngModelChange)="onModelChange()"
-                [(ngModel)]="item.placeholder" [ngModelOptions]="{standalone: true}" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24">Regex</nz-form-label>
-            <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text" (ngModelChange)="onModelChange()"
-                [(ngModel)]="item.regex" [ngModelOptions]="{standalone: true}" />
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item *ngIf="item.regex">
-            <nz-form-label [nzSm]="6" [nzXs]="24">Error text</nz-form-label>
-            <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text" (ngModelChange)="onModelChange()"
-                [(ngModel)]="item.errorText" [ngModelOptions]="{standalone: true}" />
-            </nz-form-control>
-          </nz-form-item>
+          <mat-form-field>
+            <mat-label>Label</mat-label>
+            <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.label"
+              [ngModelOptions]="{standalone: true}" />
+
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.name"
+              [ngModelOptions]="{standalone: true}" />
+
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Placeholder</mat-label>
+            <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.placeholder"
+              [ngModelOptions]="{standalone: true}" />
+
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Regex</mat-label>
+            <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.regex"
+              [ngModelOptions]="{standalone: true}" />
+
+          </mat-form-field>
+          <mat-form-field *ngIf="item.regex">
+            <mat-label>Error text</mat-label>
+            <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.errorText"
+              [ngModelOptions]="{standalone: true}" />
+
+          </mat-form-field>
 
           <!-- number -->
           <div *ngIf="item.type=='number'" nz-row>
             <div nz-col nzSpan="6">
-              <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24">Min</nz-form-label>
-                <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text"
-                    (ngModelChange)="onModelChange()" [(ngModel)]="item.min" [ngModelOptions]="{standalone: true}" />
-                </nz-form-control>
-              </nz-form-item>
+              <mat-form-field>
+                <mat-label>Min</mat-label>
+                <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.min"
+                  [ngModelOptions]="{standalone: true}" />
+
+              </mat-form-field>
             </div>
             <div nz-col nzSpan="6">
-              <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24">Max</nz-form-label>
-                <nz-form-control [nzSpan]="14" [nzOffset]="6"><input nz-input type="text"
-                    (ngModelChange)="onModelChange()" [(ngModel)]="item.max" [ngModelOptions]="{standalone: true}" />
-                </nz-form-control>
-              </nz-form-item>
+              <mat-form-field>
+                <mat-label>Max</mat-label>
+                <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.max"
+                  [ngModelOptions]="{standalone: true}" />
+
+              </mat-form-field>
             </div>
           </div>
 
@@ -226,73 +244,51 @@
           <div *ngIf="item.type=='radio'|| item.type=='checkbox' || item.type=='autocomplete'">
             <div nz-row>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control [nzSpan]="6" [nzOffset]="8">
-                    Label
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-label> Label </mat-label>
               </div>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control [nzOffset]="8">Value</nz-form-control>
-                </nz-form-item>
+                <mat-label>Value</mat-label>
               </div>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control>
-                    <label>Action</label>
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-label>Action</mat-label>
               </div>
             </div>
             <div *ngFor="let i of item.values; let valueIndex=index;" nz-row>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                    <input nz-input type="text" (ngModelChange)="onModelChange()" [(ngModel)]="i.label"
-                      [ngModelOptions]="{standalone: true}" />
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-form-field>
+                  <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="i.label"
+                    [ngModelOptions]="{standalone: true}" />
+                </mat-form-field>
               </div>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                    <input nz-input type="text" (ngModelChange)="onModelChange()" [(ngModel)]="i.value"
-                      [ngModelOptions]="{standalone: true}" />
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-form-field>
+                  <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="i.value"
+                    [ngModelOptions]="{standalone: true}" />
+                </mat-form-field>
               </div>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <label (click)="item.values.splice(valueIndex,1)">remove</label>
-                </nz-form-item>
+                <mat-label (click)="item.values.splice(valueIndex,1)">remove</mat-label>
               </div>
             </div>
             <div nz-row>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                    <input nz-input type="text" (ngModelChange)="onModelChange()" [(ngModel)]="value.label"
-                      [ngModelOptions]="{standalone: true}" />
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-form-field>
+                  <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="value.label"
+                    [ngModelOptions]="{standalone: true}" />
+                </mat-form-field>
               </div>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                    <input nz-input type="text" (ngModelChange)="onModelChange()" [(ngModel)]="value.value"
-                      [ngModelOptions]="{standalone: true}" />
-                  </nz-form-control>
-                </nz-form-item>
+                <mat-form-field>
+                  <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="value.value"
+                    [ngModelOptions]="{standalone: true}" />
+                </mat-form-field>
               </div>
               <div nz-col nzSpan="8">
-                <nz-form-item>
-                  <label (click)="addValue(item.values)">Add</label>
-                </nz-form-item>
+                <mat-label (click)="addValue(item.values)">Add</mat-label>
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       <!--optional placeholder element for dropzone-->
       <!--will be removed from DOM on init-->

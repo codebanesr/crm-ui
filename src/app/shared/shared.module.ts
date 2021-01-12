@@ -34,6 +34,9 @@ import { SharedRoutingModule } from './shared-routing.module';
     NzDatePickerModule,
     NzInputModule,
     NzRadioModule
+  ],
+  exports: [
+    DynamicFormComponent
   ]
 })
 export class SharedModule { }

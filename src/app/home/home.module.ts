@@ -27,10 +27,12 @@ import { AddConfigComponent, MappingComponent } from "../mapping/mapping.compone
 import { GeomarkerComponent } from "../geomarker/geomarker.component";
 import {GoogleMapsModule} from '@angular/google-maps';
 import { CountdownModule } from 'ngx-countdown';
+import { SharedModule } from "../shared/shared.module";
 
 
 @NgModule({
   imports: [
+    SharedModule,
     GoogleMapsModule,
     CountdownModule,
     NgxMatSelectSearchModule,
