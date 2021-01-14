@@ -1,6 +1,7 @@
 import { copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { cloneDeep } from 'lodash';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { ModelInterface } from 'src/app/home/interfaces/global.interfaces';
 import { value, field } from 'src/global.model';
@@ -277,24 +278,14 @@ export class DynamicFormComponent implements OnInit {
   }
 
   drop(event) {
-    // if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
-    //   if (event.dropEffect === 'copy')
-    //     event.data.name = event.data.type + '-' + new Date().getTime();
-    //   let index = event.index;
-    //   if (typeof index === 'undefined') {
-    //     index = list.length;
-    //   }
-    //   list.splice(index, 0, event.data);
-    //   this.onModelChange();
-    // }
-
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      copyArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        const clone = cloneDeep(event.previousContainer.data[event.previousIndex]);
+
+        // Add the clone to the new array.
+        event.container.data.splice(event.currentIndex, 0, clone);
+        this.onModelChange();
     }
   }
 }
