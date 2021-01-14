@@ -586,7 +586,9 @@ export class LeadSoloComponent implements OnInit {
     this.selectedUserForReassignment = user;
   }
 
-  onCampaignFormUpdate(event) {}
+  onCampaignFormUpdate(event) {
+    this.formModel = event;
+  }
 
   historyLimit = 1;
   onShowMoreClick() {
