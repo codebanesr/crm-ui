@@ -199,118 +199,118 @@
                     <div class="content">
                       <form nz-form>
                         <ng-container *ngFor="let item of formModel.attributes">
-                          <ng-container [ngSwitch]="item.type">
 
-                            <ng-container *ngSwitchCase="'text'">
-                              <mat-label nzFor="email">{{item.label}}</mat-label>
-
-                              <input matInput [id]="item.id" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
-
-                            </ng-container>
-
-                            <ng-container *ngSwitchCase="'email'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
-
-                              <input matInput type="email" id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
-                                placeholder="{{item.placeholder}}" />
-
-                            </ng-container>
-
-                            <ng-container *ngSwitchCase="'phone'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
-
-                              <input matInput type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
-
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'number'">
-                              <mat-label>{{item.label}}</mat-label>
-
-                              <input matInput type="number" id="{{item.name}}" min="{{item.min}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" max="{{item.max}}" placeholder="{{item.placeholder}}" />
-
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'date'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
-
-                              <input type="datetime-local" matInput id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
-
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'datetime-local'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
-
-                              <input type="datetime-local" matInput id="{{item.name}}" nzShowTime
-                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
-
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'textarea'">
-                              <mat-label>{{item.label}}</mat-label>
-
-                              <textarea matInput placeholder="Controlled autosize"
-                                id="{{item.name}}"
-                                placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
-                                ></textarea>
-
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'file'">
-                              <mat-label>{{item.label}} (File
-                                can't be uploaded right now)</mat-label>
-
-                              <input matInput type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
-                                [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
-
-                            </ng-container>
-
-                            <div *ngSwitchCase="'paragraph'">
-                              <ng-container>
-                                <mat-label>{{item.label}}</mat-label>
-                                <input matInput type="text" matInput [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
-                                    placeholder="input with clear icon" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
+                            <ng-container [ngSwitch]="item.type">
+                              <ng-container *ngSwitchCase="'text'">
+                                <mat-label nzFor="email">{{item.label}}</mat-label>
+                                <input matInput [id]="item.id" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
                               </ng-container>
-                            </div>
-                            <div *ngSwitchCase="'autocomplete'">
-                              <ng-container>
-                                <mat-label>{{item.label}}</mat-label>
-
-                                <mat-select id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
-                                  <mat-option *ngFor="let v of item.values" [value]="v.value"> {{v.label}} </mat-option>
-                                </mat-select>
+  
+                              <ng-container *ngSwitchCase="'email'">
+                                <mat-form-field>
+                                  <mat-label>{{item.label}}</mat-label>
+                                  <input matInput type="email" id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                    placeholder="{{item.placeholder}}" />
+                                </mat-form-field>
+  
                               </ng-container>
-                            </div>
-                            <div *ngSwitchCase="'checkbox'">
-                              <ng-container>
-                                <mat-label>{{item.label}}</mat-label>
-
-                                <!-- <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
-                                  [nzValue]="v.value" >
-                                  <span>{{v.label}}</span>
-                                </label> -->
-                                <mat-checkbox [(ngModel)]="v.value" *ngFor="let v of item.values">
-                                  {{v.label}}
-                                </mat-checkbox>
-
+  
+                              <ng-container *ngSwitchCase="'phone'">
+                                <mat-label>{{item.label}}
+                                </mat-label>
+  
+                                <input matInput type="text" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
+  
                               </ng-container>
-                            </div>
-                            <ng-container *ngSwitchCase="'radio'">
-                              <mat-label>{{item.label}}
-                              </mat-label>
-                              <mat-radio-group
-                                aria-labelledby="molecule-design-radio" [(ngModel)]="item.value">
-                                <mat-radio-button class="example-radio-button" *ngFor="let v of item.values" [value]="v.value">
-                                  {{v.label}}
-                                </mat-radio-button>
-                              </mat-radio-group>
+                              <ng-container *ngSwitchCase="'number'">
+                                <mat-label>{{item.label}}</mat-label>
+  
+                                <input matInput type="number" id="{{item.name}}" min="{{item.min}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" max="{{item.max}}" placeholder="{{item.placeholder}}" />
+  
+                              </ng-container>
+                              <ng-container *ngSwitchCase="'date'">
+                                <mat-label>{{item.label}}
+                                </mat-label>
+  
+                                <input type="datetime-local" matInput id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
+  
+                              </ng-container>
+                              <ng-container *ngSwitchCase="'datetime-local'">
+                                <mat-label>{{item.label}}
+                                </mat-label>
+  
+                                <input type="datetime-local" matInput id="{{item.name}}" nzShowTime
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
+  
+                              </ng-container>
+                              <ng-container *ngSwitchCase="'textarea'">
+                                <mat-label>{{item.label}}</mat-label>
+  
+                                <textarea matInput placeholder="Controlled autosize"
+                                  id="{{item.name}}"
+                                  placeholder="{{item.placeholder}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                  ></textarea>
+  
+                              </ng-container>
+                              <ng-container *ngSwitchCase="'file'">
+                                <mat-label>{{item.label}} (File
+                                  can't be uploaded right now)</mat-label>
+  
+                                <input matInput type="file" id="{{item.name}}" placeholder="{{item.placeholder}}"
+                                  [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}" />
+  
+                              </ng-container>
+  
+                              <div *ngSwitchCase="'paragraph'">
+                                <ng-container>
+                                  <mat-label>{{item.label}}</mat-label>
+                                  <input matInput type="text" matInput [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"
+                                      placeholder="input with clear icon" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}"/>
+                                </ng-container>
+                              </div>
+                              <div *ngSwitchCase="'autocomplete'">
+                                <ng-container>
+                                  <mat-label>{{item.label}}</mat-label>
+  
+                                  <mat-select id="{{item.name}}" [(ngModel)]="item.value" [ngModelOptions]="{standalone: true}">
+                                    <mat-option *ngFor="let v of item.values" [value]="v.value"> {{v.label}} </mat-option>
+                                  </mat-select>
+                                </ng-container>
+                              </div>
+                              <div *ngSwitchCase="'checkbox'">
+                                <ng-container>
+                                  <mat-label>{{item.label}}</mat-label>
+  
+                                  <!-- <label nz-checkbox *ngFor="let v of item.values" nz-checkbox [(ngModel)]="v.value"
+                                    [nzValue]="v.value" >
+                                    <span>{{v.label}}</span>
+                                  </label> -->
+                                  <mat-checkbox [(ngModel)]="v.value" *ngFor="let v of item.values">
+                                    {{v.label}}
+                                  </mat-checkbox>
+  
+                                </ng-container>
+                              </div>
+                              <ng-container *ngSwitchCase="'radio'">
+                                <mat-label>{{item.label}}
+                                </mat-label>
+                                <mat-radio-group
+                                  aria-labelledby="molecule-design-radio" [(ngModel)]="item.value">
+                                  <mat-radio-button class="example-radio-button" *ngFor="let v of item.values" [value]="v.value">
+                                    {{v.label}}
+                                  </mat-radio-button>
+                                </mat-radio-group>
+  
+                              </ng-container>
+                              <ng-container *ngSwitchCase="'button'">
+                                <input matInput type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}"/>
+                              </ng-container>
 
+                              <mat-error *ngIf="item.required && !item.value">
+                                {{item.errorText}}
+                              </mat-error>
                             </ng-container>
-                            <ng-container *ngSwitchCase="'button'">
-
-                              <input matInput type="{{item.subtype}}" value="{{item.label}}" id="{{item.name}}"/>
-
-                            </ng-container>
-                          </ng-container>
                         </ng-container>
                       </form>
                     </div>

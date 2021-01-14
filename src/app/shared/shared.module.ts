@@ -13,11 +13,13 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { SharedRoutingModule } from './shared-routing.module';
+import { DynamicFormPreviewComponent } from './dynamic-form-preview/dynamic-form-preview.component';
 
 
 @NgModule({
   declarations: [
-    DynamicFormComponent
+    DynamicFormComponent,
+    DynamicFormPreviewComponent
   ],
   imports: [
     SharedRoutingModule,
@@ -36,7 +38,8 @@ import { SharedRoutingModule } from './shared-routing.module';
     NzRadioModule
   ],
   exports: [
-    DynamicFormComponent
+    DynamicFormComponent,
+    DynamicFormPreviewComponent
   ]
 })
 export class SharedModule { }
