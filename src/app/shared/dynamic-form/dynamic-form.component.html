@@ -1,19 +1,25 @@
-<div nz-row nzJustify="space-around" style="width: calc(max(70vw, 100%))">
+<div nz-row nzJustify="space-around" style="width: calc(max(70vw, 100%))" cdkDropListGroup>
   <div nz-col nzSpan="4">
-    <div class="fields" *ngFor="let item of fieldModels">
-      <div (dndEnd)="onDragEnd($event)" [dndDraggable]="item" [dndEffectAllowed]="'copy'">
-        <nz-row>
-          <nz-col>
-            <!-- <i nz-icon nzTheme="outline" style="font-size: 1.5rem;">{{item.icon}}</i> -->
-            <span class="material-icons">
-              {{item.icon}}
-            </span>
-            <nz-divider nzType="vertical"></nz-divider>
-          </nz-col>
-          <nz-col>
-            <h4 nz-typography>{{item.label}}</h4>
-          </nz-col>
-        </nz-row>
+    <div
+      cdkDropList
+      [cdkDropListData]="fieldModels"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="fields" *ngFor="let item of fieldModels" cdkDrag>
+        <div>
+          <nz-row>
+            <nz-col>
+              <span class="material-icons">
+                {{item.icon}}
+              </span>
+              <nz-divider nzType="vertical"></nz-divider>
+            </nz-col>
+            <nz-col>
+              <h4 nz-typography>{{item.label}}</h4>
+            </nz-col>
+          </nz-row>
+        </div>
       </div>
     </div>
   </div>
@@ -38,12 +44,17 @@
 
     <!--a dropzone-->
     <!--to allow dropping content that is not [dndDraggable] set dndAllowExternal to true-->
-    <div dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event,model.attributes)" class="dndDropArea"
-      [ngClass]="{'empty':model.attributes.length == 0}">
+    <!-- <div dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event,model.attributes)" class="dndDropArea"
+      [ngClass]="{'empty':model.attributes.length == 0}"> -->
+    <div 
+      class="dndDropArea" 
+      [ngClass]="{'empty':model.attributes.length == 0}"
+      cdkDropList
+      [cdkDropListData]="model.attributes"
+      (cdkDropListDropped)="drop($event)"
+    >
 
-      <div class="field" *ngFor="let item of model.attributes;let i= index;" (dndStart)="onDragStart($event)"
-        (dndCanceled)="onDragCanceled($event)" (dndMoved)="onDragged(item, model.attributes, 'move')"
-        [dndEffectAllowed]="'all'" [dndDraggable]="item">
+      <div class="field" cdkDrag *ngFor="let item of model.attributes;let i= index;">
         <div nz-row>
           <div nz-col nzSpan="22">
             <mat-form-field *ngIf="item.type=='text'">

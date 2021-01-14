@@ -1,3 +1,4 @@
+import { copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
@@ -178,50 +179,28 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {}
 
-  onDragStart(event: DragEvent) {
-    console.log('drag started', JSON.stringify(event, null, 2));
-  }
+  
 
-  onDragEnd(event: DragEvent) {
-    console.log('drag ended', JSON.stringify(event, null, 2));
-  }
+  // onDragged(item: any, list: any[], effect: DropEffect) {
+  //   if (effect === 'move') {
+  //     const index = list.indexOf(item);
+  //     list.splice(index, 1);
+  //     this.onModelChange();
+  //   }
+  // }
 
-  onDraggableCopied(event: DragEvent) {
-    console.log('draggable copied', JSON.stringify(event, null, 2));
-  }
-
-  onDraggableLinked(event: DragEvent) {
-    console.log('draggable linked', JSON.stringify(event, null, 2));
-  }
-
-  onDragged(item: any, list: any[], effect: DropEffect) {
-    if (effect === 'move') {
-      const index = list.indexOf(item);
-      list.splice(index, 1);
-      this.onModelChange();
-    }
-  }
-
-  onDragCanceled(event: DragEvent) {
-    console.log('drag cancelled', JSON.stringify(event, null, 2));
-  }
-
-  onDragover(event: DragEvent) {
-    console.log('dragover', JSON.stringify(event, null, 2));
-  }
-
-  onDrop(event: DndDropEvent, list?: any[]) {
-    if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
-      if (event.dropEffect === 'copy')
-        event.data.name = event.data.type + '-' + new Date().getTime();
-      let index = event.index;
-      if (typeof index === 'undefined') {
-        index = list.length;
-      }
-      list.splice(index, 0, event.data);
-      this.onModelChange();
-    }
-  }
+  // onDrop(event: DndDropEvent, list?: any[]) {
+  //   if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
+  //     if (event.dropEffect === 'copy')
+  //       event.data.name = event.data.type + '-' + new Date().getTime();
+  //     let index = event.index;
+  //     if (typeof index === 'undefined') {
+  //       index = list.length;
+  //     }
+  //     list.splice(index, 0, event.data);
+  //     this.onModelChange();
+  //   }
+  // }
 
   addValue(values) {
     values.push(this.value);
@@ -295,5 +274,27 @@ export class DynamicFormComponent implements OnInit {
 
   showModel() {
     console.log(this.model);
+  }
+
+  drop(event) {
+    // if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
+    //   if (event.dropEffect === 'copy')
+    //     event.data.name = event.data.type + '-' + new Date().getTime();
+    //   let index = event.index;
+    //   if (typeof index === 'undefined') {
+    //     index = list.length;
+    //   }
+    //   list.splice(index, 0, event.data);
+    //   this.onModelChange();
+    // }
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      copyArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
   }
 }
