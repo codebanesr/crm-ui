@@ -1,5 +1,8 @@
-<!-- The upper tab for choice of lead upload -->
+
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div>
     <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="getUploadedFiles(); open()"
       style="transform: scale(0.7); position: absolute; top: -5px; right: -2px;">
@@ -9,8 +12,7 @@
     </ion-fab>
   </div>
   
-  <div style="padding: 10px;" class="scrollable">
-    <div class="scrollable" style="padding-bottom: 35px;">
+  <ion-content fullscreen>
       <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
   
         <mat-form-field appearance="outline" class="mat-full-width">
@@ -335,8 +337,7 @@
           <nz-divider></nz-divider>
         </ng-container>
       </nz-drawer>
-    </div>
-  </div>
+  </ion-content>
   
   
   
@@ -357,9 +358,4 @@
       </span>
     </span>
   </ng-template>
-
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
-    </ion-refresher-content>
-  </ion-refresher>
 </ion-content>

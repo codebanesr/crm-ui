@@ -1,5 +1,4 @@
 <ion-content>
-  <div class="scrollable">
     <mat-accordion>
       <mat-expansion-panel *ngFor="let user of listOfRandomUser" hideToggle>
         <mat-expansion-panel-header style="height: 60px;">
@@ -92,7 +91,6 @@
     <nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="pageSize" nzSimple
       [nzPageIndex]="pageIndex" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true">
     </nz-pagination>
-  </div>
   
   
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="createNewUser()">

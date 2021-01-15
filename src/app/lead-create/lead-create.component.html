@@ -1,5 +1,5 @@
 <nz-divider></nz-divider>
-<WingBlank class="scrollable" style="margin-bottom: 35px;">
+<ion-content fullscreen>
   <div *ngIf="typeDict">
     <!-- <nz-descriptions nzTitle="Lead Info" nzBordered=true>
       <nz-descriptions-item nzTitle="Contact Info">
@@ -102,7 +102,7 @@
   </div>
 
   <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)">Submit</ion-button>
-</WingBlank>
+</ion-content>
 
 <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="isContactDrawerVisible=false"
   (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '20px' }" [nzFooter]="contactModalFooter">

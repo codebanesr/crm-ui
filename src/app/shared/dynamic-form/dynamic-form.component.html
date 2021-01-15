@@ -41,7 +41,7 @@
   <div [ngClass]="{'empty':model.attributes.length == 0}" cdkDropList [cdkDropListData]="model.attributes"
     (cdkDropListDropped)="drop($event)" class="example-list">
 
-    <div class="example-box"  cdkDrag *ngFor="let item of model.attributes;let i= index;">
+    <div class="example-box"  cdkDrag *ngFor="let item of model.attributes;let i= index;" [cdkDragStartDelay]="200">
       <div nz-row>
         <div nz-col nzSpan="22">
           <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='text'">
