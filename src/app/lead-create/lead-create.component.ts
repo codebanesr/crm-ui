@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ToastService } from "ng-zorro-antd-mobile";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { ICampaign } from "../campaign/campaign.interface";
@@ -19,7 +19,7 @@ export class LeadCreateComponent implements OnInit {
   constructor(
     private leadsService: LeadsService,
     private campaignService: CampaignService,
-    private msgService: NzMessageService,
+    private router: Router,
     private activatedRouter: ActivatedRoute,
     private toastService: ToastService,
     private fb: FormBuilder
@@ -116,9 +116,15 @@ export class LeadCreateComponent implements OnInit {
         this.selectedCampaign.campaignName
       )
       .subscribe(
-        (data) => {
+        (data: Pick<ILead, '_id' | 'campaign' | 'email'>) => {
+          this.router.navigate(['home', 'solo'], {
+            queryParams: {
+              leadId: data._id,
+              campaignId: this.camapaignId,
+              isBrowsed: true
+            }
+          })
           this.toastService.show("Lead saved Successfully");
-          this.msgService.success("Successfully updated lead");
         },
         ({ error }: { error: ClassValidationError }) => {
           this.toastService.fail("Failed to create lead");

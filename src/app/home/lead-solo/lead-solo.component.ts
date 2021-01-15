@@ -1,3 +1,6 @@
+// selected lead is the lead returned from the server which will only have keys that have data associated
+// with them, use objectKeys(typedict) instead
+
 import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
@@ -234,11 +237,18 @@ export class LeadSoloComponent implements OnInit {
   enabledKeys;
   contactGroup: {label: string, value: string[], _id: string};
   leadGroups: { label: string; value: string[]; _id: string }[] = [];
+  allLeadKeys: string[] = []
   async getLeadMappings() {
-    const { typeDict } = await this.leadsService.getLeadMappings(
+    const { typeDict, mSchema } = await this.leadsService.getLeadMappings(
       this.selectedCampaignId
     );
 
+    console.log(mSchema);
+    mSchema.paths.forEach(p=>{
+      this.allLeadKeys.push(p.internalField);
+    });
+
+    
     const campaignObject = this.campaignList.filter(
       (element) => element._id === this.selectedCampaignId
     );
@@ -247,7 +257,7 @@ export class LeadSoloComponent implements OnInit {
     this.selectedCampaign = campaignObject[0];
     this.openAutodial();
 
-    this.leadGroups = campaignObject[0]?.groups;
+    this.leadGroups = this.selectedCampaign?.groups;
     this.contactGroup = this.leadGroups.filter(g=>g.label === 'contact')[0];
     this.formModel = campaignObject[0]?.formModel;
 
@@ -724,9 +734,9 @@ export class LeadSoloComponent implements OnInit {
       return;
     }
 
-    const alreadyIncluded = [];
+    let alreadyIncluded: string[] = [];
     this.selectedCampaign.groups.forEach((g) => {
-      alreadyIncluded.push(g.value);
+      alreadyIncluded = alreadyIncluded.concat(g.value);
     });
 
     this.otherData = difference(

@@ -1,4 +1,5 @@
-<button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
+<ion-content>
+  <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
 <button mat-button color="primary" (click)="downloadTransactions()">Download</button>
 <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
   <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
@@ -56,11 +57,10 @@
   </mat-drawer>
 
   <div class="main contents">
-    <ion-content fullscreen>
       <mat-accordion>
         <mat-expansion-panel *ngFor="let t of transactions">
           <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
-          <button mat-flat-button nzType="primary" style="float: right;" (click)="showLead(t.lead, t.campaign)">Edit</button>
+          <button mat-flat-button style="float: right;" (click)="showLead(t.lead, t.campaign)">Edit</button>
           <mat-list>
             <ng-container *ngFor="let k of objectKeys(t)">
               <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->
@@ -76,6 +76,6 @@
       </mat-accordion>
       <mat-paginator [length]="total" [pageSize]="perPage" [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePageChange($event)">
       </mat-paginator>
-    </ion-content>
   </div>
 </mat-drawer-container>
+</ion-content>
