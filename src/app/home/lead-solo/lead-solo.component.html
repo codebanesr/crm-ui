@@ -149,9 +149,9 @@
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Choose an option</mat-label>
                 <mat-select [(ngModel)]="selectedLead.nextAction">
-                  <mat-option value="followUp">Follow Up</mat-option>
-                  <mat-option value="onSite">On Site</mat-option>
-                  <mat-option value="salesCall">Sales Call</mat-option>
+                  <mat-option value="followUp" *ngIf="actions.followUp">Follow Up</mat-option>
+                  <mat-option value="salesCall" *ngIf="actions.salesCall">Sales Call</mat-option>
+                  <mat-option value="appointment" *ngIf="actions.appointment">Appointment</mat-option>
                 </mat-select>
               </mat-form-field>
 

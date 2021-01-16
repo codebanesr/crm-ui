@@ -408,7 +408,7 @@ export class LeadSoloComponent implements OnInit {
       }
     }
 
-    if(this.actions.followUp && !this.selectedLead.followUp) {
+    if((this.actions.followUp || this.actions.salesCall || this.actions.appointment) && !this.selectedLead.followUp) {
       return {status: false, message: "Followup is required!"};
     }
 
@@ -427,7 +427,7 @@ export class LeadSoloComponent implements OnInit {
     isInformationRequested: false,
     salesCall: false,
     appointment: false,
-    followUp : false
+    followUp : false,
   };
 
   getLinks(node: NzTreeNode): string[] {
@@ -450,6 +450,11 @@ export class LeadSoloComponent implements OnInit {
       this.selectedLead.leadStatus = links.reverse().join(" / ");
       this.selectedLead["leadStatusKeys"] = event.node.origin.key;
       const action = event.node.origin.action;
+      if(action[0] !== 'showForm') {
+        this.selectedLead.nextAction = action[0];
+      }else{
+        this.selectedLead.nextAction = action[1]
+      }
 
       this.resetAllActionHandlers();
       if (action?.includes("followUp")) {
