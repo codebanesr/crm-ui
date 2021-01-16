@@ -1,62 +1,63 @@
 <ion-content>
   <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
-<button mat-button color="primary" (click)="downloadTransactions()">Download</button>
-<mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
-  <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
-    <mat-toolbar class="header">
-      <mat-toolbar-row>
-        <span>Filters</span>
-        <span class="filter-toolbar-spacer"></span>
-        <mat-icon class="filter-toolbar-icon" aria-hidden="false" aria-label="Example close icon" (click)="drawer.toggle()">close</mat-icon>
-      </mat-toolbar-row>
-    </mat-toolbar>
-    <div class="contents">
-      <form [formGroup]="transactionForm" (submit)="getTransactions()">
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Campaign</mat-label>
-          <mat-select formControlName="campaign" placeholder="Campaign">
-            <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
-              {{option.campaignName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+  <button mat-button color="primary" (click)="downloadTransactions()">Download</button>
+  <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
+    <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
+      <mat-toolbar class="header">
+        <mat-toolbar-row>
+          <span>Filters</span>
+          <span class="filter-toolbar-spacer"></span>
+          <mat-icon class="filter-toolbar-icon" aria-hidden="false" aria-label="Example close icon"
+            (click)="drawer.toggle()">close</mat-icon>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <div class="contents">
+        <form [formGroup]="transactionForm" (submit)="getTransactions()">
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Campaign</mat-label>
+            <mat-select formControlName="campaign" placeholder="Campaign">
+              <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
+                {{option.campaignName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Prospect Name</mat-label>
-          <input placeholder="input here" matInput formControlName="prospectName" />
-        </mat-form-field>
-
-
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Enter start and end date</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate formControlName="startDate" placeholder="Start date">
-            <input matEndDate formControlName="endDate" placeholder="End date">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Prospect Name</mat-label>
+            <input placeholder="input here" matInput formControlName="prospectName" />
+          </mat-form-field>
 
 
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Assigned To</mat-label>
-          <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
-            <mat-option>
-              <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe" 
-                noEntriesFoundLabel="'no matching assignee found'">
-              </ngx-mat-select-search>
-            </mat-option>
-            <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
-              {{option.fullName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button mat-flat-button type="submit">Submit</button>
-      </form>
-    </div>
-  </mat-drawer>
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Enter start and end date</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate formControlName="startDate" placeholder="Start date">
+              <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
 
-  <div class="main contents">
+
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Assigned To</mat-label>
+            <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe"
+                  noEntriesFoundLabel="'no matching assignee found'">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
+                {{option.fullName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-flat-button type="submit">Submit</button>
+        </form>
+      </div>
+    </mat-drawer>
+
+    <div class="main contents">
       <mat-accordion>
         <mat-expansion-panel *ngFor="let t of transactions">
           <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
@@ -74,8 +75,9 @@
           </mat-list>
         </mat-expansion-panel>
       </mat-accordion>
-      <mat-paginator [length]="total" [pageSize]="perPage" [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePageChange($event)">
+      <mat-paginator [length]="total" [pageSize]="perPage" [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="handlePageChange($event)">
       </mat-paginator>
-  </div>
-</mat-drawer-container>
+    </div>
+  </mat-drawer-container>
 </ion-content>

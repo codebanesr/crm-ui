@@ -31,7 +31,7 @@ import * as moment from "moment";
 import { difference, isEmpty, isString } from "lodash";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
-import { ActionSheetController, LoadingController, Platform } from "@ionic/angular";
+import { ActionSheetController, LoadingController, Platform, ToastController } from "@ionic/angular";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { GeomarkerComponent } from "src/app/geomarker/geomarker.component";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -57,7 +57,7 @@ export class LeadSoloComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UsersService,
     private activatedRoute: ActivatedRoute,
-    private toast: ToastService,
+    private toastController: ToastController,
     private callNumber: CallNumber,
     private contacts: Contacts,
     private uploadService: UploadService,
@@ -193,7 +193,7 @@ export class LeadSoloComponent implements OnInit {
         console.log("logging query params", data);
       },
       (error) => {
-        this.toast.fail("Error in subscribing to query params");
+        // this.toast.fail("Error in subscribing to query params");
       }
     );
   }
@@ -321,9 +321,15 @@ export class LeadSoloComponent implements OnInit {
     };
 
     // any condition that has to be validated before submitting the form goes into this;
-    const isSubmissionValid = this.checkSubmissionStatus();
-    if (!isSubmissionValid) {
-      return false;
+    const preApproveResult = this.checkSubmissionStatus();
+    if (!preApproveResult.status) {
+      const toast = await this.toastController.create({
+        message: preApproveResult.message,
+        duration: 1000
+      });
+
+      toast.present();
+      return;
     }
     
     /** @Todo change this logic into something more manageable
@@ -338,13 +344,13 @@ export class LeadSoloComponent implements OnInit {
       (data) => {
         // clean user reassigment once done
         this.selectedUserForReassignment = null;
-        this.toast.success("Successfully updated lead");
+        // this.toast.success("Successfully updated lead");
         if (fetchNextLead) {
           this.fetchNextLead();
         }
       },
       ({ error }: { error: ClassValidationError }) => {
-        this.toast.fail(error.message[0]);
+        // this.toast.fail(error.message[0]);
       }
     );
   }
@@ -392,21 +398,36 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
-  checkSubmissionStatus(): boolean {
+  checkSubmissionStatus(): {status: boolean, message: string} {
     // validate form
     if (this.actions.isInformationRequested) {
       for (let element of this.formModel.attributes) {
         if (element.required && !element.value) {
-          this.toast.show(`${element.label} is a required field`);
-          return false;
+          return { status: false, message: `${element.label} is a required field` };
         }
       }
     }
-    return true;
+
+    if(this.actions.followUp && !this.selectedLead.followUp) {
+      return {status: false, message: "Followup is required!"};
+    }
+
+    if(this.actions.salesCall) {
+      return {status: false, message: "SalesCall is required!"};
+    }
+
+    if(this.actions.appointment) {
+      return {status: false, message: "Appointment is required!"};
+    }
+
+    return {status: true, message: "All validation checks passed!"};
   }
 
   actions = {
     isInformationRequested: false,
+    salesCall: false,
+    appointment: false,
+    followUp : false
   };
 
   getLinks(node: NzTreeNode): string[] {
@@ -421,9 +442,6 @@ export class LeadSoloComponent implements OnInit {
 
   showFab = false;
   followUpAction = false;
-  appointmentAction = false;
-  salesCallAction = false;
-  showFormAction = false;
   showFollowUpInput = false;
   handleDispositionTreeEvent(event) {
     // ["followUp", "appointment", "salesCall"]
@@ -435,12 +453,15 @@ export class LeadSoloComponent implements OnInit {
 
       this.resetAllActionHandlers();
       if (action?.includes("followUp")) {
+        this.actions.followUp = true;
       }
 
       if (action?.includes("appointment")) {
+        this.actions.appointment = true;
       }
 
       if (action?.includes("salesCall")) {
+        this.actions.salesCall = true;
       }
 
       if (action?.includes("showForm")) {
@@ -486,12 +507,12 @@ export class LeadSoloComponent implements OnInit {
   showAppliedFiltersOnNoResult = false;
   fetchNextLead() {
     this.showAppliedFiltersOnNoResult = false;
-    this.toast.loading("Fetching next lead");
+    // this.toast.loading("Fetching next lead");
     this.leadsService
       .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter)
       .subscribe(
         (data: any) => {
-          this.toast.hide();
+          // this.toast.hide();
           this.selectedLead = data.lead;
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
@@ -505,15 +526,15 @@ export class LeadSoloComponent implements OnInit {
 
   selectedLeadHistory = [];
   fetchLeadById(id: string) {
-    this.toast.info("Fetching lead");
+    // this.toast.info("Fetching lead");
     this.leadsService.getLeadById(id).subscribe(
       (data: {lead: ILead, leadHistory: any[]}) => {
-        this.toast.hide();
+        // this.toast.hide();
         this.selectedLead = data.lead;
         this.selectedLeadHistory = data.leadHistory;
       },
       (err) => {
-        this.toast.hide();
+        // this.toast.hide();
         console.log(err);
       }
     );
@@ -643,15 +664,19 @@ export class LeadSoloComponent implements OnInit {
             new ContactField("mobile", this.contactForm.get("value").value),
           ];
           contact.save().then(
-            () => this.toast.info("saved to phone"),
-            (error: any) => this.toast.info("Error saving contact to phone")
+            () => {
+              // this.toast.info("saved to phone")
+            },
+            (error: any) => { 
+              // this.toast.info("Error saving contact to phone") 
+            }
           );
 
-          this.toast.success("Updated contact information");
+          // this.toast.success("Updated contact information");
         },
         (error) => {
           this.selectedLead.contact.pop();
-          this.toast.fail("Failed to update contact information");
+          // this.toast.fail("Failed to update contact information");
         }
       );
 
