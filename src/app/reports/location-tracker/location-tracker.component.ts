@@ -15,8 +15,7 @@ export class LocationTrackerComponent implements OnInit {
   @ViewChild(MapInfoWindow, {static: false}) infoWindow: MapInfoWindow;
 
   center = {lat: 24, lng: 12};
-  markerOptions = {draggable: false};
-  markerPositions: google.maps.LatLngLiteral[] = [];
+  markerPositions: {userId: string, lat: number, lng: number} [] = [];
   zoom = 14;
   display?: google.maps.LatLngLiteral;
   vertices: google.maps.LatLngLiteral[] = [];
@@ -31,6 +30,7 @@ export class LocationTrackerComponent implements OnInit {
   data: any;
   listOfUsers: any;
   listOfCampaigns: any;
+
   ngOnInit() {
     this.initFilters();
     this.initCampaignList();
@@ -96,7 +96,13 @@ export class LocationTrackerComponent implements OnInit {
     this.display = event.latLng.toJSON();
   }
 
-  openInfoWindow(marker: MapMarker) {
+  iconBase =
+    "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
+
+
+  infoWindowContent = '';
+  openInfoWindow(marker: MapMarker, userId: string) {
+    this.infoWindowContent = userId;
     this.infoWindow.open(marker);
   }
 
@@ -107,10 +113,31 @@ export class LocationTrackerComponent implements OnInit {
   getVisitTrack() {
     console.log(this.filterForm.value);
 
-    this.agentService.getVisitTrack(this.filterForm.value).subscribe(data=>{
-      console.log(data);
+    this.agentService.getVisitTrack(this.filterForm.value).subscribe((data: IVisitTrack[])=>{
+      data.forEach(d=>{
+        d.locations.forEach(l=>{
+          this.markerPositions.push({lat: l.lat, lng: l.lng, userId: d.userId});
+        })
+      });
+
+      console.log(this.markerPositions)
     }, error=>{
       console.log(error);
     })
   }
+}
+
+
+interface ICoordinates {
+  _id: string, 
+  lat: number, 
+  lng: number
+}
+interface IVisitTrack {
+  createdAt: string,
+  locations: ICoordinates[],
+  updatedAt: string,
+  userId: string,
+  __v: number
+  _id: number
 }

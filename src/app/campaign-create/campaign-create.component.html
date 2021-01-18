@@ -66,8 +66,8 @@
                   Disposition
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="true" nzBlockNode [nzExpandedIcon]="multiExpandedIconTpl"
-                (nzOnDrop)="nzDropEvent($event)" (nzClick)="nzEvent($event); nodeActions($event);" [nzMultiple]="false">
+              <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="false" nzBlockNode [nzExpandedIcon]="multiExpandedIconTpl"
+                (nzClick)="nzEvent($event); nodeActions($event);" [nzMultiple]="false">
               </nz-tree>
             </mat-expansion-panel>
             <mat-expansion-panel>

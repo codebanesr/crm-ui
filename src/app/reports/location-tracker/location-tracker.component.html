@@ -13,14 +13,13 @@
     [zoom]="zoom"
     (mapMousemove)="move($event)"
     (mapRightclick)="removeLastMarker()">
-  <map-marker #marker
+  <map-marker #marker="mapMarker"
         *ngFor="let markerPosition of markerPositions"
         [position]="markerPosition"
-        [options]="markerOptions"
-        (mapClick)="openInfoWindow(marker)"></map-marker>
+        (mapClick)="openInfoWindow(marker, markerPosition.userId)"></map-marker>
 
   <map-polyline [path]="vertices"></map-polyline>
-  <map-info-window>Info Window content</map-info-window>
+  <map-info-window>{{infoWindowContent}}</map-info-window>
   </google-map>
 </div>
 
@@ -46,12 +45,6 @@
           </mat-select>
         </mat-form-field>
 
-        <!-- <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Prospect Name</mat-label>
-          <input placeholder="input here" matInput formControlName="prospectName" />
-        </mat-form-field> -->
-
-
         <mat-form-field appearance="outline" class="mat-full-width">
           <mat-label>Enter start and end date</mat-label>
           <mat-date-range-input [rangePicker]="picker">
@@ -64,7 +57,7 @@
 
 
         <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Assigned To</mat-label>
+          <mat-label>Select Users</mat-label>
           <mat-select formControlName="userIds" placeholder="Users" [multiple]="true">
             <mat-option>
               <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe" 
