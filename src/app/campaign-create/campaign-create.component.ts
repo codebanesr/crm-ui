@@ -8,7 +8,7 @@ import {
   NzDropdownMenuComponent,
 } from "ng-zorro-antd/dropdown";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { NzFormatEmitEvent } from "ng-zorro-antd/tree";
+import { NzFormatEmitEvent, NzTreeNode, NzTreeService } from "ng-zorro-antd/tree";
 import { NzUploadListComponent } from "ng-zorro-antd/upload";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { field } from "src/global.model";
@@ -39,7 +39,7 @@ export class CampaignCreateComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private uploadService: UploadService,
     private dialogCtrl: MatDialog,
-    private router: Router
+    private router: Router,
   ) {}
   campaignForm: FormGroup;
 
@@ -67,53 +67,57 @@ export class CampaignCreateComponent implements OnInit {
   fileList: NzUploadListComponent[] = [];
 
   attachments: any;
-  demoDispositionNodes: any[] = [
-    {
-      title: 'Interested',
-      key: 'interested',
-      children: [
-        {
-          title: 'Hot',
-          key: 'hot',
-          isLeaf: true
-        },
-        {
-          title: 'warm',
-          key: 'warm',
-          isLeaf: true
-        },
-        {
-          title: 'cold',
-          key: 'cold',
-          isLeaf: true
-        },{
-          title: 'won',
-          key: 'won',
-          isLeaf: true
-        }
-      ]
-    },{
-      title: 'Not Interested',
-      key: 'NI',
-      children: [
-        {
-          title: 'Too Costly',
-          key: 'TC',
-          isLeaf: true
-        },
-        {
-          title: 'Already bought',
-          key: 'AB',
-          isLeaf: true
-        },
-        {
-          title: 'Using Another CRM',
-          key: 'uacrm',
-          isLeaf: true
-        }
-      ]
-    }
-  ];
+  demoDispositionNodes: any[] = [{
+    title: "Root",
+    key: "root",
+    children: [
+      {
+        title: 'Interested',
+        key: 'interested',
+        children: [
+          {
+            title: 'Hot',
+            key: 'hot',
+            isLeaf: true
+          },
+          {
+            title: 'warm',
+            key: 'warm',
+            isLeaf: true
+          },
+          {
+            title: 'cold',
+            key: 'cold',
+            isLeaf: true
+          },{
+            title: 'won',
+            key: 'won',
+            isLeaf: true
+          }
+        ]
+      },{
+        title: 'Not Interested',
+        key: 'NI',
+        children: [
+          {
+            title: 'Too Costly',
+            key: 'TC',
+            isLeaf: true
+          },
+          {
+            title: 'Already bought',
+            key: 'AB',
+            isLeaf: true
+          },
+          {
+            title: 'Using Another CRM',
+            key: 'uacrm',
+            isLeaf: true
+          }
+        ]
+      }
+    ]
+  }];
 
   // campaignOptions: any = [];
   assignTo = [
@@ -210,7 +214,7 @@ export class CampaignCreateComponent implements OnInit {
 
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
-        this.demoDispositionNodes = data.options;
+        this.demoDispositionNodes = [{title: "Root", key: "root", children: data.options}];
       },
       (error) => {
         console.log("Error while calling initDispositionCore", error.message);
@@ -299,12 +303,12 @@ export class CampaignCreateComponent implements OnInit {
     this.formModel = event;
   }
 
-  addLeafNode() {
+  addLeafNode(isLeaf: boolean) {
     this.activeContext.node.addChildren([
       {
         title: "New Leaf",
         key: this.campaignService.getUniqueKey(),
-        isLeaf: true,
+        isLeaf,
       },
     ]);
   }
@@ -382,7 +386,7 @@ export class CampaignCreateComponent implements OnInit {
       campaignInfo: this.campaignForm.value,
       groups: this.groups,
       formModel: this.formModel,
-      dispositionData: this.demoDispositionNodes,
+      dispositionData: this.demoDispositionNodes[0].children,
       advancedSettings: this.advancedSettings.filter((el) => el.checked).map((el) => el.value),
       assignTo: this.assignTo.filter((el) => el.checked).map((el) => el.value),
       uniqueCols: this.uniqueCols.filter((c) => c.checked).map((c) => c.value),
@@ -492,18 +496,6 @@ export class CampaignCreateComponent implements OnInit {
     console.log($event);
   }
 
-  // fillCampaignOpts() {
-  //   this.emailForm
-  //     .get("campaign")
-  //     .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-  //     .subscribe((hint) => {
-  //       this.campaignService.getAllCampaignTypes(hint).subscribe((options) => {
-  //         this.campaignOptions = options;
-  //         console.log(this.campaignOptions);
-  //       });
-  //     });
-  // }
-
   handleFormTypeChange(event) {
     console.log(event, this.tabSelected);
   }
@@ -513,9 +505,9 @@ export class CampaignCreateComponent implements OnInit {
       this.activeContext.node.title = this.renameText;
       this.activeContext.node.origin.title = this.renameText;
       console.log(this.demoDispositionNodes);
-      this.demoDispositionNodes = [
-        this.activeContext.node.treeService.rootNodes[0].origin,
-      ];
+      // this.demoDispositionNodes = [
+      //   this.activeContext.node.treeService.rootNodes[0].origin,
+      // ];
       this.renameText = "";
     }
   }
@@ -657,4 +649,12 @@ export class CampaignCreateComponent implements OnInit {
       event.target.complete();
     }, 500);
   }
+}
+
+interface IChildren { 
+    key: string, 
+    title: string, 
+    children: IChildren[], 
+    isLeaf: boolean,
+    level: number
 }

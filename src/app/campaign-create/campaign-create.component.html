@@ -66,9 +66,8 @@
                   Disposition
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" nzDraggable nzBlockNode
-                (nzOnDrop)="nzEvent($event)" (nzClick)="nzEvent($event)" (nzContextMenu)="nodeActions($event)"
-                (contextmenu)="contextMenu($event, menu)">
+              <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="true" nzBlockNode [nzExpandedIcon]="multiExpandedIconTpl"
+                (nzOnDrop)="nzDropEvent($event)" (nzClick)="nzEvent($event); nodeActions($event);" [nzMultiple]="false">
               </nz-tree>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -290,37 +289,30 @@
       <!-- campaign form ends here -->
   
   
-      <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item (click)="deleteNode()">Delete This</li>
-          <li nz-menu-item (click)="addLeafNode()">Add Leaf</li>
+      <mat-menu #menu="matMenu">
+        <mat-list>
+          <button mat-menu-item (click)="deleteNode()">Delete This</button>
+          <li mat-menu-item (click)="addLeafNode(true)">Add Leaf</li>
+          <li mat-menu-item (click)="addLeafNode(false)">Add Branch</li>
+          
+          <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
+            <mat-label>Actions</mat-label>
+            <mat-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
+              <mat-option value="showForm">Show Form</mat-option>
+              <mat-option value="followUp">FollowUp</mat-option>
+              <mat-option value="appointment">Appointment</mat-option>
+              <mat-option value="salesCall">SalesCall</mat-option>
+            </mat-select>
+          </mat-form-field>
+        
   
-          <!-- <nz-select
-              style="margin: 0px; padding: 0px"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select an Action"
-              [(ngModel)]="selectedAction"
-              (ngModelChange)="attachAction()"
-            >
-              <nz-option nzLabel="Show Form" nzValue="showForm"></nz-option>
-              <nz-option nzLabel="Follow Up" nzValue="followUp"></nz-option>
-              <nz-option nzLabel="On Site Appointment" nzValue="onSiteAppointment"></nz-option>
-              <nz-option nzLabel="Sales Call" nzValue="salesCall"></nz-option>
-            </nz-select> -->
-          <ion-item nz-menu-item>
-            <ion-label>Actions</ion-label>
-            <ion-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
-              <ion-select-option value="showForm">Show Form</ion-select-option>
-              <ion-select-option value="followUp">FollowUp</ion-select-option>
-              <ion-select-option value="appointment">Appointment</ion-select-option>
-              <ion-select-option value="salesCall">SalesCall</ion-select-option>
-            </ion-select>
-          </ion-item>
-  
-          <input matInput placeholder="rename node" (keyup.enter)="rename()" nzSize="default" [(ngModel)]="renameText" />
-        </ul>
-      </nz-dropdown-menu>
+          <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
+            <mat-label>Rename Node</mat-label>
+            <input matInput placeholder="rename node" nzSize="default" [(ngModel)]="renameText" />
+            <button matSuffix mat-flat-button (click)="rename()"> Rename </button>
+          </mat-form-field>
+        </mat-list>
+      </mat-menu>
   
       <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="bottom" nzTitle="Recently Uploaded Files"
         (nzOnClose)="close()" nzHeight="90vh">
@@ -344,18 +336,28 @@
   <!-- defining tree template -->
   <ng-template #nzTreeTemplate let-node let-origin="origin">
     <span class="custom-node">
-      <span *ngIf="!node.isLeaf" (contextmenu)="contextMenu($event, menu)">
-        <!-- @Todo replace by icon from material design -->
-        <!-- <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'"></i> -->
+      <span *ngIf="!node.isLeaf">
         <span class="folder-name">{{ node.title }}</span>
       </span>
-      <span *ngIf="node.isLeaf" (contextmenu)="contextMenu($event, menu)">
+      <span *ngIf="node.isLeaf">
         <i nz-icon nzType="file"></i>
         <span class="file-name">{{ node.title }}</span>
-        <span class="file-desc" *ngIf="isArray(node.origin.action)">{{
-          node.origin.action
-        }}</span>
+        <span class="file-desc" *ngIf="isArray(node.origin.action)">{{ node.origin.action}}</span>
       </span>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </span>
+  </ng-template>
+
+
+  <ng-template #multiExpandedIconTpl let-node let-origin="origin">
+    <span class="material-icons" *ngIf="!origin.isLeaf" style="margin-top: 8px;">
+      {{ node.isExpanded ? 'keyboard_arrow_down': 'keyboard_arrow_right' }}
+    </span>
+
+    <span class="material-icons" *ngIf="origin.isLeaf" style="margin-top: 8px;">
+      {{ node._isChecked ? 'radio_button_checked': 'radio_button_unchecked' }}
     </span>
   </ng-template>
 </ion-content>

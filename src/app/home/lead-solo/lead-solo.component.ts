@@ -356,7 +356,7 @@ export class LeadSoloComponent implements OnInit {
   }
 
   getSafeWhatsAppUrl(phoneNumber: string) {
-    if(phoneNumber.length<=10 && !phoneNumber.startsWith('+')) {
+    if(phoneNumber.length<10 && !phoneNumber.startsWith('+')) {
       phoneNumber = '+91'
     }
     return this._sanitizer.bypassSecurityTrustUrl(`whatsapp://send?phone=${phoneNumber}`);
@@ -439,6 +439,7 @@ export class LeadSoloComponent implements OnInit {
 
     return links;
   }
+
 
   showFab = false;
   followUpAction = false;

@@ -112,7 +112,7 @@
 
             <mat-expansion-panel>
               <mat-expansion-panel-header>Dispositions</mat-expansion-panel-header>
-              <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)"  *ngIf="callDispositions">
+              <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)" [nzTreeTemplate]="nzTreeTemplate" *ngIf="callDispositions">
               </nz-tree>
             </mat-expansion-panel>
 
@@ -384,3 +384,17 @@
     <button mat-flat-button (click)="submitContactForm(true)">Add Another</button>
   </ng-template>
 </nz-modal>
+
+<ng-template #nzTreeTemplate let-node let-origin="origin">
+  <span *ngIf="!node.isLeaf">
+    <span class="folder-name">{{ node.title }}</span>
+  </span>
+  <span class="custom-node">
+    <span *ngIf="node.isLeaf">
+      <span class="material-icons">
+        {{node._isSelected ? 'radio_button_checked': 'radio_button_unchecked'}}
+      </span>
+      <span class="file-name">{{ node.title | titlecase }}</span>
+    </span>
+  </span>
+</ng-template>
