@@ -121,9 +121,70 @@ export class AddRulesComponent implements OnInit {
     console.log(rulesObj)
     switch(rulesObj.trigger) {
       case this.triggerEnum.dispositionChange: {
+        if(!rulesObj.fromDisposition || !rulesObj.toDisposition) {
+          return;
+        }
+        break;
+      }
+      case this.triggerEnum.changeHandler: {
+        break;
+      }
+      case this.triggerEnum.numberOfAttempts: {
+        if(!rulesObj.numberOfAttempts) {
+          return;
+        }
+        break;
+      }
+      case this.triggerEnum.overdueFollowups: {
+        if(!rulesObj.daysOverdue) {
+          return;
+        }
+        break;
+      }
+      case this.triggerEnum.repeatedDisposition: {
+        if(!rulesObj.disposition || !rulesObj.numberOfAttempts) {
+          return;
+        }
 
+        break;
+      }
+      default: {
+        return;
       }
     }
+
+    console.log("Passed trigger check");
+
+    switch(rulesObj.action) {
+      case this.eActions.callApi: {
+        if(!rulesObj.url) {
+          return;
+        }
+        break;
+      }
+
+      case this.eActions.changeDisposition: {
+        if(!rulesObj.newDisposition) {
+          return;
+        }
+
+        break;
+      }
+
+      case this.eActions.changeProspectHandler: {
+        if(!rulesObj.newHandler) {
+          return;
+        }
+
+        break;
+      }
+
+      default:{
+        return;
+      }
+    }
+
+    console.log("Passed trigger and action check");
   }
 
   dictionary = {

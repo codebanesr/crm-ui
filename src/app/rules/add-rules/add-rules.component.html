@@ -17,7 +17,7 @@
         <mat-label>Days Overdue</mat-label>
         <input type="number" matInput formControlName="daysOverdue" />
         <mat-error *ngIf="daysOverdue.hasError('required')">
-          Email is <strong>required</strong>
+          Overdue is <strong>required</strong>
         </mat-error>
       </mat-form-field>
 
@@ -32,6 +32,9 @@
             d.title
           }}</mat-option>
         </mat-select>
+        <mat-error *ngIf="disposition.hasError('required')">
+          Disposition is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field
@@ -45,7 +48,7 @@
         <mat-label>Number of Attempts</mat-label>
         <input type="number" matInput formControlName="numberOfAttempts" />
         <mat-error *ngIf="numberOfAttempts.hasError('required')">
-          Email is <strong>required</strong>
+          Number of attempts is <strong>required</strong>
         </mat-error>
       </mat-form-field>
 
@@ -60,6 +63,10 @@
             d.title
           }}</mat-option>
         </mat-select>
+
+        <mat-error *ngIf="fromDisposition.hasError('required')">
+          From Disposition is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field
@@ -73,6 +80,10 @@
             d.title
           }}</mat-option>
         </mat-select>
+
+        <mat-error *ngIf="toDisposition.hasError('required')">
+          From Disposition is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="mat-full-width" appearance="outline">
@@ -80,6 +91,10 @@
         <mat-select formControlName="action">
           <mat-option *ngFor="let act of actionOptions" [value]="act.value">{{act.label}}</mat-option>
         </mat-select>
+
+        <mat-error *ngIf="action.hasError('required')">
+          Action is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field
@@ -91,6 +106,10 @@
         <mat-select formControlName="newHandler">
           <mat-option *ngFor="let u of handlers" [value]="u._id">{{u.email}}</mat-option>
         </mat-select>
+
+        <mat-error *ngIf="newHandler.hasError('required')">
+          New Handler is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field
@@ -104,6 +123,10 @@
             d.title
           }}</mat-option>
         </mat-select>
+
+        <mat-error *ngIf="newDisposition.hasError('required')">
+          New Disposition is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field
@@ -114,7 +137,7 @@
         <mat-label>Trigger Action URL</mat-label>
         <input matInput type="url" formControlName="url" />
         <mat-error *ngIf="url.hasError('required')">
-          Email is <strong>required</strong>
+          Action url <strong>required</strong>
         </mat-error>
       </mat-form-field>
       <button
