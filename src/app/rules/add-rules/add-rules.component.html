@@ -1,0 +1,130 @@
+<ion-content>
+  <div style="margin: 8px; padding: 8px">
+    <h2>Add Rule</h2>
+    <form [formGroup]="ruleForm" (ngSubmit)="handleSubmit(ruleForm.value)">
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Trigger</mat-label>
+        <mat-select formControlName="trigger">
+          <mat-option *ngFor="let trigger of triggerOptions" [value]="trigger.value">{{trigger.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="trigger.value === triggerEnum.overdueFollowups"
+      >
+        <mat-label>Days Overdue</mat-label>
+        <input type="number" matInput formControlName="daysOverdue" />
+        <mat-error *ngIf="daysOverdue.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="trigger.value === triggerEnum.repeatedDisposition"
+      >
+        <mat-label>Disposition</mat-label>
+        <mat-select formControlName="disposition">
+          <mat-option *ngFor="let d of dispositionOpts" [value]="d.key" [disabled]="d.disabled">{{
+            d.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="
+          trigger.value === triggerEnum.numberOfAttempts ||
+          trigger.value === triggerEnum.repeatedDisposition
+        "
+      >
+        <mat-label>Number of Attempts</mat-label>
+        <input type="number" matInput formControlName="numberOfAttempts" />
+        <mat-error *ngIf="numberOfAttempts.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="trigger.value === triggerEnum.dispositionChange"
+      >
+        <mat-label>From Disposition</mat-label>
+        <mat-select formControlName="fromDisposition">
+          <mat-option *ngFor="let d of dispositionOpts" [value]="d.key" [disabled]="d.disabled">{{
+            d.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="trigger.value === triggerEnum.dispositionChange"
+      >
+        <mat-label>To Disposition</mat-label>
+        <mat-select formControlName="toDisposition">
+          <mat-option *ngFor="let d of dispositionOpts" [value]="d.key" [disabled]="d.disabled">{{
+            d.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Action</mat-label>
+        <mat-select formControlName="action">
+          <mat-option *ngFor="let act of actionOptions" [value]="act.value">{{act.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="action.value === eActions.changeProspectHandler"
+      >
+        <mat-label>New Handler</mat-label>
+        <mat-select formControlName="newHandler">
+          <mat-option *ngFor="let u of handlers" [value]="u._id">{{u.email}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="action.value === eActions.changeDisposition"
+      >
+        <mat-label>New Disposition</mat-label>
+        <mat-select formControlName="newDisposition">
+          <mat-option *ngFor="let d of dispositionOpts" [value]="d.key" [disabled]="d.disabled">{{
+            d.title
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        class="mat-full-width"
+        appearance="outline"
+        *ngIf="action.value === eActions.callApi"
+      >
+        <mat-label>Trigger Action URL</mat-label>
+        <input matInput type="url" formControlName="url" />
+        <mat-error *ngIf="url.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="mat-full-width"
+      >
+        Add Rule
+      </button>
+    </form>
+  </div>
+</ion-content>

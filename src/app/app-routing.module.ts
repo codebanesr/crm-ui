@@ -25,6 +25,10 @@ const routes: Routes = [
     loadChildren: () => import('./shared/shared.module').then(m=>m.SharedModule)
   },
   {
+    path: 'rules',
+    loadChildren: () => import('./rules/rules.module').then(m=>m.RulesModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

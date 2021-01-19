@@ -58,7 +58,8 @@
   
         <!-- the block below is only to be shown for campaign update case -->
         <ng-container *ngIf="this.campaignId">
-          <button mat-flat-button class="mat-full-width" (click)="displayParamModal()" style="padding-bottom: 2px;"> Add More Params</button>
+          <button mat-flat-button (click)="displayParamModal()" style="padding-bottom: 2px;"> Add More Params</button>
+          <button mat-flat-button (click)="routeToRules()" style="padding-bottom: 2px;"> Add Rules</button>
           <mat-accordion>
             <mat-expansion-panel>
               <mat-expansion-panel-header>
