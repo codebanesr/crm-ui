@@ -31,11 +31,28 @@ export class ListRulesComponent implements OnInit {
     })
   }
 
+  activateRule(r: IRules) {
+    r.isActive = !r.isActive;
+    this.ruleService.activateRule(r._id, r.isActive).subscribe((result: IRules) => {
+      console.log(result);
+    }, error=>{
+      r.isActive = false;
+    })
+  }
 
   navigateToRuleDetails(r: IRules) {
     this.router.navigate(['rules', 'add-rules'], {
       queryParams: {
         ruleId: r._id,
+        campaignId: this.campaignId
+      }
+    })
+  }
+
+
+  navigateToAddRule() {
+    this.router.navigate(['rules', 'add-rules'], {
+      queryParams: {
         campaignId: this.campaignId
       }
     })

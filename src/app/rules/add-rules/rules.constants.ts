@@ -41,5 +41,6 @@ export interface IRules {
   numberOfAttempts: number,
   toDisposition: string,
   trigger: string,
-  url: string
+  url: string,
+  isActive: boolean
 }

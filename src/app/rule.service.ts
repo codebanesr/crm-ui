@@ -22,4 +22,8 @@ export class RuleService {
   getRuleById(ruleId: string): Observable<IRules> {
     return this.http.get<IRules>(`${environment.apiUrl}/rules/${ruleId}`);
   }
+
+  activateRule(ruleId: string, isActive: boolean): Observable<IRules> {
+    return this.http.post<IRules>(`${environment.apiUrl}/rules/changeState`, {ruleId, isActive});
+  }
 }

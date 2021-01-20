@@ -1,28 +1,18 @@
-<!-- <ion-content>
-  <ion-item detail (click)="navigateToRuleDetails(r)" *ngFor="let r of rules" lines="full">
-    <ion-label>
-      <ion-text>{{startCase(r.trigger)}} / {{startCase(r.action)}}</ion-text>
-    </ion-label>
-  </ion-item>
-</ion-content> -->
-
 <ion-content>
-  <mat-expansion-panel hideToggle *ngFor="let r of rules">
-    <mat-expansion-panel-header style="display: flex;">
-      <mat-panel-title style="flex: 5;">
+  <mat-expansion-panel *ngFor="let r of rules">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
         {{startCase(r.trigger)}}
       </mat-panel-title>
-      <mat-panel-description style="flex:1;">
-        <mat-icon style="margin-left: auto;">date_range</mat-icon>
-      </mat-panel-description>
     </mat-expansion-panel-header>
-    <!-- {{startCase(r.action)}} -->
-    <p *ngFor="let k of objectKeys(r)">
-      {{k}} : {{r[k]}}
-    </p>
+    <ng-container *ngFor="let k of objectKeys(r)">
+      <p *ngIf="r[k] && !['_id', 'campaign'].includes(k)">{{startCase(k)}} : {{ (k === 'createdAt' || k === 'updatedAt') ? (r[k] | date) : r[k]}}</p>
+    </ng-container>
     <mat-action-row>
-      <button mat-button color="warn">Previous</button>
+      <button mat-button [color]="r.isActive ? 'warn' : 'primary'" (click)="activateRule(r)">{{r.isActive ? 'DeActivate': 'Activate'}}</button>
       <button mat-button color="primary" (click)="navigateToRuleDetails(r)">Edit</button>
     </mat-action-row>
   </mat-expansion-panel>
+
+  <button mat-raised-button color="primary" class="mat-full-width" (click)="navigateToAddRule()">Add Rule</button>
 </ion-content>
