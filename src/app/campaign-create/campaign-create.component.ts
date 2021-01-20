@@ -178,7 +178,7 @@ export class CampaignCreateComponent implements OnInit {
   }
   // rules/add-rules?campaignId=5fd9f611f191a800a76533dc
   routeToRules() {
-    this.router.navigate(['rules', 'add-rules'], {
+    this.router.navigate(['rules', 'list-rules'], {
       queryParams: {
         campaignId: this.campaign._id
       }

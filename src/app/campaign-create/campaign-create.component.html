@@ -58,8 +58,10 @@
   
         <!-- the block below is only to be shown for campaign update case -->
         <ng-container *ngIf="this.campaignId">
-          <button mat-flat-button (click)="displayParamModal()" style="padding-bottom: 2px;"> Add More Params</button>
-          <button mat-flat-button (click)="routeToRules()" style="padding-bottom: 2px;"> Add Rules</button>
+          <div style="margin-left: 10px; margin-right: 10px;">
+            <button mat-raised-button color="accent" (click)="displayParamModal()" style="margin: 4px;"> Add More Params</button>
+            <button mat-raised-button color="accent" (click)="routeToRules()" style="margin: 4px;">Rules</button>
+          </div>
           <mat-accordion>
             <mat-expansion-panel>
               <mat-expansion-panel-header>

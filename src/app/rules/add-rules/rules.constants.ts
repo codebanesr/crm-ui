@@ -28,3 +28,18 @@ export const ActionOptions = [
     {label: "Change Prospect Handler", value: EActions.changeProspectHandler},
     
 ]
+
+export interface IRules {
+  _id?:string,
+  action: string,
+  changeHandler: string,
+  daysOverdue: number,
+  disposition: string,
+  fromDisposition: string,
+  newDisposition: string,
+  newHandler: string,
+  numberOfAttempts: number,
+  toDisposition: string,
+  trigger: string,
+  url: string
+}

@@ -10,22 +10,8 @@ import { CampaignService } from "src/app/home/campaign.service";
 import { NzTreeNode } from "ng-zorro-antd/tree";
 import { UsersService } from "src/app/home/users.service";
 import { User } from "src/app/home/interfaces/user";
-import { Trigger, TriggerOptions, ActionOptions, EActions } from './rules.constants';
-
-interface IRules {
-  action: string,
-  changeHandler: string,
-  daysOverdue: number,
-  disposition: string,
-  fromDisposition: string,
-  newDisposition: string,
-  newHandler: string,
-  numberOfAttempts: number,
-  toDisposition: string,
-  trigger: string,
-  url: string
-}
-
+import { Trigger, TriggerOptions, ActionOptions, EActions, IRules } from './rules.constants';
+import { RuleService } from "src/app/rule.service";
 @Component({
   selector: "app-add-rules",
   templateUrl: "./add-rules.component.html",
@@ -36,18 +22,25 @@ export class AddRulesComponent implements OnInit {
     private fb: FormBuilder,
     private campaignService: CampaignService,
     private activatedRoute: ActivatedRoute,
-    private userService: UsersService
+    private userService: UsersService,
+    private ruleService: RuleService
   ) {}
 
   triggerEnum = Trigger;
   triggerOptions = TriggerOptions;
   eActions = EActions;
   actionOptions = ActionOptions;
+  campaignId: string = '';
+  ruleId: string = null;
+  ruleButtonText = "Waiting ..."
   ngOnInit() {
-    const campaignId = this.activatedRoute.snapshot.queryParamMap.get('campaignId');
-    console.log(campaignId);
+    const qp = this.activatedRoute.snapshot.queryParamMap;
+    this.campaignId = qp.get('campaignId');
+    this.ruleId = qp.get('ruleId');
+
+    this.ruleButtonText = this.ruleId ? 'Update Rule' : 'Add New Rule'
     this.initRuleForm();
-    this.initDispositionNodes(campaignId);
+    this.initDispositionNodes();
     this.getAllHandler();
   }
 
@@ -60,8 +53,8 @@ export class AddRulesComponent implements OnInit {
     })
   }
 
-  initDispositionNodes(campaignId) {
-    this.campaignService.getDisposition(campaignId).subscribe((result: any)=>{
+  initDispositionNodes() {
+    this.campaignService.getDisposition(this.campaignId).subscribe((result: any)=>{
       this.flattenDispositionTree(result.options);
     }, error=>{
       console.log(error);
@@ -103,6 +96,8 @@ export class AddRulesComponent implements OnInit {
 
   initRuleForm() {
     this.ruleForm = this.fb.group({
+      _id: new FormControl(null),
+      campaign: new FormControl(this.campaignId),
       trigger: this.trigger,
       numberOfAttempts: this.numberOfAttempts,
       action: this.action,
@@ -115,6 +110,12 @@ export class AddRulesComponent implements OnInit {
       newHandler: this.newHandler,
       newDisposition: this.newDisposition
     });
+
+    if(this.ruleId) {
+      this.ruleService.getRuleById(this.ruleId).subscribe((rule: IRules)=>{
+        this.ruleForm.patchValue(rule);
+      })
+    }
   }
 
   handleSubmit(rulesObj: IRules) {
@@ -185,6 +186,17 @@ export class AddRulesComponent implements OnInit {
     }
 
     console.log("Passed trigger and action check");
+
+
+    if(this.ruleId) {
+      console.log("update will be called here!")
+    }else {
+      this.ruleService.addRule(rulesObj).subscribe(data=>{
+        console.log(data);
+      }, error=>{
+        console.log(error);
+      })
+    }
   }
 
   dictionary = {

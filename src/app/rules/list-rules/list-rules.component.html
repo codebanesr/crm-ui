@@ -1,0 +1,7 @@
+<ion-content>
+  <ion-item detail (click)="navigateToRuleDetails(r)" *ngFor="let r of rules" lines="full">
+    <ion-label>
+      <ion-text>{{startCase(r.trigger)}} / {{startCase(r.action)}}</ion-text>
+    </ion-label>
+  </ion-item>
+</ion-content>
