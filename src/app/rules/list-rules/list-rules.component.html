@@ -1,7 +1,28 @@
-<ion-content>
+<!-- <ion-content>
   <ion-item detail (click)="navigateToRuleDetails(r)" *ngFor="let r of rules" lines="full">
     <ion-label>
       <ion-text>{{startCase(r.trigger)}} / {{startCase(r.action)}}</ion-text>
     </ion-label>
   </ion-item>
+</ion-content> -->
+
+<ion-content>
+  <mat-expansion-panel hideToggle *ngFor="let r of rules">
+    <mat-expansion-panel-header style="display: flex;">
+      <mat-panel-title style="flex: 5;">
+        {{startCase(r.trigger)}}
+      </mat-panel-title>
+      <mat-panel-description style="flex:1;">
+        <mat-icon style="margin-left: auto;">date_range</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <!-- {{startCase(r.action)}} -->
+    <p *ngFor="let k of objectKeys(r)">
+      {{k}} : {{r[k]}}
+    </p>
+    <mat-action-row>
+      <button mat-button color="warn">Previous</button>
+      <button mat-button color="primary" (click)="navigateToRuleDetails(r)">Edit</button>
+    </mat-action-row>
+  </mat-expansion-panel>
 </ion-content>

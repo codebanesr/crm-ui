@@ -21,6 +21,7 @@ export class ListRulesComponent implements OnInit {
 
   startCase = startCase;
   campaignId = '';
+  objectKeys = Object.keys;
   ngOnInit() {
     this.campaignId = this.activatedRouter.snapshot.queryParamMap.get('campaignId');
     this.ruleService.getAllRules(this.campaignId, 20, 0).subscribe((rules: IRules[])=>{
