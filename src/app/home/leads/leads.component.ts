@@ -16,7 +16,7 @@ import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
 import { ICampaign } from "src/app/campaign/campaign.interface";
-import { ToastController } from "@ionic/angular";
+import { LoadingController, ToastController } from "@ionic/angular";
 const { Share } = Plugins;
 
 @Component({
@@ -34,6 +34,7 @@ export class LeadsComponent {
     private campaignService: CampaignService,
     private pubsub: PubsubService,
     public toastController: ToastController,
+    public loadingCtrl: LoadingController
   ) {}
 
   page: number = 1;
@@ -125,16 +126,17 @@ export class LeadsComponent {
     /** @Todo please prevent big typedict from being passed, look for an alternate route */
     this.leadOptions["typeDict"] = this.typeDict;
 
-    const toast = await this.toastController.create({
+    const loader = await this.loadingCtrl.create({
       message: 'Fetching leads',
-      duration: 2000,
-      color: 'light'
+      spinner: 'bubbles',
+      mode: 'md'
     });
 
-    toast.present();
+    await loader.present();
 
     this.leadsService.getLeads(this.leadOptions).subscribe(
       async (response: any) => {
+        loader.dismiss();
         if (response.data.length === 0) {
           this.isEmpty = true;
         } else {

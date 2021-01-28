@@ -1,7 +1,7 @@
 // selected lead is the lead returned from the server which will only have keys that have data associated
 // with them, use objectKeys(typedict) instead
 
-import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
@@ -28,7 +28,7 @@ import {
 } from "@ionic-native/contacts/ngx";
 import * as moment from "moment";
 
-import { difference, isEmpty, isString, update } from "lodash";
+import { difference, isEmpty, isString, takeRight, update } from "lodash";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { ActionSheetController, LoadingController, Platform, ToastController } from "@ionic/angular";
@@ -41,6 +41,8 @@ import { CallLog } from '@ionic-native/call-log/ngx';
 import { ICallRecord } from "./call-record.interface";
 import { environment } from "src/environments/environment";
 import { ECallStatus } from "../interfaces/call-status.enum";
+import { debounce, debounceTime, distinctUntilChanged, take, takeLast, takeUntil, throttle, throttleTime } from "rxjs/operators";
+import { from, timer } from "rxjs";
 
 declare let PhoneCallTrap: any;
 
@@ -183,10 +185,10 @@ export class LeadSoloComponent implements OnInit{
 
   selectedCampaign: ICampaign;
   subscribeToQueryParamChange() {
-    this.activatedRoute.queryParams.subscribe(
-      async (data) => {
-        this.selectedCampaignId = data.campaignId;
-
+    const t = timer(300);
+    this.activatedRoute.queryParams.pipe(takeUntil(t), takeLast(1)).subscribe(async data => {
+      this.selectedCampaignId = data.campaignId;
+        this.browsableState = data.isBrowsed ? true : false;
         await this.getLeadMappings();
         this.getDispositionForCampaign();
 
@@ -197,11 +199,9 @@ export class LeadSoloComponent implements OnInit{
           this.fetchNextLead();
         }
         console.log("logging query params", data);
-      },
-      (error) => {
-        // this.toast.fail("Error in subscribing to query params");
-      }
-    );
+    }, async error=>{
+      console.log(error);
+    })
   }
 
   usersForReassignment = [];
@@ -240,7 +240,7 @@ export class LeadSoloComponent implements OnInit{
 
   // leadStatusOptions: string[];
   // selectedLeadStatus: string;
-  enabledKeys;
+  enabledKeys: string[] = [];
   contactGroup: {label: string, value: string[], _id: string};
   leadGroups: { label: string; value: string[]; _id: string }[] = [];
   allLeadKeys: string[] = []
@@ -389,9 +389,7 @@ export class LeadSoloComponent implements OnInit{
 
   browsableState = false;
   openAutodial() {
-    const queryParams = this.activatedRoute.snapshot.queryParams;
-    if(queryParams.isBrowsed) {
-      this.browsableState = true;
+    if(this.browsableState) {
       return;
     }
 
@@ -545,9 +543,10 @@ export class LeadSoloComponent implements OnInit{
 
     this.showAppliedFiltersOnNoResult = false;
     await loading.present();
+    const t = timer(300);
     this.leadsService
       .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter)
-      .subscribe(
+      .pipe(takeUntil(t), takeLast(1)).subscribe(
         (data: any) => {
           loading.dismiss();
           this.selectedLead = data.lead;

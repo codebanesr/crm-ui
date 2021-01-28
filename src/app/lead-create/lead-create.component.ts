@@ -33,16 +33,22 @@ export class LeadCreateComponent implements OnInit {
   objectkeys = Object.keys;
   dateMode: string = "time";
   loadingCampaignList = false;
-  campaignList: any[] = [];
+  campaignList: Pick<ICampaign, '_id' | 'campaignName'>[] = [];
   callDispositions;
   isContactDrawerVisible = false;
   otherData = [];
   ngOnInit(): void {
     this.initContactForm();
     this.subscribeToQueryParamChange();
+    this.getCampaignNameAndId();
   }
 
-  async populateCampaignDropdown(campaignId: string) {
+
+  async getCampaignNameAndId() {
+    this.campaignList = await this.campaignService.populateCampaignDropdown({select: ['_id', 'campaignName']});
+  }
+
+  async populateCampaignData(campaignId: string) {
     this.loadingCampaignList = true;
     this.campaignService
       .getCampaignById(campaignId)
@@ -153,7 +159,7 @@ export class LeadCreateComponent implements OnInit {
     }
 
     this.camapaignId = campaignId;
-    this.populateCampaignDropdown(this.camapaignId);
+    this.populateCampaignData(this.camapaignId);
   }
 
   contactForm!: FormGroup;

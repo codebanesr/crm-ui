@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { LoadingController } from "@ionic/angular";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
@@ -17,7 +18,8 @@ export class UsersComponent implements OnInit {
     private usersService: UsersService,
     private leadService: LeadsService,
     private router: Router,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private loadingCtrl: LoadingController
   ) {}
 
   total = 1;
@@ -32,21 +34,26 @@ export class UsersComponent implements OnInit {
     { text: "female", value: "female" },
   ];
 
-  loadDataFromServer(
+  async loadDataFromServer(
     pageIndex: number,
     pageSize: number,
     sortField: string | null,
     sortOrder: string | null,
     filter: Array<{ key: string; value: string[] }>
-  ): void {
-    this.loading = true;
+  ): Promise<void> {
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      mode: 'md',
+      message: 'Fetching lead ...'
+    })
+    loading.present();
     this.usersService
       .getUsers(pageIndex, pageSize, sortField, sortOrder, filter)
-      .subscribe((result: any) => {
-        this.loading = false;
+      .subscribe(async (result: any) => {
+        await loading.dismiss();
         this.total = result.metadata.total;
         this.listOfRandomUser = result.users;
-      });
+      }, async err=> loading.dismiss());
   }
 
   editUser(userid: string) {
@@ -69,7 +76,7 @@ export class UsersComponent implements OnInit {
 
   managers: any;
   selectedCampaign: ICampaign;
-  ngOnInit(): void {
+  async ngOnInit() {
     this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
     this.usersService.getManagersForReassignment().subscribe(
       (data) => {

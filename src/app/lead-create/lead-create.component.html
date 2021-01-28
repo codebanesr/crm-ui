@@ -1,137 +1,157 @@
-<nz-divider></nz-divider>
 <ion-content fullscreen>
   <div *ngIf="typeDict">
-    <!-- <nz-descriptions nzTitle="Lead Info" nzBordered=true>
-      <nz-descriptions-item nzTitle="Contact Info">
-        <nz-collapse nzHeader="Contact Info">
-          <ng-template #contactInfo>
-            <button mat-raised-button style="height: 100%; width: 100%;">Add Contact</button>
-          </ng-template>
-          <nz-collapse-panel [nzHeader]="contactInfo" nzShowArrow="false">
-            <ng-container *ngFor="let contact of selectedLead.contact">
-              <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
-                <ion-icon name="call"></ion-icon>
-                <i class="icon ion-ios-telephone"></i> &nbsp;
-                {{contact.value}}
-              </ion-button>
-              <a *ngIf="contact.category!=='mobile'"> {{contact.value}}</a>
-            </ng-container>
-            <button nz-button nzSize='small' style="float: right;" (click)="isContactDrawerVisible = true">Add
-              Contact</button>
-          </nz-collapse-panel>
-        </nz-collapse>
-      </nz-descriptions-item>
-    </nz-descriptions> -->
     <mat-card>
       <mat-card-content>
         <h2>
           Contact Information
-          <button mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon" (click)="isContactDrawerVisible = true">
+          <button
+            mat-mini-fab
+            color="primary"
+            aria-label="Example icon button with a plus one icon"
+            (click)="isContactDrawerVisible = true"
+          >
             <mat-icon>add_ic_call</mat-icon>
-          </button>      
+          </button>
         </h2>
         <ng-container *ngFor="let contact of selectedLead.contact">
-          <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
+          <ion-button
+            color="success"
+            size="small"
+            *ngIf="contact.category === 'mobile'"
+          >
             <ion-icon name="call"></ion-icon>
             <i class="icon ion-ios-telephone"></i> &nbsp;
-            {{contact.value}}
+            {{ contact.value }}
           </ion-button>
-          <a *ngIf="contact.category!=='mobile'"> {{contact.value}}</a>
+          <a *ngIf="contact.category !== 'mobile'"> {{ contact.value }}</a>
         </ng-container>
-        <br>
+        <br />
       </mat-card-content>
     </mat-card>
-  
 
-    
-      <mat-tab-group mat-align-tabs="start">
-        <mat-tab [label]="g.label" *ngFor="let g of selectedCampaign?.groups">
-          <nz-descriptions nzBordered=true nzSize="small">
-            <ng-container *ngFor="let leadKey of g.value">
-              <ng-container *ngIf="['string', 'number', 'date', 'select'].includes(typeDict[leadKey].type)">
-                <nz-descriptions-item *ngIf="typeDict[leadKey]" [nzTitle]="typeDict[leadKey].label">
-                  <ng-container [ngSwitch]="typeDict[leadKey].type">
-                    <ng-container *ngSwitchCase="'date'">
-                      <mat-form-field>
-                        <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
-                        type="datetime-local">
-                      </mat-form-field>
-                    </ng-container>
-    
-                    <ng-container *ngSwitchCase="'number'">
-                      <mat-form-field>
-                        <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
-                      </mat-form-field>
-                    </ng-container>
-    
-                    <ng-container *ngSwitchCase="'string'">
-                      <mat-form-field>
-                        <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
-                          [disabled]="isDisabled(leadKey)" />
-                      </mat-form-field>
-                    </ng-container>
-    
-    
-                    <ng-container *ngSwitchCase="'select'">
-                      <mat-form-field>
-                        <!-- <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
+    <mat-form-field class="mat-full-width">
+      <mat-label>Campaign</mat-label>
+      <mat-select [(ngModel)]="selectedLead.campaignId">
+        <mat-option *ngFor="let c of campaignList" [value]="c._id">
+          {{ c.campaignName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-tab-group mat-align-tabs="start">
+      <mat-tab [label]="g.label" *ngFor="let g of selectedCampaign?.groups">
+        <nz-descriptions nzBordered="true" nzSize="small">
+          <ng-container *ngFor="let leadKey of g.value">
+            <ng-container
+              *ngIf="
+                ['string', 'number', 'date', 'select'].includes(
+                  typeDict[leadKey].type
+                )
+              "
+            >
+              <nz-descriptions-item
+                *ngIf="typeDict[leadKey]"
+                [nzTitle]="typeDict[leadKey].label"
+              >
+                <ng-container [ngSwitch]="typeDict[leadKey].type">
+                  <ng-container *ngSwitchCase="'date'">
+                    <mat-form-field>
+                      <input
+                        matInput
+                        [(ngModel)]="selectedLead[leadKey]"
+                        [disabled]="isDisabled(leadKey)"
+                        type="datetime-local"
+                      />
+                    </mat-form-field>
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'number'">
+                    <mat-form-field>
+                      <input
+                        matInput
+                        placeholder="Basic usage"
+                        [(ngModel)]="selectedLead[leadKey]"
+                      />
+                    </mat-form-field>
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'string'">
+                    <mat-form-field>
+                      <input
+                        matInput
+                        placeholder="Basic usage"
+                        [(ngModel)]="selectedLead[leadKey]"
+                        [disabled]="isDisabled(leadKey)"
+                      />
+                    </mat-form-field>
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="'select'">
+                    <mat-form-field>
+                      <!-- <nz-select nzMode="default" [(ngModel)]="selectedLead[leadKey]">
                           <nz-option *ngFor="let option of typeDict[leadKey].options" [nzLabel]="option" [nzValue]="option">
                           </nz-option>
                         </nz-select> -->
 
-                        <mat-select>
-
-                        </mat-select>
-                      </mat-form-field>
-
-    
-                    </ng-container>
-    
+                      <mat-select> </mat-select>
+                    </mat-form-field>
                   </ng-container>
-                </nz-descriptions-item>
-              </ng-container>
+                </ng-container>
+              </nz-descriptions-item>
             </ng-container>
-          </nz-descriptions>
-        </mat-tab>
-      </mat-tab-group>
+          </ng-container>
+        </nz-descriptions>
+      </mat-tab>
+    </mat-tab-group>
 
-
-      
-    
-    <button nz-button nzSize='sm' (click)="evaluateOtherData()">{{this.showOtherData ? 'Show Less': 'Show More'}}</button>
+    <button nz-button nzSize="sm" (click)="evaluateOtherData()">
+      {{ this.showOtherData ? "Show Less" : "Show More" }}
+    </button>
   </div>
 
-  <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)">Submit</ion-button>
+  <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)"
+    >Submit</ion-button
+  >
 </ion-content>
 
-<nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="isContactDrawerVisible=false"
-  (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '20px' }" [nzFooter]="contactModalFooter">
+<nz-modal
+  [(nzVisible)]="isContactDrawerVisible"
+  nzTitle="Add Contact"
+  (nzOnCancel)="isContactDrawerVisible = false"
+  (nzOnOk)="isContactDrawerVisible = false"
+  [nzStyle]="{ top: '20px' }"
+  [nzFooter]="contactModalFooter"
+>
   <form nz-form [formGroup]="contactForm">
     <mat-form-field class="mat-full-width">
       <mat-label nzRequired nzFor="note">Label</mat-label>
-      
-        <input id="label" type="text" nz-input formControlName="label" matInput/>
-      
+
+      <input id="label" type="text" nz-input formControlName="label" matInput />
     </mat-form-field>
 
     <mat-form-field class="mat-full-width">
       <mat-label>Value</mat-label>
-      <input id="value" type="text" nz-input formControlName="value" matInput/>
-      
+      <input id="value" type="text" nz-input formControlName="value" matInput />
     </mat-form-field>
 
     <mat-form-field class="mat-full-width">
       <mat-label>category</mat-label>
-        <mat-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
-          <mat-option nzValue="mobile" nzLabel="Mobile"></mat-option>
-          <mat-option nzValue="email" nzLabel="Email"></mat-option>
-        </mat-select>
-      
+      <mat-select
+        id="category"
+        formControlName="category"
+        nzPlaceHolder="Select a option and change input text above"
+      >
+        <mat-option nzValue="mobile" nzLabel="Mobile"></mat-option>
+        <mat-option nzValue="email" nzLabel="Email"></mat-option>
+      </mat-select>
     </mat-form-field>
   </form>
-
   <ng-template #contactModalFooter>
-    <button nz-button nzType="default" (click)="submitContactForm(false)">Save</button>
-    <button nz-button nzType="primary" (click)="submitContactForm(true)">Add Another</button>
+    <button nz-button nzType="default" (click)="submitContactForm(false)">
+      Save
+    </button>
+    <button nz-button nzType="primary" (click)="submitContactForm(true)">
+      Add Another
+    </button>
   </ng-template>
 </nz-modal>

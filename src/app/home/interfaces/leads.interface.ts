@@ -6,6 +6,7 @@ export interface ILead {
   address: string;
   amount: string;
   campaign: string;
+  campaignId: string;
   companyName: string;
   createdAt: string;
   customerEmail: string;
