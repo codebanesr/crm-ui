@@ -1,7 +1,7 @@
 // selected lead is the lead returned from the server which will only have keys that have data associated
 // with them, use objectKeys(typedict) instead
 
-import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
@@ -28,7 +28,7 @@ import {
 } from "@ionic-native/contacts/ngx";
 import * as moment from "moment";
 
-import { difference, isEmpty, isString } from "lodash";
+import { difference, isEmpty, isString, update } from "lodash";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { ActionSheetController, LoadingController, Platform, ToastController } from "@ionic/angular";
@@ -40,6 +40,7 @@ import { EAutodial } from "./autodial.interface";
 import { CallLog } from '@ionic-native/call-log/ngx';
 import { ICallRecord } from "./call-record.interface";
 import { environment } from "src/environments/environment";
+import { ECallStatus } from "../interfaces/call-status.enum";
 
 declare let PhoneCallTrap: any;
 
@@ -50,7 +51,7 @@ defineCustomElements(window);
   templateUrl: "./lead-solo.component.html",
   styleUrls: ["./lead-solo.component.scss"],
 })
-export class LeadSoloComponent implements OnInit {
+export class LeadSoloComponent implements OnInit{
   constructor(
     private leadsService: LeadsService,
     private campaignService: CampaignService,
@@ -66,7 +67,7 @@ export class LeadSoloComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private callLog: CallLog,
     private platform: Platform,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
   ) {}
 
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
@@ -95,15 +96,20 @@ export class LeadSoloComponent implements OnInit {
   jsonStringify = JSON.stringify;
   locale = en_US;
 
-  ngOnInit(): void {
+  loading: HTMLIonLoadingElement;
+
+  ngOnInit() {
     /** @Todo we dont have to fetch the entire list of campaigns here, only the campaign whose id was provided in the query params
      * coming from list campaigns page .....
      */
-
-    this.populateCampaignDropdown("");
-    this.initEmailForm();
-    this.fetchUsersForReassignment();
     this.initContactForm();
+    this.initEmailForm();
+  }
+
+
+  ionViewWillEnter() {
+    this.populateCampaignDropdown("");
+    this.fetchUsersForReassignment();
     this.initCallTrap();
   }
 
@@ -151,7 +157,7 @@ export class LeadSoloComponent implements OnInit {
     }
   }
 
-  contactForm!: FormGroup;
+  contactForm: FormGroup;
   initContactForm() {
     this.contactForm = this.fb.group({
       label: [null, [Validators.required]],
@@ -320,6 +326,17 @@ export class LeadSoloComponent implements OnInit {
       type: this.callRecord?.type || 2
     };
 
+
+    // call status addition
+    if(this.callRecord?.duration > 0) {
+      updateObj["callStatus"] = ECallStatus.answered
+    } else if(this.callRecord?.duration === 0) {
+      updateObj["callStatus"] = ECallStatus.unknown
+      console.log("printing for call duration === 0", this.callRecord?.duration);
+    }else {
+      updateObj["callStatus"] = ECallStatus.unanswered;
+    }
+
     // any condition that has to be validated before submitting the form goes into this;
     const preApproveResult = this.checkSubmissionStatus();
     if (!preApproveResult.status) {
@@ -337,20 +354,28 @@ export class LeadSoloComponent implements OnInit {
      */
     // await this.handleDocumentUpload()
     let documentLinks = this.uploadedDocsLink;
-    documentLinks = []
     updateObj.lead.documentLinks = documentLinks;
-    // 
+    
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
-      (data) => {
-        // clean user reassigment once done
+      async(data) => {
         this.selectedUserForReassignment = null;
-        // this.toast.success("Successfully updated lead");
+        const toast = await this.toastController.create({
+          message: 'Successfully updated lead.',
+          duration: 2000
+        });
+
+        toast.present();
         if (fetchNextLead) {
           this.fetchNextLead();
         }
       },
-      ({ error }: { error: ClassValidationError }) => {
-        // this.toast.fail(error.message[0]);
+      async({ error }: { error: ClassValidationError }) => {
+        const toast = await this.toastController.create({
+          message: error.message[0],
+          duration: 2000
+        });
+
+        toast.present();
       }
     );
   }
@@ -412,11 +437,11 @@ export class LeadSoloComponent implements OnInit {
       return {status: false, message: "Followup is required!"};
     }
 
-    if(this.actions.salesCall) {
+    if(this.actions.salesCall && !this.selectedLead.followUp) {
       return {status: false, message: "SalesCall is required!"};
     }
 
-    if(this.actions.appointment) {
+    if(this.actions.appointment && !this.selectedLead.followUp) {
       return {status: false, message: "Appointment is required!"};
     }
 
@@ -451,9 +476,9 @@ export class LeadSoloComponent implements OnInit {
       this.selectedLead.leadStatus = links.reverse().join(" / ");
       this.selectedLead["leadStatusKeys"] = event.node.origin.key;
       const action = event.node.origin.action;
-      if(action[0] !== 'showForm') {
+      if(action && action[0] !== 'showForm') {
         this.selectedLead.nextAction = action[0];
-      }else{
+      }else if(action) {
         this.selectedLead.nextAction = action[1]
       }
 
@@ -511,36 +536,48 @@ export class LeadSoloComponent implements OnInit {
   handleLeadStatusChange(event) {}
 
   showAppliedFiltersOnNoResult = false;
-  fetchNextLead() {
+  async fetchNextLead() {
+    const loading = await this.loadingCtrl.create({
+      mode: 'md',
+      spinner: 'bubbles',
+      message: 'Fetching next lead ...'
+    });
+
     this.showAppliedFiltersOnNoResult = false;
-    // this.toast.loading("Fetching next lead");
+    await loading.present();
     this.leadsService
       .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter)
       .subscribe(
         (data: any) => {
-          // this.toast.hide();
+          loading.dismiss();
           this.selectedLead = data.lead;
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }
         },
         (error) => {
+          loading.dismiss();
           console.log(error);
         }
       );
   }
 
   selectedLeadHistory = [];
-  fetchLeadById(id: string) {
-    // this.toast.info("Fetching lead");
+  async fetchLeadById(id: string) {
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      mode: 'md',
+      message: 'Fetching lead ...'
+    })
+    loading.present();
     this.leadsService.getLeadById(id).subscribe(
-      (data: {lead: ILead, leadHistory: any[]}) => {
-        // this.toast.hide();
+      async(data: {lead: ILead, leadHistory: any[]}) => {
+        loading.dismiss();
         this.selectedLead = data.lead;
         this.selectedLeadHistory = data.leadHistory;
       },
       (err) => {
-        // this.toast.hide();
+        loading.dismiss();
         console.log(err);
       }
     );
@@ -567,7 +604,6 @@ export class LeadSoloComponent implements OnInit {
   selectedEmailTemplate: any;
   populateEmailModal(event) {
     this.selectedEmailTemplate = event;
-
     this.attachments = this.selectedEmailTemplate.attachments;
     this.emailForm.patchValue({
       subject: this.selectedEmailTemplate.subject,
@@ -697,41 +733,6 @@ export class LeadSoloComponent implements OnInit {
   name = "shanur";
   value = new Date();
 
-  currentDateFormat(date, format: string = "yyyy-mm-dd HH:MM"): any {
-    const pad = (n: number): string => (n < 10 ? `0${n}` : n.toString());
-    return format
-      .replace("yyyy", date.getFullYear())
-      .replace("mm", pad(date.getMonth() + 1))
-      .replace("dd", pad(date.getDate()))
-      .replace("HH", pad(date.getHours()))
-      .replace("MM", pad(date.getMinutes()))
-      .replace("ss", pad(date.getSeconds()));
-  }
-
-  onOk(result: Date) {
-    this.name = this.currentDateFormat(result);
-    this.value = result;
-  }
-
-  formatIt(date: Date, form: string) {
-    const pad = (n: number) => (n < 10 ? `0${n}` : n);
-    const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate()
-    )}`;
-    const timeStr = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    if (form === "YYYY-MM-DD") {
-      return dateStr;
-    }
-    if (form === "HH:mm") {
-      return timeStr;
-    }
-    return `${dateStr} ${timeStr}`;
-  }
-
-  handleDateOpenChange(event) {}
-  handleDatePanelChange(event) {}
-
-
   defaultContactValue = "mobile"
   getInputType(readableType) {
     if(readableType.type === 'string') {
@@ -787,7 +788,15 @@ export class LeadSoloComponent implements OnInit {
   docsUploaded = false;
   uploading = false;
   async handleDocumentUpload(file: File): Promise<void> {
+    const loading = await this.loadingCtrl.create({
+      message: 'Uploading your document ...',
+      spinner: 'bubbles',
+      mode: 'md'
+    })
+    await loading.present();
     const { Location } = await this.uploadService.uploadFile("attachments", file);
+
+    await loading.dismiss();
     this.uploadedDocsLink.push(Location);
   } 
 
@@ -799,11 +808,19 @@ export class LeadSoloComponent implements OnInit {
       source
     });
  
+    const loader = await this.loadingCtrl.create({
+      mode: 'md',
+      spinner: 'bubbles',
+      message: 'Uploading your image ...'
+    });
+
+    await loader.present();
     this.uploadService.getFileFromUri(image.webPath).subscribe(async file=>{
+      loader.dismiss();
       const timestamp = new Date().getTime();
       const result:any = await this.uploadService.uploadArrayBuffer(file, `${timestamp}.${image.format}`);
       this.uploadedDocsLink.push(result.Location);
-    })
+    }, error=>loader.dismiss());
   }
 
   async selectImageSource() {
@@ -850,35 +867,6 @@ export class LeadSoloComponent implements OnInit {
     }, error=>{
       console.log(error);
     });
-  }
-
-
-  b64toBlob(b64Data, contentType = '', sliceSize = 512) {
-    const byteCharacters = atob(b64Data);
-    const byteArrays = [];
- 
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
- 
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
- 
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
- 
-    const blob = new Blob(byteArrays, { type: contentType });
-    return blob;
-  }
-
-  blobToFile(theBlob: Blob, fileName:string): File {
-    var b: any = theBlob;
-    //A Blob() is almost a File() - it's just missing the two properties below which we will add
-    b.lastModifiedDate = new Date();
-    b.name = fileName;
-    return <File>theBlob;
   }
 }
 

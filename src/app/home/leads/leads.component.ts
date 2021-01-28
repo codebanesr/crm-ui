@@ -16,6 +16,7 @@ import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
 import { ICampaign } from "src/app/campaign/campaign.interface";
+import { ToastController } from "@ionic/angular";
 const { Share } = Plugins;
 
 @Component({
@@ -23,9 +24,8 @@ const { Share } = Plugins;
   templateUrl: "./leads.component.html",
   styleUrls: ["./leads.component.scss"],
 })
-export class LeadsComponent implements OnInit {
+export class LeadsComponent {
   constructor(
-    private msg: NzMessageService,
     private leadsService: LeadsService,
     private nzContextMenuService: NzContextMenuService,
     private router: Router,
@@ -33,7 +33,7 @@ export class LeadsComponent implements OnInit {
     private usersService: UsersService,
     private campaignService: CampaignService,
     private pubsub: PubsubService,
-    public toast: ToastService,
+    public toastController: ToastController,
   ) {}
 
   page: number = 1;
@@ -56,15 +56,12 @@ export class LeadsComponent implements OnInit {
   checked = false;
   listOfCurrentPageData: any[] = [];
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.pubsub.$pub("HEADING", { heading: "Leads" });
     this.populateCampaignDropdown("");
     this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initSettingForm();
-    // this.initEmailForm();
     this.initRightClickActions();
-    // this.getBasicOverview();
-    // this.initEtAutocomplete();
   }
 
   campaignList: any[];
@@ -124,24 +121,37 @@ export class LeadsComponent implements OnInit {
     campaignId: 'all'
   };
   isEmpty: boolean;
-  getData() {
+  async getData() {
     /** @Todo please prevent big typedict from being passed, look for an alternate route */
     this.leadOptions["typeDict"] = this.typeDict;
-    this.toast.info("Fetching leads");
+
+    const toast = await this.toastController.create({
+      message: 'Fetching leads',
+      duration: 2000,
+      color: 'light'
+    });
+
+    toast.present();
+
     this.leadsService.getLeads(this.leadOptions).subscribe(
       async (response: any) => {
         if (response.data.length === 0) {
           this.isEmpty = true;
         } else {
-          this.toast.hide();
           this.isEmpty = false;
           this.leads = response.data;
           this.total = response.total;
           this.leadOptions.page = response.page;
         }
       },
-      (error) => {
-        this.msg.error("Some error occured while fetching leads");
+      async(error) => {
+        const toast = await this.toastController.create({
+          message: "Something went wrong ...",
+          duration: 2000,
+          color: "warning",
+        });
+
+        toast.present();
       }
     );
   }
@@ -259,9 +269,14 @@ export class LeadsComponent implements OnInit {
         this.selectedLeadHistory = selectedLeadHistory;
         this.isTimelineModalVisible = true;
       },
-      (error) => {
+      async (error) => {
         this.selectedLeadHistory = undefined;
-        this.msg.error(error.message + " : " + lead.externalId);
+        const toast = await this.toastController.create({
+          message: 'Something went wrong.',
+          duration: 2000,
+          color: 'warn'
+        });
+        toast.present();
       }
     );
   }
@@ -299,11 +314,21 @@ export class LeadsComponent implements OnInit {
         this.selectedLead
       )
       .subscribe(
-        (result) => {
-          this.msg.success("Successfully reassigned lead");
+        async(result) => {
+          const toast = await this.toastController.create({
+            message: 'Lead has been reassigned',
+            duration: 2000,
+            color: 'success'
+          });
+          toast.present();
         },
-        (error) => {
-          this.msg.error(error.error);
+        async(error) => {
+          const toast = await this.toastController.create({
+            message: 'Lead reassignment failed',
+            duration: 2000,
+            color: 'warn'
+          });
+          toast.present();
         }
       );
   }

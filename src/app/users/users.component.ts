@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { NzContextMenuService } from "ng-zorro-antd/dropdown";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
@@ -17,7 +16,6 @@ export class UsersComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     private leadService: LeadsService,
-    private nzContextMenuService: NzContextMenuService,
     private router: Router,
     private campaignService: CampaignService
   ) {}
@@ -98,10 +96,6 @@ export class UsersComponent implements OnInit {
 
   takeActions(action) {
     console.log(action);
-  }
-
-  closeMenu(): void {
-    this.nzContextMenuService.close();
   }
 
   reassignToUser(newManager, user) {

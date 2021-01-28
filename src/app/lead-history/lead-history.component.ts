@@ -2,32 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from "@angular/router";
-import { MenuController, ModalController } from "@ionic/angular";
-import { AgentService } from "../agent.service";
+import { LoadingController, MenuController, ModalController } from "@ionic/angular";
 import { CampaignService } from '../home/campaign.service';
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from '../home/users.service';
+import { IHistory } from "./history.interface";
 
-interface IHistory {
-  oldUser: string;
-  newUser: string;
-  lead: string;
-  campaignName: string;
-  prospectName: string;
-  phoneNumber: string;
-  followUp: String;
-  direction: String;
-  notes: string;
-  callRecordUrl: string;
-  geoLocation: { coordinates: string[] };
-  leadStatus: string;
-  attachment: string;
-  requestedInformation?: { [key: string]: string }[];
-  active: boolean;
-  createdAt: string;
-  nextAction?: string;
-  campaign: string;
-}
 @Component({
   selector: "app-lead-history",
   templateUrl: "./lead-history.component.html",
@@ -42,6 +22,7 @@ export class LeadHistoryComponent implements OnInit {
     private fb: FormBuilder,
     private campaignService: CampaignService,
     private userService: UsersService,
+    private loadingCtrl: LoadingController
   ) {}
 
   transactions: IHistory[] = [];
@@ -52,17 +33,10 @@ export class LeadHistoryComponent implements OnInit {
 
   listOfCampaigns: any;
   listOfHandlers: any;
-  transactionForm: FormGroup;
-  handlerFilter = new FormControl();
-  startDate = new FormControl();
-  endDate = new FormControl();
-  prospectName = new FormControl();
-  handler = new FormControl([]);
-  campaign = new FormControl()
 
-  ngOnInit() {
-    this.getTransactions();
+  async ngOnInit() {
     this.initTransactionFilters();
+    this.getTransactions();
     this.initCampaignList();
     this.initHandlerList();
   }
@@ -77,8 +51,25 @@ export class LeadHistoryComponent implements OnInit {
     })
   }
 
+  transactionForm: FormGroup;
+  handlerFilter = new FormControl();
+  startDate = new FormControl();
+  endDate = new FormControl();
+  prospectName = new FormControl();
+  handler = new FormControl([]);
+  campaign = new FormControl()
+  initTransactionFilters() {
+    this.transactionForm = this.fb.group({
+      startDate: this.startDate,
+      endDate: this.endDate,
+      prospectName: this.prospectName,
+      handler: this.handler,
+      campaign: this.campaign
+    })
+  }
+
   tempUserList: any;
-  initHandlerList() {
+  async initHandlerList() {
     this.userService.getAllUsersHack().subscribe((result: any)=>{
       this.tempUserList = result[0].users;
       this.listOfHandlers = result[0].users;
@@ -93,24 +84,24 @@ export class LeadHistoryComponent implements OnInit {
     })
   }
 
-  initTransactionFilters() {
-    this.transactionForm = this.fb.group({
-      startDate: this.startDate,
-      endDate: this.endDate,
-      prospectName: this.prospectName,
-      handler: this.handler,
-      campaign: this.campaign
-    })
-  }
-
 
   total = 50;
-  getTransactions() {
+  async getTransactions() {
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      mode: 'md',
+      message: 'Loading transactions ...'
+    });
+
+    await loading.present();
     this.leadService
       .getTransactions(this.pagination, this.transactionForm?.value)
       .subscribe(({response, total} : {response: IHistory[], total: number}) => {
+        loading.dismiss();
         this.transactions = response;
         this.total = total;
+      }, error => {
+        loading.dismiss();
       });
   }
 

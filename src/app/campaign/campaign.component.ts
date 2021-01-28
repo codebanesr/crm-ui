@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { ToastService } from "ng-zorro-antd-mobile";
+import { LoadingController, ToastController } from "@ionic/angular";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzUploadListComponent } from "ng-zorro-antd/upload";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
@@ -20,10 +20,11 @@ import { ICampaign } from "./campaign.interface";
 export class CampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
-    private toast: ToastService,
+    private loadingCtrl: LoadingController,
     private router: Router,
     private pubsub: PubsubService,
-    private uploadService: UploadService
+    private toast: ToastController
+
   ) {}
 
   campaignOpts: string[];
@@ -75,17 +76,24 @@ export class CampaignComponent implements OnInit {
     this.getCampaigns();
   }
 
-  getCampaigns() {
-    this.toast.loading("Fetching campaign list");
+  async getCampaigns() {
+    // this.toast.loading("Fetching campaign list");
+    const loading = await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      mode: 'md',
+      message: 'Loading Campaigns ...'
+    });
+
+    await loading.present();
     this.campaignService
       .getCampaigns(this.page, this.perPage, this.filters, null, null)
       .subscribe(
         (data: any) => {
-          this.toast.hide();
+          loading.dismiss();
           this.processData(data);
         },
         (error) => {
-          this.toast.fail(error.message);
+          loading.dismiss();
         }
       );
   }
@@ -132,15 +140,21 @@ export class CampaignComponent implements OnInit {
 
   archiveCampaign(campaign: ICampaign) {
     this.campaignService.archiveCampaign(campaign).subscribe(
-      (data) => {
-        this.toast.success(
-          `${campaign.campaignName} has been archived successfully`
-        );
+      async(data) => {
+        const toast = await this.toast.create({
+          message: 'Campaign archived successfully ..',
+          duration: 2000,
+          color: 'success'
+        });
+        toast.present();
       },
-      (error) => {
-        this.toast.fail(
-          `There was an error in archiving ${campaign.campaignName}`
-        );
+      async(error) => {
+        const toast = await this.toast.create({
+          message: 'Failed to archive campaign',
+          duration: 2000,
+          color: 'error'
+        });
+        toast.present();
       }
     );
   }

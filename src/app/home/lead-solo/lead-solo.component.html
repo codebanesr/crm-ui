@@ -1,4 +1,4 @@
-<nz-content class="parent">
+<ion-content fullscreen>
   <div class="top">    
     <ng-container *ngIf="leadFilter">
       <!-- <nz-tag *ngFor="let key of objectkeys(leadFilter);" nzMode='closeable' (nzOnClose)="handleTagRemoval(key)"
@@ -46,44 +46,51 @@
                     <div style="max-height: 250px;">
                       <ng-container *ngFor="let leadKey of allLeadKeys" key="leadKey">
                         <ng-container *ngIf="g.value.includes(leadKey)">
-                          <mat-form-field 
-                            class="example-full-width" 
-                            appearance="outline" 
-                            *ngIf="['date', 'option', 'string', 'tel', 'number'].includes(typeDict[leadKey].type)"
-                          >
-                              <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                          
+                          <mat-form-field appearance="outline" *ngIf="typeDict[leadKey].type === 'date'"  class="mat-full-width" >
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+
+                          <mat-form-field *ngIf="typeDict[leadKey].type === 'string'" appearance="outline"  class="mat-full-width" >
+                            <mat-label>{{typeDict[leadKey].label}}</mat-label>
                               <input 
                                 matInput 
+                                type="text"
                                 [(ngModel)]="selectedLead[leadKey]" 
                                 [disabled]="isDisabled(leadKey)" 
-                                *ngIf="typeDict[leadKey].type === 'string'"
                               />
+                          </mat-form-field>
                               
-                              <input 
+                          <mat-form-field *ngIf="typeDict[leadKey].type === 'number'" appearance="outline"  class="mat-full-width" >
+                            <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                            <input 
                                 matInput 
+                                type="number"
                                 [(ngModel)]="selectedLead[leadKey]" 
                                 [disabled]="isDisabled(leadKey)" 
-                                *ngIf="typeDict[leadKey].type === 'number'"
                               />
+                          </mat-form-field> 
                               
-                              <input 
+
+                          <mat-form-field *ngIf="typeDict[leadKey].type === 'tel'" appearance="outline"  class="mat-full-width" >
+                            <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                            <input 
                                 matInput type="tel" 
+                                type="tel"
                                 [(ngModel)]="selectedLead[leadKey]" 
                                 [disabled]="isDisabled(leadKey)" 
-                                *ngIf="typeDict[leadKey].type === 'tel'"
                               />
-                              
-                              <ng-container *ngIf="typeDict[leadKey].type === 'date'">
-                                <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"/>
-                                <mat-datepicker #picker color="primary"></mat-datepicker>
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                              </ng-container>
-                            
-                              <mat-select [(ngModel)]="selectedLead[leadKey]" *ngIf="typeDict[leadKey].type === 'select'">
-                                <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">{{option}}
-                                </mat-option>
-                              </mat-select>
-                            
+                          </mat-form-field>
+
+                          <mat-form-field *ngIf="typeDict[leadKey].type === 'select'" appearance="outline"  class="mat-full-width" >
+                            <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                            <mat-select [(ngModel)]="selectedLead[leadKey]">
+                              <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">{{option}}
+                              </mat-option>
+                            </mat-select>
                           </mat-form-field>
                         </ng-container>
                       </ng-container>
@@ -146,7 +153,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <mat-form-field class="example-full-width" appearance="fill">
+              <mat-form-field class="mat-full-width" appearance="fill">
                 <mat-label>Choose an option</mat-label>
                 <mat-select [(ngModel)]="selectedLead.nextAction">
                   <mat-option value="followUp" *ngIf="actions.followUp">Follow Up</mat-option>
@@ -157,7 +164,7 @@
 
               <p style="font-weight: 700;">{{selectedLead.followUp | date: 'short'}}&nbsp;<i nz-icon nzType="down"></i>
               </p>
-              <mat-form-field class="example-full-width" appearance="fill">
+              <mat-form-field class="mat-full-width" appearance="fill">
                 <mat-label>Follow Up</mat-label>
                 <mat-select (selectionChange)="handleFollowUp($event)">
                   <mat-option value="1">Now</mat-option>
@@ -285,7 +292,7 @@
       </div>
     </nz-page-header-content>
   </nz-page-header>
-</nz-content>
+</ion-content>
 
 
 <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"

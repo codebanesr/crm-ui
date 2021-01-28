@@ -29,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
       url: "/home/transactions",
       icon: "card_membership",
     },
+    
     {
       title: "Leads",
       url: "/home",
@@ -87,7 +88,12 @@ export class AppComponent implements OnInit, OnDestroy {
       title: "Track Users",
       url: "/reports/tracker",
       icon: "timeline",
-    }
+    },
+    {
+      title: "Tele Reports",
+      url: "/reports/graphs",
+      icon: "phonelink",
+    },
   ];
 
   routeTo(url: string) {

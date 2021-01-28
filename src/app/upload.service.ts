@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { LoadingController, ToastController } from "@ionic/angular";
 import { environment } from "src/environments/environment";
 
 declare let AWS: any;
@@ -15,7 +16,8 @@ export class UploadService {
   });
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private loadingCtrl: LoadingController
   ) {}
 
   async uploadFile(key: string, file: any): Promise<{Location: string}> {
@@ -30,7 +32,6 @@ export class UploadService {
         if (err) {
           reject(err);
         }
-
         resolve(data);
       });
     });
