@@ -14,12 +14,14 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { SharedRoutingModule } from './shared-routing.module';
 import { DynamicFormPreviewComponent } from './dynamic-form-preview/dynamic-form-preview.component';
+import { LeadFilterComponent } from '../lead-filter/lead-filter.component';
 
 
 @NgModule({
   declarations: [
     DynamicFormComponent,
-    DynamicFormPreviewComponent
+    DynamicFormPreviewComponent,
+    LeadFilterComponent
   ],
   imports: [
     SharedRoutingModule,
@@ -39,7 +41,8 @@ import { DynamicFormPreviewComponent } from './dynamic-form-preview/dynamic-form
   ],
   exports: [
     DynamicFormComponent,
-    DynamicFormPreviewComponent
+    DynamicFormPreviewComponent,
+    LeadFilterComponent
   ]
 })
 export class SharedModule { }

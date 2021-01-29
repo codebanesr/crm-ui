@@ -28,6 +28,7 @@ import { GeomarkerComponent } from "../geomarker/geomarker.component";
 import {GoogleMapsModule} from '@angular/google-maps';
 import { CountdownModule } from 'ngx-countdown';
 import { SharedModule } from "../shared/shared.module";
+import { ExpansionPanelComponent } from "./leads/expansion-panel/expansion-panel.component";
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { SharedModule } from "../shared/shared.module";
     DemoMaterialModule,
   ],
   declarations: [
+    ExpansionPanelComponent,
     ProfileComponent,
     GeomarkerComponent,
     FollowupComponent,

@@ -22,3 +22,13 @@ export interface CurrentUser {
   refreshToken: string;
   roleType: string;
 }
+
+export interface ITypeDict {
+  [key: string]: {
+    label: string;
+    value: string;
+    type: string;
+    checked: boolean;
+    options: any[];
+  };
+}

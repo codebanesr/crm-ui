@@ -1,7 +1,7 @@
 // selected lead is the lead returned from the server which will only have keys that have data associated
 // with them, use objectKeys(typedict) instead
 
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
@@ -43,6 +43,7 @@ import { environment } from "src/environments/environment";
 import { ECallStatus } from "../interfaces/call-status.enum";
 
 import { ILeadHistory } from "./lead-history.interface";
+import { MatAccordion } from "@angular/material/expansion";
 
 declare let PhoneCallTrap: any;
 
@@ -266,11 +267,11 @@ export class LeadSoloComponent implements OnInit{
     /** modified on Dec 17 please verify if it breaks anything */
     this.selectedCampaign = campaignObject[0];
 
-    this.leadGroups = this.selectedCampaign?.groups;
+    this.leadGroups = this.selectedCampaign?.groups || [];
     this.contactGroup = this.leadGroups.filter(g=>g.label === 'contact')[0];
     this.formModel = campaignObject[0]?.formModel;
 
-    this.enabledKeys = campaignObject[0]?.editableCols;
+    this.enabledKeys = campaignObject[0]?.editableCols || [];
     this.typeDict = typeDict;
     this.evaluateOtherData();
     this.populateEmailTemplateDropdown(campaignObject[0]);
@@ -298,7 +299,8 @@ export class LeadSoloComponent implements OnInit{
   
   }
 
-  async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {    
     const geoLocation = await Geolocation.getCurrentPosition();
     const updateObj = {
       lead,
@@ -361,13 +363,15 @@ export class LeadSoloComponent implements OnInit{
     
     this.loading = true;
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
-      async(data) => {
+      (data) => {
+        this.loading = false;
         this.selectedUserForReassignment = null;
         if (fetchNextLead) {
+          this.accordion.closeAll();
           this.fetchNextLead();
         }
       },
-      async({ error }: { error: ClassValidationError }) => {
+      ({ error }: { error: ClassValidationError }) => {
         this.loading = false;
       }
     );

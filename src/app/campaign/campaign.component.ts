@@ -1,15 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { LoadingController, ToastController } from "@ionic/angular";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { NzUploadListComponent } from "ng-zorro-antd/upload";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { CampaignService } from "../home/campaign.service";
 import { CurrentUser } from "../home/interfaces/global.interfaces";
-import { ColumnItem, DataItem } from "../home/interfaces/listOfCols";
 import { PubsubService } from "../pubsub.service";
-import { UploadService } from "../upload.service";
 import { ICampaign } from "./campaign.interface";
 
 @Component({
@@ -46,18 +41,8 @@ export class CampaignComponent implements OnInit {
 
     this.getCampaigns();
   }
-  listOfColumns: ColumnItem[] = [
-    { name: "Campaign Name" },
-    { name: "Created By" },
-    { name: "Start Date" },
-    { name: "End Date" },
-  ];
 
   listOfData: any[] = [];
-
-  trackByName(_: number, item: ColumnItem): string {
-    return item.name;
-  }
 
   doRefresh(event) {
     setTimeout(() => {

@@ -9,7 +9,7 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { PubsubService } from "src/app/pubsub.service";
 import { CampaignService } from "../campaign.service";
-import { ColumnItem, DataItem } from "../interfaces/listOfCols";
+// import { ColumnItem, DataItem } from "../interfaces/listOfCols";
 import { LeadsService } from "../leads.service";
 import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
@@ -17,13 +17,15 @@ import { Plugins } from "@capacitor/core";
 import { ToastService } from "ng-zorro-antd-mobile";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { LoadingController, ToastController } from "@ionic/angular";
+import { ITypeDict } from "../interfaces/global.interfaces";
+import { ILead } from "../interfaces/leads.interface";
 const { Share } = Plugins;
+import { List } from "immutable";
 
 @Component({
   selector: "app-leads",
   templateUrl: "./leads.component.html",
-  styleUrls: ["./leads.component.scss"],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ["./leads.component.scss"]
 })
 export class LeadsComponent {
   constructor(
@@ -44,9 +46,6 @@ export class LeadsComponent {
   showFilterDrawer = false;
   showGlobalSearch = false;
 
-  listOfColumns: ColumnItem[];
-  listOfOption: any[] = [];
-
   managers = null;
   isTimelineModalVisible = false;
 
@@ -61,7 +60,6 @@ export class LeadsComponent {
   ionViewWillEnter() {
     this.pubsub.$pub("HEADING", { heading: "Leads" });
     this.populateCampaignDropdown("");
-    this.listOfOption = ["LEAD", "TICKET", "USER", "CUSTOMER"];
     this.initSettingForm();
     this.initRightClickActions();
   }
@@ -105,7 +103,7 @@ export class LeadsComponent {
     );
   }
 
-  leads: DataItem[] = [];
+  leads: List<ILead>;
   objectkeys = Object.keys;
 
   leadOptions: {
@@ -134,15 +132,13 @@ export class LeadsComponent {
     });
 
     await loader.present();
-
-    this.leadsService.getLeads(this.leadOptions).subscribe(
-      async (response: any) => {
+    this.leadsService.getLeads(this.leadOptions).subscribe((response: {data: ILead[], total: number, page: number}) => {
         loader.dismiss();
         if (response.data.length === 0) {
           this.isEmpty = true;
         } else {
           this.isEmpty = false;
-          this.leads = response.data;
+          this.leads = List(response.data);
           this.total = response.total;
           this.leadOptions.page = response.page;
         }
@@ -157,14 +153,6 @@ export class LeadsComponent {
         toast.present();
       }
     );
-  }
-
-  trackLead(index, lead) {
-    return lead._id
-  }
-
-  trackKeys(index, key) {
-    return key;
   }
 
   selectedKeys = []
@@ -189,15 +177,7 @@ export class LeadsComponent {
     
   }
 
-  typeDict: {
-    [key: string]: {
-      label: string;
-      value: string;
-      type: string;
-      checked: boolean;
-      options: any[];
-    };
-  };
+  typeDict: ITypeDict;
   dataLoaded: boolean = false;
   async getAllLeadColumns() {
     this.loading = true;

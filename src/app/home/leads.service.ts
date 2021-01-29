@@ -25,8 +25,8 @@ export class LeadsService {
     showCols?: string[];
     searchTerm: string;
     filters?: any;
-  }): Observable<{ results: any[] }> {
-    return this.http.post<{ results: any[] }>(
+  }): Observable<{data: ILead[], total: number, page: number}> {
+    return this.http.post<{data: ILead[], total: number, page: number}>(
       `${environment.apiUrl}/lead/findAll`,
       options
     );

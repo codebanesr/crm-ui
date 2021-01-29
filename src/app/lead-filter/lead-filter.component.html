@@ -1,0 +1,36 @@
+<ng-container *ngFor="let key of leadKeys">
+  <mat-form-field *ngIf="typeDict[key].value && typeDict[key].label" class="mat-full-width"
+    appearance="outline">
+    <mat-label>{{typeDict[key].label}}</mat-label>
+    <ng-container [ngSwitch]="typeDict[key].type">
+      <ng-container *ngSwitchCase="'date'">
+        <input matInput type="datetime-local" matInput [(ngModel)]="leadFilter[key]"
+          [ngModelOptions]="{standalone: true}">
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'number'">
+        <input matInput placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+          [ngModelOptions]="{standalone: true}" />
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'string'">
+        <input matInput placeholder="Basic usage" [(ngModel)]="leadFilter[key]"
+          [ngModelOptions]="{standalone: true}" />
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'tel'">
+        <input matInput [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}" />
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'geo'">
+        <input matInput [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}" />
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'select'">
+        <mat-select [(ngModel)]="leadFilter[key]" [ngModelOptions]="{standalone: true}">
+          <mat-option *ngFor="let option of typeDict[key].options" [value]="option">{{option}}</mat-option>
+        </mat-select>
+      </ng-container>
+    </ng-container>
+  </mat-form-field>
+</ng-container>
