@@ -165,7 +165,7 @@ export class CampaignComponent implements OnInit {
   }
 
   routeToSoloLead(data: ICampaign) {
-    console.log(data);
+
     this.router.navigate(["home", "solo"], {
       queryParams: {
         campaignId: data._id,
@@ -176,6 +176,6 @@ export class CampaignComponent implements OnInit {
 
 
   handleCampaignChange(campaignName) {
-    console.log(campaignName);
+
   }
 }

@@ -42,7 +42,7 @@ export class GraphsComponent implements OnInit {
   
   ngOnInit() {
     this.initFilters();
-    this.getGraphData({});
+    // this.getGraphData({});
     this.initCampaignList();
     this.initHandlerList();
   }

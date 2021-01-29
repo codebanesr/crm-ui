@@ -2,6 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { ICampaign } from "../campaign/campaign.interface";
+import { ILead } from "./interfaces/leads.interface";
 import { ILeadColumn } from "./leads/lead.interface";
 
 export enum INTERVAL {
@@ -34,9 +36,9 @@ export class LeadsService {
     return this.http.post(`${environment.apiUrl}/lead`, body);
   }
 
-  getAllLeadColumns(campaignId: string) {
+  getAllLeadColumns(campaignId: string, remove?: Partial<keyof ILead>[]) {
     let reqUrl = `${environment.apiUrl}/lead/getAllLeadColumns/${campaignId}`;
-    return this.http.get(reqUrl);
+    return this.http.get(reqUrl, {params: {remove}});
   }
 
   updateLead(
@@ -77,7 +79,7 @@ export class LeadsService {
   ): Promise<{ typeDict: { [x: string]: any }; mSchema: { paths: any[] } }> {
     return new Promise((resolve, reject) => {
       const showCols = [];
-      this.getAllLeadColumns(campaignName).subscribe(
+      this.getAllLeadColumns(campaignName, ['createdAt', 'followUp', '__v', 'campaignId', 'updatedAt', 'email', 'leadStatus']).subscribe(
         (mSchema: { paths: ILeadColumn[] }) => {
           mSchema.paths.forEach((path: ILeadColumn) => {
             showCols.push({

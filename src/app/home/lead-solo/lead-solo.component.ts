@@ -1,7 +1,7 @@
 // selected lead is the lead returned from the server which will only have keys that have data associated
 // with them, use objectKeys(typedict) instead
 
-import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
@@ -41,8 +41,8 @@ import { CallLog } from '@ionic-native/call-log/ngx';
 import { ICallRecord } from "./call-record.interface";
 import { environment } from "src/environments/environment";
 import { ECallStatus } from "../interfaces/call-status.enum";
-import { debounce, debounceTime, distinctUntilChanged, take, takeLast, takeUntil, throttle, throttleTime } from "rxjs/operators";
-import { from, timer } from "rxjs";
+
+import { ILeadHistory } from "./lead-history.interface";
 
 declare let PhoneCallTrap: any;
 
@@ -69,7 +69,7 @@ export class LeadSoloComponent implements OnInit{
     private _sanitizer: DomSanitizer,
     private callLog: CallLog,
     private platform: Platform,
-    private loadingCtrl: LoadingController,
+    private loadingCtrl: LoadingController
   ) {}
 
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
@@ -98,7 +98,7 @@ export class LeadSoloComponent implements OnInit{
   jsonStringify = JSON.stringify;
   locale = en_US;
 
-  loading: HTMLIonLoadingElement;
+  loading: boolean = false;
 
   ngOnInit() {
     /** @Todo we dont have to fetch the entire list of campaigns here, only the campaign whose id was provided in the query params
@@ -126,7 +126,7 @@ export class LeadSoloComponent implements OnInit{
                   break;
       
             case "IDLE":
-                console.log("PhoneCallTrap idle state :: printing logs");
+              
                 this.platform.ready().then(() => {
   
                   this.callLog.hasReadPermission().then(hasPermission => {
@@ -179,14 +179,16 @@ export class LeadSoloComponent implements OnInit{
     this.callTime = new Date().getTime().toString();
     this.callNumber
       .callNumber(number, true)
-      .then((res) => {console.log("Launched dialer!", res) })
-      .catch((err) => console.log("Error launching dialer", err));
+      .then((res) => {})
+      .catch((err) => {})
   }
 
   selectedCampaign: ICampaign;
   subscribeToQueryParamChange() {
-    const t = timer(300);
-    this.activatedRoute.queryParams.pipe(takeUntil(t), takeLast(1)).subscribe(async data => {
+    // const t = timer(300);
+    this.activatedRoute.queryParams
+    // .pipe(takeUntil(t), takeLast(1))
+    .subscribe(async data => {
       this.selectedCampaignId = data.campaignId;
         this.browsableState = data.isBrowsed ? true : false;
         await this.getLeadMappings();
@@ -198,9 +200,9 @@ export class LeadSoloComponent implements OnInit{
         } else {
           this.fetchNextLead();
         }
-        console.log("logging query params", data);
+      
     }, async error=>{
-      console.log(error);
+    
     })
   }
 
@@ -214,6 +216,7 @@ export class LeadSoloComponent implements OnInit{
   /** @Todo remove this, we are not populating list of campaigns */
   populateCampaignDropdown(filter) {
     this.loadingCampaignList = true;
+    this.loading = true;
     this.campaignService.getCampaigns(1, 20, filter, "", "asc").subscribe(
       (result: any) => {
         this.loadingCampaignList = false;
@@ -221,8 +224,9 @@ export class LeadSoloComponent implements OnInit{
         this.subscribeToQueryParamChange();
       },
       (error) => {
+        this.loading = false;
         this.loadingCampaignList = false;
-        console.log(error);
+      
       }
     );
   }
@@ -233,7 +237,7 @@ export class LeadSoloComponent implements OnInit{
         this.callDispositions = data.options;
       },
       (error) => {
-        console.log(error);
+      
       }
     );
   }
@@ -246,10 +250,10 @@ export class LeadSoloComponent implements OnInit{
   allLeadKeys: string[] = []
   async getLeadMappings() {
     const { typeDict, mSchema } = await this.leadsService.getLeadMappings(
-      this.selectedCampaignId
+      this.selectedCampaignId,
     );
 
-    console.log(mSchema);
+  
     mSchema.paths.forEach(p=>{
       this.allLeadKeys.push(p.internalField);
     });
@@ -261,7 +265,6 @@ export class LeadSoloComponent implements OnInit{
 
     /** modified on Dec 17 please verify if it breaks anything */
     this.selectedCampaign = campaignObject[0];
-    this.openAutodial();
 
     this.leadGroups = this.selectedCampaign?.groups;
     this.contactGroup = this.leadGroups.filter(g=>g.label === 'contact')[0];
@@ -279,7 +282,7 @@ export class LeadSoloComponent implements OnInit{
         this.emailTemplates = data;
       },
       (error) => {
-        console.log(error);
+      
       }
     );
   }
@@ -292,7 +295,7 @@ export class LeadSoloComponent implements OnInit{
   }
 
   handleEvent(e) {
-    console.log(e)
+  
   }
 
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
@@ -332,7 +335,7 @@ export class LeadSoloComponent implements OnInit{
       updateObj["callStatus"] = ECallStatus.answered
     } else if(this.callRecord?.duration === 0) {
       updateObj["callStatus"] = ECallStatus.unknown
-      console.log("printing for call duration === 0", this.callRecord?.duration);
+    
     }else {
       updateObj["callStatus"] = ECallStatus.unanswered;
     }
@@ -356,26 +359,16 @@ export class LeadSoloComponent implements OnInit{
     let documentLinks = this.uploadedDocsLink;
     updateObj.lead.documentLinks = documentLinks;
     
+    this.loading = true;
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
       async(data) => {
         this.selectedUserForReassignment = null;
-        const toast = await this.toastController.create({
-          message: 'Successfully updated lead.',
-          duration: 2000
-        });
-
-        toast.present();
         if (fetchNextLead) {
           this.fetchNextLead();
         }
       },
       async({ error }: { error: ClassValidationError }) => {
-        const toast = await this.toastController.create({
-          message: error.message[0],
-          duration: 2000
-        });
-
-        toast.present();
+        this.loading = false;
       }
     );
   }
@@ -403,7 +396,7 @@ export class LeadSoloComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe((result: {event: EAutodial, data: any})=>{
       if(result.event === EAutodial.callNumber) {
-        console.log("calling number", this.selectedLead.mobilePhone);
+      
         this.onPhoneClick(this.selectedLead.mobilePhone)
       }
     })
@@ -522,7 +515,7 @@ export class LeadSoloComponent implements OnInit{
   }
 
   fabTransition() {
-    console.log("transition");
+  
   }
 
   resetAllActionHandlers() {
@@ -535,49 +528,42 @@ export class LeadSoloComponent implements OnInit{
 
   showAppliedFiltersOnNoResult = false;
   async fetchNextLead() {
-    const loading = await this.loadingCtrl.create({
-      mode: 'md',
-      spinner: 'bubbles',
-      message: 'Fetching next lead ...'
-    });
-
+    !this.loading && (this.loading = true);
     this.showAppliedFiltersOnNoResult = false;
-    await loading.present();
-    const t = timer(300);
+    /** @Todo do some more research on pipes */
+    // const t = timer(500);
     this.leadsService
       .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter)
-      .pipe(takeUntil(t), takeLast(1)).subscribe(
+      // .pipe(takeUntil(t), takeLast(1))
+      .subscribe(
         (data: any) => {
-          loading.dismiss();
+          this.loading = false;
+          this.openAutodial();
           this.selectedLead = data.lead;
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }
         },
         (error) => {
-          loading.dismiss();
-          console.log(error);
+          this.loading = false;
+        
         }
       );
   }
 
-  selectedLeadHistory = [];
+  selectedLeadHistory:ILeadHistory[] = [];
   async fetchLeadById(id: string) {
-    const loading = await this.loadingCtrl.create({
-      spinner: 'bubbles',
-      mode: 'md',
-      message: 'Fetching lead ...'
-    })
-    loading.present();
+    if(!this.loading) this.loading = true;
     this.leadsService.getLeadById(id).subscribe(
       async(data: {lead: ILead, leadHistory: any[]}) => {
-        loading.dismiss();
+        this.openAutodial();
+        this.loading = false;
         this.selectedLead = data.lead;
         this.selectedLeadHistory = data.leadHistory;
       },
       (err) => {
-        loading.dismiss();
-        console.log(err);
+        this.loading = false;
+      
       }
     );
   }
@@ -597,7 +583,7 @@ export class LeadSoloComponent implements OnInit{
   attachments: any[] = [];
 
   submitEmailForm(model) {
-    console.log(model);
+  
   }
 
   selectedEmailTemplate: any;
@@ -611,14 +597,14 @@ export class LeadSoloComponent implements OnInit{
   }
 
   handleOk(): void {
-    console.log("Button ok clicked!");
+  
     this.isVisible = false;
   }
 
   showFilterDrawer = false;
   leadFilter = {} as any;
   openFilterDrawer(): void {
-    console.log(this.typeDict);
+  
     this.showFilterDrawer = true;
   }
 
@@ -627,7 +613,7 @@ export class LeadSoloComponent implements OnInit{
   }
 
   printFilters() {
-    console.log(this.leadFilter);
+  
   }
 
   handleTagRemoval(tag) {
@@ -683,7 +669,7 @@ export class LeadSoloComponent implements OnInit{
     }
 
     /** @Todo validate form before submitting, also add backend validation */
-    console.log(this.contactForm.value, this.selectedLead.contact);
+  
 
     // in case backend sends an empty array, should not happen but is possible sometimes
     this.selectedLead.contact = this.selectedLead.contact || [];
@@ -758,12 +744,13 @@ export class LeadSoloComponent implements OnInit{
   evaluateOtherData() {
     this.showOtherData = !this.showOtherData;
 
-    if (!this.showOtherData) {
-      this.selectedCampaign.groups = this.selectedCampaign.groups.filter(
-        (g) => g.label !== "More"
-      );
-      return;
-    }
+    /** @Todo check what this was in use for, seems useless to me  */
+    // if (!this.showOtherData) {
+    //   this.selectedCampaign.groups = this.selectedCampaign.groups.filter(
+    //     (g) => g.label !== "More"
+    //   );
+    //   return;
+    // }
 
     let alreadyIncluded: string[] = [];
     this.selectedCampaign.groups.forEach((g) => {
@@ -860,11 +847,11 @@ export class LeadSoloComponent implements OnInit{
 
 
   assignTo(user) {
-    console.log(this.selectedLead.email, user.email, this.selectedLead);
+  
     this.leadsService.reassignLead(this.selectedLead.email, user.email, this.selectedLead).subscribe(data=>{
-      console.log(data);
+    
     }, error=>{
-      console.log(error);
+    
     });
   }
 }
@@ -890,7 +877,7 @@ export class LeadAutodial implements OnInit{
   ) {}
 
   ngOnInit() {
-    console.log(this.data.autodialSettings);
+  
   }
 
   navigateToCampaignList() {

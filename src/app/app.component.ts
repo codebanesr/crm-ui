@@ -144,7 +144,7 @@ export class AppComponent implements OnInit, OnDestroy {
       .onChange()
       .subscribe((status) => {
         this.agentService.updateBatteryStatus(status.level).subscribe((res) => {
-          console.log(res);
+          
         });
       });
 
@@ -158,16 +158,16 @@ export class AppComponent implements OnInit, OnDestroy {
     };
 
     this.backgroundGeolocation.configure(config).then(() => {
-      console.log("promise for background geolocation resolved");
+      
       this.backgroundGeolocation
         .on(BackgroundGeolocationEvents.location)
         .subscribe((location: BackgroundGeolocationResponse) => {
           this.agentService.addVisitTrack({coordinate: {lat: location.latitude, lng: location.longitude}}).subscribe(vt=>{
-            console.log("added visit track", vt);
+            
           })
         });
     }).catch(e=>{
-      console.log("error occured while starting background location");
+      
     });
 
 
@@ -175,9 +175,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log(
-      "finishing all tasks, destroying app component, geolocation and battery wont work"
-    );
+    
     this.subz.unsubscribe();
     this.batteryStatusSubz.unsubscribe();
   }

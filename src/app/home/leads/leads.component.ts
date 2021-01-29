@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
@@ -23,6 +23,7 @@ const { Share } = Plugins;
   selector: "app-leads",
   templateUrl: "./leads.component.html",
   styleUrls: ["./leads.component.scss"],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeadsComponent {
   constructor(
@@ -85,7 +86,7 @@ export class LeadsComponent {
     // if all campaigns option is selected do not call this api
     if(this.selectedCampaign._id !== 'all') {
       const result = await this.leadsService.getLeadMappings(
-        this.selectedCampaign._id
+        this.selectedCampaign._id,
       );
       this.typeDict = result.typeDict;
     }
@@ -99,7 +100,7 @@ export class LeadsComponent {
         this.usersCount = data?.metadata?.total;
       },
       (error) => {
-        console.log(error);
+        
       }
     );
   }
@@ -158,6 +159,14 @@ export class LeadsComponent {
     );
   }
 
+  trackLead(index, lead) {
+    return lead._id
+  }
+
+  trackKeys(index, key) {
+    return key;
+  }
+
   selectedKeys = []
   nodeClickEvent(event: any) {
     if(event.node._children.length > 0) {
@@ -177,7 +186,7 @@ export class LeadsComponent {
     }
 
     this.leadOptions.filters["leadStatusKeys"] = this.selectedKeys;
-    console.log(this.leadOptions.filters)
+    
   }
 
   typeDict: {
@@ -290,12 +299,12 @@ export class LeadsComponent {
   }
 
   handleOk(): void {
-    console.log("Button ok clicked!");
+    
     this.isVisible = false;
   }
 
   handleCancel(): void {
-    console.log("Button cancel clicked!");
+    
     this.isVisible = false;
   }
 
@@ -308,7 +317,7 @@ export class LeadsComponent {
   }
 
   reassignLead(newManager: any) {
-    console.log(this.selectedLead, newManager);
+    
     this.leadsService
       .reassignLead(
         this.selectedLead.email,
@@ -342,7 +351,7 @@ export class LeadsComponent {
   //   this.selectedLead = leadData;
   //   this.selectedManager = new FormControl(null);
   //   this.selectedManager.valueChanges.subscribe((data) => {
-  //     console.log(data);
+  //     
   //   });
   //   this.isReassignmentModalVisible = true;
   //   // now show managers on modal, wait for a manager to click and send for reassignment also set the typings file now, its required
@@ -361,7 +370,7 @@ export class LeadsComponent {
   total: number = 1000;
   loading = false;
   onQueryParamsChange(paginator): void {
-    console.log(paginator);
+    
     this.leadOptions.page = paginator.pageIndex;
     this.perPage = paginator.pageSize;
     this.leadOptions.perPage = paginator.pageSize;
@@ -378,14 +387,14 @@ export class LeadsComponent {
   //       this.basicOverview = basicOverview;
   //     },
   //     (error) => {
-  //       console.log(error.messsage);
+  //       
   //     }
   //   );
   // }
 
   // selectedEmailTemplate: any;
   // populateEmailModal(event) {
-  //   console.log(typeof event, event.nzValue);
+  //   
   //   this.selectedEmailTemplate = event.nzValue;
 
   //   this.attachments = this.selectedEmailTemplate.attachments;
@@ -421,7 +430,7 @@ export class LeadsComponent {
   // }
 
   // submitEmailForm(model) {
-  //   console.log(model);
+  //   
   // }
 
   async onSocialShareClick(event, data) {
@@ -462,7 +471,7 @@ export class LeadsComponent {
         this.callDispositions = data.options;
       },
       (error) => {
-        console.log(error);
+        
       }
     );
   }
