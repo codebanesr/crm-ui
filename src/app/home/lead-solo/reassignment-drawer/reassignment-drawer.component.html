@@ -1,0 +1,6 @@
+<mat-nav-list>
+  <a mat-list-item  (click)="assignTo(user)" *ngFor="let user of data?.usersForReassignment">
+    <span mat-line>{{user.fullName}}</span>
+    <span mat-line>{{user.email}}</span>
+  </a>
+</mat-nav-list>

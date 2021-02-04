@@ -232,6 +232,8 @@
                       </nz-timeline-item>
                       <nz-timeline-item>Lead Created At {{selectedLead.createdAt | date}}</nz-timeline-item>
                     </nz-timeline>
+
+                    <button mat-flat-button color="accent" (click)="navigateToTransactions()">View All Logs</button>
                   </div>
                 </mat-expansion-panel>
 
@@ -292,7 +294,7 @@
 
 
               <div class="mat-button-group">
-                <button mat-raised-button (click)="showReassignmentDrawer()" color="warn">Reassign</button>
+                <button mat-raised-button (click)="openReassignmentDrawer()" color="warn">Reassign</button>
                 <button mat-raised-button (click)="handleLeadSubmission(selectedLead, false)"
                   color="primary">Save</button>
                 <button mat-raised-button *ngIf="!browsableState" (click)="handleLeadSubmission(selectedLead, true);accordion.closeAll();"
@@ -310,15 +312,6 @@
         </nz-page-header-content>
       </nz-page-header>
     </div>
-    <nz-drawer [nzClosable]="false" [nzVisible]="isReassignmentDrawerVisible" nzPlacement="bottom" nzHeight="80vh"
-      (nzOnClose)="closeReassignmentDrawer()">
-      <h3>Users</h3>
-      <mat-selection-list #shoes [multiple]="false">
-        <mat-list-option *ngFor="let user of usersForReassignment" (click)="assignTo(user)">
-          {{user.email}}
-        </mat-list-option>
-      </mat-selection-list>
-    </nz-drawer>
 
     <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
       (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">

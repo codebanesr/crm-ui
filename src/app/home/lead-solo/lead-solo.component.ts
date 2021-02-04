@@ -44,6 +44,8 @@ import { ECallStatus } from "../interfaces/call-status.enum";
 
 import { ILeadHistory } from "./lead-history.interface";
 import { MatAccordion } from "@angular/material/expansion";
+import { MatBottomSheet } from "@angular/material/bottom-sheet";
+import { ReassignmentDrawerSheetComponent } from "./reassignment-drawer/reassignment-drawer.component";
 
 declare let PhoneCallTrap: any;
 
@@ -70,7 +72,9 @@ export class LeadSoloComponent implements OnInit{
     private _sanitizer: DomSanitizer,
     private callLog: CallLog,
     private platform: Platform,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private router: Router,
+    private _bottomSheet: MatBottomSheet
   ) {}
 
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
@@ -418,6 +422,14 @@ export class LeadSoloComponent implements OnInit{
     });
   }
 
+  navigateToTransactions() {
+    this.router.navigate(["home", "transactions"], {
+      queryParams: {
+        leadId: this.selectedLead._id
+      }
+    })
+  }
+
   checkSubmissionStatus(): {status: boolean, message: string} {
     // validate form
     if (this.actions.isInformationRequested) {
@@ -631,12 +643,25 @@ export class LeadSoloComponent implements OnInit{
   }
 
   isReassignmentDrawerVisible = false;
-  showReassignmentDrawer() {
-    this.isReassignmentDrawerVisible = true;
+  openReassignmentDrawer() {
+    const rsref = this._bottomSheet.open(ReassignmentDrawerSheetComponent, {
+      data: {
+        usersForReassignment: this.usersForReassignment,
+        selectedLead: this.selectedLead
+      }
+    });
+
+    rsref.afterDismissed().subscribe((status: boolean) => {
+      if(status) {
+        this.fetchNextLead();
+      }
+    }, error=> {
+      console.error(error);
+    })
   }
 
   closeReassignmentDrawer() {
-    this.isReassignmentDrawerVisible = false;
+    
   }
 
   selectedUserForReassignment = null;
@@ -847,16 +872,6 @@ export class LeadSoloComponent implements OnInit{
       buttons
     });
     await actionSheet.present();
-  }
-
-
-  assignTo(user) {
-  
-    this.leadsService.reassignLead(this.selectedLead.email, user.email, this.selectedLead).subscribe(data=>{
-    
-    }, error=>{
-    
-    });
   }
 }
 

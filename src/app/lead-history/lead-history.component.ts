@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { LoadingController, MenuController, ModalController } from "@ionic/angular";
 import { CampaignService } from '../home/campaign.service';
 import { LeadsService } from "../home/leads.service";
@@ -22,7 +22,8 @@ export class LeadHistoryComponent implements OnInit {
     private fb: FormBuilder,
     private campaignService: CampaignService,
     private userService: UsersService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   transactions: IHistory[] = [];
@@ -34,11 +35,17 @@ export class LeadHistoryComponent implements OnInit {
   listOfCampaigns: any;
   listOfHandlers: any;
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initTransactionFilters();
     this.getTransactions();
     this.initCampaignList();
     this.initHandlerList();
+    this.checkForQueryParams();
+  }
+
+
+  checkForQueryParams() {
+    this.leadId.setValue(this.activatedRoute.snapshot.queryParams.leadId);
   }
 
   downloadTransactions() {
@@ -57,14 +64,16 @@ export class LeadHistoryComponent implements OnInit {
   endDate = new FormControl();
   prospectName = new FormControl();
   handler = new FormControl([]);
-  campaign = new FormControl()
+  campaign = new FormControl();
+  leadId = new FormControl(null);
   initTransactionFilters() {
     this.transactionForm = this.fb.group({
       startDate: this.startDate,
       endDate: this.endDate,
       prospectName: this.prospectName,
       handler: this.handler,
-      campaign: this.campaign
+      campaign: this.campaign,
+      leadId: this.leadId
     })
   }
 

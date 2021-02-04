@@ -29,6 +29,7 @@ import {GoogleMapsModule} from '@angular/google-maps';
 import { CountdownModule } from 'ngx-countdown';
 import { SharedModule } from "../shared/shared.module";
 import { ExpansionPanelComponent } from "./leads/expansion-panel/expansion-panel.component";
+import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawer/reassignment-drawer.component";
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { ExpansionPanelComponent } from "./leads/expansion-panel/expansion-panel
     DemoMaterialModule,
   ],
   declarations: [
+    ReassignmentDrawerSheetComponent,
     ExpansionPanelComponent,
     ProfileComponent,
     GeomarkerComponent,
