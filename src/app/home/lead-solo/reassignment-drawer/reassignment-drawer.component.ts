@@ -15,7 +15,10 @@ export class ReassignmentDrawerSheetComponent implements OnInit {
     private _bottomSheetRef: MatBottomSheetRef<ReassignmentDrawerSheetComponent>,
     private _snackBar: MatSnackBar,
     private leadsService: LeadsService,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {usersForReassignment: any[], selectedLead: ILead}  
+    @Inject(MAT_BOTTOM_SHEET_DATA) 
+    public data: {
+      usersForReassignment: any[], selectedLead: ILead
+    }  
   ) {}
 
   ngOnInit() { 

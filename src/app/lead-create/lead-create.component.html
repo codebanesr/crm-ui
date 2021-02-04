@@ -25,6 +25,15 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field class="mat-full-width" appearance="fill" style="margin-top: 8px;">
+      <mat-label>Handler</mat-label>
+      <mat-select [(ngModel)]="selectedLead.email">
+        <mat-option *ngFor="let u of usersForReassignment" [value]="u._id">
+          {{ u.fullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-tab-group mat-align-tabs="start">
       <mat-tab [label]="g.label | titlecase" *ngFor="let g of selectedCampaign?.groups">
 
@@ -65,6 +74,10 @@
         </ng-container>
       </mat-tab>
     </mat-tab-group>
+
+    <button mat-button class="mat-full-width" mat-flat-button color="accent" (click)="openReassignmentDrawer()">
+      Change Handler
+    </button>
 
     <button mat-button mat-flat-button (click)="evaluateOtherData()">
       {{ this.showOtherData ? "Show Less" : "Show More" }}

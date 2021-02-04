@@ -554,8 +554,8 @@ export class LeadSoloComponent implements OnInit{
       .subscribe(
         (data: any) => {
           this.loading = false;
-          this.openAutodial();
           this.selectedLead = data.lead;
+          this.selectedLead && this.openAutodial();
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }

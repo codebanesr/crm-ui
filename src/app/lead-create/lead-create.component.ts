@@ -9,6 +9,9 @@ import { ClassValidationError } from "../home/interfaces/global.interfaces";
 import { ILead } from "../home/interfaces/leads.interface";
 import { LeadsService } from "../home/leads.service";
 import { difference } from "lodash";
+import { MatBottomSheet } from "@angular/material/bottom-sheet";
+import { ReassignmentDrawerSheetComponent } from "../home/lead-solo/reassignment-drawer/reassignment-drawer.component";
+import { UsersService } from "../home/users.service";
 
 @Component({
   selector: "app-lead-create",
@@ -22,7 +25,9 @@ export class LeadCreateComponent implements OnInit {
     private router: Router,
     private activatedRouter: ActivatedRoute,
     private toastService: ToastService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _bottomSheet: MatBottomSheet,
+    private userService: UsersService
   ) {}
 
   selectedCampaign: ICampaign;
@@ -41,6 +46,14 @@ export class LeadCreateComponent implements OnInit {
     this.initContactForm();
     this.subscribeToQueryParamChange();
     this.getCampaignNameAndId();
+    this.fetchUsersForReassignment();
+  }
+
+  usersForReassignment = [];
+  fetchUsersForReassignment() {
+    this.userService.getAllUsersHack().subscribe((result: any) => {
+      this.usersForReassignment = result[0].users;
+    });
   }
 
   async onSelectedCampaignChange() {
