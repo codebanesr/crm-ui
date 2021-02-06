@@ -5,9 +5,11 @@ import {
   FormBuilder,
   Validators,
 } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from "src/authentication.service";
+import { User } from "../home/interfaces/user";
 import { UsersService } from "../home/users.service";
 import { PubsubService } from "../pubsub.service";
 
@@ -17,8 +19,10 @@ import { PubsubService } from "../pubsub.service";
   styleUrls: ["./signup.component.scss"],
 })
 export class SignupComponent implements OnInit {
+
   signupForm!: FormGroup;
   rolesOptions: any;
+  loading = false;
   submitForm(): void {
     for (const i in this.signupForm.controls) {
       this.signupForm.controls[i].markAsDirty();
@@ -29,19 +33,21 @@ export class SignupComponent implements OnInit {
       this.usersService
         .updateUser(this.userid, this.signupForm.value)
         .subscribe(
-          (success) => {},
+          (data: any) => {
+            this._snackBar.open("Profile updated for ", this.signupForm.get('fullName').value, {duration: 2000, politeness: 'assertive'});
+          },
           (error) => {
-            this.msg.error("Failed to update user", error);
+            this._snackBar.open("Failed to update user", error);
           }
         );
     } else {
       this.authService.signup(this.signupForm.value).subscribe(
         (data: any) => {
-          this.msg.success("Your Account has been registered");
-          this.router.navigate(["welcome", "leads", "all"]);
+          this._snackBar.open("Your Account has been registered");
+          this.router.navigate(["home"]);
         },
         (e: any) => {
-          this.msg.error(e.error.message[0]);
+          this._snackBar.open(e.error.message[0]);
         }
       );
     }
@@ -70,11 +76,11 @@ export class SignupComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
-    private msg: NzMessageService,
     private router: Router,
     private usersService: UsersService,
     private activatedRoute: ActivatedRoute,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -87,12 +93,11 @@ export class SignupComponent implements OnInit {
       phoneNumberPrefix: ["+91"],
       phoneNumber: [null, [Validators.required]],
       roleType: [null, Validators.required],
-      manages: [[], Validators.required],
+      // manages: [[], Validators.required],
       roles: [[], Validators.required],
-      reportsTo: [null, Validators.required],
+      reportsTo: [null],
       agree: [false],
     });
-    this.initUsersList();
 
     this.createOrUpdate();
 
@@ -110,40 +115,40 @@ export class SignupComponent implements OnInit {
 
   userid: string;
   createOrUpdate() {
-    this.activatedRoute.queryParams.subscribe(
-      (data) => {
-        this.userid = data.userid;
-        this.userid && this.usersService.getUserById(this.userid).subscribe((data) => {
-          this.signupForm.patchValue(data);
-        });
-      },
-      (error) => {
-        this.msg.error("This was not supposed to happen");
-      }
-    );
+    this.userid = this.activatedRoute.snapshot.queryParams.userid;
+    if(this.userid) {
+      this.userid && this.usersService.getUserById(this.userid).subscribe((data: User) => {
+        this.signupForm.patchValue(data);
+        this.initUsersList(data.email);
+      });
+    } else {
+      this.initUsersList();
+    }
   }
 
-  listOfOption = [];
+  listOfSuperiors: User[] = [];
   listOfSelectedValue: string[] = [];
 
-  isNotSelected(value: string): boolean {
-    // return this.listOfSelectedValue.indexOf(value) === -1;
-    return this.signupForm.get("manages").value.indexOf(value) === -1;
-  }
+  // isNotSelected(value: string): boolean {
+  //   // return this.listOfSelectedValue.indexOf(value) === -1;
+  //   return this.signupForm.get("manages").value.indexOf(value) === -1;
+  // }
 
   isNotSelectedRole(value): boolean {
     return this.signupForm.get("roles").value.indexOf(value) === -1;
   }
 
   usersCount = 0;
-  initUsersList() {
-    this.usersService.getAllUsersHack().subscribe(
-      (data: any) => {
-        this.listOfOption = data[0].users;
-        this.usersCount = data[0]?.metadata?.total;
+  initUsersList(userEmail?: string) {
+    this.loading = true;
+    this.usersService.getAllManagers(userEmail).subscribe(
+      (users: User[]) => {
+        this.listOfSuperiors = users;
       },
       (error) => {
         console.log(error);
+      }, () => {
+        this.loading = false;
       }
     );
   }

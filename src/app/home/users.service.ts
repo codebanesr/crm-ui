@@ -11,25 +11,20 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   getUsers(
-    pageIndex: number,
-    pageSize: number,
+    page: number,
+    perPage: number,
     sortField: string | null,
     sortOrder: string | null,
     filters?: Array<{ key: string; value: string[] }>
   ): Observable<{ results: User[] }> {
-    let params = new HttpParams()
-      .append("page", `${pageIndex}`)
-      .append("results", `${pageSize}`)
-      .append("sortField", `${sortField}`)
-      .append("sortOrder", `${sortOrder}`);
     // filters.forEach(filter => {
     //   filter.value.forEach(value => {
     //     params = params.append(filter.key, value);
     //   });
     // });
-    return this.http.get<{ results: User[] }>(
+    return this.http.post<{ results: User[] }>(
       `${environment.apiUrl}/user/allUsers`,
-      { params }
+      { page, perPage, sortField, sortOrder, filters}
     );
   }
 
@@ -88,5 +83,14 @@ export class UsersService {
 
   getAllResellerOrganizations() {
     return this.http.get(`${environment.apiUrl}/organization/reseller`);
+  }
+
+
+  getAllManagers(userEmail?: string) {
+    const params = new HttpParams();
+    if(userEmail) {
+      params.set('userEmail', userEmail);
+    }
+    return this.http.get(`${environment.apiUrl}/user/managers`, {params});
   }
 }

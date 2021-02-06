@@ -1,4 +1,5 @@
 <ion-content>
+    <mat-spinner *ngIf="loading" class="center-spinner"></mat-spinner>
     <mat-accordion>
       <mat-expansion-panel *ngFor="let user of listOfRandomUser" hideToggle>
         <mat-expansion-panel-header style="height: 60px;">
@@ -10,14 +11,6 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
   
-  
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>
-            {{user.managedBy.roleType}}
-          </mat-label>
-          <input matInput [value]="user.managedBy.fullName" readonly />
-          <mat-hint>{{user.managedBy.email}}</mat-hint>
-        </mat-form-field>
   
         <div nz-col nzFlex=1>
           <span class="actions">
@@ -88,9 +81,15 @@
         </ng-template>
       </mat-expansion-panel>
     </mat-accordion>
-    <nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="pageSize" nzSimple
-      [nzPageIndex]="pageIndex" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true">
-    </nz-pagination>
+    <!-- <nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="pageSize" nzSimple
+      [nzPageIndex]="pageIndex" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"
+      *ngIf="!loading"  
+    >
+    </nz-pagination> -->
+
+    <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
   
   
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="createNewUser()">

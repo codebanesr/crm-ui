@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { PageEvent } from "@angular/material/paginator";
 import { Router } from "@angular/router";
-import { LoadingController } from "@ionic/angular";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
 import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
@@ -19,14 +19,13 @@ export class UsersComponent implements OnInit {
     private leadService: LeadsService,
     private router: Router,
     private campaignService: CampaignService,
-    private loadingCtrl: LoadingController
   ) {}
 
   total = 1;
   listOfRandomUser: User[] = [];
-  loading = true;
-  pageSize = 10;
-  pageIndex = 1;
+  loading = false;
+  pageSize = 20;
+  pageIndex = 0;
   startDate = null;
   endDate = null;
   filterGender = [
@@ -34,26 +33,24 @@ export class UsersComponent implements OnInit {
     { text: "female", value: "female" },
   ];
 
-  async loadDataFromServer(
+  loadDataFromServer(
     pageIndex: number,
     pageSize: number,
-    sortField: string | null,
-    sortOrder: string | null,
-    filter: Array<{ key: string; value: string[] }>
-  ): Promise<void> {
-    const loading = await this.loadingCtrl.create({
-      spinner: 'bubbles',
-      mode: 'md',
-      message: 'Fetching lead ...'
-    })
-    loading.present();
+    filter: Array<{ key: string; value: string[] }>,
+    sortField?: string,
+    sortOrder?: string,
+  ) {
+    this.loading = true;
     this.usersService
       .getUsers(pageIndex, pageSize, sortField, sortOrder, filter)
-      .subscribe(async (result: any) => {
-        await loading.dismiss();
-        this.total = result.metadata.total;
-        this.listOfRandomUser = result.users;
-      }, async err=> loading.dismiss());
+      .subscribe(
+        (result: any) => {
+          this.total = result.total;
+          this.listOfRandomUser = result.users;
+        },   
+        err=> {}, 
+        ()=> this.loading = false
+      ) 
   }
 
   editUser(userid: string) {
@@ -65,19 +62,16 @@ export class UsersComponent implements OnInit {
     this.router.navigate(["home", "users","signup"]);
   }
 
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex, sort, filter } = params;
-    const currentSort = sort.find((item) => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
-    this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+  onQueryParamsChange(paginator: PageEvent): void {
+    this.pageIndex = paginator.pageIndex;
+    this.pageSize = paginator.pageSize;
+    this.loadDataFromServer(this.pageIndex, this.pageSize, [])
   }
 
   managers: any;
   selectedCampaign: ICampaign;
-  async ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize, null, null, []);
+  ngOnInit() {
+    this.loadDataFromServer(this.pageIndex, this.pageSize, []);
     this.usersService.getManagersForReassignment().subscribe(
       (data) => {
         this.managers = data;
