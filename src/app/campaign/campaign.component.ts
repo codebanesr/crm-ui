@@ -19,7 +19,6 @@ export class CampaignComponent implements OnInit {
     private router: Router,
     private pubsub: PubsubService,
     private toast: ToastController
-
   ) {}
 
   campaignOpts: string[];
