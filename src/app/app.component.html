@@ -1,6 +1,6 @@
 <ion-app>
-  <app-main-sidebar [appPages]="appPages" [currentUser]="currentUser" *ngIf="currentUser"></app-main-sidebar>
-  <app-main-toolbar [currentUser]="currentUser" *ngIf="currentUser"></app-main-toolbar>
+  <app-main-sidebar [appPages]="appPages" [currentUser]="currentUser" *ngIf="!!currentUser"></app-main-sidebar>
+  <app-main-toolbar [currentUser]="currentUser" *ngIf="!!currentUser"></app-main-toolbar>
 
   <nz-layout id="main-content">
     <ion-router-outlet class="inner-content"></ion-router-outlet>
