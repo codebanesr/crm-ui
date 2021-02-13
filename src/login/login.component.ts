@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { ToastService } from "ng-zorro-antd-mobile";
 import { AuthenticationService } from "../authentication.service";
 
 @Component({
@@ -23,7 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
-    private toast: ToastService,
+    // private toast: ToastService,
     private router: Router
   ) {}
 
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit {
       (data: any) => {
         this.authService.showNav();
         // this.msg.success("Successfully Logged In");
-        this.toast.success("Login Successful");
+        // this.toast.success("Login Successful");
         const currentUser = localStorage.getItem("currentUser");
         const currentUserObj = JSON.parse(currentUser);
         if (["admin", "manager"].includes(currentUserObj.roleType)) {
@@ -69,7 +68,7 @@ export class LoginComponent implements OnInit {
         }
       },
       (error: Error) => {
-        this.toast.fail("Login failed");
+        // this.toast.fail("Login failed");
       }
     );
   }
@@ -77,14 +76,14 @@ export class LoginComponent implements OnInit {
   submitResetForm(username: string) {
     this.authService.forgotPassword(username).subscribe(
       (data: any) => {
-        this.toast.success(
-          "A link to reset your account has been sent to your email"
-        );
+        // this.toast.success(
+        //   "A link to reset your account has been sent to your email"
+        // );
       },
       (error: Error) => {
         // message from the backend server to be shown here
         this.onFormTypeChange(this.formView.login);
-        this.toast.fail("Something went wrong");
+        // this.toast.fail("Something went wrong");
       }
     );
   }

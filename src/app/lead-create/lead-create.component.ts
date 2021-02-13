@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ToastService } from "ng-zorro-antd-mobile";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
@@ -24,7 +23,6 @@ export class LeadCreateComponent implements OnInit {
     private campaignService: CampaignService,
     private router: Router,
     private activatedRouter: ActivatedRoute,
-    private toastService: ToastService,
     private fb: FormBuilder,
     private _bottomSheet: MatBottomSheet,
     private userService: UsersService
@@ -112,7 +110,7 @@ export class LeadCreateComponent implements OnInit {
         this.callDispositions = data.options;
       },
       (error) => {
-        this.toastService.fail("Failed to fetch Disposition");
+        // this.toastService.fail("Failed to fetch Disposition");
         console.log(error);
       }
     );
@@ -134,7 +132,7 @@ export class LeadCreateComponent implements OnInit {
 
   handleLeadSubmission(lead: ILead) {
     /** @Todo all updates should move to lead-solo component, its already implemented there */
-    this.toastService.show("Saving lead");
+    // this.toastService.show("Saving lead");
     this.leadsService
       .createLead(
         lead,
@@ -150,10 +148,10 @@ export class LeadCreateComponent implements OnInit {
               isBrowsed: true
             }
           })
-          this.toastService.show("Lead saved Successfully");
+          // this.toastService.show("Lead saved Successfully");
         },
         ({ error }: { error: ClassValidationError }) => {
-          this.toastService.fail("Failed to create lead");
+          // this.toastService.fail("Failed to create lead");
         }
       );
   }

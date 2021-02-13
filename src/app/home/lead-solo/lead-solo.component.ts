@@ -19,7 +19,6 @@ import { NzTreeNode } from "ng-zorro-antd/tree";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CallNumber } from "@ionic-native/call-number/ngx";
 const { Geolocation, Camera } = Plugins;
-import { en_US, ToastService } from "ng-zorro-antd-mobile";
 import {
   Contacts,
   Contact,
@@ -101,7 +100,6 @@ export class LeadSoloComponent implements OnInit{
   callDispositions: any;
   isVisible = false;
   jsonStringify = JSON.stringify;
-  locale = en_US;
 
   loading: boolean = false;
 

@@ -54,15 +54,16 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "ng-zorro-antd": "^10.0.0",
-    "ng-zorro-antd-mobile": "^3.0.3",
     "ngx-countdown": "^11.0.1",
     "ngx-drag-drop": "^2.0.0",
     "ngx-mat-select-search": "^3.1.4",
     "rxjs": "~6.5.5",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.10.3"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "node-sass": "^4.14.1",
+    "postcss": "^8.1.0",
+    "zone.js": "~0.10.3",
     "@angular-devkit/build-angular": "~0.1000.0",
     "@angular/cli": "~10.0.5",
     "@angular/compiler": "~10.0.0",

@@ -15,7 +15,6 @@ import { OrganizationComponent } from "../organization/organization.component";
 import { CampaignCreateComponent } from "../campaign-create/campaign-create.component";
 import { InvoiceComponent } from "../invoice/invoice.component";
 import { FollowupComponent } from "../followup/followup.component";
-import { NgZorroAntdMobileModule } from "ng-zorro-antd-mobile";
 import { WelcomeSlidesComponent } from "../welcome-slides/welcome-slides.component";
 import { LeadCreateComponent } from "../lead-create/lead-create.component";
 import { LeadHistoryComponent } from "../lead-history/lead-history.component";
@@ -45,7 +44,6 @@ import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawe
     IonicModule,
     HomePageRoutingModule,
     ModantdModule,
-    NgZorroAntdMobileModule,
     DemoMaterialModule,
   ],
   declarations: [

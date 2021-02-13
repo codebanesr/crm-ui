@@ -14,7 +14,6 @@ import { LeadsService } from "../leads.service";
 import { UsersService } from "../users.service";
 import { Setting, ILeadColumn } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
-import { ToastService } from "ng-zorro-antd-mobile";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { LoadingController, ToastController } from "@ionic/angular";
 import { ITypeDict } from "../interfaces/global.interfaces";
