@@ -21,7 +21,7 @@ import { PubsubService } from "../pubsub.service";
 export class SignupComponent implements OnInit {
 
   signupForm!: FormGroup;
-  rolesOptions: any;
+  // rolesOptions: any;
   loading = false;
   submitForm(): void {
     for (const i in this.signupForm.controls) {
@@ -35,6 +35,7 @@ export class SignupComponent implements OnInit {
         .subscribe(
           (data: any) => {
             this._snackBar.open("Profile updated for ", this.signupForm.get('fullName').value, {duration: 2000, politeness: 'assertive'});
+            this.router.navigate(['home', 'users']);
           },
           (error) => {
             this._snackBar.open("Failed to update user", error);
@@ -94,23 +95,23 @@ export class SignupComponent implements OnInit {
       phoneNumber: [null, [Validators.required]],
       roleType: [null, Validators.required],
       // manages: [[], Validators.required],
-      roles: [[], Validators.required],
+      // roles: [[], Validators.required],
       reportsTo: [null],
       agree: [false],
     });
 
     this.createOrUpdate();
 
-    this.rolesOptions = [
-      {
-        label: "Admin",
-        value: "admin",
-      },
-      {
-        label: "User",
-        value: "user",
-      },
-    ];
+    // this.rolesOptions = [
+    //   {
+    //     label: "Admin",
+    //     value: "admin",
+    //   },
+    //   {
+    //     label: "User",
+    //     value: "user",
+    //   },
+    // ];
   }
 
   userid: string;
@@ -134,9 +135,9 @@ export class SignupComponent implements OnInit {
   //   return this.signupForm.get("manages").value.indexOf(value) === -1;
   // }
 
-  isNotSelectedRole(value): boolean {
-    return this.signupForm.get("roles").value.indexOf(value) === -1;
-  }
+  // isNotSelectedRole(value): boolean {
+  //   return this.signupForm.get("roles").value.indexOf(value) === -1;
+  // }
 
   usersCount = 0;
   initUsersList(userEmail?: string) {

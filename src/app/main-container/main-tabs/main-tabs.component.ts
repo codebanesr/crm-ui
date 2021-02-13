@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'src/authentication.service';
 
 /** @Todo change this to onPush strategy, this is just a quick fix */
 @Component({
@@ -9,11 +8,6 @@ import { AuthenticationService } from 'src/authentication.service';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class MainTabsComponent implements OnInit {
-
-  constructor(
-    public authService: AuthenticationService
-  ) { }
-
+  constructor() { }
   ngOnInit() {}
-
 }

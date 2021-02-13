@@ -5,14 +5,12 @@ import {
   NzContextMenuService,
   NzDropdownMenuComponent,
 } from "ng-zorro-antd/dropdown";
-import { NzMessageService } from "ng-zorro-antd/message";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { PubsubService } from "src/app/pubsub.service";
 import { CampaignService } from "../campaign.service";
-// import { ColumnItem, DataItem } from "../interfaces/listOfCols";
 import { LeadsService } from "../leads.service";
 import { UsersService } from "../users.service";
-import { Setting, ILeadColumn } from "./lead.interface";
+import { Setting } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { LoadingController, ToastController } from "@ionic/angular";
@@ -20,6 +18,7 @@ import { ITypeDict } from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 const { Share } = Plugins;
 import { List } from "immutable";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-leads",
@@ -36,7 +35,8 @@ export class LeadsComponent {
     private campaignService: CampaignService,
     private pubsub: PubsubService,
     public toastController: ToastController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private _snackBar: MatSnackBar
   ) {}
 
   page: number = 1;
@@ -436,6 +436,16 @@ export class LeadsComponent {
   }
 
   handleCreateLead() {
+    if(!this.selectedCampaign) {
+      const snack_action = this._snackBar.open("No Campaign Selected", "Create Campaign", {duration: 2000});
+
+      snack_action.onAction().subscribe(data=>{
+        this.router.navigate(['home', 'campaigns', 'create']);
+      })
+
+      return;
+    }
+
     this.router.navigate(["home", "lead-create"], {
       queryParams: {
         campaignId: this.selectedCampaign._id,

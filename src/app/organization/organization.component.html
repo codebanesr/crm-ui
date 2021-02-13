@@ -67,21 +67,21 @@
         <mat-label>Mobile Number</mat-label>
         <input type="text" matInput formControlName="phoneNumber">
         <mat-error *ngIf="phoneNumber.hasError('required')">
-          OTP is <strong>required</strong>
+          Phone number is <strong>required</strong>
         </mat-error>
   
   
-        <button matSuffix mat-flat-button color="accent" (click)="onPhoneNumberEnter()">Generate OTP</button>
+        <!-- <button matSuffix mat-flat-button color="accent" (click)="onPhoneNumberEnter()">Generate OTP</button> -->
       </mat-form-field>
 
-
+<!-- 
       <mat-form-field class="mat-full-width" appearance="outline">
         <mat-label>OTP</mat-label>
         <input type="email" matInput formControlName="otp" placeholder="1ABFFD">
         <mat-error *ngIf="otp.hasError('required')">
           OTP is <strong>required</strong>
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
   
       <button mat-raised-button color="primary" (click)="submitForm()">Register</button>
     </form>

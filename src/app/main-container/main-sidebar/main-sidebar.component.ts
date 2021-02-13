@@ -8,7 +8,7 @@ import { CurrentUser } from '../../home/interfaces/global.interfaces';
   selector: 'app-main-sidebar',
   templateUrl: './main-sidebar.component.html',
   styleUrls: ['./main-sidebar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class MainSidebarComponent implements OnChanges {
 
@@ -22,15 +22,20 @@ export class MainSidebarComponent implements OnChanges {
   ) { }
 
   ngOnChanges(change: SimpleChanges) {
-    this.currentUser = change.currentUser.currentValue;
+    this.currentUser = change.currentUser?.currentValue;
     this.appPages = change.appPages?.currentValue;
 
     this.appPages = this.appPages?.filter(page => {
       switch(this.currentUser?.roleType) {
+        case 'superAdmin':
+          return true;
         case 'admin':
+          if(['createOrganization'].includes(page.shortName)) {
+            return false;
+          }
           return true;
         case 'frontline':
-          if(['addUser', 'createCampaign', 'trackUsers', 'teleReports'].includes(page.shortName)) {
+          if(['addUser', 'createCampaign', 'trackUsers', 'teleReports', 'createOrganization'].includes(page.shortName)) {
             return false;
           }
           return true;

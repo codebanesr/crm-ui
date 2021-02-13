@@ -14,7 +14,6 @@ import {
   BackgroundGeolocationEvents,
   BackgroundGeolocationResponse,
 } from "@ionic-native/background-geolocation/ngx";
-import { CurrentUser } from "./home/interfaces/global.interfaces";
 
 @Component({
   selector: "app-root",
@@ -121,7 +120,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.initializeApp();
   }
 
-  currentUser: CurrentUser = null;
+  currentUser: any;
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -130,15 +129,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     this.authService.currentUser.subscribe(cu=>{
-      if(cu) {
-        this.currentUser = cu;
-      }
+      this.currentUser = cu;
     })
   }
 
   heading: string = "Leads";
 
-  showNav: boolean = false;
 
   subz: Subscription;
   batteryStatusSubz: Subscription;

@@ -9,8 +9,6 @@ import { CurrentUser } from 'src/app/home/interfaces/global.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainToolbarComponent implements OnChanges {
-
-  @Input() currentUser: CurrentUser;
   constructor(
     private menuController: MenuController
   ) { }

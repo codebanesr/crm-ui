@@ -98,12 +98,12 @@ export class OrganizationComponent implements OnInit {
   name= new FormControl([''],
     [
       Validators.required,
-      Validators.maxLength(12),
-      Validators.minLength(6),
+      Validators.maxLength(255),
+      Validators.minLength(5),
     ],
     [this.organizationNameValidator]);
   phoneNumber= new FormControl([null], [Validators.required]);
-  otp= new FormControl(null, [Validators.required]);
+  // otp= new FormControl(null, [Validators.required]);
   agree= new FormControl([false]);
   ngOnInit(): void {
     this.pubsub.$pub("HEADING", {heading: "Create Organization"});
@@ -114,7 +114,7 @@ export class OrganizationComponent implements OnInit {
       fullName: this.fullName,
       name: this.name,
       phoneNumber: this.phoneNumber,
-      otp: this.otp,
+      // otp: this.otp,
       agree: this.agree,
       organizationImage: this.organizationImage
     });
@@ -137,18 +137,18 @@ export class OrganizationComponent implements OnInit {
     );
   }
 
-  onPhoneNumberEnter() {
-    // const prefix = this.organizationForm.get('phoneNumberPrefix').value;
-    const phoneNumber = this.phoneNumber.value;
+  // onPhoneNumberEnter() {
+  //   // const prefix = this.organizationForm.get('phoneNumberPrefix').value;
+  //   const phoneNumber = this.phoneNumber.value;
 
-    this.organizationService.generateAndReceiveOtp(phoneNumber).subscribe(data=>{
-      console.log(data);
-      this.msg.success("Successfully sent otp to your mobile");
-    }, error=>{
-      this.msg.error("An error occured while trying to generate otp for your mobile");
-      console.error("An error occured", error);
-    })
-  }
+  //   this.organizationService.generateAndReceiveOtp(phoneNumber).subscribe(data=>{
+  //     console.log(data);
+  //     this.msg.success("Successfully sent otp to your mobile");
+  //   }, error=>{
+  //     this.msg.error("An error occured while trying to generate otp for your mobile");
+  //     console.error("An error occured", error);
+  //   })
+  // }
 
   onPhoneNumberCancel() {
     console.log("Cancelled otp")
