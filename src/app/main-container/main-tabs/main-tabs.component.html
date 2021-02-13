@@ -1,0 +1,33 @@
+<ion-tabs>
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" *ngIf="authService.visible">
+      <ion-tab-button [routerLink]="['home', 'campaign', 'list']">
+        <span class="material-icons">
+          campaign
+          </span>
+        <ion-label>Campaign</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button [routerLink]="['home', 'followup']">
+        <ion-icon name="calendar"></ion-icon>
+        <ion-label>Schedule</ion-label>
+        <!-- <ion-badge>6</ion-badge> -->
+      </ion-tab-button>
+
+  
+      <ion-tab-button [routerLink]="['home', 'transactions']">
+        <span class="material-icons">
+          history
+          </span>
+        <ion-label>Logs</ion-label>
+      </ion-tab-button>
+  
+      <ion-tab-button  [routerLink]="['home', 'profile']">
+        <span class="material-icons">
+          admin_panel_settings
+          </span>
+        <ion-label>Profile</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-tabs>

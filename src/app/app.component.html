@@ -1,87 +1,10 @@
 <ion-app>
-  <ion-menu side="end" content-id="main-content" menuId="first"  *ngIf="authService.visible">
-    <ion-content>
-      <mat-grid-list cols="6" rowHeight="50px" *ngFor="let o of appPages" (click)="routeTo(o.url)">
-        <mat-grid-tile [colspan]="'1'" [rowspan]="'1'">
-          <span class="material-icons" style="color: #673ab7;">
-            {{o.icon}}
-          </span>
-        </mat-grid-tile>
-        <mat-grid-tile
-            [colspan]="'5'"
-            [rowspan]="'1'">
-          {{o.title}}
-        </mat-grid-tile>
-        <mat-divider></mat-divider>
-      </mat-grid-list>
-      <mat-grid-list (click)="logout()" cols="6" rowHeight="50px">
-        <mat-divider></mat-divider>
-        <mat-grid-tile [colspan]="'1'" [rowspan]="'1'">
-          <span class="material-icons" style="color: #673ab7; margin-left: 4px;">
-            close
-          </span>
-        </mat-grid-tile>
-        <mat-grid-tile
-            [colspan]="'5'"
-            [rowspan]="'1'">
-          Logout
-        </mat-grid-tile>
-      </mat-grid-list>
-    </ion-content>
-  </ion-menu>
-
-  <mat-toolbar color="primary" *ngIf="authService.visible">
-    <mat-toolbar-row>
-      <span>Molecule</span>
-      <span class="example-spacer"></span>
-      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      <mat-icon>notifications_active</mat-icon>
-      </button>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-          <mat-icon>query_stats</mat-icon>
-        </button>
-      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openMenu()">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </mat-toolbar-row>
-  </mat-toolbar>
+  <app-main-sidebar [appPages]="appPages" [currentUser]="currentUser" *ngIf="currentUser"></app-main-sidebar>
+  <app-main-toolbar [currentUser]="currentUser" *ngIf="currentUser"></app-main-toolbar>
 
   <nz-layout id="main-content">
-    <!-- <h4 nz-typography class="header-class">{{heading}}</h4> -->
     <ion-router-outlet class="inner-content"></ion-router-outlet>
-    <ion-tabs>
-      <ion-tabs>
-        <ion-tab-bar slot="bottom" *ngIf="authService.visible">
-          <ion-tab-button [routerLink]="['home', 'campaign', 'list']">
-            <span class="material-icons">
-              campaign
-              </span>
-            <ion-label>Campaign</ion-label>
-          </ion-tab-button>
-
-          <ion-tab-button [routerLink]="['home', 'followup']">
-            <ion-icon name="calendar"></ion-icon>
-            <ion-label>Schedule</ion-label>
-            <!-- <ion-badge>6</ion-badge> -->
-          </ion-tab-button>
-    
-      
-          <ion-tab-button [routerLink]="['home', 'transactions']">
-            <span class="material-icons">
-              history
-              </span>
-            <ion-label>Logs</ion-label>
-          </ion-tab-button>
-      
-          <ion-tab-button  [routerLink]="['home', 'profile']">
-            <span class="material-icons">
-              admin_panel_settings
-              </span>
-            <ion-label>Profile</ion-label>
-          </ion-tab-button>
-        </ion-tab-bar>
-      </ion-tabs>
-    </ion-tabs>
+    <app-main-tabs></app-main-tabs>
   </nz-layout>
 </ion-app>
 

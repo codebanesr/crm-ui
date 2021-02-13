@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 
-import { MenuController, Platform } from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { Router } from "@angular/router";
 import { PubsubService } from "./pubsub.service";
 import { Subscription } from "rxjs";
 import { AuthenticationService } from "src/authentication.service";
@@ -15,6 +14,7 @@ import {
   BackgroundGeolocationEvents,
   BackgroundGeolocationResponse,
 } from "@ionic-native/background-geolocation/ngx";
+import { CurrentUser } from "./home/interfaces/global.interfaces";
 
 @Component({
   selector: "app-root",
@@ -27,87 +27,91 @@ export class AppComponent implements OnInit, OnDestroy {
     {
       title: "Transactions",
       url: "/home/transactions",
+      shortName: 'transactions',
       icon: "card_membership",
     },
     
     {
       title: "Leads",
       url: "/home",
+      shortName: 'listLeads',
       icon: "person_search",
     },
     {
       title: "All Users",
       url: "/home/users",
+      shortName: 'listUsers',
       icon: "supervisor_account",
     },
-    {
-      title: "Slides",
-      url: "/home/welcome-slides",
-      icon: "pages",
-    },
+    // {
+    //   title: "Slides",
+    //   shortName: 'slides',
+    //   url: "/home/welcome-slides",
+    //   icon: "pages",
+    // },
     {
       title: "Add User",
       url: "/home/users/signup",
       icon: "person_add_alt_1",
+      shortName: 'addUser'
     },
     {
       title: "List Campaigns",
       url: "/home/campaign/list",
       icon: "format_list_bulleted",
+      shortName: 'listCampaigns'
     },
     {
       title: "Create Campaign",
       url: "/home/campaigns/create",
       icon: "playlist_add",
+      shortName: 'createCampaign'
     },
     {
       title: "Create Organization",
       url: "/home/create-organization",
       icon: "corporate_fare",
+      shortName: 'createOrganization'
     },
-    {
-      title: "Invoice",
-      url: "/home/invoice",
-      icon: "receipt",
-    },
+    // {
+    //   title: "Invoice",
+    //   url: "/home/invoice",
+    //   icon: "receipt",
+    // },
     {
       title: "Followup",
       url: "/home/followup",
       icon: "pending_actions",
+      shortName: 'listFollowUps'
     },
-    {
-      title: "List Reseller",
-      url: "/reseller/organization/list",
-      icon: "format_list_numbered",
-    },    {
-      title: "Create Reseller",
-      url: "/reseller/create",
-      icon: "add_business",
-    }, 
+    // {
+    //   title: "List Reseller",
+    //   url: "/reseller/organization/list",
+    //   icon: "format_list_numbered",
+    // }, 
+    // {
+    //   title: "Create Reseller",
+    //   url: "/reseller/create",
+    //   icon: "add_business",
+    // }, 
     {
       title: "Track Users",
       url: "/reports/tracker",
       icon: "timeline",
+      shortName: 'trackUsers'
     },
     {
       title: "Tele Reports",
       url: "/reports/graphs",
       icon: "phonelink",
+      shortName: 'teleReports'
     },
   ];
-
-  routeTo(url: string) {
-    let routeArray = url.split("/");
-    this.router.navigate(routeArray);
-    this.menuController.close();
-  }
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private router: Router,
-    private menuController: MenuController,
     private pubsub: PubsubService,
     public authService: AuthenticationService,
     private batteryStatus: BatteryStatus,
@@ -117,15 +121,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.initializeApp();
   }
 
+  currentUser: CurrentUser = null;
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-  }
 
-  openMenu() {
-    this.menuController.open();
+
+    this.authService.currentUser.subscribe(cu=>{
+      if(cu) {
+        this.currentUser = cu;
+      }
+    })
   }
 
   heading: string = "Leads";
@@ -178,9 +186,5 @@ export class AppComponent implements OnInit, OnDestroy {
     
     this.subz.unsubscribe();
     this.batteryStatusSubz.unsubscribe();
-  }
-
-  logout() {
-    this.authService.logout();
   }
 }

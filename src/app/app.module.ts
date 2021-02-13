@@ -24,10 +24,20 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { BatteryStatus } from "@ionic-native/battery-status/ngx";
 import { BackgroundGeolocation } from "@ionic-native/background-geolocation/ngx";
 import { CallLog } from "@ionic-native/call-log/ngx";
+import { MainSidebarComponent } from "./main-container/main-sidebar/main-sidebar.component";
+import { MainTabsComponent } from "./main-container/main-tabs/main-tabs.component";
+import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar.component";
+
 
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [
+    AppComponent, 
+    LoginComponent,
+    MainSidebarComponent,
+    MainTabsComponent,
+    MainToolbarComponent
+  ],
   entryComponents: [],
   imports: [
     ModantdModule,
