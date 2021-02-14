@@ -430,6 +430,9 @@ export class LeadSoloComponent implements OnInit{
 
   checkSubmissionStatus(): {status: boolean, message: string} {
     // validate form
+    if(!this.selectedLead.leadStatus) {
+      return {status: false, message: 'Disposition cannot be empty'};
+    }
     if (this.actions.isInformationRequested) {
       for (let element of this.formModel.attributes) {
         if (element.required && !element.value) {
@@ -553,6 +556,7 @@ export class LeadSoloComponent implements OnInit{
         (data: any) => {
           this.loading = false;
           this.selectedLead = data.lead;
+          this.selectedLead.leadStatus = null;
           this.selectedLead && this.openAutodial();
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
@@ -573,6 +577,7 @@ export class LeadSoloComponent implements OnInit{
         this.openAutodial();
         this.loading = false;
         this.selectedLead = data.lead;
+        this.selectedLead.leadStatus = null;
         this.selectedLeadHistory = data.leadHistory;
       },
       (err) => {
