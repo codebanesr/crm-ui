@@ -622,8 +622,10 @@ export class LeadSoloComponent implements OnInit{
 
   showFilterDrawer = false;
   leadFilter = {} as any;
+
+  // custom filters that are not part of the lead Schema, things like freshLeads, followUps etc
+  nonKeyFilters = {} as any;
   openFilterDrawer(): void {
-  
     this.showFilterDrawer = true;
   }
 
