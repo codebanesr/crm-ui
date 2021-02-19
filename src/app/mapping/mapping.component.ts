@@ -45,8 +45,8 @@ export class MappingComponent implements OnInit {
   }
 
   async getLeadMapping() {
-    /** @Todo */
-    const result = await this.leadService.getLeadMappings(this.campaignObj.campaign._id);
+    /** @Todo second parameter accepts fields that should not be returned in the response */
+    const result = await this.leadService.getLeadMappings(this.campaignObj.campaign._id, []);
     this.configs = result.mSchema.paths;
     console.log(this.configs)
   }
