@@ -58,3 +58,8 @@
   transform: translateY(-50%);
   z-index: 99999;
 }
+
+
+@media screen and (min-width: 401px) and (max-width: 2048px) {
+  .main-tabs{ display: none; }   /* hide it elsewhere */
+}
