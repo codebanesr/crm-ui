@@ -1311,6 +1311,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@ionic-native/android-full-screen@^5.31.1":
+  version "5.31.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/android-full-screen/-/android-full-screen-5.31.1.tgz#0c4c701678b14caa53599df018660adaa9e177f7"
+  integrity sha512-w0jnYAMpjB0q2KBvOkZnDBMZ4fmbvcVY4h0JNTKr1alPhhN98Hyr/FLEk/7LWaDfekg0szjs8fcgi67Tg6FiAQ==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/background-geolocation@^5.30.0":
   version "5.30.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/background-geolocation/-/background-geolocation-5.30.0.tgz#c239d51f23aa02b37bf6f8ed9395ba7f879ad953"
@@ -3215,6 +3222,11 @@ cordova-plugin-filepath@^1.5.8:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/cordova-plugin-filepath/-/cordova-plugin-filepath-1.5.8.tgz#9adc7b0ae281683bcea755bb0ac86688e96f5e3a"
   integrity sha512-DhMVM9lkndPWQ+lI8Um0Yq648MBKWpNe/3PW057g4wuFrnAz/9nR8Qs4bjYt/yxwxMX/VMZC59qXOcksd2JYuw==
+
+cordova-plugin-fullscreen@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-fullscreen/-/cordova-plugin-fullscreen-1.3.0.tgz#25739db841d22106ddcd26a7de2829385c7f3382"
+  integrity sha512-K0SQMUyemQrezNlnfyHXQd8BgpwR3TS/fx456GueRCUdro5QG6tCzDDVBCVEGeKroDhXWmabAlhvO3gPoqw/tg==
 
 core-js-compat@^3.6.2:
   version "3.6.5"

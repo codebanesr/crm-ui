@@ -1,5 +1,5 @@
 <ng-container *ngFor="let key of leadKeys">
-  <mat-form-field *ngIf="typeDict[key].value && typeDict[key].label" class="mat-full-width"
+  <mat-form-field *ngIf="typeDict[key].value && typeDict[key].label" class="mat-always-full-width"
     appearance="outline">
     <mat-label>{{typeDict[key].label}}</mat-label>
     <ng-container [ngSwitch]="typeDict[key].type">

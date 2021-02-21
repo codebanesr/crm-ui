@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 
 import { Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -14,7 +14,6 @@ import {
   BackgroundGeolocationEvents,
   BackgroundGeolocationResponse,
 } from "@ionic-native/background-geolocation/ngx";
-
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
@@ -117,6 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private agentService: AgentService,
     private backgroundGeolocation: BackgroundGeolocation
   ) {
+    
     this.initializeApp();
   }
 
@@ -130,7 +130,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.authService.currentUser.subscribe(cu=>{
       this.currentUser = cu;
-    })
+    });
   }
 
   heading: string = "Leads";

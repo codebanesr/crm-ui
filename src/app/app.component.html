@@ -4,9 +4,11 @@
     <app-main-toolbar></app-main-toolbar>
   </div>
   
-    <nz-layout id="main-content">
+  
+    <nz-layout id="main-content" class="breakpoint-transform">
       <ion-router-outlet class="inner-content"></ion-router-outlet>
       <app-main-tabs *ngIf="!!currentUser"></app-main-tabs>
     </nz-layout>
+  
 </ion-app>
 

@@ -29,7 +29,6 @@ import { MainTabsComponent } from "./main-container/main-tabs/main-tabs.componen
 import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar.component";
 
 
-
 @NgModule({
   declarations: [
     AppComponent, 

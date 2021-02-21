@@ -19,7 +19,6 @@
             </mat-expansion-panel-header>
             <div *ngIf="typeDict" style="padding-bottom: 100px;">
               <app-lead-filter [typeDict]="typeDict" [leadFilter]="leadFilter"></app-lead-filter>
-              <button mat-raised-button color="accent" (click)="fetchNextLead()" class="mat-full-width">Submit</button>
             </div>
           </mat-expansion-panel>
 
@@ -31,18 +30,19 @@
                 aria-labelledby="example-radio-group-label"
                 class="example-radio-group"
                 [(ngModel)]="nonKeyFilters.typeOfLead">
-                <mat-radio-button class="mat-full-width" value="fresh">
+                <mat-radio-button class="mat-always-full-width" value="fresh">
                   Fresh Leads
                 </mat-radio-button>
-                <mat-radio-button class="mat-full-width" value="followUps">
+                <mat-radio-button class="mat-always-full-width" value="followUps">
                   Follow Ups
                 </mat-radio-button>
-                <mat-radio-button class="mat-full-width" value="freshAndFollowUps">
+                <mat-radio-button class="mat-always-full-width" value="freshAndFollowUps">
                   Fresh and FollowUps
                 </mat-radio-button>
               </mat-radio-group>
             </div>
           </mat-expansion-panel>
+          <button mat-raised-button color="accent" (click)="fetchNextLead()" class="mat-always-full-width">Submit</button>
         </mat-accordion>
       </div>
     </mat-drawer>
