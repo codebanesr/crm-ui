@@ -302,7 +302,7 @@ export class LeadSoloComponent implements OnInit{
   }
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
-  async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {    
+  async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {  
     const geoLocation = await Geolocation.getCurrentPosition();
     const updateObj = {
       lead,
@@ -550,7 +550,7 @@ export class LeadSoloComponent implements OnInit{
     /** @Todo do some more research on pipes */
     // const t = timer(500);
     this.leadsService
-      .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter)
+      .fetchNextLead(this.selectedCampaignId, this.typeDict, this.leadFilter, this.nonKeyFilters)
       // .pipe(takeUntil(t), takeLast(1))
       .subscribe(
         (data: any) => {

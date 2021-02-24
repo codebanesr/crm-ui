@@ -141,14 +141,19 @@ export class CampaignCreateComponent implements OnInit {
   ngOnInit() {
     this.initAutodialForm();
     this.initCampaignForm();
+
+    this.assigneeFilter = new FormControl();
+  }
+
+  ionViewWillEnter(){
     this.subscribeToQueryParamChange();
 
     this.initEmailForm();
 
     // this.suggestCampaignNames();
     this.initUsersList();
-    this.assigneeFilter = new FormControl();
-  }
+    
+  }    
 
   campaignId: string;
   campaign: ICampaign;

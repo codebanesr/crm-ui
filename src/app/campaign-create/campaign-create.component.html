@@ -1,5 +1,5 @@
-
-<ion-content>
+<ion-content fullscreen>
+  <div style="margin-top: 10px;"></div>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -11,331 +11,336 @@
       </ion-fab-button>
     </ion-fab>
   </div>
-  
-  <ion-content fullscreen>
-      <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
-  
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Campaign Name</mat-label>
-          <input placeholder="input here" matInput formControlName="campaignName" [readonly]="campaignId" />
-        </mat-form-field>
-  
-        
-        <!-- <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker> -->
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Enter start and end date</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate formControlName="startDate" placeholder="Start date">
-            <input matEndDate formControlName="endDate" placeholder="End date">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-      
-  
-  
-        <mat-form-field class="mat-full-width" appearance="outline">
-          <mat-label>Comment</mat-label>
-  
-          <textarea formControlName="comment" matInput rows="2" placeholder="write any thing"></textarea>
-  
-        </mat-form-field>
-  
-       
-        <mat-form-field appearance="outline" class="mat-full-width">
-          <mat-label>Assignees</mat-label>
-          <mat-select formControlName="assignees" placeholder="Assignees" [multiple]="true">
-            <mat-option>
-              <ngx-mat-select-search [formControl]="assigneeFilter" placeholderLabel="Jon Doe" 
-                noEntriesFoundLabel="'no matching assignee found'">
-              </ngx-mat-select-search>
-            </mat-option>
-            <mat-option *ngFor="let option of filteredListOfUsers" [value]="option._id">
-              {{option.fullName}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-  
-        <!-- the block below is only to be shown for campaign update case -->
-        <ng-container *ngIf="this.campaignId">
-          <div style="margin-left: 10px; margin-right: 10px;">
-            <button mat-raised-button color="accent" (click)="displayParamModal()" style="margin: 4px;"> Add More Params</button>
-            <button mat-raised-button color="accent" (click)="routeToRules()" style="margin: 4px;">Rules</button>
-          </div>
-          <mat-accordion>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Disposition
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="false" nzBlockNode [nzExpandedIcon]="multiExpandedIconTpl"
-                (nzClick)="nzEvent($event); nodeActions($event);" [nzMultiple]="false">
-              </nz-tree>
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Unique Attributes
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <!-- <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
-              <mat-slide-toggle *ngFor="let col of uniqueCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Editable Columns
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <!-- <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
-              <mat-slide-toggle *ngFor="let col of editableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-            </mat-expansion-panel>
-    
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Browsable Columns
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <!-- <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
-              <mat-slide-toggle *ngFor="let col of browsableCols" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-            </mat-expansion-panel>
-    
-    
-            <!-- For changes to group refer https://github.com/shanurrahman/crm-ui/blob/8b3fd4192ba2e5e610cac69365d3435dffa4e04b/src/app/campaign-create/campaign-create.component.html -->
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                Create Campaign Groups
-              </mat-expansion-panel-header>
+
+  <ng-container>
+    <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">
+
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Campaign Name</mat-label>
+        <input placeholder="input here" matInput formControlName="campaignName" [readonly]="campaignId" />
+      </mat-form-field>
+
+
+      <!-- <nz-range-picker nzShowTime formControlName="interval"></nz-range-picker> -->
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Enter start and end date</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="startDate" placeholder="Start date">
+          <input matEndDate formControlName="endDate" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="mat-always-full-width">
+        <mat-label>Assignees</mat-label>
+        <mat-select formControlName="assignees" placeholder="Assignees" [multiple]="true">
+          <mat-option>
+            <ngx-mat-select-search [formControl]="assigneeFilter" placeholderLabel="Jon Doe"
+              noEntriesFoundLabel="'no matching assignee found'">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let option of filteredListOfUsers" [value]="option._id">
+            {{option.fullName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="mat-always-full-width" appearance="outline">
+        <mat-label>Comment</mat-label>
+        <textarea formControlName="comment" matInput rows="2" placeholder="write any thing"></textarea>
+      </mat-form-field>
+
+      <!-- the block below is only to be shown for campaign update case -->
+      <ng-container *ngIf="this.campaignId">
+        <div style="margin-left: 10px; margin-right: 10px;">
+          <button mat-raised-button color="accent" (click)="displayParamModal()" style="margin: 4px;"> Add More
+            Params</button>
+          <button mat-raised-button color="accent" (click)="routeToRules()" style="margin: 4px;">Rules</button>
+        </div>
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Disposition
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="false" nzBlockNode
+              [nzExpandedIcon]="multiExpandedIconTpl" (nzClick)="nzEvent($event); nodeActions($event);"
+              [nzMultiple]="false">
+            </nz-tree>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Unique Attributes
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="uniqueCols" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of uniqueCols" class="custom-toggle" [(ngModel)]="col.checked"
+              [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Editable Columns
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="editableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of editableCols" class="custom-toggle" [(ngModel)]="col.checked"
+              [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Browsable Columns
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="browsableCols" [ngModelOptions]="{standalone: true}"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of browsableCols" class="custom-toggle" [(ngModel)]="col.checked"
+              [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+
+
+          <!-- For changes to group refer https://github.com/shanurrahman/crm-ui/blob/8b3fd4192ba2e5e610cac69365d3435dffa4e04b/src/app/campaign-create/campaign-create.component.html -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              Create Campaign Groups
+            </mat-expansion-panel-header>
+            <mat-form-field class="mat-full-width">
+              <mat-label>Group Name</mat-label>
+              <input type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
+              <button matSuffix mat-stroked-button color="primary" (click)="handleGroupAdd($event)">Add</button>
+            </mat-form-field>
+
+            <ng-container *ngFor="let g of groups">
               <mat-form-field class="mat-full-width">
-                <mat-label>Group Name</mat-label>
-                <input type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}"/>
-                <button matSuffix  mat-stroked-button color="primary" (click)="handleGroupAdd($event)">Add</button>
+                <mat-label>
+                  <span>
+                    {{g.label}}
+                  </span>
+                </mat-label>
+                <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}" *ngIf="allLeadCols">
+                  <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}
+                  </mat-option>
+                </mat-select>
+
+                <!-- <button mat-flat-button >Delete</button> -->
+                <button mat-mini-fab color="warn" matSuffix (click)="deleteGroup(g.label)" aria-label="Delete button">
+                  <mat-icon>remove</mat-icon>
+                </button>
               </mat-form-field>
-    
-              <ng-container *ngFor="let g of groups">
-                <mat-form-field class="mat-full-width">
-                  <mat-label>
-                    <span>
-                      {{g.label}}
-                    </span>
-                  </mat-label>
-                  <mat-select multiple [(ngModel)]="g.value" [ngModelOptions]="{standalone: true}" *ngIf="allLeadCols">
-                    <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
-                  </mat-select>
+            </ng-container>
 
-                  <!-- <button mat-flat-button >Delete</button> -->
-                  <button mat-mini-fab color="warn" matSuffix (click)="deleteGroup(g.label)" aria-label="Delete button">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </mat-form-field>
-              </ng-container>
-    
-            </mat-expansion-panel>
-    
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Assign To
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <!-- <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
-              <mat-slide-toggle *ngFor="let col of assignTo" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-            </mat-expansion-panel>
-    
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Advanced Settings
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <!-- <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
-              <mat-slide-toggle *ngFor="let col of advancedSettings" class="custom-toggle" [(ngModel)]="col.checked" [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
-            </mat-expansion-panel>
-    
-            <mat-expansion-panel nzHeader="Create Groups">
-              <mat-form-field appearance="outline">
-                <mat-label> Campaign Groups </mat-label>
-                <input matInput type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
-                <span matSuffix>
-                  <span (click)="handleGroupAdd($event)">Add</span>
-                </span>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Assign To
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="assignTo" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of assignTo" class="custom-toggle" [(ngModel)]="col.checked"
+              [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Advanced Settings
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <nz-checkbox-group [(ngModel)]="advancedSettings" [ngModelOptions]="{ standalone: true }"></nz-checkbox-group> -->
+            <mat-slide-toggle *ngFor="let col of advancedSettings" class="custom-toggle" [(ngModel)]="col.checked"
+              [ngModelOptions]="{ standalone: true }">{{col.label}}</mat-slide-toggle>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel nzHeader="Create Groups">
+            <mat-form-field appearance="outline">
+              <mat-label> Campaign Groups </mat-label>
+              <input matInput type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
+              <span matSuffix>
+                <span (click)="handleGroupAdd($event)">Add</span>
+              </span>
+            </mat-form-field>
+
+
+            <ng-container *ngFor="let g of groups">
+              <mat-form-field>
+                <mat-label>
+                  <span>
+                    {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;"
+                      (click)="deleteGroup(g.label)"></i>
+                    <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
+                  </span>
+                </mat-label>
+                <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
+                <!-- formControlName="assignees" -->
+                <!-- [nzLabel]="option.readableField" -->
+                <mat-select multiple placeHolder="Inserted are removed" [(ngModel)]="g.value"
+                  [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}
+                  </mat-option>
+                </mat-select>
+                <!-- </nz-form-control> -->
               </mat-form-field>
-    
-    
-              <ng-container *ngFor="let g of groups">
-                <mat-form-field>
-                  <mat-label>
-                    <span>
-                      {{g.label}} <i nz-icon nzType="delete" nzTheme="fill" style="color: red; font-size: larger;"
-                        (click)="deleteGroup(g.label)"></i>
-                      <i nz-icon nz-tooltip nzTooltipTitle="Who all will he manage" nzTheme="outline"></i>
-                    </span>
-                  </mat-label>
-                  <!-- <nz-form-control [nzSpan]="12" nzErrorTip="Assign campaign to users in your organization"> -->
-                    <!-- formControlName="assignees" -->
-                    <!-- [nzLabel]="option.readableField" -->
-                    <mat-select multiple placeHolder="Inserted are removed" [(ngModel)]="g.value"
-                      [ngModelOptions]="{standalone: true}">
-                      <mat-option *ngFor="let option of allLeadCols" [value]="option.internalField">{{option.readableField}}</mat-option>
-                    </mat-select>
-                  <!-- </nz-form-control> -->
-                </mat-form-field>
-              </ng-container>
-            </mat-expansion-panel>
+            </ng-container>
+          </mat-expansion-panel>
 
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                Autodial Settings
-              </mat-expansion-panel-header>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              Autodial Settings
+            </mat-expansion-panel-header>
 
-              <form [formGroup]="autodialForm">
-                <div style="margin-bottom: 14px;">
-                  <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
-                </div>
-                <mat-form-field class="mat-full-width" appearance="outline">
-                  <mat-label aria-placeholder="Max followup / day"> Max followup / day</mat-label>
-                  <input type="number" matInput formControlName="mfupd"/>
-                </mat-form-field>
-                <mat-form-field class="mat-full-width" appearance="outline">
-                  <mat-label> Call Preview Time / seconds</mat-label>
-                  <input type="number" matInput formControlName="cpts"/>
-                </mat-form-field>
-                <mat-form-field class="mat-full-width" appearance="outline">
-                  <mat-label> Call disposition time / seconds</mat-label>
-                  <input type="number" matInput formControlName="cdts"/>
-                </mat-form-field>
-              </form>
-            </mat-expansion-panel>
-    
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Add Email Template
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-                <mat-form-field class="mat-full-width" appearance="outline">
-                  <mat-label>Template Name</mat-label>
-                  <input matInput formControlName="templateName" />
-                </mat-form-field>
-    
-    
-                <mat-form-field class="mat-full-width" appearance="outline">
-                  <mat-label>Subject</mat-label>
-                  <input matInput formControlName="subject" />
-                </mat-form-field>
-    
-                <mat-form-field class="mat-full-width" appearance="outline">
-                  <mat-label>Body</mat-label>
-                    <textarea matInput placeholder="Controlled autosize" formControlName="content"></textarea>
-                </mat-form-field>
-                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
-                  <button mat-stroked-button color="primary"><i nz-icon nzType="upload"></i>Select File</button>
-                </nz-upload>
-              </form>
-    
-              <!-- @Todo add functionality for submit without attachments -->
-              <button mat-stroked-button color="danger">Submit without attachments</button>
-              <button mat-stroked-button color="primary" (click)="handleUpload()"
-                [disabled]="fileList.length == 0" style="margin-top: 16px">
-                {{ uploading ? 'Uploading' : 'Use Attachments' }}
-              </button>
-    
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Create Campaign form
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-             
-              <mat-tab-group mat-align-tabs="start">
-                <mat-tab label="Form builder">
-                  <app-dynamic-form
-                    (formUpdate)="onCampaignFormUpdate($event)"
-                    [formModel]="formModel"
-                  ></app-dynamic-form>
-                </mat-tab>
-                <mat-tab label="Preview">
-                  <app-dynamic-form-preview [formModel]="formModel"></app-dynamic-form-preview>
-                </mat-tab>
-              </mat-tab-group>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </ng-container>
-        <br>
-  
-  
-        <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files"
-          (click)="$event.stopImmediatePropagation();" class="mat-full-width">
-          <button mat-raised-button color="accent"><i nz-icon nzType="upload"></i>Choose Campaign File</button> &nbsp;
-          <button mat-raised-button color="primary" (click)="handleLeadFilesUpload();">Upload</button>
-        </nz-upload>
-        <br>
-  
-        <!-- <nz-form-item style="margin-top: 5px;">
+            <form [formGroup]="autodialForm">
+              <div style="margin-bottom: 14px;">
+                <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
+              </div>
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label aria-placeholder="Max followup / day"> Max followup / day</mat-label>
+                <input type="number" matInput formControlName="mfupd" />
+              </mat-form-field>
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label> Call Preview Time / seconds</mat-label>
+                <input type="number" matInput formControlName="cpts" />
+              </mat-form-field>
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label> Call disposition time / seconds</mat-label>
+                <input type="number" matInput formControlName="cdts" />
+              </mat-form-field>
+            </form>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Add Email Template
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>Template Name</mat-label>
+                <input matInput formControlName="templateName" />
+              </mat-form-field>
+
+
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>Subject</mat-label>
+                <input matInput formControlName="subject" />
+              </mat-form-field>
+
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>Body</mat-label>
+                <textarea matInput placeholder="Controlled autosize" formControlName="content"></textarea>
+              </mat-form-field>
+              <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]=true nzName="files">
+                <button mat-stroked-button color="primary"><i nz-icon nzType="upload"></i>Select File</button>
+              </nz-upload>
+            </form>
+
+            <!-- @Todo add functionality for submit without attachments -->
+            <button mat-stroked-button color="danger">Submit without attachments</button>
+            <button mat-stroked-button color="primary" (click)="handleUpload()" [disabled]="fileList.length == 0"
+              style="margin-top: 16px">
+              {{ uploading ? 'Uploading' : 'Use Attachments' }}
+            </button>
+
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Create Campaign form
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-tab-group mat-align-tabs="start">
+              <mat-tab label="Form builder">
+                <app-dynamic-form (formUpdate)="onCampaignFormUpdate($event)" [formModel]="formModel">
+                </app-dynamic-form>
+              </mat-tab>
+              <mat-tab label="Preview">
+                <app-dynamic-form-preview [formModel]="formModel"></app-dynamic-form-preview>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-container>
+      <br>
+
+
+      <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files"
+        (click)="$event.stopImmediatePropagation();" class="mat-full-width">
+        <button mat-raised-button color="accent"><i nz-icon nzType="upload"></i>Choose Campaign File</button> &nbsp;
+        <button mat-raised-button color="primary" (click)="handleLeadFilesUpload();">Upload</button>
+      </nz-upload>
+      <br>
+
+      <!-- <nz-form-item style="margin-top: 5px;">
           <nz-form-control [nzSpan]="12"> -->
-            <!-- hidden upload element -->
-            <!-- <input type="file" #uploader (change)="captureCampaignConfigFile($event)" style="display: none;">
+      <!-- hidden upload element -->
+      <!-- <input type="file" #uploader (change)="captureCampaignConfigFile($event)" style="display: none;">
             <button type="upload" id="myFile" mat-raised-button color="accent" nzType="default" (click)="uploader.click()">
               <i nz-icon nzType="upload" nzTheme="outline"></i>
               Upload Params
               <nz-badge [nzCount]="campaignFiles?.length" style="margin-left: 1px;"></nz-badge>
             </button> &nbsp; -->
-            <button mat-raised-button [disabled]="!campaignForm.valid" color="primary" class="mat-full-width"
-              (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
-          <!-- </nz-form-control>
+      <button mat-raised-button [disabled]="!campaignForm.valid" color="primary" class="mat-always-full-width"
+        (click)="submitForm(campaignForm.value); $event.stopPropagation()">{{submitText}}</button>
+      <!-- </nz-form-control>
         </nz-form-item> -->
-      </form>
-      <!-- campaign form ends here -->
-  
-  
-      <mat-menu #menu="matMenu">
-        <mat-list>
-          <button mat-menu-item (click)="deleteNode()">Delete This</button>
-          <li mat-menu-item (click)="addLeafNode(true)">Add Leaf</li>
-          <li mat-menu-item (click)="addLeafNode(false)">Add Branch</li>
-          
-          <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
-            <mat-label>Actions</mat-label>
-            <mat-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
-              <mat-option value="showForm">Show Form</mat-option>
-              <mat-option value="followUp">FollowUp</mat-option>
-              <mat-option value="appointment">Appointment</mat-option>
-              <mat-option value="salesCall">SalesCall</mat-option>
-            </mat-select>
-          </mat-form-field>
-        
-  
-          <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
-            <mat-label>Rename Node</mat-label>
-            <input matInput placeholder="rename node" nzSize="default" [(ngModel)]="renameText" />
-            <button matSuffix mat-flat-button (click)="rename()"> Rename </button>
-          </mat-form-field>
+    </form>
+    <!-- campaign form ends here -->
+
+
+    <mat-menu #menu="matMenu">
+      <mat-list>
+        <button mat-menu-item (click)="deleteNode()">Delete This</button>
+        <li mat-menu-item (click)="addLeafNode(true)">Add Leaf</li>
+        <li mat-menu-item (click)="addLeafNode(false)">Add Branch</li>
+
+        <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
+          <mat-label>Actions</mat-label>
+          <mat-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
+            <mat-option value="showForm">Show Form</mat-option>
+            <mat-option value="followUp">FollowUp</mat-option>
+            <mat-option value="appointment">Appointment</mat-option>
+            <mat-option value="salesCall">SalesCall</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
+          <mat-label>Rename Node</mat-label>
+          <input matInput placeholder="rename node" nzSize="default" [(ngModel)]="renameText" />
+          <button matSuffix mat-flat-button (click)="rename()"> Rename </button>
+        </mat-form-field>
+      </mat-list>
+    </mat-menu>
+
+    <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="bottom" nzTitle="Recently Uploaded Files"
+      (nzOnClose)="close()" nzHeight="90vh">
+      <ng-container>
+        <mat-list nzItemLayout="horizontal">
+          <mat-list-item *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect">
+
+            <a matLine style="cursor: pointer;">Uploaded <span style="color: cornflowerblue;">{{upload["label"]}}</span>
+              by
+              {{upload['email']}} at {{upload['createdAt']| date:'full'}} with action type
+              {{upload['actionType']}}</a>
+
+          </mat-list-item>
         </mat-list>
-      </mat-menu>
-  
-      <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="bottom" nzTitle="Recently Uploaded Files"
-        (nzOnClose)="close()" nzHeight="90vh">
-        <ng-container>
-          <mat-list nzItemLayout="horizontal">
-            <mat-list-item *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect">
-              
-                <a matLine style="cursor: pointer;">Uploaded <span style="color: cornflowerblue;">{{upload["label"]}}</span> by
-                  {{upload['email']}} at {{upload['createdAt']| date:'full'}} with action type
-                  {{upload['actionType']}}</a>
-              
-            </mat-list-item>
-          </mat-list>
-          <nz-divider></nz-divider>
-        </ng-container>
-      </nz-drawer>
-  </ion-content>
-  
-  
-  
+        <nz-divider></nz-divider>
+      </ng-container>
+    </nz-drawer>
+
+    <div style="margin-bottom: 10px;"></div>
+  </ng-container>
+
+
+
   <!-- defining tree template -->
   <ng-template #nzTreeTemplate let-node let-origin="origin">
     <span class="custom-node">

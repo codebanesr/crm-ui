@@ -160,6 +160,13 @@
                   </nz-tree>
                 </mat-expansion-panel>
 
+                <mat-form-field class="mat-always-full-width mtb" appearance="fill">
+                  <mat-label>Notes</mat-label>
+                  <input matInput #message maxlength="256" placeholder="Ex. I need help with..." [(ngModel)]="selectedLead.notes"/>
+                  <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
+                  <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+                </mat-form-field>
+          
                 <mat-expansion-panel>
                   <mat-expansion-panel-header>Upload Documents</mat-expansion-panel-header>
                   <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link}}</a>
@@ -207,6 +214,7 @@
                     </mat-select>
                   </mat-form-field>
                 </mat-expansion-panel>
+
 
                 <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok"
                   nzCancelText="cancel" (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">

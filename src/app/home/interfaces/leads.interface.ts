@@ -27,5 +27,6 @@ export interface ILead {
     value: string;
     category: string;
   }[];
-  documentLinks: string[]
+  documentLinks: string[],
+  notes: string
 }

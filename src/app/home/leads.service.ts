@@ -109,11 +109,12 @@ export class LeadsService {
     typeDict: {
       [key: string]: { label: string; value: string; options?: any };
     },
-    filters: Map<string, string>
+    filters: Map<string, string>,
+    nonKeyFilters: Map<string, string>
   ): Observable<any> {
     return this.http.post(
       `${environment.apiUrl}/lead/fetchNextLead/${campaignName}`,
-      { filters, typeDict }
+      { filters, typeDict, nonKeyFilters }
     );
   }
 
