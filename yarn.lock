@@ -1311,13 +1311,6 @@
   dependencies:
     tslib "^1.9.0"
 
-"@ionic-native/android-full-screen@^5.31.1":
-  version "5.31.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/android-full-screen/-/android-full-screen-5.31.1.tgz#0c4c701678b14caa53599df018660adaa9e177f7"
-  integrity sha512-w0jnYAMpjB0q2KBvOkZnDBMZ4fmbvcVY4h0JNTKr1alPhhN98Hyr/FLEk/7LWaDfekg0szjs8fcgi67Tg6FiAQ==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic-native/background-geolocation@^5.30.0":
   version "5.30.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/background-geolocation/-/background-geolocation-5.30.0.tgz#c239d51f23aa02b37bf6f8ed9395ba7f879ad953"
@@ -1596,6 +1589,11 @@
   version "3.0.17"
   resolved "https://registry.yarnpkg.com/@types/selenium-webdriver/-/selenium-webdriver-3.0.17.tgz#50bea0c3c2acc31c959c5b1e747798b3b3d06d4b"
   integrity sha512-tGomyEuzSC1H28y2zlW6XPCaDaXFaD6soTdb4GNdmte2qfHtrKqhy0ZFs4r/1hpazCfEZqeTSRLvSasmEx89uw==
+
+"@types/socket.io-client@^1.4.35":
+  version "1.4.35"
+  resolved "https://registry.yarnpkg.com/@types/socket.io-client/-/socket.io-client-1.4.35.tgz#9f3d38b2f548d64beab4510b4eddc5a526b81724"
+  integrity sha512-MI8YmxFS+jMkIziycT5ickBWK1sZwDwy16mgH/j99Mcom6zRG/NimNGQ3vJV0uX5G6g/hEw0FG3w3b3sT5OUGw==
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -3223,11 +3221,6 @@ cordova-plugin-filepath@^1.5.8:
   resolved "https://registry.yarnpkg.com/cordova-plugin-filepath/-/cordova-plugin-filepath-1.5.8.tgz#9adc7b0ae281683bcea755bb0ac86688e96f5e3a"
   integrity sha512-DhMVM9lkndPWQ+lI8Um0Yq648MBKWpNe/3PW057g4wuFrnAz/9nR8Qs4bjYt/yxwxMX/VMZC59qXOcksd2JYuw==
 
-cordova-plugin-fullscreen@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-fullscreen/-/cordova-plugin-fullscreen-1.3.0.tgz#25739db841d22106ddcd26a7de2829385c7f3382"
-  integrity sha512-K0SQMUyemQrezNlnfyHXQd8BgpwR3TS/fx456GueRCUdro5QG6tCzDDVBCVEGeKroDhXWmabAlhvO3gPoqw/tg==
-
 core-js-compat@^3.6.2:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.6.5.tgz#2a51d9a4e25dfd6e690251aa81f99e3c05481f1c"
@@ -3995,6 +3988,23 @@ engine.io-client@~3.4.0:
     parseqs "0.0.6"
     parseuri "0.0.6"
     ws "~6.1.0"
+    xmlhttprequest-ssl "~1.5.4"
+    yeast "0.1.2"
+
+engine.io-client@~3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-3.5.0.tgz#fc1b4d9616288ce4f2daf06dcf612413dec941c7"
+  integrity sha512-12wPRfMrugVw/DNyJk34GQ5vIVArEcVMXWugQGGuw2XxUSztFNmJggZmv8IZlLyEdnpO1QB9LkcjeWewO2vxtA==
+  dependencies:
+    component-emitter "~1.3.0"
+    component-inherit "0.0.3"
+    debug "~3.1.0"
+    engine.io-parser "~2.2.0"
+    has-cors "1.1.0"
+    indexof "0.0.1"
+    parseqs "0.0.6"
+    parseuri "0.0.6"
+    ws "~7.4.2"
     xmlhttprequest-ssl "~1.5.4"
     yeast "0.1.2"
 
@@ -8877,6 +8887,23 @@ socket.io-client@2.3.0:
     socket.io-parser "~3.3.0"
     to-array "0.1.4"
 
+socket.io-client@^2.4.1:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.4.0.tgz#aafb5d594a3c55a34355562fc8aea22ed9119a35"
+  integrity sha512-M6xhnKQHuuZd4Ba9vltCLT9oa+YvTsP8j9NcEiLElfIg8KeYPyhWOes6x4t+LTAC8enQbE/995AdTem2uNyKKQ==
+  dependencies:
+    backo2 "1.0.2"
+    component-bind "1.0.0"
+    component-emitter "~1.3.0"
+    debug "~3.1.0"
+    engine.io-client "~3.5.0"
+    has-binary2 "~1.0.2"
+    indexof "0.0.1"
+    parseqs "0.0.6"
+    parseuri "0.0.6"
+    socket.io-parser "~3.3.0"
+    to-array "0.1.4"
+
 socket.io-parser@~3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-3.3.1.tgz#f07d9c8cb3fb92633aa93e76d98fd3a334623199"
@@ -10251,6 +10278,11 @@ ws@~6.1.0:
   integrity sha512-eqZfL+NE/YQc1/ZynhojeV8q+H050oR8AZ2uIev7RU10svA9ZnJUddHcOUZTJLinZ9yEfdA2kSATS2qZK5fhJA==
   dependencies:
     async-limiter "~1.0.0"
+
+ws@~7.4.2:
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.3.tgz#1f9643de34a543b8edb124bdcbc457ae55a6e5cd"
+  integrity sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==
 
 xml2js@^0.4.17, xml2js@^0.4.19:
   version "0.4.23"

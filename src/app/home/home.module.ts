@@ -29,6 +29,7 @@ import { CountdownModule } from 'ngx-countdown';
 import { SharedModule } from "../shared/shared.module";
 import { ExpansionPanelComponent } from "./leads/expansion-panel/expansion-panel.component";
 import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawer/reassignment-drawer.component";
+import { WebsocketService } from "../websocket.service";
 
 
 @NgModule({

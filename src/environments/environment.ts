@@ -8,7 +8,8 @@ export const environment = {
   // apiUrl: "https://moleculesystem.com/api",
   accessKeyId:"AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
-  platform: 'web'
+  platform: 'web',
+  alertsUrl: "http://localhost:9999/alerts"
 };
 
 /*

@@ -21,6 +21,7 @@ import { UsersService } from "../home/users.service";
 import { MappingComponent } from "../mapping/mapping.component";
 import { PubsubService } from "../pubsub.service";
 import { UploadService } from "../upload.service";
+import { WebsocketService } from "../websocket.service";
 
 @Component({
   selector: "app-campaign-create",
@@ -40,6 +41,7 @@ export class CampaignCreateComponent implements OnInit {
     private uploadService: UploadService,
     private dialogCtrl: MatDialog,
     private router: Router,
+    private sock: WebsocketService
   ) {}
   campaignForm: FormGroup;
 
@@ -152,6 +154,11 @@ export class CampaignCreateComponent implements OnInit {
 
     // this.suggestCampaignNames();
     this.initUsersList();
+
+
+    this.sock.getAlerts().subscribe(text => {
+      console.log(text);
+    })
     
   }    
 
