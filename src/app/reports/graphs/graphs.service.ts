@@ -13,4 +13,9 @@ export class GraphService {
     getGraphData(payload): Observable<Object> {
         return this.http.post(`${environment.apiUrl}/lead-analytic/graphData`, payload);
     }
+
+
+    getLeadStatusLineData(year=2021) {
+      return this.http.get(`${environment.apiUrl}/lead-analytic/leadStatusLineData?year=${year}`);
+    }
 }

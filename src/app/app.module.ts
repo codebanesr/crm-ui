@@ -27,6 +27,9 @@ import { CallLog } from "@ionic-native/call-log/ngx";
 import { MainSidebarComponent } from "./main-container/main-sidebar/main-sidebar.component";
 import { MainTabsComponent } from "./main-container/main-tabs/main-tabs.component";
 import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar.component";
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -35,7 +38,7 @@ import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar
     LoginComponent,
     MainSidebarComponent,
     MainTabsComponent,
-    MainToolbarComponent
+    MainToolbarComponent,
   ],
   entryComponents: [],
   imports: [
@@ -49,6 +52,9 @@ import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar
     BrowserAnimationsModule,
     DemoMaterialModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

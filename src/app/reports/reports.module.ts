@@ -11,6 +11,8 @@ import { BarChartComponent } from './app-bar-chart/app-bar.component';
 import { InteractionComponent } from './interaction/pie.component';
 import { GraphsComponent } from './graphs/graphs.component';
 import { StackBarChart } from './app-stack-bar/app-stack-bar.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
+import { DataTableComponent } from './data-table/data-table.component';
 
 
 
@@ -30,7 +32,9 @@ import { StackBarChart } from './app-stack-bar/app-stack-bar.component';
     BarChartComponent,
     InteractionComponent,
     StackBarChart,
-    GraphsComponent
+    GraphsComponent,
+    LineChartComponent,
+    DataTableComponent
   ],
 })
 export class ReportsModule { }

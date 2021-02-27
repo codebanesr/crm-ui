@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { isArray } from 'lodash';
 import {
@@ -28,7 +29,7 @@ import { WebsocketService } from "../websocket.service";
   templateUrl: "./campaign-create.component.html",
   styleUrls: ["./campaign-create.component.scss"],
 })
-export class CampaignCreateComponent implements OnInit {
+export class CampaignCreateComponent implements OnInit, OnDestroy {
   constructor(
     private usersService: UsersService,
     private leadsService: LeadsService,
@@ -41,7 +42,8 @@ export class CampaignCreateComponent implements OnInit {
     private uploadService: UploadService,
     private dialogCtrl: MatDialog,
     private router: Router,
-    private sock: WebsocketService
+    private sock: WebsocketService,
+    private _snackBar: MatSnackBar,
   ) {}
   campaignForm: FormGroup;
 
@@ -158,6 +160,7 @@ export class CampaignCreateComponent implements OnInit {
 
     this.sock.getAlerts().subscribe(text => {
       console.log(text);
+      this._snackBar.open(text, 'cancel', {duration: 2000});
     })
     
   }    
@@ -668,6 +671,11 @@ export class CampaignCreateComponent implements OnInit {
       this.subscribeToQueryParamChange();
       event.target.complete();
     }, 500);
+  }
+
+
+  ngOnDestroy() {
+    this.sock.disconnect();
   }
 }
 

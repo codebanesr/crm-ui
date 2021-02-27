@@ -11,18 +11,24 @@ export class WebsocketService {
 
   socket: typeof Socket;
   constructor() {
-    this.socket = connect(environment.alertsUrl); 
-    const currentUser:CurrentUser = JSON.parse(localStorage.getItem('currentUser'));
-    console.log("connecting to: ", environment.alertsUrl, currentUser.email);
-
-    this.socket.on('connect', () => {
-      this.socket.emit('joinRoom', currentUser.email);
-      console.log('check 2', this.socket.connected);
-    });
+    this.createWSConnection();
   }
   
+  createWSConnection() {
+    this.socket = connect(environment.alertsUrl); 
+    const currentUser:CurrentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    this.socket.on('connect', () => {
+      console.log("connected")
+      this.socket.emit('joinRoom', currentUser.email);
+    });
+  }
 
   getAlerts(): Observable<string> {
+    if(!this.socket.connected) {
+      this.createWSConnection();
+    }
+
     return fromEvent<string>(this.socket, 'chatToClient').pipe(text=>text);
   }
 
