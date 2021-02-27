@@ -109,21 +109,21 @@ export class GraphsComponent implements OnInit {
   ];
 
 
-  stackBarTimeFrameLabel = 'month';
-  stackBarQuantityLabel = 'NOC';
+  XAxisLabel = 'month';
+  YAxisLabel = 'NOC';
   stackBarData = [
-    { [this.stackBarTimeFrameLabel]: 'January', type: 'Sales', [this.stackBarQuantityLabel]: 1000 },
-    { [this.stackBarTimeFrameLabel]: 'September', type: 'Sales', [this.stackBarQuantityLabel]: 1170 },
-    { [this.stackBarTimeFrameLabel]: 'March', type: 'Sales', [this.stackBarQuantityLabel]: 660 },
-    { [this.stackBarTimeFrameLabel]: 'April', type: 'Sales', [this.stackBarQuantityLabel]: 1030 },
-    { [this.stackBarTimeFrameLabel]: 'May', type: 'Expenses', [this.stackBarQuantityLabel]: 400 },
-    { [this.stackBarTimeFrameLabel]: 'June', type: 'Expenses', [this.stackBarQuantityLabel]: 460 },
-    { [this.stackBarTimeFrameLabel]: 'July', type: 'Expenses', [this.stackBarQuantityLabel]: 1120 },
-    { [this.stackBarTimeFrameLabel]: 'January', type: 'Expenses', [this.stackBarQuantityLabel]: 540 },
-    { [this.stackBarTimeFrameLabel]: 'September', type: 'Profit', [this.stackBarQuantityLabel]: 300 },
-    { [this.stackBarTimeFrameLabel]: 'October', type: 'Profit', [this.stackBarQuantityLabel]: 300 },
-    { [this.stackBarTimeFrameLabel]: 'April', type: 'Profit', [this.stackBarQuantityLabel]: 300 },
-    { [this.stackBarTimeFrameLabel]: 'June', type: 'Profit', [this.stackBarQuantityLabel]: 350 },
+    { [this.XAxisLabel]: 'January', type: 'Sales', [this.YAxisLabel]: 1000 },
+    { [this.XAxisLabel]: 'September', type: 'Sales', [this.YAxisLabel]: 1170 },
+    { [this.XAxisLabel]: 'March', type: 'Sales', [this.YAxisLabel]: 660 },
+    { [this.XAxisLabel]: 'April', type: 'Sales', [this.YAxisLabel]: 1030 },
+    { [this.XAxisLabel]: 'May', type: 'Expenses', [this.YAxisLabel]: 400 },
+    { [this.XAxisLabel]: 'June', type: 'Expenses', [this.YAxisLabel]: 460 },
+    { [this.XAxisLabel]: 'July', type: 'Expenses', [this.YAxisLabel]: 1120 },
+    { [this.XAxisLabel]: 'January', type: 'Expenses', [this.YAxisLabel]: 540 },
+    { [this.XAxisLabel]: 'September', type: 'Profit', [this.YAxisLabel]: 300 },
+    { [this.XAxisLabel]: 'October', type: 'Profit', [this.YAxisLabel]: 300 },
+    { [this.XAxisLabel]: 'April', type: 'Profit', [this.YAxisLabel]: 300 },
+    { [this.XAxisLabel]: 'June', type: 'Profit', [this.YAxisLabel]: 350 },
   ];
 
 

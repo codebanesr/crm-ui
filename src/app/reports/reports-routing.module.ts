@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { DataTableComponent } from "./data-table/data-table.component";
+import { TelecallerLcTableComponent } from "../telecaller-lc-table/telecaller-lc-table.component";
 import { GraphsComponent } from "./graphs/graphs.component";
 import { InteractionComponent } from "./interaction/pie.component";
 import { LineChartComponent } from "./line-chart/line-chart.component";
@@ -21,9 +21,9 @@ const routes: Routes = [
     pathMatch: 'full',
     component: LineChartComponent
   }, {
-    path: 'dataTable',
+    path: 'openClosedLeadCount',
     pathMatch: 'full',
-    component: DataTableComponent
+    component: TelecallerLcTableComponent
   }
 ];
 

@@ -21,8 +21,11 @@ export class StackBarChart implements OnDestroy, OnChanges {
   }
   
   @Input() data: any[];
-  @Input() timeFrameLabel: string = 'month';
-  @Input() quantityLabel = 'sales';
+  @Input() XAxisLabel: string = 'month';
+  @Input() YAxisLabel = 'sales';
+  @Input() max = 2400;
+
+  @Input() title = 'Average Call Duration'
 
 
   install() {
@@ -44,9 +47,9 @@ export class StackBarChart implements OnDestroy, OnChanges {
     
     this.chart.data(this.data);
     this.chart.scale({
-      [this.quantityLabel]: {
-        max: 2400,
-        tickInterval: 600,
+      [this.YAxisLabel]: {
+        max: this.max,
+        tickInterval: this.max/2,
         nice: true,
       },
     });
@@ -57,7 +60,7 @@ export class StackBarChart implements OnDestroy, OnChanges {
     
     this.chart
       .interval()
-      .position(`${this.timeFrameLabel}*${this.quantityLabel}`)
+      .position(`${this.XAxisLabel}*${this.YAxisLabel}`)
       .color('type')
       .adjust('stack');
     

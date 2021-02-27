@@ -24,11 +24,12 @@ export interface G2MiniBarData {
 export class BarChartComponent implements OnChanges {
   private chart: Chart;
   @Input() padding = [2, 2, 2, 2];
+  @Input() title = 'Average Call Metric';
 
   constructor(private ngZone: NgZone) {}
 
   /** @param type: x-axis, value: y-axis, percent: tooltip */
-  @Input() data;
+  @Input() data : {type: string, value: number, percent: number }[] = [];
 
   @ViewChild("g2MinBar", { static: true }) g2MinBar: ElementRef;
 

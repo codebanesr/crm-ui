@@ -38,7 +38,7 @@ import { MatSortModule } from '@angular/material/sort';
     LoginComponent,
     MainSidebarComponent,
     MainTabsComponent,
-    MainToolbarComponent,
+    MainToolbarComponent
   ],
   entryComponents: [],
   imports: [
