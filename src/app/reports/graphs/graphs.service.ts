@@ -35,4 +35,9 @@ export class GraphService {
     campaignWiseLeadCountPerCategory() {
       return this.http.get<{XAxisLabel: string,YAxisLabel: string, stackBarData: any[], max: number }>(`${environment.apiUrl}/lead-analytic/campaignWiseLeadCountPerCategory`);
     }
+
+
+    getUserTalktime() {
+      return this.http.get<{type: string, value: number, percent: number }>(`${environment.apiUrl}/lead-analytic/userTalktime`);
+    }
 }

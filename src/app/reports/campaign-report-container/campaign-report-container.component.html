@@ -1,4 +1,4 @@
-<ion-content fullscreen>
+<ion-content fullscreen style="overflow-y: hidden;">
   <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
@@ -64,6 +64,7 @@
         <app-telecaller-lc-table></app-telecaller-lc-table>
         <app-line-chart></app-line-chart>
         <app-bar [data]="barData" [title]="'Campaign wise lead count'" *ngIf="barData"></app-bar>
+        <app-bar [data]="talktimeData" [title]="'Telecallers Talktime'" *ngIf="talktimeData"></app-bar>
         <app-stack-bar 
           [data]="stackBarData" 
           [XAxisLabel]="XAxisLabel" 

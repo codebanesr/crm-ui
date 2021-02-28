@@ -28,9 +28,17 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   barData: any[];
   listOfCampaigns: ICampaign[] = [];
 
+  talktimeData = null;
+
   ngOnInit(){
     this.initTransactionFilters();
     this.initCampaignList();
+    this.initHandlerList();
+
+
+    this.graphService.getUserTalktime().subscribe(talktimeData=>{
+      this.talktimeData = talktimeData;
+    })
   }
 
   initCampaignList() {
@@ -95,5 +103,4 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
       this.stackBarData = data.stackBarData;
     })
   }
-
 }
