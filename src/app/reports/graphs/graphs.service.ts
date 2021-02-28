@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { TelecallerLcTableItem } from "src/app/telecaller-lc-table/telecallerLc.interface";
+import { TelecallerLcTableItem } from "src/app/reports/telecaller-lc-table/telecallerLc.interface";
 import { environment } from "src/environments/environment";
 
 @Injectable()

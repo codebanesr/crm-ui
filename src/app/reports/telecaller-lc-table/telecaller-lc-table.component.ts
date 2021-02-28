@@ -4,7 +4,7 @@ import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
 import { merge, of as observableOf } from "rxjs";
 import { catchError, map, startWith, switchMap } from "rxjs/operators";
-import { GraphService } from "../reports/graphs/graphs.service";
+import { GraphService } from "../graphs/graphs.service";
 import { TelecallerLcTableItem } from "./telecallerLc.interface";
 
 @Component({
@@ -22,8 +22,6 @@ export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ["email", "totalOpen", "totalClosed"];
 
-  barData: any[];
-
   // leadclosed
   data: TelecallerLcTableComponent[] = [];
 
@@ -31,30 +29,9 @@ export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
   isLoadingResults = true;
   isRateLimitReached = false;
 
-
-  stackBarTitle = 'Category Wise Lead Count / Campaign';
-  XAxisLabel = 'Campaign Name';
-  YAxisLabel = 'Total Leads';
-  stackBarData = null;
-  max = 50;
-
   ngOnInit() {}
 
   ngAfterViewInit() {
-
-    this.graphService.campaignWiseLeadCount().subscribe(data=>{
-      this.barData = data;
-    });
-
-
-    this.graphService.campaignWiseLeadCountPerCategory().subscribe(data=>{
-      this.XAxisLabel = data.XAxisLabel;
-      this.YAxisLabel = data.YAxisLabel;
-
-      this.max = data.max;
-      this.stackBarData = data.stackBarData;
-    })
-
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     merge(this.sort.sortChange, this.paginator.page)

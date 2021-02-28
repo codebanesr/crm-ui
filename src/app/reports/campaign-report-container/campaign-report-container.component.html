@@ -1,6 +1,5 @@
-<ion-content>
+<ion-content fullscreen>
   <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
-  <button mat-button color="primary" (click)="downloadTransactions()">Download</button>
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
       <mat-toolbar class="header">
@@ -11,8 +10,9 @@
             (click)="drawer.toggle()">close</mat-icon>
         </mat-toolbar-row>
       </mat-toolbar>
+
       <div class="contents">
-        <form [formGroup]="transactionForm" (submit)="getTransactions()">
+        <form [formGroup]="filterForm" (submit)="fetchFilteredData()">
           <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Campaign</mat-label>
             <mat-select formControlName="campaign" placeholder="Campaign">
@@ -57,27 +57,22 @@
       </div>
     </mat-drawer>
 
+
+    <!-- main content goes here -->
     <div class="main contents">
-      <mat-accordion>
-        <mat-expansion-panel *ngFor="let t of transactions">
-          <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
-          <button mat-flat-button style="float: right;" (click)="showLead(t.lead, t.campaign)">Edit</button>
-          <mat-list>
-            <ng-container *ngFor="let k of objectKeys(t)">
-              <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->
-              <mat-form-field appearance="outline" class="mat-always-full-width">
-                <mat-label>{{leadMapping[k]}}</mat-label>
-                <input matInput [value]="t[k] | date: 'short'" *ngIf="['createdAt', 'followUp'].includes(k)" readonly>
-                <input matInput [value]="t[k]" *ngIf="!['createdAt', 'followUp'].includes(k)" readonly>
-              </mat-form-field>
-              <!-- </mat-list-item> -->
-            </ng-container>
-          </mat-list>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <mat-paginator [length]="total" [pageSize]="perPage" [pageSizeOptions]="[5, 10, 25, 100]"
-        (page)="handlePageChange($event)">
-      </mat-paginator>
+      <div style="margin: 20px; padding: 20px;">
+        <app-telecaller-lc-table></app-telecaller-lc-table>
+        <app-line-chart></app-line-chart>
+        <app-bar [data]="barData" [title]="'Campaign wise lead count'" *ngIf="barData"></app-bar>
+        <app-stack-bar 
+          [data]="stackBarData" 
+          [XAxisLabel]="XAxisLabel" 
+          [YAxisLabel]="YAxisLabel"
+          [title]="stackBarTitle"
+          [max] = "max"
+          *ngIf="stackBarData"
+        ></app-stack-bar>
+      </div>
     </div>
   </mat-drawer-container>
 </ion-content>

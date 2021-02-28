@@ -1,4 +1,4 @@
-<ion-content fullscreen>
+
   <div class="example-container mat-elevation-z8">
     <div class="example-loading-shade"
          *ngIf="isLoadingResults || isRateLimitReached">
@@ -38,16 +38,3 @@
     <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
   </div>
 
-  <app-line-chart></app-line-chart>
-
-  <app-bar [data]="barData" [title]="'Campaign wise lead count'" *ngIf="barData"></app-bar>
-
-  <app-stack-bar 
-    [data]="stackBarData" 
-    [XAxisLabel]="XAxisLabel" 
-    [YAxisLabel]="YAxisLabel"
-    [title]="stackBarTitle"
-    [max] = "max"
-    *ngIf="stackBarData"
-  ></app-stack-bar>
-</ion-content>
