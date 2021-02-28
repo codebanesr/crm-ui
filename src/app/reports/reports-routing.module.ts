@@ -21,7 +21,7 @@ const routes: Routes = [
     pathMatch: 'full',
     component: LineChartComponent
   }, {
-    path: 'openClosedLeadCount',
+    path: 'campaignReports',
     pathMatch: 'full',
     component: TelecallerLcTableComponent
   }

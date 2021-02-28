@@ -104,6 +104,12 @@ export class AppComponent implements OnInit, OnDestroy {
       icon: "phonelink",
       shortName: 'teleReports'
     },
+    {
+      title: "Campaign Reports",
+      url: "/reports/campaignReports",
+      icon: "phonelink",
+      shortName: 'campaignReports'
+    },
   ];
 
   constructor(
