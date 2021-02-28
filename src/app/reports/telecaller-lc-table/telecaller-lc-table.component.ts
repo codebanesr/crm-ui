@@ -42,7 +42,7 @@ export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
           return this.graphService.getOpenClosedLeadCount(
             this.sort.active,
             this.sort.direction,
-            this.paginator.pageIndex
+            this.paginator.pageIndex,
           );
         }),
         map((data) => {

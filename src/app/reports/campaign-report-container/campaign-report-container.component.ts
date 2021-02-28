@@ -31,13 +31,32 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   talktimeData = null;
 
   ngOnInit(){
-    this.initTransactionFilters();
+    this.initFilterForm();
     this.initCampaignList();
     this.initHandlerList();
+  }
 
 
-    this.graphService.getUserTalktime().subscribe(talktimeData=>{
+  ngAfterViewInit() {
+    this.fetchAllAnalyticsData();
+  }
+
+  fetchAllAnalyticsData() {
+    this.graphService.getUserTalktime(this.filterForm.value).subscribe(talktimeData=>{
       this.talktimeData = talktimeData;
+    });
+
+    this.graphService.campaignWiseLeadCount(this.filterForm.value).subscribe(data=>{
+      this.barData = data;
+    });
+
+
+    this.graphService.campaignWiseLeadCountPerCategory(this.filterForm.value).subscribe(data=>{
+      this.XAxisLabel = data.XAxisLabel;
+      this.YAxisLabel = data.YAxisLabel;
+
+      this.max = data.max;
+      this.stackBarData = data.stackBarData;
     })
   }
 
@@ -46,9 +65,6 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
       this.listOfCampaigns = result.data;
     })
   }
-
-
-  async fetchFilteredData() {}
 
   listOfHandlers: any;
   tempUserList: any;
@@ -77,7 +93,7 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   handler = new FormControl([]);
   campaign = new FormControl();
   leadId = new FormControl(null);
-  initTransactionFilters() {
+  initFilterForm() {
     this.filterForm = this.fb.group({
       startDate: this.startDate,
       endDate: this.endDate,
@@ -85,22 +101,6 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
       handler: this.handler,
       campaign: this.campaign,
       leadId: this.leadId
-    })
-  }
-
-
-  ngAfterViewInit() {
-    this.graphService.campaignWiseLeadCount().subscribe(data=>{
-      this.barData = data;
-    });
-
-
-    this.graphService.campaignWiseLeadCountPerCategory().subscribe(data=>{
-      this.XAxisLabel = data.XAxisLabel;
-      this.YAxisLabel = data.YAxisLabel;
-
-      this.max = data.max;
-      this.stackBarData = data.stackBarData;
     })
   }
 }

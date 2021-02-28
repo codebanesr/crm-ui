@@ -12,7 +12,7 @@
       </mat-toolbar>
 
       <div class="contents">
-        <form [formGroup]="filterForm" (submit)="fetchFilteredData()">
+        <form [formGroup]="filterForm" (submit)="fetchAllAnalyticsData()">
           <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Campaign</mat-label>
             <mat-select formControlName="campaign" placeholder="Campaign">

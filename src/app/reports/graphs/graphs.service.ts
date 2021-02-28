@@ -15,7 +15,7 @@ export class GraphService {
 
 
     getLeadStatusLineData(year=2021) {
-      return this.http.get(`${environment.apiUrl}/lead-analytic/leadStatusLineData?year=${year}`);
+      return this.http.post(`${environment.apiUrl}/lead-analytic/leadStatusLineData?year=${year}`, {});
     }
 
 
@@ -24,20 +24,20 @@ export class GraphService {
     }
 
     // campaignWiseLeadCount
-    campaignWiseLeadCount() {
-      return this.http.get<{
+    campaignWiseLeadCount(payload) {
+      return this.http.post<{
         type: string;
         value: number;
         percent: number;
-      }[]>(`${environment.apiUrl}/lead-analytic/campaignWiseLeadCount`);
+      }[]>(`${environment.apiUrl}/lead-analytic/campaignWiseLeadCount`, payload);
     }
 
-    campaignWiseLeadCountPerCategory() {
-      return this.http.get<{XAxisLabel: string,YAxisLabel: string, stackBarData: any[], max: number }>(`${environment.apiUrl}/lead-analytic/campaignWiseLeadCountPerCategory`);
+    campaignWiseLeadCountPerCategory(payload) {
+      return this.http.post<{XAxisLabel: string,YAxisLabel: string, stackBarData: any[], max: number }>(`${environment.apiUrl}/lead-analytic/campaignWiseLeadCountPerCategory`, payload);
     }
 
 
-    getUserTalktime() {
-      return this.http.get<{type: string, value: number, percent: number }>(`${environment.apiUrl}/lead-analytic/userTalktime`);
+    getUserTalktime(payload) {
+      return this.http.post<{type: string, value: number, percent: number }>(`${environment.apiUrl}/lead-analytic/userTalktime`, payload);
     }
 }
