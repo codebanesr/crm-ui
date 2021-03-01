@@ -29,6 +29,7 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   listOfCampaigns: ICampaign[] = [];
 
   talktimeData = null;
+  averageTalktimeData = null;
 
   ngOnInit(){
     this.initFilterForm();
@@ -44,6 +45,13 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   fetchAllAnalyticsData() {
     this.graphService.getUserTalktime(this.filterForm.value).subscribe(talktimeData=>{
       this.talktimeData = talktimeData;
+
+      this.averageTalktimeData = this.talktimeData.map(d=>{
+        return {
+          type: d.type,
+          value: d.averageValue
+        }
+      })
     });
 
     this.graphService.campaignWiseLeadCount(this.filterForm.value).subscribe(data=>{

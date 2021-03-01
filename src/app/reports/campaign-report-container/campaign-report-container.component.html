@@ -65,6 +65,7 @@
         <app-line-chart></app-line-chart>
         <app-bar [data]="barData" [title]="'Campaign wise lead count'" *ngIf="barData"></app-bar>
         <app-bar [data]="talktimeData" [title]="'Telecallers Talktime'" *ngIf="talktimeData"></app-bar>
+        <app-bar [data]="averageTalktimeData" [title]="'Average Talktime'" *ngIf="averageTalktimeData"></app-bar>
         <app-stack-bar 
           [data]="stackBarData" 
           [XAxisLabel]="XAxisLabel" 
