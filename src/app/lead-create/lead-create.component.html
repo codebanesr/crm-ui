@@ -60,6 +60,11 @@
                 [disabled]="isDisabled(leadKey)" />
             </mat-form-field>
 
+            <mat-form-field *ngSwitchCase="'tel'" class="mat-full-width" appearance="outline">
+              <mat-label> {{typeDict[leadKey].label}} </mat-label>
+              <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" type="tel"
+                [disabled]="isDisabled(leadKey)" />
+            </mat-form-field>
 
 
             <mat-form-field *ngSwitchCase="'select'" class="mat-full-width" appearance="outline">

@@ -30,6 +30,7 @@ import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import { MatSortModule } from '@angular/material/sort';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: NZ_I18N, useValue: en_US },
     authInterceptorProviders,
+    ExceptionInterceptorProvider,
   ],
   bootstrap: [AppComponent],
 })
