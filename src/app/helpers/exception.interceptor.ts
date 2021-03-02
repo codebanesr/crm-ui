@@ -7,9 +7,13 @@ import {
 } from "@angular/common/http";
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable()
 export class ExceptionInterceptor implements HttpInterceptor {
+    constructor(private _snackBar: MatSnackBar) {
+
+    }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             map((event: HttpEvent<any>) => {
@@ -19,8 +23,21 @@ export class ExceptionInterceptor implements HttpInterceptor {
             catchError((error: HttpErrorResponse) => {
                 // handle all custom exceptions here, this should be a tailored message
                 switch(error.error.statusCode) {
+                    // nestjs exceptions
                     case 409: {
-                        alert(error.error.message);
+                        this._snackBar.open(error.error.message, 'Cancel', {
+                            duration: 2000,
+                            verticalPosition: 'top'
+                        });
+                        break;
+                    }
+
+                    // errors sent from class validators
+                    case 400: {
+                        this._snackBar.open(error.error.message, 'Cancel', {
+                            duration: 2000,
+                            verticalPosition: 'top'
+                        });
                         break;
                     }
                 }
