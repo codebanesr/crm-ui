@@ -162,4 +162,9 @@ export class CampaignService {
   updateConfigs(configsToUpdate, campaignId: string, campaignName: string) {
     return this.http.patch(`${environment.apiUrl}/campaign/addConfigs/${campaignId}/${campaignName}`, configsToUpdate);
   }
+
+
+  removeConfig(configId: string) {
+    return this.http.delete(`${environment.apiUrl}/campaign/${configId}`);
+  }
 }

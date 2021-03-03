@@ -44,6 +44,20 @@ export class MappingComponent implements OnInit {
     this.getLeadMapping();
   }
 
+
+  onRemoveConfig(config: IConfig) {
+    const result = prompt(`Enter <${config?.readableField}> to permanently delete it from campaign`);
+    if(result === config.readableField) {
+      this.campaignService.removeConfig(config._id).subscribe(result => {
+        console.log(result);
+      }, error=>{
+        console.log(error);
+      });
+    } else {
+      alert("The text you entered is incorrect, try again!");
+    }
+  }
+
   async getLeadMapping() {
     /** @Todo second parameter accepts fields that should not be returned in the response */
     const result = await this.leadService.getLeadMappings(this.campaignObj.campaign._id, []);

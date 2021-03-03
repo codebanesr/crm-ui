@@ -15,6 +15,7 @@
           <mat-option *ngFor="let type of elementTypes" [value]="type.value">{{type.label}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <span class="material-icons" matSuffix (click)="onRemoveConfig(e)">remove_circle</span>        
     </div>
   </ng-container>
   <button mat-flat-button (click)="openDialog()">Add Field</button>
