@@ -76,7 +76,7 @@ export class LeadsService {
 
   async getLeadMappings(
     campaignName: string = null,
-    preventFields: Partial<keyof ILead>[] = ['createdAt', '__v', 'campaignId', 'updatedAt', 'email', 'leadStatus']
+    preventFields: Partial<keyof ILead>[] = ['createdAt', '__v', 'campaignId', 'updatedAt', 'email']
   ): Promise<{ typeDict: { [x: string]: any }; mSchema: { paths: any[] } }> {
     return new Promise((resolve, reject) => {
       const showCols = [];
