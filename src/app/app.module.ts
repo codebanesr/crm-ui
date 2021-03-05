@@ -18,8 +18,8 @@ import { en_US, NZ_I18N } from "ng-zorro-antd/i18n";
 import { CallNumber } from "@ionic-native/call-number/ngx";
 import { Contacts } from "@ionic-native/contacts/ngx";
 import { DemoMaterialModule } from "./material/material.module";
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { BatteryStatus } from "@ionic-native/battery-status/ngx";
 import { BackgroundGeolocation } from "@ionic-native/background-geolocation/ngx";
@@ -27,19 +27,19 @@ import { CallLog } from "@ionic-native/call-log/ngx";
 import { MainSidebarComponent } from "./main-container/main-sidebar/main-sidebar.component";
 import { MainTabsComponent } from "./main-container/main-tabs/main-tabs.component";
 import { MainToolbarComponent } from "./main-container/main-toolbar/main-toolbar.component";
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from "@angular/material/sort";
 import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent, 
+    AppComponent,
     LoginComponent,
     MainSidebarComponent,
     MainTabsComponent,
-    MainToolbarComponent
+    MainToolbarComponent,
   ],
   entryComponents: [],
   imports: [
@@ -52,14 +52,16 @@ import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
     HttpClientModule,
     BrowserAnimationsModule,
     DemoMaterialModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production,
+    }),
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
-    {provide: BackgroundGeolocation, useClass: BackgroundGeolocation},
+    { provide: BackgroundGeolocation, useClass: BackgroundGeolocation },
     BatteryStatus,
     CallNumber,
     CallLog,
@@ -68,6 +70,7 @@ import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: NZ_I18N, useValue: en_US },
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     authInterceptorProviders,
     ExceptionInterceptorProvider,
   ],

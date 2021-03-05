@@ -328,7 +328,9 @@
             <a matLine style="cursor: pointer;">Uploaded <span style="color: cornflowerblue;">{{upload["label"]}}</span>
               by
               {{upload['email']}} at {{upload['createdAt']| date:'full'}} with action type
-              {{upload['actionType']}}</a>
+              {{upload['actionType']}} ->
+              {{upload['filePath']}}
+            </a>
 
           </mat-list-item>
         </mat-list>
