@@ -27,7 +27,7 @@ export class LeadHistoryComponent implements OnInit {
   ) {}
 
   transactions: IHistory[] = [];
-  pagination = { sortBy: "createdAt", sortOrder: "ASC", page: 1, perPage: 20 };
+  pagination = { sortBy: "updatedAt", sortOrder: "ASC", page: 1, perPage: 20 };
   
   histories: any[] = [];
   objectKeys = Object.keys;

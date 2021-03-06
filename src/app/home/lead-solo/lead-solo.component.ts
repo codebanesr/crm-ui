@@ -557,7 +557,9 @@ export class LeadSoloComponent implements OnInit{
           this.loading = false;
           this.selectedLead = data.lead;
           this.selectedLead.leadStatus = null;
-          this.selectedLead && this.openAutodial();
+          
+          /** Only start autodial if its there in settings */
+          this.selectedLead && this.selectedCampaign.autodialSettings.active && this.openAutodial();
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }
