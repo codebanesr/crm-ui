@@ -647,7 +647,6 @@ export class LeadSoloComponent implements OnInit{
     this.isLeadEditMode = !this.isLeadEditMode;
   }
 
-  isReassignmentDrawerVisible = false;
   openReassignmentDrawer() {
     const rsref = this._bottomSheet.open(ReassignmentDrawerSheetComponent, {
       data: {

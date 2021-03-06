@@ -16,6 +16,9 @@ import { Plugins } from "@capacitor/core";
 import { List } from "immutable";
 const { Share } = Plugins;
 import { Gesture, GestureController } from "@ionic/angular";
+import { MatBottomSheet } from "@angular/material/bottom-sheet";
+import { ReassignmentDrawerSheetComponent } from "../../lead-solo/reassignment-drawer/reassignment-drawer.component";
+import { UsersService } from "../../users.service";
 
 @Component({
   selector: "app-expansion-panel",
@@ -24,7 +27,11 @@ import { Gesture, GestureController } from "@ionic/angular";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpansionPanelComponent implements OnInit, AfterViewInit {
-  constructor(private router: Router, private gestureCtrl: GestureController) {}
+  constructor(
+    private router: Router, 
+    private _bottomSheet: MatBottomSheet,
+    private userService: UsersService
+  ) {}
 
   longPressed = false;
   @Input() typeDict: ITypeDict;
@@ -32,36 +39,28 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
   @Input() selectedCampaign: ICampaign;
   @ViewChildren('panels', { read: ElementRef }) panels: QueryList<ElementRef>;
   ngOnInit() {
+    this.fetchUsersForReassignment();
   }
 
-  ngAfterViewInit() {
-    // this.useLongPress();
+  ngAfterViewInit() {}
+
+  onLongPress(ev) {
+    console.log(ev)
+    this.longPressed = true;
   }
 
-  onLongPress() {
-    console.log("Long press activated")
+  allSelected = false;
+  onSelectAll() {
+    this.allSelected = !this.allSelected;
+    this.leads.forEach((l: any)=>{
+      l.selected = this.allSelected;
+    })
   }
 
-  // longPressActive: boolean = false;
-  // useLongPress() {
-  //   for (let panel of this.panels) {
-  //     const gesture: Gesture = this.gestureCtrl.create(
-  //       {
-  //         el: panel.nativeElement,
-  //         gestureName: "long-press",
-  //         onStart: (ev) => {
-  //           this.longPressActive = true;
-  //         },
-  //         onEnd: (ev) => {
-  //           this.longPressActive = false;
-  //         },
-  //       },
-  //       true
-  //     );
+  onDeselectAll() {
+    this.longPressed = false;
+  }
 
-  //     gesture.enable(true);
-  //   }
-  // }
 
   leadKeys = [];
   ngOnChanges() {
@@ -95,5 +94,34 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
       url: "https://thefosstech.com",
       dialogTitle: "Share with buddies",
     });
+  }
+
+  usersForReassignment = [];
+  fetchUsersForReassignment() {
+    this.userService.getAllUsersHack().subscribe((result: any) => {
+      this.usersForReassignment = result[0].users;
+    });
+  }
+
+
+  openReassignmentDrawer() {
+    const leadIds = this.leads.filter((l: ILead & {selected: boolean}) => l.selected).map(l=>l._id);
+    const rsref = this._bottomSheet.open(ReassignmentDrawerSheetComponent, {
+      data: {
+        usersForReassignment: this.usersForReassignment,
+        leadIds,
+        isBulkReassignment: true
+      }
+    });
+
+    rsref.afterDismissed().subscribe(
+      (status: boolean) => {
+        if (status) {
+        }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 }

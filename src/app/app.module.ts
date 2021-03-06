@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
+import { BrowserModule, HammerModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
@@ -32,7 +32,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-
+import * as Hammer from 'hammerjs';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,6 +58,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    HammerModule,
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

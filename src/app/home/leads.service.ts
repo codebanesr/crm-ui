@@ -52,12 +52,17 @@ export class LeadsService {
     return this.http.get(`${environment.apiUrl}/lead/${leadId}`);
   }
 
+  /**  There is no need to send the entire payload, we can just send the leadId */
   reassignLead(oldUserEmail, newUserEmail, lead) {
     return this.http.post(`${environment.apiUrl}/lead/reassignLead`, {
       oldUserEmail,
       newUserEmail,
       lead,
     });
+  }
+
+  reassignBulkLeads(leadIds: string[], userEmail: string) {
+    return this.http.post(`${environment.apiUrl}/lead/bulkReassign`, {leadIds, userEmail});
   }
 
   getHistoryForLead(externalId) {

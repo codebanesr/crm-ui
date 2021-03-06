@@ -30,7 +30,6 @@ import { SharedModule } from "../shared/shared.module";
 import { ExpansionPanelComponent } from "./leads/expansion-panel/expansion-panel.component";
 import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawer/reassignment-drawer.component";
 
-
 @NgModule({
   imports: [
     SharedModule,
@@ -44,7 +43,7 @@ import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawe
     IonicModule,
     HomePageRoutingModule,
     ModantdModule,
-    DemoMaterialModule,
+    DemoMaterialModule
   ],
   declarations: [
     ReassignmentDrawerSheetComponent,
