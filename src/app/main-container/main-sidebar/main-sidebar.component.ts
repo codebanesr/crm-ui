@@ -29,6 +29,8 @@ export class MainSidebarComponent implements OnChanges {
       switch(this.currentUser?.roleType) {
         case 'superAdmin':
           return true;
+        case 'manager':
+        case 'seniorManager':
         case 'admin':
           if(['createOrganization'].includes(page.shortName)) {
             return false;

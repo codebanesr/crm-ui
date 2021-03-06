@@ -1,7 +1,9 @@
 <mat-expansion-panel (opened)="lead.panelOpenState = true" (closed)="lead.panelOpenState = false"
-  *ngFor="let lead of leads; trackBy: trackLead" hideToggle>
+  *ngFor="let lead of leads; trackBy: trackLead" hideToggle #panels>
+  <button mat-button mat-flat-button (onLongPress)="onLongPress()" (onLongPressing)="onLongPress()">Long pres</button>
   <mat-expansion-panel-header>
     <mat-panel-title style="width: 100%;">
+      <mat-checkbox class="example-margin" (click)="$event.stopPropagation()"></mat-checkbox> &nbsp;&nbsp;&ngsp;
       <span>{{lead?.firstName}} {{lead?.lastName}}</span>
       <span class="spacer"></span>
       <span style="font-weight: 500; color: #673ab7;">{{lead.leadStatus | titlecase}}</span>

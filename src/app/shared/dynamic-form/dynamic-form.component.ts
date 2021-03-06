@@ -1,8 +1,7 @@
-import { copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { cloneDeep } from 'lodash';
-import { DndDropEvent, DropEffect } from 'ngx-drag-drop';
 import { ModelInterface } from 'src/app/home/interfaces/global.interfaces';
 import { value, field } from 'src/global.model';
 
@@ -180,28 +179,6 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {}
 
-  
-
-  // onDragged(item: any, list: any[], effect: DropEffect) {
-  //   if (effect === 'move') {
-  //     const index = list.indexOf(item);
-  //     list.splice(index, 1);
-  //     this.onModelChange();
-  //   }
-  // }
-
-  // onDrop(event: DndDropEvent, list?: any[]) {
-  //   if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
-  //     if (event.dropEffect === 'copy')
-  //       event.data.name = event.data.type + '-' + new Date().getTime();
-  //     let index = event.index;
-  //     if (typeof index === 'undefined') {
-  //       index = list.length;
-  //     }
-  //     list.splice(index, 0, event.data);
-  //     this.onModelChange();
-  //   }
-  // }
 
   addValue(values) {
     values.push(this.value);
