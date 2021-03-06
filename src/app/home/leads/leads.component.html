@@ -2,7 +2,7 @@
   <ion-searchbar placeholder="Filter Leads" (change)="handleSearchTerm()" showCancelButton="focus"
     [(ngModel)]="leadOptions.searchTerm"></ion-searchbar>
   <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
-    <app-expansion-panel [leads]="leads" [typeDict]="typeDict" [selectedCampaign]="selectedCampaign"></app-expansion-panel>
+    <app-expansion-panel [leads]="leads" [typeDict]="typeDict" [selectedCampaign]="selectedCampaign" (onReload)="getData()"></app-expansion-panel>
     <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
       [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>

@@ -3,8 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   QueryList,
   ViewChildren,
 } from "@angular/core";
@@ -38,6 +40,7 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
   @Input() leads: List<ILead>;
   @Input() selectedCampaign: ICampaign;
   @ViewChildren('panels', { read: ElementRef }) panels: QueryList<ElementRef>;
+  @Output() onReload: EventEmitter<boolean> = new EventEmitter();
   ngOnInit() {
     this.fetchUsersForReassignment();
   }
@@ -116,8 +119,7 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
 
     rsref.afterDismissed().subscribe(
       (status: boolean) => {
-        if (status) {
-        }
+        this.onReload.emit(true);
       },
       (error) => {
         console.error(error);
