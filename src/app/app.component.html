@@ -1,0 +1,14 @@
+<ion-app>
+  <div *ngIf="!!currentUser">
+    <app-main-sidebar [appPages]="appPages" [currentUser]="currentUser"></app-main-sidebar>
+    <app-main-toolbar></app-main-toolbar>
+  </div>
+  
+  
+    <nz-layout id="main-content" class="breakpoint-transform">
+      <ion-router-outlet class="inner-content"></ion-router-outlet>
+      <app-main-tabs *ngIf="!!currentUser"></app-main-tabs>
+    </nz-layout>
+  
+</ion-app>
+

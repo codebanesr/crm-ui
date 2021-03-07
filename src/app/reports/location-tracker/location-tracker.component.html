@@ -1,0 +1,89 @@
+<button mat-flat-button (click)="drawer.toggle()">Filter Results</button>
+
+
+<!-- (mapClick)="addMarker($event)" -->
+
+<div style="height: 100%;">
+  <!-- <button mat-icon-button mat-dialog-close
+    style="position: absolute; z-index: 11; right: 10px;"  
+  >x</button> -->
+  <google-map height="100%"
+    width="100%"
+    [center]="center"
+    [zoom]="zoom"
+    (mapMousemove)="move($event)"
+    (mapRightclick)="removeLastMarker()">
+  <map-marker #marker="mapMarker"
+        *ngFor="let markerPosition of markerPositions"
+        [position]="markerPosition"
+        (mapClick)="openInfoWindow(marker, markerPosition.userId)"></map-marker>
+
+  <map-polyline [path]="vertices"></map-polyline>
+  <map-info-window>
+    <div style="margin-top: 10px;">
+      <p style="font-weight: 700;">{{selectedUser.fullName}} ({{selectedUser.roleType}})</p>
+      <span style="font-weight: 300;">
+        Battery ({{selectedUser.batLvl}}%) 
+        <mat-hint *ngIf="!selectedUser.batLvl">Not available</mat-hint>
+        <mat-progress-bar 
+          style="display: inline-block;" 
+          [value]="selectedUser.batLvl" 
+          color="warn" 
+          mode="determinate">
+        </mat-progress-bar>
+      </span>
+    </div>
+  </map-info-window>
+  </google-map>
+</div>
+
+
+
+<mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
+  <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
+    <mat-toolbar class="header">
+      <mat-toolbar-row>
+        <span>Filters</span>
+        <span class="filter-toolbar-spacer"></span>
+        <mat-icon class="filter-toolbar-icon" aria-hidden="false" aria-label="Example close icon" (click)="drawer.toggle()">close</mat-icon>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="contents">
+      <form [formGroup]="filterForm" (submit)="getVisitTrack()">
+        <mat-form-field appearance="outline" class="mat-always-full-width">
+          <mat-label>Campaign</mat-label>
+          <mat-select formControlName="campaign" placeholder="Campaign">
+            <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
+              {{option.campaignName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="mat-always-full-width">
+          <mat-label>Enter start and end date</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="startDate" placeholder="Start date">
+            <input matEndDate formControlName="endDate" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="mat-always-full-width">
+          <mat-label>Select Users</mat-label>
+          <mat-select formControlName="userIds" placeholder="Users" [multiple]="true">
+            <mat-option>
+              <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe" 
+                noEntriesFoundLabel="'no matching assignee found'">
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let user of listOfUsers" [value]="user._id">
+              {{user.fullName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button type="submit">Fetch</button>
+      </form>
+    </div>
+  </mat-drawer>

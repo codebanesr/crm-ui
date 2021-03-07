@@ -1,0 +1,23 @@
+<div  style="height: 90vh; overflow-y: scroll;">
+  <h1>{{campaignObj?.campaign?.campaignName}}</h1>
+  <ng-container *ngFor="let e of configs">
+    <div style="display: flex; margin: 2px; padding: 2px;">
+      <mat-form-field style="flex: 1;" class="mat-small-width" appearance="outline">
+        <mat-label>{{e.internalField}}</mat-label>
+        <input matInput [value]="e.readableField" (blur)="handleConfigChange(e)">
+      </mat-form-field>
+    
+      
+      &nbsp;&nbsp;
+      <mat-form-field style="flex: 1" class="mat-small-width" appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="e.type" (ngModelChange)="handleConfigChange(e)">
+          <mat-option *ngFor="let type of elementTypes" [value]="type.value">{{type.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="material-icons" matSuffix (click)="onRemoveConfig(e)">remove_circle</span>        
+    </div>
+  </ng-container>
+  <button mat-flat-button (click)="openDialog()">Add Field</button>
+  <button mat-raised-button color="primary" style="float: right;" (click)="closeModal()">Close</button>
+</div>

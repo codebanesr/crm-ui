@@ -1,0 +1,63 @@
+<ion-content>
+  <h2 style="text-align: center;">Create a Reseller</h2>
+  <form [formGroup]="signupForm" (ngSubmit)="submitForm()" style="height: 90vh; overflow-y: scroll; margin: 6px; padding: 6px;">
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Full Name</mat-label>
+      <input matInput formControlName="fullName" />
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password" />
+    </mat-form-field>
+  
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()"
+        type="password" />
+      <mat-error *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
+        Two passwords that you enter is inconsistent!
+      </mat-error>
+    </mat-form-field>
+
+    <!-- company name -->
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Company Name</mat-label>
+      <input matInput formControlName="companyName" />
+    </mat-form-field>
+
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Domain</mat-label>
+      <input matInput formControlName="domain" />
+      <mat-error *ngIf="signupForm.controls.domain.hasError('required')">
+        Domain is required!
+      </mat-error>
+    </mat-form-field>
+  
+    <!-- address -->
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" />
+      <mat-error *ngIf="signupForm.controls.address.hasError('required')">
+        Address is required!
+      </mat-error>
+    </mat-form-field>
+
+    <!-- KYC space -->
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Mobile Number</mat-label>
+      <input matInput formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel" />
+    </mat-form-field>
+  
+    <button mat-raised-button color="primary">
+      Register
+    </button>
+  </form>
+
+</ion-content>
+  

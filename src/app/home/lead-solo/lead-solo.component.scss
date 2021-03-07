@@ -1,0 +1,39 @@
+
+.file-name {
+  position: absolute;
+  margin-left: 8px;
+}
+
+  .drawer {
+    position: fixed;
+    padding: 4px;
+    height: 100vh;
+    width: 230px;
+  }
+  
+  
+  .main {
+    background-color: #fff;
+  }
+  
+  .main.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+    border-bottom: 1px solid #ccc;
+  }
+  
+
+  .filter-toolbar-icon {
+    padding: 0 14px;
+  }
+  .filter-toolbar-spacer {
+    flex: 1 1 auto;
+  }
+
+
+  .mtb {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }

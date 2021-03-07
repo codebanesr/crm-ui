@@ -1,0 +1,101 @@
+<ion-content>
+    <mat-spinner *ngIf="loading" class="center-spinner"></mat-spinner>
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let user of listOfRandomUser" hideToggle>
+        <mat-expansion-panel-header style="height: 60px;">
+          <mat-chip-list aria-label="Details" style="padding: 30px 0;">
+            <mat-chip>{{user.roleType}}</mat-chip>
+          </mat-chip-list>
+          <mat-panel-title>
+            <ng-container *ngTemplateOutlet="accordianheader"></ng-container>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+  
+        <div nz-col nzFlex=1>
+          <span class="actions">
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item *ngFor="let manager of managers" (click)="reassignToUser(manager, user)">
+                  {{manager.email}} </li>
+              </ul>
+            </nz-dropdown-menu>
+          </span>
+        </div>
+  
+  
+  
+        <mat-form-field class="mat-full-width">
+          <mat-label>Select Campaign</mat-label>
+          <mat-select placeHolder="Inserted are removed" [(ngModel)]="selectedCampaign"
+            (ngModelChange)="onSelectionChange()">
+            <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+  
+  
+        <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+            <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+  
+  
+  
+        <nz-descriptions nzBordered [nzColumn]="1" nzTitle="Lead Details" *ngIf="user.userLeadActivityDetails?.length>0">
+          <nz-descriptions-item [nzTitle]="detail._id" *ngFor="let detail of user.userLeadActivityDetails">
+            {{detail.amount}}</nz-descriptions-item>
+        </nz-descriptions>
+  
+        <button mat-flat-button color="primary" (click)="viewActivity(user)">View Activity</button> &nbsp;
+        <button mat-flat-button color="primary" (click)="editUser(user._id)">Edit User</button>
+  
+        <ng-template #accordianheader>
+          <mat-list>
+            <mat-list-item>
+              <div mat-line>{{user.fullName}}</div>
+              <div mat-line>{{user.email}}</div>
+            </mat-list-item>
+          </mat-list>
+          <!-- <ion-label>
+            <h3>{{user?.email}}</h3>
+            <p class="m0 p0">{{ user?.createdAt | date }}</p>
+            <p class="m0 p0">{{ user?.roleType }}</p>
+            <a (click)="navigate(user._id);  $event.stopPropagation();">Edit User</a>
+          </ion-label>
+  
+  
+          <ion-label>
+            <i nz-icon nzType="api" nzTheme="fill" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu"></i> &nbsp;
+            <i nz-icon nzType="book" nzTheme="outline" (click)="takeActions('history'); $event.stopPropagation()"></i>
+            &nbsp;
+            <i nz-icon nzType="user-delete" nzTheme="outline"
+              (click)="takeActions('unassign'); $event.stopPropagation()"></i>
+          </ion-label> -->
+  
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <!-- <nz-pagination class="pagination-component" [nzTotal]="total" [nzPageSize]="pageSize" nzSimple
+      [nzPageIndex]="pageIndex" (nzPageIndexChange)="onQueryParamsChange($event)" [nzShowSizeChanger]="true"
+      *ngIf="!loading"  
+    >
+    </nz-pagination> -->
+
+    <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  
+  
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="createNewUser()">
+    <button mat-icon-button disabled aria-label="Example icon button with a open in new tab icon" 
+        style="background-color: #673ab7; color: white;">
+      <mat-icon>add</mat-icon>
+    </button>
+  </ion-fab>
+</ion-content>

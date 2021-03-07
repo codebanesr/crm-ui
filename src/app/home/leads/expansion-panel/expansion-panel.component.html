@@ -1,0 +1,49 @@
+<mat-toolbar *ngIf="longPressed">
+  <mat-checkbox (click)="onSelectAll()">Select all</mat-checkbox> 
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon" (click)="onDeselectAll()">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-expansion-panel (opened)="lead.panelOpenState = true" (closed)="lead.panelOpenState = false"
+  *ngFor="let lead of leads; trackBy: trackLead" hideToggle>
+    <mat-expansion-panel-header  (press)="onLongPress($event)">
+      <mat-panel-title style="width: 100%;">
+        <mat-checkbox (click)="$event.stopPropagation()" *ngIf="longPressed" [(ngModel)]="lead.selected"></mat-checkbox> &nbsp;&nbsp;&ngsp;
+        <span>{{lead?.firstName}} {{lead?.lastName}}</span>
+        <span class="example-spacer"></span>
+        <span style="font-weight: 500; color: #673ab7;">{{lead.leadStatus | titlecase}}</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <button mat-raised-button color="primary" (click)="handleLeadEdit(lead)" class="lead-edit-btn">Edit Lead</button>
+    <i nz-icon nzType="mail" nzTheme="outline" style="font-size: large;"></i> &nbsp;
+    <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)" style="font-size: large;">
+    </ion-icon>
+    
+    <!-- @Todo do not show mobile numbers in show view, also prevent fetching mobile numbers -->
+    <ng-container *ngFor="let key of leadKeys; trackBy: trackKeys">
+      <p [ngStyle]="{'display': typeDict[key]?.value && typeDict[key].type !=='tel'? 'hidden': 'block' }">
+        {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+      </p>
+    </ng-container>
+</mat-expansion-panel>
+
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="openReassignmentDrawer()">
+    <mat-icon>assignment_ind</mat-icon>
+    <span>Reassign</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>archive</mat-icon>
+    <span>Archive</span>
+  </button>
+  <button mat-menu-item disabled>
+    <mat-icon>notifications_off</mat-icon>
+    <span>Disable alerts</span>
+  </button>
+</mat-menu>

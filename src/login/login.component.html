@@ -1,0 +1,58 @@
+<mat-card class="center-spinner">
+  <!-- <nz-card-meta nzTitle="Welcome to Molecule" style="text-align: center; padding-bottom: 40px;"></nz-card-meta> -->
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Welcome To Molecule</mat-card-title>
+    <mat-card-subtitle>Leader Choice</mat-card-subtitle>
+  </mat-card-header>
+  <ng-container [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+
+    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.username" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="username" placeholder="Ex. pat@example.com">
+      <mat-error *ngIf="validateForm.get('username').hasError('email') && !validateForm.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="validateForm.get('username').hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.password" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input [type]="hide ? 'password' : 'text'" matInput formControlName="password" placeholder="strong password">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-full-width" *ngIf="fieldsToShow.confirmPassword" appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input type="password" matInput formControlName="confirmPassword" placeholder="confirm password">
+    </mat-form-field>
+
+    <mat-grid-list cols="8">
+      <mat-grid-tile
+          [colspan]="5"
+          [rowspan]="1">
+          <section class="example-section" style="flex: 1 1 auto">
+            <mat-radio-group formControlName="remember">
+              <mat-radio-button  value="before">Remember Me</mat-radio-button>
+            </mat-radio-group>
+          </section>      
+      </mat-grid-tile>
+      <mat-grid-tile
+          [colspan]="3"
+          [rowspan]="1">
+          <a (click)="this.onFormTypeChange(formView.reset)" class="login-form-forgot">Forgot password</a>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ng-container>
+  <button style="margin-top: 10px;" (click)="submitForm()" mat-raised-button color="primary">{{buttonText}}</button>
+  <button (click)="this.onFormTypeChange(nextAction)" mat-flat-button> {{nextAction}} </button>
+</mat-card>
+<ng-template #coverTemplate>
+  <img alt="example" src="assets/icon/transparent_logo.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>
+</ng-template>

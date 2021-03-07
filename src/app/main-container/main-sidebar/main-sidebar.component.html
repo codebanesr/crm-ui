@@ -1,0 +1,30 @@
+<ion-menu side="end" content-id="main-content" menuId="first">
+  <ion-content>
+    <mat-grid-list cols="6" rowHeight="50px" *ngFor="let o of appPages" (click)="routeTo(o.url)">
+      <mat-grid-tile [colspan]="'1'" [rowspan]="'1'">
+        <span class="material-icons" style="color: #673ab7;">
+          {{o.icon}}
+        </span>
+      </mat-grid-tile>
+      <mat-grid-tile
+          [colspan]="'5'"
+          [rowspan]="'1'">
+        {{o.title}}
+      </mat-grid-tile>
+      <mat-divider></mat-divider>
+    </mat-grid-list>
+    <mat-grid-list (click)="logout()" cols="6" rowHeight="50px">
+      <mat-divider></mat-divider>
+      <mat-grid-tile [colspan]="'1'" [rowspan]="'1'">
+        <span class="material-icons" style="color: #673ab7; margin-left: 4px;">
+          close
+        </span>
+      </mat-grid-tile>
+      <mat-grid-tile
+          [colspan]="'5'"
+          [rowspan]="'1'">
+        Logout
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ion-content>
+</ion-menu>

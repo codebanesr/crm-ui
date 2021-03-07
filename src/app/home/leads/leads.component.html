@@ -1,0 +1,72 @@
+<ion-content>
+  <ion-searchbar placeholder="Filter Leads" (change)="handleSearchTerm()" showCancelButton="focus"
+    [(ngModel)]="leadOptions.searchTerm"></ion-searchbar>
+  <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
+    <app-expansion-panel [leads]="leads" [typeDict]="typeDict" [selectedCampaign]="selectedCampaign" (onReload)="getData()"></app-expansion-panel>
+    <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
+      [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+  </mat-accordion>
+
+  <nz-empty *ngIf="isEmpty"></nz-empty>
+
+  <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
+    (nzOnClose)="closeFilterDrawer()">
+
+    <mat-select nzMode="default" [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()"
+      style="width: 200px;">
+      <mat-option [value]='{_id: "all"}'>All Campaign</mat-option>
+      <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
+    </mat-select>
+
+
+    <mat-accordion>
+      <mat-expansion-panel *ngIf="typeDict">
+        <mat-expansion-panel-header>
+          Lead Filter
+        </mat-expansion-panel-header>
+
+        <app-lead-filter [leadFilter]="leadOptions.filters" [typeDict]="typeDict"></app-lead-filter>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Disposition Filter
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <!-- <mat-chip color="accent" selected>{{leadOptions.filters["dispositionFilter"]}}</mat-chip> -->
+        <nz-tree nzMultiple [nzData]="callDispositions" (nzClick)="nodeClickEvent($event)"
+          [nzSelectedKeys]="selectedKeys" class="pull-left"></nz-tree>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"
+      style="margin-top: 4px;">Submit</button>
+  </nz-drawer>
+
+
+
+  <ng-template #empty>
+    <nz-empty></nz-empty>
+  </ng-template>
+
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="position: absolute; bottom: 70px;">
+    <ion-fab-button>
+      <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <!-- create lead -->
+      <ion-fab-button color="primary" (click)="handleCreateLead()">
+        <!-- filter -->
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="primary">
+        <!-- followup -->
+        <ion-icon name="alarm-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="primary" (click)="showFilterDrawer = true">
+        <ion-icon name="filter"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

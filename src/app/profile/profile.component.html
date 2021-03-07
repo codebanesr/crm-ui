@@ -1,0 +1,44 @@
+<ion-content>
+  <div style="margin: 6px; padding: 6px; overflow-y: scroll; height: 90vh;">
+    <img [src]="userimage" (click)="csvInput.click()" alt="" srcset="" class="rounded">
+  
+    <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="handleIconClick($event)" accept=".jpg,.jpeg,.png,.tif,.tiff,.gif"/>
+  
+    <form [formGroup]="profileForm" (submit)="handleProfileSubmit()">
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="firstName"/>
+        <mat-error *ngIf="firstName.hasError('minlength') && !firstName.hasError('required')">
+          First Name must be atleast three characters long
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="lastName"/>
+        <mat-error *ngIf="lastName.hasError('minlength') && !lastName.hasError('required')">
+          Last Name must be atleast three characters long
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Mobile Number</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="mobileNumber" type="number"/>
+        <mat-error *ngIf="mobileNumber.hasError('pattern') && !mobileNumber.hasError('required')">
+          Please enter a valid mobile number
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="password" type="password"/>
+        <mat-error *ngIf="password.hasError('required')">
+          Password cannot be empty
+        </mat-error>
+        <mat-hint>Enter your current password to make changes</mat-hint>
+      </mat-form-field>
+  
+      <button mat-raised-button style="float: right;" color="primary">Submit</button>
+    </form>
+  </div>  
+</ion-content>

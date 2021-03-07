@@ -1,0 +1,121 @@
+<ion-content fullscreen>
+  <div *ngIf="typeDict" style="margin: 4px; padding:4px;">    
+      <h2>
+        Contact Information
+        <button mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon"
+          (click)="isContactDrawerVisible = true">
+          <mat-icon>add_ic_call</mat-icon>
+        </button>
+      </h2>
+      <ng-container *ngFor="let contact of selectedLead.contact">
+        <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
+          <ion-icon name="call"></ion-icon>
+          <i class="icon ion-ios-telephone"></i> &nbsp;
+          {{ contact.value }}
+        </ion-button>
+        <a *ngIf="contact.category !== 'mobile'"> {{ contact.value }}</a>
+      </ng-container>
+
+    <mat-form-field class="mat-full-width" appearance="fill" style="margin-top: 8px;">
+      <mat-label>Campaign</mat-label>
+      <mat-select [(ngModel)]="selectedLead.campaignId" (ngModelChange)="onSelectedCampaignChange()">
+        <mat-option *ngFor="let c of campaignList" [value]="c._id">
+          {{ c.campaignName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="mat-full-width" appearance="fill" style="margin-top: 8px;">
+      <mat-label>Handler</mat-label>
+      <mat-select [(ngModel)]="selectedLead.email">
+        <mat-option *ngFor="let u of usersForReassignment" [value]="u._id">
+          {{ u.fullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-tab-group mat-align-tabs="start">
+      <mat-tab [label]="g.label | titlecase" *ngFor="let g of selectedCampaign?.groups">
+
+        <ng-container *ngFor="let leadKey of g.value">
+          <ng-container [ngSwitch]="typeDict[leadKey]?.type">
+
+            <mat-form-field class="mat-full-width" appearance="outline" *ngSwitchCase="'date'">
+              <mat-label> {{typeDict[leadKey].label | titlecase}} </mat-label>
+              <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
+                type="datetime-local" />
+            </mat-form-field>
+
+
+            <mat-form-field *ngSwitchCase="'number'" class="mat-full-width" appearance="outline">
+              <mat-label> {{typeDict[leadKey].label}} </mat-label>
+              <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" />
+            </mat-form-field>
+
+
+
+            <mat-form-field *ngSwitchCase="'string'" class="mat-full-width" appearance="outline">
+              <mat-label> {{typeDict[leadKey].label}} </mat-label>
+              <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]"
+                [disabled]="isDisabled(leadKey)" />
+            </mat-form-field>
+
+            <mat-form-field *ngSwitchCase="'tel'" class="mat-full-width" appearance="outline">
+              <mat-label> {{typeDict[leadKey].label}} </mat-label>
+              <input matInput placeholder="Basic usage" [(ngModel)]="selectedLead[leadKey]" type="tel"
+                [disabled]="isDisabled(leadKey)" />
+            </mat-form-field>
+
+
+            <mat-form-field *ngSwitchCase="'select'" class="mat-full-width" appearance="outline">
+              <mat-label> {{typeDict[leadKey].label}} </mat-label>
+              <mat-select [(ngModel)]="selectedLead[leadKey]">
+                <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">{{option}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+
+        </ng-container>
+      </mat-tab>
+    </mat-tab-group>
+
+    <button mat-button mat-flat-button (click)="evaluateOtherData()">
+      {{ this.showOtherData ? "Show Less" : "Show More" }}
+    </button>
+
+    <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)">Submit</ion-button>
+  </div>
+</ion-content>
+
+<nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="isContactDrawerVisible = false"
+  (nzOnOk)="isContactDrawerVisible = false" [nzStyle]="{ top: '20px' }" [nzFooter]="contactModalFooter">
+  <form nz-form [formGroup]="contactForm">
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label nzRequired nzFor="note">Label</mat-label>
+
+      <input id="label" type="text" nz-input formControlName="label" matInput />
+    </mat-form-field>
+
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>Value</mat-label>
+      <input id="value" type="text" nz-input formControlName="value" matInput />
+    </mat-form-field>
+
+    <mat-form-field class="mat-full-width" appearance="outline">
+      <mat-label>category</mat-label>
+      <mat-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
+        <mat-option nzValue="mobile" nzLabel="Mobile"></mat-option>
+        <mat-option nzValue="email" nzLabel="Email"></mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+  <ng-template #contactModalFooter>
+    <button nz-button nzType="default" (click)="submitContactForm(false)">
+      Save
+    </button>
+    <button nz-button nzType="primary" (click)="submitContactForm(true)">
+      Add Another
+    </button>
+  </ng-template>
+</nz-modal>

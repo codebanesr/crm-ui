@@ -1,0 +1,32 @@
+.inner-content {
+  background: #fff;
+}
+
+::ng-deep ion-toolbar {
+  height: 35px;
+}
+
+.header-class {
+  line-height: 35px;
+  margin: 0 auto;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+ion-menu {
+  --width: 234px;
+}
+
+:host >>> .mat-figure {
+  align-items: end !important;
+}
+
+@media screen and (min-width: 770px) and (max-width: 2048px) {
+    .breakpoint-transform {
+        width: 90vw;
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+}

@@ -1,0 +1,89 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+// .scrollable {
+//   height: 100%;
+//   overflow-y: scroll;
+//   overflow-x: hidden;
+// }
+
+.m0 {
+  margin: 0;
+}
+
+.p0 {
+  padding: 0;
+}
+
+.lr-margin {
+  padding: 0px 0px;
+}
+
+.center-spinner {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 99999;
+}
+
+
+.mat-full-width {
+  width: 100%;
+}
+
+@media screen and (max-width: 401px) {
+  .mat-full-width {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 769px) {
+  .main-tabs { display: none; }   /* hide it elsewhere */
+  .mat-full-width {
+    width: 40%;
+    margin-right: 2px;
+    margin-left: 2px;
+  }
+}
+
+
+@media screen and (min-width: 770px) and (max-width: 2048px) {
+  .main-tabs { display: none; }   /* hide it elsewhere */
+  .mat-full-width {
+    width: 46%;
+    margin-right: 2px;
+    margin-left: 2px;
+  }
+}
+
+.mat-always-full-width {
+  width: 100%;
+}

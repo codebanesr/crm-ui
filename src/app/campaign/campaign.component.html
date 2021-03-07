@@ -1,0 +1,33 @@
+<ion-content>
+  <mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let campaign of listOfData" style="height: 120px;">
+      <a mat-line style="font-weight: 550;" (click)="routeToSoloLead(campaign)">
+        {{campaign.campaignName | uppercase}}
+      </a>
+  
+  
+      <div mat-line style="padding-top: 10px;">
+        <span [matBadge]="quickStats[campaign.campaignName]?.followUp || 0 " matBadgeOverlap="false">Follow Ups</span>
+      </div>
+  
+      <div mat-line style="padding-top: 10px;">
+        <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0 " matBadgeColor="warn" matBadgeOverlap="false">Overdue</span>
+      </div>
+  
+      <mat-action-list>
+        <button class="custom-btn" mat-raised-button color="primary" (click)="gotoDetailedView(campaign)" *ngIf="roleType === 'admin'">Edit</button> &nbsp;
+        <button class="custom-btn" mat-raised-button color="accent" (click)="routeToSoloLead(campaign)">Browse</button>
+      </mat-action-list>
+    </mat-list-item>
+  </mat-list>
+  <mat-paginator [length]="100"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+</ion-content>

@@ -1,0 +1,300 @@
+<!-- start changes -->
+<div cdkDropListGroup>
+  <div cdkDropList [cdkDropListData]="fieldModels" (cdkDropListDropped)="drop($event)"
+    class="example-list"
+    style="height: 100px; 
+      overflow-y: scroll; 
+      padding: 15px; background-color: thistle;"
+  >
+    <button mat-flat-button 
+      color="accent" 
+      style="margin-right: 5px; margin-bottom: 5px;" 
+      cdkDrag *ngFor="let item of fieldModels" 
+      [cdkDragStartDelay]="200"
+    >
+        <span>{{item.label}}</span>
+        <span class="material-icons">
+          {{item.icon}}
+        </span>
+    </button>
+  </div>
+
+
+  <form style="margin-top: 20px;">
+    <mat-form-field class="mat-full-width">
+      <mat-label>Form Name</mat-label>
+
+      <input matInput name="formName" type="text" (ngModelChange)="onModelChange()" [(ngModel)]="model.name"
+        [ngModelOptions]="{standalone: true}" />
+
+    </mat-form-field>
+  </form>
+
+  <div [ngClass]="{'empty':model.attributes.length == 0}" cdkDropList [cdkDropListData]="model.attributes"
+    (cdkDropListDropped)="drop($event)" class="example-list">
+
+    <div class="example-box"  cdkDrag *ngFor="let item of model.attributes;let i= index;" [cdkDragStartDelay]="200">
+      <div nz-row>
+        <div nz-col nzSpan="22">
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='text'">
+            <mat-label>{{item.label}}</mat-label>
+            <input matInput name="email" type="text" id="{{item.name}}" placeholder="{{item.placeholder}}">
+          </mat-form-field>
+
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='email'">
+            <mat-label>{{item.label}}</mat-label>
+
+            <input matInput type="email" id="{{item.name}}" placeholder="{{item.placeholder}}">
+
+          </mat-form-field>
+
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='phone'">
+            <mat-label>{{item.label}}</mat-label>
+
+            <input matInput type="text" id="{{item.name}}" placeholder="{{item.placeholder}}">
+
+          </mat-form-field>
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='number'">
+            <mat-label>{{item.label}}</mat-label>
+            <input matInput type="number" id="{{item.name}}" min="{{item.min}}" max="{{item.max}}"
+              placeholder="{{item.placeholder}}">
+          </mat-form-field>
+
+          <mat-form-field class="mat-full-width" appearance="outline" class="mat-full-width" appearance="fill"
+            *ngIf="item.type=='date'">
+            <mat-label>{{item.label}}</mat-label>
+            <input matInput [matDatepicker]="picker" [id]="item.name">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='datetime-local'"
+            class="mat-full-width" appearance="fill">
+            <mat-label>{{item.label}}</mat-label>
+            <input matInput [matDatepicker]="picker" [id]="item.name">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+
+          </mat-form-field>
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='textarea'">
+            <mat-label>{{item.label}}</mat-label>
+
+            <textarea matInput placeholder="Controlled autosize" id="{{item.name}}" placeholder="{{item.placeholder}}">
+                  </textarea>
+
+          </mat-form-field>
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='file'">
+            <mat-label>{{item.label}} (File can't be uploaded right now)
+            </mat-label>
+
+            <input matInput type="file" id="{{item.name}}" placeholder="{{item.placeholder}}">
+
+          </mat-form-field>
+
+          <div *ngIf="item.type=='paragraph'">
+            <div *ngIf="item.type=='paragraph'">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <mat-label>{{item.label}}</mat-label>
+
+                <input type="text" matInput (ngModelChange)="onModelChange()" [(ngModel)]="item.value"
+                  placeholder="input with clear icon" [ngModelOptions]="{standalone: true}" />
+              </mat-form-field>
+
+              <ng-template #inputClearTpl><i nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+                  *ngIf="item.value" (click)="item.value = null"></i></ng-template>
+            </div>
+          </div>
+          <div *ngIf="item.type=='autocomplete'">
+            <mat-form-field class="mat-full-width" appearance="outline">
+              <mat-label>{{item.label}}</mat-label>
+
+              <mat-select id="{{item.name}}">
+                <mat-option *ngFor="let v of item.values" [value]="v.value">
+                  {{v.label}}
+                </mat-option>
+                <!-- <nz-option [nzValue]="v.value" [nzLabel]="v.label"></nz-option> -->
+              </mat-select>
+
+            </mat-form-field>
+          </div>
+          <div *ngIf="item.type=='checkbox'">
+            <section>
+              <mat-label>{{item.label}}</mat-label>
+              <mat-checkbox *ngFor="let v of item.values" (ngModelChange)="onModelChange()" [(ngModel)]="v.value"
+                [ngModelOptions]="{standalone: true}">{{v.label}}</mat-checkbox>
+            </section>
+
+          </div>
+          <div *ngIf="item.type=='radio'">
+            <mat-label>{{item.label}}</mat-label>
+            <mat-radio-group (ngModelChange)="onModelChange()" [(ngModel)]="item.value" name="matradio">
+              <mat-radio-button [value]="v.value" *ngFor="let v of item.values">{{v.label}}</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.type=='button'" class="btn-cont">
+
+            <input matInput type="{{item.subtype}}" (click)="submit()" value="{{item.label}}" class="btn btn-primary"
+              id="{{item.name}}">
+
+          </mat-form-field>
+        </div>
+        <div nz-col nzSpan="2">
+          <span class="material-icons" *ngIf="item.toggle" (click)="item.toggle=false">
+            arrow_circle_up
+          </span>
+          <span class="material-icons" (click)="item.toggle=true" *ngIf="!item.toggle">
+            arrow_circle_down
+          </span>
+          <!-- <i (click)="removeField(i)" nz-icon nzType="delete" nzTheme="outline" style="font-size: 1.3rem"></i> -->
+          <span class="material-icons" (click)="removeField(i)">
+            delete_outline
+          </span>
+        </div>
+      </div>
+      <div *ngIf="item.toggle" style="padding: 15px; background: snow; border-radius: 10px;">
+        <div class="form-group">
+          <mat-label>Required</mat-label>
+          <mat-slide-toggle [(ngModel)]="item.required" [ngModelOptions]="{standalone: true}">
+            Required
+          </mat-slide-toggle>
+          <span class="pull-right ucfirst">{{item.type}}</span>
+        </div>
+        <mat-form-field class="mat-full-width" appearance="outline">
+          <mat-label>Label</mat-label>
+          <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.label"
+            [ngModelOptions]="{standalone: true}" />
+
+        </mat-form-field>
+        <mat-form-field class="mat-full-width" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.name"
+            [ngModelOptions]="{standalone: true}" />
+
+        </mat-form-field>
+        <mat-form-field class="mat-full-width" appearance="outline">
+          <mat-label>Placeholder</mat-label>
+          <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.placeholder"
+            [ngModelOptions]="{standalone: true}" />
+
+        </mat-form-field>
+        <mat-form-field class="mat-full-width" appearance="outline">
+          <mat-label>Regex</mat-label>
+          <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.regex"
+            [ngModelOptions]="{standalone: true}" />
+
+        </mat-form-field>
+        <mat-form-field class="mat-full-width" appearance="outline" *ngIf="item.regex">
+          <mat-label>Error text</mat-label>
+          <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.errorText"
+            [ngModelOptions]="{standalone: true}" />
+
+        </mat-form-field>
+
+        <!-- number -->
+        <div *ngIf="item.type=='number'" nz-row>
+          <div nz-col nzSpan="6">
+            <mat-form-field class="mat-full-width" appearance="outline">
+              <mat-label>Min</mat-label>
+              <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.min"
+                [ngModelOptions]="{standalone: true}" />
+
+            </mat-form-field>
+          </div>
+          <div nz-col nzSpan="6">
+            <mat-form-field class="mat-full-width" appearance="outline">
+              <mat-label>Max</mat-label>
+              <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="item.max"
+                [ngModelOptions]="{standalone: true}" />
+
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- radio || checkbox || autocomplete -->
+        <div *ngIf="item.type=='radio'|| item.type=='checkbox' || item.type=='autocomplete'">
+          <div nz-row>
+            <div nz-col nzSpan="8">
+              <mat-label> Label </mat-label>
+            </div>
+            <div nz-col nzSpan="8">
+              <mat-label>Value</mat-label>
+            </div>
+            <div nz-col nzSpan="8">
+              <mat-label>Action</mat-label>
+            </div>
+          </div>
+          <div *ngFor="let i of item.values; let valueIndex=index;" nz-row>
+            <div nz-col nzSpan="8">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="i.label"
+                  [ngModelOptions]="{standalone: true}" />
+              </mat-form-field>
+            </div>
+            <div nz-col nzSpan="8">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="i.value"
+                  [ngModelOptions]="{standalone: true}" />
+              </mat-form-field>
+            </div>
+            <div nz-col nzSpan="8">
+              <mat-label (click)="item.values.splice(valueIndex,1)">remove</mat-label>
+            </div>
+          </div>
+          <div nz-row>
+            <div nz-col nzSpan="8">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="value.label"
+                  [ngModelOptions]="{standalone: true}" />
+              </mat-form-field>
+            </div>
+            <div nz-col nzSpan="8">
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <input matInput type="text" (ngModelChange)="onModelChange()" [(ngModel)]="value.value"
+                  [ngModelOptions]="{standalone: true}" />
+              </mat-form-field>
+            </div>
+            <div nz-col nzSpan="8">
+              <mat-label (click)="addValue(item.values)">Add</mat-label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--optional placeholder element for dropzone-->
+    <!--will be removed from DOM on init-->
+    <div class="dndPlaceholder" dndPlaceholderRef>
+    </div>
+  </div>
+</div>
+<!-- end changes -->
+
+<div *ngIf="report" class="padding20 white-bg">
+  <div class="row">
+    <div class="col-12 btn-cont">
+      <button (click)="report=false" class="btn btn-primary">
+        << Back</button>
+    </div>
+    <div class="col-12 spacer30"></div>
+    <!-- if records found -->
+    <div *ngIf="reports?.length > 0" class="col-12">
+      <div *ngFor="let records of reports" class="report-block">
+        <div *ngFor="let record of records.attributes">
+          <div *ngIf="record.type !='button' && record.type !='paragraph'" class="row">
+            <div class="col-4">{{record.label}}</div>
+            <div class="col-8">{{record.value}}</div>
+          </div>
+        </div>
+      </div>
+      <!-- <pre>{{reports|json}}</pre> -->
+    </div>
+    <!-- if no records found -->
+    <div *ngIf="reports?.length == 0" class="col-12 btn-cont">
+      No response found
+    </div>
+  </div>
+</div>

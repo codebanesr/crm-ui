@@ -1,0 +1,87 @@
+<ion-content>
+  <ion-content fullscreen>
+    <div>
+      <mat-form-field class="mat-full-width">
+        <mat-label>Select Campaign</mat-label>
+        <mat-select placeHolder="Select Campaign" value="all" [(ngModel)]="selectedCampaignId" (ngModelChange)="onLeadSelectionChange($event)">
+          <mat-option value="all">All</mat-option>
+          <mat-option *ngFor="let campaign of campaignList" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  
+    <mat-form-field appearance="outline" class="mat-full-width">
+      <mat-label>Enter start and end date</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+        <input matEndDate placeholder="End date" [(ngModel)]="endDate" (ngModelChange)="getFollowUps()">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  
+    <mat-accordion hideToggle>
+      <mat-expansion-panel *ngFor="let lead of listOfUpcomingLeads">
+        <mat-expansion-panel-header>
+          {{lead.firstName}}
+        </mat-expansion-panel-header>
+        
+        <mat-form-field class="mat-full-width" appearance="fill">
+          <mat-label>Handler</mat-label>
+          <input matInput placeholder="Ex. Pizza" [value]="lead.email" readonly>
+        </mat-form-field>
+  
+        <mat-form-field class="mat-full-width" appearance="fill">
+          <mat-label>Followup</mat-label>
+          <input matInput placeholder="Ex. Pizza" [value]="lead.followUp | date: 'short'" readonly>
+        </mat-form-field>
+  
+        <mat-form-field class="mat-full-width" appearance="fill">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="Ex. Pizza" [value]="lead.firstName" readonly>
+        </mat-form-field>
+  
+        <mat-form-field class="mat-full-width" appearance="fill">
+          <mat-label>Campaign</mat-label>
+          <input matInput placeholder="Ex. Pizza" [value]="lead.campaign" readonly>
+        </mat-form-field>
+  
+        <mat-form-field class="mat-full-width" appearance="fill">
+          <mat-label>Disposition</mat-label>
+          <input matInput placeholder="Ex. Pizza" [value]="lead.leadStatus" readonly>
+        </mat-form-field>
+      
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+    
+    <mat-paginator [length]="total"
+                  [pageSize]="perPage"
+                  [pageSizeOptions]="[10, 20, 35]"
+                  (page)="handlePaginationEvent($event)">
+    </mat-paginator>
+    
+  </ion-content>
+</ion-content>
+
+
+<!-- 
+<nz-collapse [nzBordered]="true" *ngIf="listOfUpcomingLeads && typeDict" class="scrollable">
+  <nz-collapse-panel [nzShowArrow]="false" *ngFor="let lead of listOfUpcomingLeads" [nzHeader]="accordianheader"
+    [nzActive]="lead.active">
+    <p *ngFor="let key of objectkeys(lead)">
+      {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+    </p>
+
+    <ng-template #accordianheader>
+      <nz-descriptions>
+        <ng-container *ngFor="let key of objectkeys(lead); let i = index">
+          <nz-descriptions-item [nzTitle]="typeDict[key]?.label" *ngIf="i<6 && typeDict[key]?.label">
+            {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
+          </nz-descriptions-item>
+        </ng-container>
+      </nz-descriptions>
+    </ng-template>
+
+  </nz-collapse-panel>
+</nz-collapse> -->

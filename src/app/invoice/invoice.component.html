@@ -1,0 +1,79 @@
+<h1>Removed from production till requirement</h1>
+<!-- <h1>Invoice</h1>
+<div class="scrollable">
+  <nz-descriptions nzTitle="East Repair Inc {{total | number: '1.0-2'}}" nzBordered>
+    <nz-descriptions-item nzTitle="Bill To">
+      East Repair Inc, 485 Amsterdam Avenue. New York, NY 1023
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Ship To">
+      Jon Smith, 685 Lexington Avenue. 6th Floor NY
+    </nz-descriptions-item>
+
+    <nz-descriptions-item nzTitle="Invoice">
+      INV-31270
+    </nz-descriptions-item>
+
+    <nz-descriptions-item nzTitle="Order Time" [nzSpan]=1>
+      2018-04-24 18:00:00
+    </nz-descriptions-item>
+
+    <nz-descriptions-item nzTitle="Usage Time" [nzSpan]="2">
+      2018-04-24 18:00:00 To 2019-04-24 18:00:00
+    </nz-descriptions-item>
+
+
+    <nz-descriptions-item nzTitle="Status" [nzSpan]="3">
+      <nz-badge nzStatus="processing" nzText="Running"></nz-badge>
+    </nz-descriptions-item>
+  </nz-descriptions>
+  
+  <nz-divider></nz-divider>
+  
+  
+  <nz-table #editRowTable nzBordered [nzData]="listOfData" class="scrollable">
+    <thead>
+      <tr>
+        <th nzWidth="10px">Qty</th>
+        <th>Description</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of editRowTable.data" (click)="startEdit(data.id)">
+        <td class="editable-row">
+          <div [hidden]="editId === data.id">
+            {{ data.quantity }}
+          </div>
+          <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.quantity" (blur)="stopEdit()" />
+        </td>
+  
+        <td class="editable-row">
+          <div [hidden]="editId === data.id">
+            {{ data.description }}
+          </div>
+          <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.description" (blur)="stopEdit()" />
+        </td>
+  
+        <td class="editable-row">
+          <div [hidden]="editId === data.id">
+            {{ data.unitPrice | number: '1.0-2'}}
+          </div>
+          <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.unitPrice" (blur)="stopEdit()" />
+        </td>
+        <td class="editable-row">
+          <div>
+            {{ data.unitPrice * data.quantity }}
+          </div>
+        </td>
+  
+  
+        <td class="editable-row">
+          <a nz-popconfirm nzPopconfirmTitle="Sure to delete?" (nzOnConfirm)="deleteRow(data.id)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+    <button nz-button (click)="addRow()" nzType="primary">Add</button>
+  </nz-table>  
+</div> -->

@@ -1,0 +1,99 @@
+<div class="example-container mat-elevation-z8">
+  <div class="example-loading-shade"
+       *ngIf="isLoadingResults">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
+
+  <div class="reseller-container">
+
+    <table mat-table [dataSource]="resellerOrganizations"
+           matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="name" sticky=true>
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let row">
+          {{row.orgName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="credit" sticky=true>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Credit
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.credit}}</td>
+      </ng-container>
+
+      <!-- Number Column -->
+      <ng-container matColumnDef="orgId">
+        <th mat-header-cell *matHeaderCellDef>Org Id</th>
+        <td mat-cell *matCellDef="let row">{{row.orgId}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="resellerId">
+        <th mat-header-cell *matHeaderCellDef>Reseller Id</th>
+        <td mat-cell *matCellDef="let row">{{row.resellerId}}</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Created At</th>
+        <td mat-cell *matCellDef="let row">{{row.createdAt | date: 'short'}}</td>
+      </ng-container>
+      
+      <ng-container matColumnDef="updatedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Updated At
+        </th>
+        <td mat-cell *matCellDef="let row">{{row.updatedAt | date: 'short'}}</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="_v">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{row: row}" aria-label="Example icon-button with a menu">
+            <mat-icon>{{row._v}}more_vert</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- wire your row click listener here -->
+      <!-- <mat-row (click)="test()" *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
+    </table>
+  </div>
+
+  <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+</div>
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-data="row">
+    <button mat-menu-item (click)="getAllTransactions(data)">
+      <mat-icon>payment</mat-icon>
+      <span>Last 10 Payments</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>receipt_long</mat-icon>
+      <span>Send Invoice</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>add_business</mat-icon>
+      <span>Edit Organization</span>
+    </button>
+    <button mat-menu-item (click)="openAddUserQuota(data)">
+      <mat-icon>library_add</mat-icon>
+      <span>Add User Quota</span>
+    </button>
+  
+    <button mat-menu-item>
+      <mat-icon>add_task</mat-icon>
+      <span>Assign User Quota</span>
+    </button>
+  </ng-template>
+</mat-menu>

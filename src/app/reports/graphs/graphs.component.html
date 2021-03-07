@@ -1,0 +1,68 @@
+<ion-content fullscreen>
+  <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
+  <button mat-button color="primary" (click)="downloadGraph()">Download</button>
+
+  <mat-drawer-container>
+    <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <span>Filters</span>
+          <span class="filter-toolbar-spacer"></span>
+          <mat-icon class="filter-toolbar-icon"  (click)="drawer.toggle()">close</mat-icon>
+        </mat-toolbar-row>
+      </mat-toolbar>
+
+      <div class="contents">
+        <form [formGroup]="filterForm" (submit)="getGraphData({refresh: true})">
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Campaign</mat-label>
+            <mat-select formControlName="campaign" placeholder="Campaign">
+              <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
+                {{option.campaignName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Prospect Name</mat-label>
+            <input placeholder="input here" matInput formControlName="prospectName" />
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Enter start and end date</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate formControlName="startDate" placeholder="Start date">
+              <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="mat-full-width">
+            <mat-label>Assigned To</mat-label>
+            <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe"
+                  noEntriesFoundLabel="'no matching assignee found'">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
+                {{option.fullName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-flat-button type="submit">Submit</button>
+        </form>
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
+
+  <div style="margin: 4px; padding: 8px;" class="main contents">
+    <h2 style="margin: 0 auto; margin-bottom: 25px;">Telecaller Reports</h2>
+    <app-stack-bar [data]="stackBarData" [XAxisLabel]="XAxisLabel" [YAxisLabel]="YAxisLabel" *ngIf="stackBarData?.length > 0"></app-stack-bar>
+    <app-pie [data]="pieData" *ngIf="pieData?.length>0"></app-pie>
+    <app-bar [data]="barData" *ngIf="pieData?.length>0"></app-bar>
+  </div>
+</ion-content>

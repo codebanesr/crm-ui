@@ -1,0 +1,18 @@
+<ion-content>
+  <mat-expansion-panel *ngFor="let r of rules">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{startCase(r.trigger)}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-container *ngFor="let k of objectKeys(r)">
+      <p *ngIf="r[k] && !['_id', 'campaign'].includes(k)">{{startCase(k)}} : {{ (k === 'createdAt' || k === 'updatedAt') ? (r[k] | date) : r[k]}}</p>
+    </ng-container>
+    <mat-action-row>
+      <button mat-button [color]="r.isActive ? 'warn' : 'primary'" (click)="activateRule(r)">{{r.isActive ? 'DeActivate': 'Activate'}}</button>
+      <button mat-button color="primary" (click)="navigateToRuleDetails(r)">Edit</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <button mat-raised-button color="primary" class="mat-full-width" (click)="navigateToAddRule()">Add Rule</button>
+</ion-content>
