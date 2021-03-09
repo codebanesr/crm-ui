@@ -72,7 +72,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
 
   attachments: any;
   demoDispositionNodes: any[] = [{
-    title: "Root",
+    title: "Add Dispositions",
     key: "root",
     children: [
       {

@@ -87,3 +87,11 @@
 .mat-always-full-width {
   width: 100%;
 }
+
+ion-fab-button {
+  --background: #673ab7;
+
+  ion-icon {
+    color: white;
+  }
+}

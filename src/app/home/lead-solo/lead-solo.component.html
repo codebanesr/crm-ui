@@ -17,7 +17,7 @@
             <mat-expansion-panel-header>
               Lead Filter
             </mat-expansion-panel-header>
-            <div *ngIf="typeDict" style="padding-bottom: 100px;">
+            <div *ngIf="typeDict">
               <app-lead-filter [typeDict]="typeDict" [leadFilter]="leadFilter"></app-lead-filter>
             </div>
           </mat-expansion-panel>
@@ -45,6 +45,13 @@
           <button mat-raised-button color="accent" (click)="fetchNextLead()" class="mat-always-full-width">Submit</button>
         </mat-accordion>
       </div>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        style="margin-top: 20px;" 
+        class="mat-always-full-width"
+        (click)="onLeadCreate()"
+      >Create Another Lead</button>
     </mat-drawer>
 
     <div class="main contents">
@@ -162,7 +169,7 @@
 
                 <mat-form-field class="mat-always-full-width mtb" appearance="fill">
                   <mat-label>Notes</mat-label>
-                  <input matInput #message maxlength="256" placeholder="Ex. I need help with..." [(ngModel)]="selectedLead.notes"/>
+                  <textarea matInput #message maxlength="256" placeholder="Ex. I need help with..." [(ngModel)]="selectedLead.notes"></textarea>
                   <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
                   <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
                 </mat-form-field>

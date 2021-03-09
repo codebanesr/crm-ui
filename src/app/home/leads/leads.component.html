@@ -1,6 +1,8 @@
 <ion-content>
-  <ion-searchbar placeholder="Filter Leads" (change)="handleSearchTerm()" showCancelButton="focus"
-    [(ngModel)]="leadOptions.searchTerm"></ion-searchbar>
+  <ion-searchbar 
+    placeholder="Name, email, address, company ..." (change)="handleSearchTerm()" showCancelButton="focus"
+    [(ngModel)]="leadOptions.searchTerm"
+  ></ion-searchbar>
   <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
     <app-expansion-panel [leads]="leads" [typeDict]="typeDict" [selectedCampaign]="selectedCampaign" (onReload)="getData()"></app-expansion-panel>
     <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
@@ -12,9 +14,16 @@
 
   <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
     (nzOnClose)="closeFilterDrawer()">
-
+    <button 
+      mat-flat-button 
+      class="mat-always-full-width" 
+      color="accent"
+      (click)="leadOptions.filters = {}"
+      *ngIf="objectkeys(leadOptions.filters).length > 0"
+      style="margin-bottom: 10px;"
+    >Clear all Filters</button>
     <mat-select nzMode="default" [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()"
-      style="width: 200px;">
+      style="width: 200px; margin: 10px;">
       <mat-option [value]='{_id: "all"}'>All Campaign</mat-option>
       <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
     </mat-select>
@@ -39,6 +48,11 @@
           [nzSelectedKeys]="selectedKeys" class="pull-left"></nz-tree>
       </mat-expansion-panel>
     </mat-accordion>
+    <div style="padding: 5px; margin: 10px;">
+      <mat-checkbox 
+      [(ngModel)]="leadOptions.filters.showArchived"
+    >Show archived</mat-checkbox>
+    </div>
     <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"
       style="margin-top: 4px;">Submit</button>
   </nz-drawer>
@@ -56,15 +70,14 @@
     </ion-fab-button>
     <ion-fab-list side="top">
       <!-- create lead -->
-      <ion-fab-button color="primary" (click)="handleCreateLead()">
+      <ion-fab-button (click)="handleCreateLead()">
         <!-- filter -->
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="primary">
-        <!-- followup -->
-        <ion-icon name="alarm-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="primary" (click)="showFilterDrawer = true">
+      <!-- <ion-fab-button >
+        <ion-icon name="alarm-outline" disabled></ion-icon>
+      </ion-fab-button> -->
+      <ion-fab-button  (click)="showFilterDrawer = true">
         <ion-icon name="filter"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>

@@ -21,6 +21,7 @@ import { Gesture, GestureController } from "@ionic/angular";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { ReassignmentDrawerSheetComponent } from "../../lead-solo/reassignment-drawer/reassignment-drawer.component";
 import { UsersService } from "../../users.service";
+import { LeadsService } from "../../leads.service";
 
 @Component({
   selector: "app-expansion-panel",
@@ -32,7 +33,8 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router, 
     private _bottomSheet: MatBottomSheet,
-    private userService: UsersService
+    private userService: UsersService,
+    private leadService: LeadsService
   ) {}
 
   longPressed = false;
@@ -107,8 +109,12 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
   }
 
 
+  getSelectedLeadIds() {
+    return this.leads.filter((l: ILead & {selected: boolean}) => l.selected).map(l=>l._id);
+  }
+  
   openReassignmentDrawer() {
-    const leadIds = this.leads.filter((l: ILead & {selected: boolean}) => l.selected).map(l=>l._id);
+    const leadIds = this.getSelectedLeadIds();
     const rsref = this._bottomSheet.open(ReassignmentDrawerSheetComponent, {
       data: {
         usersForReassignment: this.usersForReassignment,
@@ -125,5 +131,23 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
         console.error(error);
       }
     );
+  }
+
+  handleLeadArchive(lead) {
+    this.leadService.archiveLead(lead._id).subscribe(data=> { 
+      this.onReload.emit(true);
+    }, error=> {
+      console.log(error);
+    })
+  }
+
+
+  archiveSelected() {
+    const selectedLeadIds = this.getSelectedLeadIds();
+    this.leadService.archiveLeads(selectedLeadIds.toArray()).subscribe(data => {
+      this.onReload.emit(true);
+    }, error=>{
+      console.log(error)
+    });
   }
 }

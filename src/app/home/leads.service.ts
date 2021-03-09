@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -191,5 +191,14 @@ export class LeadsService {
       pagination,
       filters,
     });
+  }
+
+  archiveLead(leadId: string) {
+    return this.http.delete(`${environment.apiUrl}/lead/archive/${leadId}`);
+  }
+
+
+  archiveLeads(leadIds: string[]) {
+    return this.http.delete(`${environment.apiUrl}/lead/bulkArchive`, {params: { leadIds }});
   }
 }
