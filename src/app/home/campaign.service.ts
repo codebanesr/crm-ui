@@ -167,4 +167,8 @@ export class CampaignService {
   removeConfig(configId: string) {
     return this.http.delete(`${environment.apiUrl}/campaign/${configId}`);
   }
+
+  cloneCampaign(campaignId: string) {
+    return this.http.post(`${environment.apiUrl}/campaign/clone`, {campaignId});
+  }
 }

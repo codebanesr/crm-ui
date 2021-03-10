@@ -1,0 +1,16 @@
+
+
+
+<h1 mat-dialog-title>Choose campaign to transfer leads</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Tranfer leads to</mat-label>
+    <mat-select [(ngModel)]="toCampaignId">
+      <mat-option *ngFor="let campaign of data.campaigns" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
+    </mat-select>
+  </mat-form-field>  
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button (click)="transferLeads()" cdkFocusInitial>Ok</button>
+</div>

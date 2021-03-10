@@ -27,7 +27,7 @@ import { GeomarkerComponent } from "../geomarker/geomarker.component";
 import {GoogleMapsModule} from '@angular/google-maps';
 import { CountdownModule } from 'ngx-countdown';
 import { SharedModule } from "../shared/shared.module";
-import { ExpansionPanelComponent } from "./leads/expansion-panel/expansion-panel.component";
+import { ExpansionPanelComponent, LeadTransferDialog } from "./leads/expansion-panel/expansion-panel.component";
 import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawer/reassignment-drawer.component";
 
 @NgModule({
@@ -65,7 +65,8 @@ import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawe
     LeadHistoryComponent,
     MappingComponent,
     AddConfigComponent,
-    LeadAutodial
+    LeadAutodial,
+    LeadTransferDialog
   ],
   providers: []
 })

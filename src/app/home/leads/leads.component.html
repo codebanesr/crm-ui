@@ -4,7 +4,13 @@
     [(ngModel)]="leadOptions.searchTerm"
   ></ion-searchbar>
   <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
-    <app-expansion-panel [leads]="leads" [typeDict]="typeDict" [selectedCampaign]="selectedCampaign" (onReload)="getData()"></app-expansion-panel>
+    <app-expansion-panel 
+      [leads]="leads" 
+      [typeDict]="typeDict" 
+      [selectedCampaign]="selectedCampaign" 
+      (onReload)="getData()"
+      [campaignList]="campaignList"
+    ></app-expansion-panel>
     <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
       [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
@@ -14,7 +20,7 @@
 
   <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
     (nzOnClose)="closeFilterDrawer()">
-    <button 
+  <button 
       mat-flat-button 
       class="mat-always-full-width" 
       color="accent"
@@ -48,6 +54,19 @@
           [nzSelectedKeys]="selectedKeys" class="pull-left"></nz-tree>
       </mat-expansion-panel>
     </mat-accordion>
+    <mat-form-field appearance="outline" class="mat-always-full-width">
+      <mat-label>Assigned To</mat-label>
+      <mat-select [(ngModel)]="leadOptions.filters.handlers" placeholder="Assignees" [multiple]="true">
+        <mat-option>
+          <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe"
+            noEntriesFoundLabel="'no matching assignee found'">
+          </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
+          {{option.fullName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <div style="padding: 5px; margin: 10px;">
       <mat-checkbox 
       [(ngModel)]="leadOptions.filters.showArchived"
@@ -69,9 +88,7 @@
       <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <!-- create lead -->
       <ion-fab-button (click)="handleCreateLead()">
-        <!-- filter -->
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
       <!-- <ion-fab-button >

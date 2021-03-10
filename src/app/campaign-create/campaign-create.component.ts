@@ -673,6 +673,24 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     }, 500);
   }
 
+  cloneCampaign() {
+    this.campaignService.cloneCampaign(this.campaign._id).subscribe(data=>{
+      this._snackBar
+        .open("Campaign Successfully created", "Cancel", {
+          duration: 3000,
+          verticalPosition: "top",
+        })
+        .afterDismissed()
+        .subscribe((d) => {
+          this.router.navigate(["home", "campaign", "list"]);
+        });
+    }, error=>{
+      this._snackBar.open('Failed to copy campaign', 'cancel', {
+        duration: 3000,
+        verticalPosition: 'top'
+      })
+    })
+  }
 
   ngOnDestroy() {
     this.sock.disconnect();

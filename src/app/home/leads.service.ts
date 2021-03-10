@@ -201,4 +201,9 @@ export class LeadsService {
   archiveLeads(leadIds: string[]) {
     return this.http.delete(`${environment.apiUrl}/lead/bulkArchive`, {params: { leadIds }});
   }
+
+
+  transferLeads(leadIds: string[], toCampaignId: string) {
+    return this.http.post(`${environment.apiUrl}/lead/transferLeads`, {leadIds, toCampaignId});
+  }
 }

@@ -36,7 +36,8 @@ export class LeadsComponent {
     private pubsub: PubsubService,
     public toastController: ToastController,
     public loadingCtrl: LoadingController,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private userService: UsersService
   ) {}
 
   page: number = 1;
@@ -61,6 +62,27 @@ export class LeadsComponent {
     this.populateCampaignDropdown("");
     this.initSettingForm();
     this.initRightClickActions();
+
+    this.initHandlerList();
+  }
+
+  tempUserList: any;
+  listOfHandlers: any;
+
+  handlerFilter = new FormControl();
+  async initHandlerList() {
+    this.userService.getAllUsersHack().subscribe((result: any)=>{
+      this.tempUserList = result[0].users;
+      this.listOfHandlers = result[0].users;
+    });
+
+    this.handlerFilter.valueChanges.subscribe((value: string) => {
+      this.listOfHandlers = this.tempUserList.filter((v)=>{
+        // search in both email and name
+        const t = v.fullName + v.email;
+        return t.includes(value)
+      });
+    })
   }
 
   campaignList: any[];

@@ -46,10 +46,12 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="mat-always-full-width" appearance="outline">
+      <mat-form-field class="mat-full-width" appearance="outline">
         <mat-label>Comment</mat-label>
         <textarea formControlName="comment" matInput rows="2" placeholder="write any thing"></textarea>
       </mat-form-field>
+
+      <button mat-raised-button (click)="cloneCampaign()">Create duplicate campaign</button>
 
       <!-- the block below is only to be shown for campaign update case -->
       <ng-container *ngIf="this.campaignId">
@@ -271,7 +273,7 @@
 
       <nz-upload [(nzFileList)]="leadFileList" [nzBeforeUpload]="beforeLeadFilesUpload" [nzMultiple]=true nzName="files"
         (click)="$event.stopImmediatePropagation();" class="mat-full-width">
-        <button mat-raised-button color="accent"><i nz-icon nzType="upload"></i>Choose Campaign File</button> &nbsp;
+        <button mat-raised-button color="accent"><i nz-icon nzType="upload"></i>Choose Lead File</button> &nbsp;
         <button mat-raised-button color="primary" (click)="handleLeadFilesUpload();">Upload</button>
       </nz-upload>
       <br>

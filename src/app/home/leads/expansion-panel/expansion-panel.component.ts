@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Inject,
   Input,
   OnInit,
   Output,
@@ -22,6 +23,8 @@ import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { ReassignmentDrawerSheetComponent } from "../../lead-solo/reassignment-drawer/reassignment-drawer.component";
 import { UsersService } from "../../users.service";
 import { LeadsService } from "../../leads.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
   selector: "app-expansion-panel",
@@ -34,13 +37,15 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
     private router: Router, 
     private _bottomSheet: MatBottomSheet,
     private userService: UsersService,
-    private leadService: LeadsService
+    private leadService: LeadsService,
+    public dialog: MatDialog
   ) {}
 
   longPressed = false;
   @Input() typeDict: ITypeDict;
   @Input() leads: List<ILead>;
   @Input() selectedCampaign: ICampaign;
+  @Input() campaignList: ICampaign[]
   @ViewChildren('panels', { read: ElementRef }) panels: QueryList<ElementRef>;
   @Output() onReload: EventEmitter<boolean> = new EventEmitter();
   ngOnInit() {
@@ -150,4 +155,55 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
       console.log(error)
     });
   }
+
+
+  openTransferDialog() {
+    const leadIds = this.getSelectedLeadIds();
+    this.dialog.open(LeadTransferDialog, {
+      data: {
+        campaigns: this.campaignList,
+        leadIds: leadIds.toArray()
+      }
+    });
+  }
 }
+
+
+
+interface ITransferDialogData {
+  leadIds: string[],
+  campaigns: ICampaign[]
+}
+
+@Component({
+  selector: 'lead-transfer-dialog',
+  templateUrl: 'lead-transfer-dialog.html',
+})
+export class LeadTransferDialog {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: ITransferDialogData,
+    private leadService: LeadsService,
+    private _snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<LeadTransferDialog>,
+  ) {}
+
+  toCampaignId: string
+  transferLeads() {
+    const {leadIds} = this.data;
+    console.log({leadIds})
+    if(!leadIds) {
+      return;
+    }
+    console.log(this.toCampaignId);
+    this.leadService.transferLeads(leadIds, this.toCampaignId).subscribe(result=>{
+      this._snackBar.open("Successfully transferred leads", 'Cancel', {duration: 3000, verticalPosition: 'top', politeness: 'polite'})
+    }, error=> {
+      this._snackBar.open("Failed to transfer leads", 'Cancel', {duration: 3000, verticalPosition: 'top', politeness: 'assertive'})
+    })
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
