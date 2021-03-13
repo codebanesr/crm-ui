@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
 import { LoadingController, MenuController, ModalController } from "@ionic/angular";
 import { CampaignService } from '../home/campaign.service';
+import { ILeadHistory } from "../home/lead-solo/lead-history.interface";
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from '../home/users.service';
 import { IHistory } from "./history.interface";
@@ -129,6 +130,7 @@ export class LeadHistoryComponent implements OnInit {
   }
 
   showFiller = false;
+  keysToDisplay = ['createdAt', 'leadStatus', 'followUp', 'notes', 'prospectName', 'nextAction', 'duration', 'type', 'newUser']
   leadMapping = {
     geoLocation: "Location",
     createdAt: "Created At",
@@ -139,12 +141,12 @@ export class LeadHistoryComponent implements OnInit {
     prospectName: "Name",
     leadStatus: "Status",
     followUp: "Scheduled",
-    nextAction: "Action",
+    nextAction: "Next Action",
     requestedInformation: "Information Requested",
     organization: "Organization",
     duration: "Call Duration",
     type: "Call Band",
-    number: "Phone Number"
+    number: "Phone Number",
   };
 
   perPage = 20;

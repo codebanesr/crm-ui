@@ -36,19 +36,18 @@ export class ReassignmentDrawerSheetComponent implements OnInit {
 
   assignTo(user: User) {
     if(!this.data.isBulkReassignment) {
-      this.leadsService.reassignLead(this.data.selectedLead.email, user.email, this.data.selectedLead).subscribe(data=>{
-        // this.loading = false;
-        this._snackBar.open("Successfully reassigned lead to", user.email, {
-          duration: 2000,
-        });
+      // this.leadsService.reassignLead(this.data.selectedLead.email, user.email, this.data.selectedLead).subscribe(data=>{
+        
+      //   this._snackBar.open("Successfully reassigned lead to", user.email, {
+      //     duration: 2000,
+      //   });
     
-        this._bottomSheetRef.dismiss(true);
-  
-        // close the drawer before fetching next lead
-        // this.fetchNextLead();
-      }, error=>{
-        this._bottomSheetRef.dismiss(false);
-      });
+      //   this._bottomSheetRef.dismiss(true);
+      // }, error=>{
+      //   this._bottomSheetRef.dismiss(false);
+      // });
+
+      this._bottomSheetRef.dismiss(user);
     }
 
     // i am aware that else if is not required

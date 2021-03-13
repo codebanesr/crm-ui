@@ -63,6 +63,7 @@ import { MatAccordion } from "@angular/material/expansion";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { ReassignmentDrawerSheetComponent } from "./reassignment-drawer/reassignment-drawer.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { User } from "../interfaces/user";
 
 declare let PhoneCallTrap: any;
 
@@ -343,8 +344,9 @@ export class LeadSoloComponent implements OnInit {
       campaignId: this.selectedCampaign._id,
     };
 
-    if (this.selectedUserForReassignment) {
-      updateObj["reassignmentInfo"] = this.selectedUserForReassignment;
+    if(this.reassignToUser) {
+      updateObj['reassignToUser'] = this.reassignToUser;
+      this.reassignToUser = null; /** @Todo done twice, once after upload */
     }
 
     updateObj["emailForm"] = this.emailForm.value;
@@ -389,7 +391,7 @@ export class LeadSoloComponent implements OnInit {
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
       (data) => {
         this.loading = false;
-        this.selectedUserForReassignment = null;
+        this.reassignToUser = null;
         this._snackBar.open('Successfully updated lead', 'cancel', {duration: 2000, verticalPosition: 'top'});
         if (fetchNextLead) {
           this.accordion.closeAll();
@@ -679,6 +681,7 @@ export class LeadSoloComponent implements OnInit {
     this.isLeadEditMode = !this.isLeadEditMode;
   }
 
+  reassignToUser: string;
   openReassignmentDrawer() {
     const rsref = this._bottomSheet.open(ReassignmentDrawerSheetComponent, {
       data: {
@@ -687,28 +690,13 @@ export class LeadSoloComponent implements OnInit {
       },
     });
 
-    rsref.afterDismissed().subscribe(
-      (status: boolean) => {
-        if (status) {
-          this.fetchNextLead();
-        }
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    rsref.afterDismissed().subscribe((user: Pick<User, 'email' | 'fullName' | '_id'>) => {
+      this.reassignToUser = user.email;
+    });
   }
 
   closeReassignmentDrawer() {}
 
-  selectedUserForReassignment = null;
-  selectUserForReassignment(user: {
-    email: string;
-    _id: string;
-    fullname: string;
-  }) {
-    this.selectedUserForReassignment = user;
-  }
 
   onCampaignFormUpdate(event) {
     this.formModel = event;

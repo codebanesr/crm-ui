@@ -1,5 +1,5 @@
 <ion-content>
-  <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
+  <button color="accent" mat-raised-button (click)="drawer.toggle()">Open transaction filter</button>
   <button mat-button color="primary" (click)="downloadTransactions()">Download</button>
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
@@ -63,14 +63,12 @@
           <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
           <button mat-flat-button style="float: right;" (click)="showLead(t.lead, t.campaign)">Edit</button>
           <mat-list>
-            <ng-container *ngFor="let k of objectKeys(t)">
-              <!-- <mat-list-item *ngIf="k!=='requestedInformation' && leadMapping[k]"> -->
-              <mat-form-field appearance="outline" class="mat-always-full-width">
+            <ng-container *ngFor="let k of keysToDisplay">
+              <mat-form-field appearance="outline" class="mat-always-full-width" *ngIf="t[k] !== undefined">
                 <mat-label>{{leadMapping[k]}}</mat-label>
                 <input matInput [value]="t[k] | date: 'short'" *ngIf="['createdAt', 'followUp'].includes(k)" readonly>
                 <input matInput [value]="t[k]" *ngIf="!['createdAt', 'followUp'].includes(k)" readonly>
               </mat-form-field>
-              <!-- </mat-list-item> -->
             </ng-container>
           </mat-list>
         </mat-expansion-panel>

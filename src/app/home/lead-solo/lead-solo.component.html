@@ -72,12 +72,11 @@
 
       <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
       <nz-page-header class="site-page-header" *ngIf="selectedLead">
-        <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}} | {{selectedCampaign.campaignName}}</nz-page-header-title>
+        <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}}</nz-page-header-title>
         <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
         <nz-page-header-content>
           <div class="content">
             <div class="main">
-              
                 <mat-accordion>
                   <mat-expansion-panel hideToggle>
                     <mat-expansion-panel-header>
@@ -258,7 +257,7 @@
                         <p *ngIf="h.leadStatus">
                           Status: <button mat-icon-button color="basic">{{h.leadStatus}}</button>
                         </p>
-                        <a (click)="openMap(h.geoLocation.coordinates)" *ngIf="h.geoLocation.coordinates">Coordinates: {{h.geoLocation.coordinates[0] + ",
+                        <a (click)="openMap(h.geoLocation.coordinates)" *ngIf="h.geoLocation.coordinates.length > 0">Coordinates: {{h.geoLocation.coordinates[0] + ",
                           "+
                           h.geoLocation.coordinates[1]}}</a>
                         <p style="width: 100%;">{{h.notes}}</p>

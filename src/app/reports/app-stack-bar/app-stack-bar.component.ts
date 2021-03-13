@@ -15,6 +15,9 @@ export class StackBarChart implements OnDestroy, OnChanges {
   private chart: Chart;
 
   ngOnChanges() {
+    if(this.chart) {
+      this.ngZone.runOutsideAngular(() => this.ngOnDestroy());
+    }
     setTimeout(()=>{
       this.ngZone.runOutsideAngular(()=> this.install());
     }, 0)
