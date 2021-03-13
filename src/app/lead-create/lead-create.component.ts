@@ -104,17 +104,17 @@ export class LeadCreateComponent implements OnInit {
     });
   }
 
-  getDispositionForCampaign(campaignName: string) {
-    this.campaignService.getDispositionByCampaignName(campaignName).subscribe(
-      (data: any) => {
-        this.callDispositions = data.options;
-      },
-      (error) => {
-        // this.toastService.fail("Failed to fetch Disposition");
-        console.log(error);
-      }
-    );
-  }
+  // getDispositionForCampaign(campaignName: string) {
+  //   this.campaignService.getDispositionByCampaignName(campaignName).subscribe(
+  //     (data: any) => {
+  //       this.callDispositions = data.options;
+  //     },
+  //     (error) => {
+  //       // this.toastService.fail("Failed to fetch Disposition");
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
   selectedLeadStatus: string;
   async getLeadMappings(campaignId: string) {

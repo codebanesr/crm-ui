@@ -7,13 +7,15 @@ import {
 } from "@angular/common/http";
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 const TOKEN_HEADER_KEY = "Authorization";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
-    private router: Router
+    private router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
   getToken() {
@@ -24,9 +26,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     let authReq = req;
     // @Todo change this
-    if (req.url.indexOf("login") !== -1) {
-      return next.handle(authReq);
-    }
+    // if (req.url.indexOf("login") !== -1) {
+    //   return next.handle(authReq);
+    // }
 
     const token = this.getToken();
     if (token != null) {
@@ -43,6 +45,10 @@ export class AuthInterceptor implements HttpInterceptor {
               return;
             }
             localStorage.clear();
+            this._snackBar.open(err.error.message, 'Cancel', {
+              duration: 2000,
+              verticalPosition: 'top'
+            });
             this.router.navigate(["login"]);
           }
         }

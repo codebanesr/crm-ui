@@ -72,7 +72,7 @@
 
       <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
       <nz-page-header class="site-page-header" *ngIf="selectedLead">
-        <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}}</nz-page-header-title>
+        <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}} | {{selectedCampaign.campaignName}}</nz-page-header-title>
         <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
         <nz-page-header-content>
           <div class="content">
@@ -168,9 +168,9 @@
                   </nz-tree>
                 </mat-expansion-panel>
 
-                <mat-form-field class="mat-always-full-width mtb" appearance="fill">
+                <mat-form-field class="mat-always-full-width mtb" appearance="outline">
                   <mat-label>Notes</mat-label>
-                  <textarea matInput #message maxlength="256" placeholder="Ex. I need help with..." [(ngModel)]="selectedLead.notes"></textarea>
+                  <textarea rows="5"  matInput #message maxlength="256" placeholder="Ex. I need help with..." [(ngModel)]="selectedLead.notes"></textarea>
                   <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
                   <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
                 </mat-form-field>

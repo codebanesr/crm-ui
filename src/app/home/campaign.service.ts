@@ -124,11 +124,12 @@ export class CampaignService {
     );
   }
 
-  getDispositionByCampaignName(campaignName: string) {
-    return this.http.get(
-      `${environment.apiUrl}/campaign/disposition/campaignName/${campaignName}`
-    );
-  }
+  // getDispositionByCampaignName(campaignName: string) {
+  //   return this.http.get(
+  //     `${environment.apiUrl}/campaign/disposition/campaignName/${campaignName}`
+  //   );
+  // }
+  
   getUniqueKey() {
     let uniqueId =
       Math.random().toString(36).substring(2) + Date.now().toString(36);
