@@ -199,11 +199,21 @@ export class LeadsService {
 
 
   archiveLeads(leadIds: string[]) {
-    return this.http.delete(`${environment.apiUrl}/lead/bulkArchive`, {params: { leadIds }});
+    return this.http.delete(`${environment.apiUrl}/lead/archiveLeads`, {params: { leadIds }});
   }
+
+
+  unarchiveLeads(leadIds: string[]) {
+    return this.http.post(`${environment.apiUrl}/lead/unarchiveLeads`, {leadIds});
+  }
+
 
 
   transferLeads(leadIds: string[], toCampaignId: string) {
     return this.http.post(`${environment.apiUrl}/lead/transferLeads`, {leadIds, toCampaignId});
+  }
+
+  openClosedLead(leadIds: string[]) {
+    return this.http.post(`${environment.apiUrl}/lead/openClosedLeads`, {leadIds});
   }
 }

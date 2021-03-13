@@ -147,9 +147,27 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
   }
 
 
+  openClosedLeads() {
+    const leadIds = this.getSelectedLeadIds().toArray();
+    return this.leadService.openClosedLead(leadIds).subscribe(data=> {
+      this.onReload.emit(true);
+    }, error=> {
+      console.log(error)
+    })
+  }
+
   archiveSelected() {
     const selectedLeadIds = this.getSelectedLeadIds();
     this.leadService.archiveLeads(selectedLeadIds.toArray()).subscribe(data => {
+      this.onReload.emit(true);
+    }, error=>{
+      console.log(error)
+    });
+  }
+
+  unArchiveSelected() {
+    const selectedLeadIds = this.getSelectedLeadIds();
+    this.leadService.unarchiveLeads(selectedLeadIds.toArray()).subscribe(data => {
       this.onReload.emit(true);
     }, error=>{
       console.log(error)

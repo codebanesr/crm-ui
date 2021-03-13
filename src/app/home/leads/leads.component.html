@@ -69,8 +69,13 @@
     </mat-form-field>
     <div style="padding: 5px; margin: 10px;">
       <mat-checkbox 
-      [(ngModel)]="leadOptions.filters.showArchived"
-    >Show archived</mat-checkbox>
+        [(ngModel)]="leadOptions.filters.showArchived"
+      >Show archived</mat-checkbox>
+    </div>
+    <div style="padding: 5px; margin: 10px;">
+      <mat-checkbox 
+        [(ngModel)]="leadOptions.filters.showClosed"
+      >Show Closed</mat-checkbox>
     </div>
     <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"
       style="margin-top: 4px;">Submit</button>

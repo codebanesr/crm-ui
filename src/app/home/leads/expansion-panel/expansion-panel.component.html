@@ -44,11 +44,22 @@
     <span>Archive</span>
   </button>
 
+  <button mat-menu-item (click)="unArchiveSelected()">
+    <mat-icon>unarchive</mat-icon>
+    <span>UnArchive</span>
+  </button>
+
+
   <button mat-menu-item (click)="openTransferDialog()">
     <mat-icon>transfer_within_a_station</mat-icon>
     <span>Transfer Leads</span>
   </button>
 
+
+  <button mat-menu-item (click)="openClosedLeads()">
+    <mat-icon>launch</mat-icon>
+    <span>Open Leads</span>
+  </button>
 
   <button mat-menu-item disabled>
     <mat-icon>notifications_off</mat-icon>
