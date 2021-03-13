@@ -15,7 +15,7 @@ export class ProfileComponent implements OnInit {
     private uploadService: UploadService
   ) { }
 
-  userimage='https://cdn.christianpost.com/files/cache/image/12/94/129498_w_450_450.jpg';
+  userimage='captain america here';
   ngOnInit() {
     this.initProfileForm();
   }
