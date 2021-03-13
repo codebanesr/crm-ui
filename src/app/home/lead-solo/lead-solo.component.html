@@ -258,7 +258,7 @@
                         <p *ngIf="h.leadStatus">
                           Status: <button mat-icon-button color="basic">{{h.leadStatus}}</button>
                         </p>
-                        <a (click)="openMap(h.geoLocation.coordinates)">Coordinates: {{h.geoLocation.coordinates[0] + ",
+                        <a (click)="openMap(h.geoLocation.coordinates)" *ngIf="h.geoLocation.coordinates">Coordinates: {{h.geoLocation.coordinates[0] + ",
                           "+
                           h.geoLocation.coordinates[1]}}</a>
                         <p style="width: 100%;">{{h.notes}}</p>
