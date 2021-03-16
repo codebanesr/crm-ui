@@ -10,7 +10,7 @@ import {
   TemplateRef,
   ViewChild,
 } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { CampaignService } from "../campaign.service";
 import {
@@ -507,6 +507,9 @@ export class LeadSoloComponent implements OnInit {
       node = node.parentNode;
     }
 
+    if(node.parentNode === null && node.origin.title) {
+      return [node.origin.title];
+    }
     return links;
   }
 
@@ -594,6 +597,7 @@ export class LeadSoloComponent implements OnInit {
         (data: any) => {
           this.loading = false;
           this.selectedLead = data.lead;
+          this.overwriteEmail.setValue(this.selectedLead.customerEmail);
           this.selectedLead.leadStatus = null;
           /** Only start autodial if its there in settings */
           this.selectedLead &&
@@ -630,11 +634,13 @@ export class LeadSoloComponent implements OnInit {
   emailTemplates: any;
   tempObj: any = {};
   emailModel;
+  overwriteEmail = new FormControl('', [Validators.email])
   initEmailForm() {
     this.emailForm = this.fb.group({
       subject: [null],
       content: [null],
       attachments: [null],
+      overwriteEmail: this.overwriteEmail
     });
   }
 

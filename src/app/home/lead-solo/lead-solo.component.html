@@ -289,16 +289,22 @@
                       Send Email
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <ng-container>
-                    <mat-form-field class="example-full-width" appearance="fill">
+
+                  <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+
+                    <mat-form-field class="mat-full-width" appearance="fill">
+                      <mat-label>Email</mat-label>
+                      <input type="email" placeholder="enter your email" matInput name="email" formControlName="overwriteEmail">
+                    </mat-form-field>
+
+                    <mat-form-field class="mat-full-width" appearance="fill">
                       <mat-label>Select Email Template</mat-label>
-                      <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj">
+                      <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj" [ngModelOptions]="{standalone: true}">
                         <mat-option [value]="et" *ngFor="let et of emailTemplates">{{ et.templateName }}</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </ng-container>
-
-                  <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+                  
+                    
                     <mat-form-field class="mat-full-width">
                       <mat-label>Subject</mat-label>
                       <input matInput placeholder="Write the subject of email" formControlName="subject" />
