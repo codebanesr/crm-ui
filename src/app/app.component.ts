@@ -163,8 +163,8 @@ export class AppComponent implements OnInit, OnDestroy {
       stationaryRadius: 20,
       distanceFilter: 30,
       debug: false, //  enable this hear sounds for background-geolocation life-cycle.
-      stopOnTerminate: false, // enable this to clear background location settings when the app terminates,
-      notificationText: "Tracking Geolocation",
+      stopOnTerminate: true, // enable this to clear background location settings when the app terminates,
+      notificationText: "Your Location is being recorded",
     };
 
     this.backgroundGeolocation.configure(config).then(() => {

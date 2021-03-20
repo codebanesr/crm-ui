@@ -70,7 +70,11 @@ export class LineChartComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.chart.line().position("month*total").color("leadStatus").shape("smooth");
+    this.chart
+      .line()
+      .position("month*total")
+      .color("leadStatus")
+      .shape("smooth");
 
     this.chart
       .point()
@@ -82,6 +86,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
         lineWidth: 1,
       });
 
+    this.chart.theme({ "styleSheet": { "brandColor": "#025DF4", "paletteQualitative10": ["#025DF4", "#DB6BCF", "#2498D1", "#BBBDE6", "#4045B2", "#21A97A", "#FF745A", "#007E99", "#FFA8A8", "#2391FF"], "paletteQualitative20": ["#025DF4", "#DB6BCF", "#2498D1", "#BBBDE6", "#4045B2", "#21A97A", "#FF745A", "#007E99", "#FFA8A8", "#2391FF", "#FFC328", "#A0DC2C", "#946DFF", "#626681", "#EB4185", "#CD8150", "#36BCCB", "#327039", "#803488", "#83BC99"] } });
     this.chart.removeInteraction("legend-filter"); // 移除默认的 legend-filter 数据过滤交互
     this.chart.interaction("legend-visible-filter"); // 使用分类图例的图形过滤
 

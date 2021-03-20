@@ -33,6 +33,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import * as Hammer from 'hammerjs';
+import { NativeGeocoder } from "@ionic-native/native-geocoder/ngx";
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,6 +70,7 @@ import * as Hammer from 'hammerjs';
     Contacts,
     StatusBar,
     SplashScreen,
+    NativeGeocoder,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: NZ_I18N, useValue: en_US },
     {provide: LocationStrategy, useClass: HashLocationStrategy},

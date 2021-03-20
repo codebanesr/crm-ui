@@ -16,7 +16,7 @@
     </mat-paginator>
   </mat-accordion>
 
-  <nz-empty *ngIf="isEmpty"></nz-empty>
+  <nz-empty *ngIf="isEmpty" class="center-spinner"></nz-empty>
 
   <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
     (nzOnClose)="closeFilterDrawer()">

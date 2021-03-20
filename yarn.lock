@@ -1367,6 +1367,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/native-geocoder@^5.31.1":
+  version "5.31.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/native-geocoder/-/native-geocoder-5.31.1.tgz#c87238eeba7a4942c531b92348d590d788de39a2"
+  integrity sha512-736LrzXuWEcwk0ausUsowWME8MxwhNupHL9LKYYrF/ABegT78NwkRdel7xO+MyjDiae5m9vdVXk6/8NWZRietA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/splash-screen@^5.0.0":
   version "5.29.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.29.0.tgz#961ce354b81c6cde7f33e9f3a45abe14df64dce2"
@@ -3220,6 +3227,11 @@ cordova-plugin-filepath@^1.5.8:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/cordova-plugin-filepath/-/cordova-plugin-filepath-1.5.8.tgz#9adc7b0ae281683bcea755bb0ac86688e96f5e3a"
   integrity sha512-DhMVM9lkndPWQ+lI8Um0Yq648MBKWpNe/3PW057g4wuFrnAz/9nR8Qs4bjYt/yxwxMX/VMZC59qXOcksd2JYuw==
+
+cordova-plugin-nativegeocoder@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-nativegeocoder/-/cordova-plugin-nativegeocoder-3.4.1.tgz#836408410c6eec12c57961e86d97694d2bb0b2a8"
+  integrity sha512-2VDRWFJIRk7mYGxPctadvtdeyYpgX/PZl3xAc8zglLK83YQnAp5p2sNoiYokkCMEXK+vSeuff3E7b3fkAC1TsQ==
 
 core-js-compat@^3.6.2:
   version "3.6.5"

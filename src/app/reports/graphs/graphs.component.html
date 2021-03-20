@@ -60,9 +60,9 @@
   </mat-drawer-container>
 
   <div style="margin: 4px; padding: 8px;" class="main contents">
-    <h2 style="margin: 0 auto; margin-bottom: 25px;">Telecaller Reports</h2>
+    <h2 style="margin: 0 auto; margin-bottom: 25px;">Telecaller Reports</h2>    
+    <app-bar [data]="barData" *ngIf="pieData?.length>0"></app-bar>
     <app-stack-bar [data]="stackBarData" [XAxisLabel]="XAxisLabel" [YAxisLabel]="YAxisLabel" *ngIf="stackBarData?.length > 0"></app-stack-bar>
     <app-pie [data]="pieData" *ngIf="pieData?.length>0"></app-pie>
-    <app-bar [data]="barData" *ngIf="pieData?.length>0"></app-bar>
   </div>
 </ion-content>
