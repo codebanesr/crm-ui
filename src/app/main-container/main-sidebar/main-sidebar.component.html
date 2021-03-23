@@ -1,4 +1,4 @@
-<ion-menu side="end" content-id="main-content" menuId="first">
+<!-- <ion-menu side="end" content-id="main-content" menuId="first">
   <ion-content>
     <mat-grid-list cols="6" rowHeight="50px" *ngFor="let o of appPages" (click)="routeTo(o.url)">
       <mat-grid-tile [colspan]="'1'" [rowspan]="'1'">
@@ -27,4 +27,15 @@
       </mat-grid-tile>
     </mat-grid-list>
   </ion-content>
+</ion-menu> -->
+
+<ion-menu side="end" content-id="main-content" menuId="first">
+  <ng-material-multilevel-menu  
+    [configuration]='config' 
+    [items]='appitems'
+    (selectedItem)="selectedItem($event)" 
+    (menuIsReady)="menuIsReady($event)" 
+    (selectedLabel)="selectedLabel($event)"
+  >
+  </ng-material-multilevel-menu>
 </ion-menu>

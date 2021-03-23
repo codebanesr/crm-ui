@@ -57,6 +57,7 @@
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
+    "ng-material-multilevel-menu": "^5.5.3",
     "ng-zorro-antd": "^10.0.0",
     "ngx-countdown": "^11.0.1",
     "ngx-drag-drop": "^2.0.0",
