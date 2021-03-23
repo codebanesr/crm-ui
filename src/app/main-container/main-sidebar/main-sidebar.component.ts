@@ -20,6 +20,7 @@ import { CurrentUser } from "../../home/interfaces/global.interfaces";
 export class MainSidebarComponent implements OnChanges, OnInit {
   constructor(
     public authService: AuthenticationService,
+    private menuController: MenuController
   ) {}
 
 
@@ -122,7 +123,7 @@ export class MainSidebarComponent implements OnChanges, OnInit {
 
   config = {
     paddingAtStart: false,
-    interfaceWithRoute: true,
+    interfaceWithRoute: false,
     classname: 'my-custom-class',
     // listBackgroundColor: `#673ab7`,
     // fontColor: `#FFF`,
@@ -135,12 +136,12 @@ export class MainSidebarComponent implements OnChanges, OnInit {
   };
 
   selectedItem(ev) {
-    console.log(ev);
+    this.menuController.close();
   }
 
-  menuIsReady(ev) {}
-
-  selectedLabel(ev) {
-
+  menuIsReady(ev) { 
+    console.log("menu is ready")
   }
+
+  selectedLabel(ev) {}
 }

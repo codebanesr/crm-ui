@@ -31,11 +31,15 @@ export class FollowupComponent implements OnInit {
   }
 
   total: number;
-  // startDate: string;
-  // endDate: string;
 
-  startDate: string;
-  endDate: string;
+  today = new Date();
+  month = this.today.getMonth();
+  year = this.today.getFullYear();
+  // startDate = new FormControl(new Date(this.year, this.month-2, 1));
+  // endDate = new FormControl(new Date(this.year, this.month, 28));
+  
+  startDate = new Date(this.year, this.month-2, 1);
+  endDate = new Date(this.year, this.month, 28);
   selectedCampaignId = 'all';
 
   getFollowUps() {
@@ -47,12 +51,12 @@ export class FollowupComponent implements OnInit {
       .getFollowUps({
         page: this.page,
         perPage: this.perPage,
-        interval: [this.startDate, this.endDate],
+        interval: [this.startDate.toString(), this.endDate.toString()],
         campaignId: this.selectedCampaignId || this.selectedCampaign._id
       })
       .subscribe(
         (result) => {
-          this.total = result[0]?.metadata[0].total;
+          this.total = result[0]?.metadata[0]?.total;
           this.listOfUpcomingLeads = result[0]?.data;
         },
         (error) => {
@@ -68,7 +72,6 @@ export class FollowupComponent implements OnInit {
     );
   }
 
-  today = new Date();
   disabledDate = (current: Date): boolean => {
     return differenceInCalendarDays(current, this.today) < 0;
   };

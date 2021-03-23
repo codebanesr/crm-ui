@@ -64,7 +64,6 @@ import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { ReassignmentDrawerSheetComponent } from "./reassignment-drawer/reassignment-drawer.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { User } from "../interfaces/user";
-import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 
 declare let PhoneCallTrap: any;
 
@@ -95,7 +94,6 @@ export class LeadSoloComponent implements OnInit {
     private router: Router,
     private _bottomSheet: MatBottomSheet,
     private _snackBar: MatSnackBar,
-    private nativeGeocoder: NativeGeocoder
   ) {}
 
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef;
@@ -346,21 +344,6 @@ export class LeadSoloComponent implements OnInit {
       }),
       campaignId: this.selectedCampaign._id,
     };
-
-    // take reverse geocoding if present on the device else skip it, we will be using google maps reverse geocoding api
-    // otherwise. this code will be used if we decide to use the native geocoder plugin
-    if(this.nativeGeocoder?.reverseGeocode) {
-      const options: NativeGeocoderOptions = {
-        useLocale: true,
-        maxResults: 5
-      };
-      const [{administrativeArea, locality, subLocality}] = await this.nativeGeocoder.reverseGeocode(geoLocation.coords.latitude, geoLocation.coords.longitude, options);
-      
-      const location = `${subLocality},  ${locality}, ${administrativeArea}`;
-
-      console.log({location});
-      updateObj["revGeolocation"] = location;
-    }
 
 
     if(this.reassignToUser) {

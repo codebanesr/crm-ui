@@ -62,6 +62,6 @@ export class AuthenticationService  {
     // quick fix incorrect
     setTimeout(()=>{
       this.router.navigate(['/']);
-    }, 0)
+    }, 300);
   }
 }

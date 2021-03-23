@@ -95,11 +95,11 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   today = new Date();
   month = this.today.getMonth();
   year = this.today.getFullYear();
-
-  filterForm: FormGroup;
-  handlerFilter = new FormControl();
   startDate = new FormControl(new Date(this.year, this.month-2, 1));
   endDate = new FormControl(new Date(this.year, this.month, 28));
+  
+  filterForm: FormGroup;
+  handlerFilter = new FormControl();
   prospectName = new FormControl();
   handler = new FormControl([]);
   campaign = new FormControl();
