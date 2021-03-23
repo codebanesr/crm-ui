@@ -56,12 +56,12 @@ export class AuthenticationService  {
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
-    this.router.navigate(['login']);
     this.currentUserSubject.next(null);
+    
 
     // quick fix incorrect
     setTimeout(()=>{
-      window.location.reload();
-    }, 200)
+      this.router.navigate(['/']);
+    }, 0)
   }
 }

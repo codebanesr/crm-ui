@@ -32,7 +32,7 @@ export class CampaignComponent implements OnInit {
     this.pubsub.$pub("HEADING", { heading: "Campaigns" });
 
     this.currentUserObj = JSON.parse(localStorage.getItem("currentUser"));
-    this.roleType = this.currentUserObj.roleType;
+    this.roleType = this.currentUserObj?.roleType;
     this.page = 1;
     this.perPage = 20;
     this.campaignOpts = ["default"];
