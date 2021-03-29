@@ -17,14 +17,17 @@
         <span (press)="onLongPress($event)">{{lead?.firstName}} {{lead?.lastName}}</span>
         <span class="example-spacer"></span>
         <span style="font-weight: 500; color: #673ab7;">{{lead.leadStatus | titlecase}}</span>
+        
+        <span mat-raised-button color="primary" style="position: absolute;"
+            [matBadge]="lead.transactionCount" matBadgePosition="before" matBadgeColor="accent">
+        </span>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <button mat-raised-button color="primary" (click)="handleLeadEdit(lead)" class="lead-edit-btn">Edit Lead</button> &nbsp;
     <button mat-raised-button color="primary" (click)="handleLeadArchive(lead)" class="lead-edit-btn">Archive Lead</button>
     <i nz-icon nzType="mail" nzTheme="outline" style="font-size: large;"></i> &nbsp;
-    <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)" style="font-size: large;">
-    </ion-icon>
-    
+    <ion-icon name="share-social-sharp" (click)="onSocialShareClick($event, lead)" style="font-size: large;"></ion-icon>
+    <div style="height: 10px;"></div>
     <!-- @Todo do not show mobile numbers in show view, also prevent fetching mobile numbers -->
     <ng-container *ngFor="let key of leadKeys; trackBy: trackKeys">
       <p [ngStyle]="{'display': typeDict[key]?.value && typeDict[key].type !=='tel'? 'hidden': 'block' }">

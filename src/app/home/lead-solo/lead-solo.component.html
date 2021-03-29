@@ -72,7 +72,10 @@
 
       <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
       <nz-page-header class="site-page-header" *ngIf="selectedLead">
-        <nz-page-header-title>{{selectedLead.firstName}} {{selectedLead.lastName}}</nz-page-header-title>
+        <nz-page-header-title style="width: 100vw;">
+          {{selectedLead.firstName}} {{selectedLead.lastName}}
+          <mat-chip color="primary" selected style="float: right;" *ngIf="selectedLead.transactionCount">{{selectedLead.transactionCount}}</mat-chip>
+        </nz-page-header-title>
         <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
         <nz-page-header-content>
           <div class="content">
@@ -227,8 +230,7 @@
                   nzCancelText="cancel" (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
 
                   <mat-form-field class="mat-full-width" appearance="outline">
-                    <input matInput type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp"
-                      placeholder="followUp" />
+                    <input matInput type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp" (ngModelChange)="appendTimeZone()" placeholder="followUp" />
                   </mat-form-field>
                 </nz-modal>
 

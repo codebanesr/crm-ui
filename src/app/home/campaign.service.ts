@@ -7,6 +7,7 @@ import {
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { filter } from "rxjs/operators";
+import { IGetCampaigns } from "../campaign/campaign.interface";
 
 @Injectable({
   providedIn: "root",
@@ -15,20 +16,20 @@ export class CampaignService {
   constructor(private http: HttpClient) {}
 
   getCampaigns(
-    pageIndex: number,
-    pageSize: number,
+    page: number,
+    perPage: number,
     filters: any,
     sortField: string | null,
     sortOrder: string | null
   ) {
     let body = {
-      pageIndex,
-      pageSize,
+      page,
+      perPage,
       filters,
       sortField: sortField,
       sortOrder: sortOrder,
     };
-    return this.http.post(`${environment.apiUrl}/campaign/get`, body);
+    return this.http.post<IGetCampaigns>(`${environment.apiUrl}/campaign/get`, body);
   }
 
   getHandlerEmailHints(partialEmail: string) {
@@ -155,8 +156,8 @@ export class CampaignService {
     });
   }
 
-  archiveCampaign(data) {
-    return this.http.post(`${environment.apiUrl}/campaign/archive`, data);
+  archiveCampaign(campaignId: string) {
+    return this.http.delete(`${environment.apiUrl}/campaign/archive/${campaignId}`);
   }
 
 

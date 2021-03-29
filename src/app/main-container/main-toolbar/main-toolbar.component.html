@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span>Molecule</span>
+    <span *ngIf="organizationName">{{organizationName}}</span>
     <span class="example-spacer"></span>
     <span class="main-tabs">
       <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">

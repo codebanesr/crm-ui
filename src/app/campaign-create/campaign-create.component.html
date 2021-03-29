@@ -55,7 +55,9 @@
         <textarea formControlName="comment" matInput rows="2" placeholder="write any thing"></textarea>
       </mat-form-field>
 
-      <button mat-raised-button (click)="cloneCampaign()">Create duplicate campaign</button>
+      <button mat-raised-button color="accent" (click)="cloneCampaign()">Create duplicate campaign</button> &nbsp;
+      <button mat-raised-button color="accent" (click)="archiveCampaign()">Archive</button>
+      <div style="height: 10px;"></div>
 
       <!-- the block below is only to be shown for campaign update case -->
       <ng-container *ngIf="this.campaignId">

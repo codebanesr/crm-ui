@@ -187,6 +187,7 @@ export class LeadsService {
     },
     filters: any
   ) {
+    ++pagination.page;
     return this.http.post(`${environment.apiUrl}/lead/transactions`, {
       pagination,
       filters,

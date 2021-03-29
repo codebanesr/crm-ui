@@ -24,3 +24,17 @@ export interface ICampaign {
     mfupd: number
   }
 }
+
+
+
+
+export interface IGetCampaigns {
+  data: ICampaign[];
+  interval: string[];
+  metadata: { total: number; page: number };
+  quickStatsAgg: {
+    campaign: string;
+    followUp: number;
+    overdue: number;
+  };
+}

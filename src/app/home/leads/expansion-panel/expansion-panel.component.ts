@@ -87,11 +87,15 @@ export class ExpansionPanelComponent implements OnInit, AfterViewInit {
     return key;
   }
 
+  /** @todo when we are sure that there is no lead without a campaign id, lead.campaignId || this.selectedCampaign._id
+   * can be converted to
+   * lead.campaignId
+   */
   handleLeadEdit(lead) {
     this.router.navigate(["home", "solo"], {
       queryParams: {
         isBrowsed: true,
-        campaignId: this.selectedCampaign._id,
+        campaignId: lead.campaignId || this.selectedCampaign._id,
         leadId: lead._id,
       },
     });

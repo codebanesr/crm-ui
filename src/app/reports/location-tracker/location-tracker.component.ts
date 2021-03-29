@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { AgentService } from 'src/app/agent.service';
 import { CampaignService } from 'src/app/home/campaign.service';
 import { UsersService } from 'src/app/home/users.service';
@@ -15,7 +15,7 @@ export class LocationTrackerComponent implements OnInit {
   @ViewChild(MapInfoWindow, {static: false}) infoWindow: MapInfoWindow;
 
   center = {lat: 24, lng: 12};
-  markerPositions: {userId: string, lat: number, lng: number} [] = [];
+  markerPositions: {userId: string, lat: number, lng: number, timestamp: string} [] = [];
   zoom = 14;
   display?: google.maps.LatLngLiteral;
   vertices: google.maps.LatLngLiteral[] = [];
@@ -30,6 +30,10 @@ export class LocationTrackerComponent implements OnInit {
   data: any;
   listOfUsers: any;
   listOfCampaigns: any;
+
+  markerOptions = {
+    icon: "assets/icon/library.svg"
+  }
 
   ngOnInit() {
     this.initFilters();
@@ -102,8 +106,11 @@ export class LocationTrackerComponent implements OnInit {
 
   usersMap: IUserMap = {};
   infoWindowContent = '';
-  selectedUser: { _id: string, roleType: string, roles: string[], batLvl: number, fullName: string } = {_id: '', roleType: '', roles: [], batLvl: 0, fullName: ''};
-  openInfoWindow(marker: MapMarker, userId: string) {
+  timestamp: string = '';
+  selectedUser: { _id: string, roleType: string, roles: string[], batLvl: number, fullName: string } = {_id: '', roleType: '', roles: [], batLvl: 0, fullName: '' };
+  openInfoWindow(marker: MapMarker, markerPosition) {
+    const { userId, timestamp } = markerPosition;
+    this.timestamp = timestamp;
     this.selectedUser = {
       batLvl: this.usersMap[userId].batLvl, 
       _id: userId, 
@@ -121,9 +128,9 @@ export class LocationTrackerComponent implements OnInit {
   getVisitTrack() {
     this.agentService.getVisitTrack(this.filterForm.value).subscribe((data: IVisitTrack[])=>{
       data.forEach(d=>{
-        this.usersMap[d.userId._id] = {batLvl: d.batLvl, info: d.userId};
+        this.usersMap[d.userId._id] = {batLvl: d.batLvl, info: d.userId, updatedAt: d.updatedAt};
         d.locations.forEach(l=>{
-          this.markerPositions.push({lat: l.lat, lng: l.lng, userId: d.userId._id});
+          this.markerPositions.push({lat: l.lat, lng: l.lng, userId: d.userId._id, timestamp: l.timestamp });
         })
       });
 
@@ -138,7 +145,8 @@ export class LocationTrackerComponent implements OnInit {
 interface ICoordinates {
   _id: string, 
   lat: number, 
-  lng: number
+  lng: number,
+  timestamp: string
 }
 
 interface IVisitTrack {
@@ -163,6 +171,7 @@ interface IUserMap {
       fullName: string,
       roleType: string,
       roles: string[]
-    }
+    },
+    updatedAt: string
   }
 }

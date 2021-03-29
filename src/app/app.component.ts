@@ -14,6 +14,7 @@ import {
   BackgroundGeolocationEvents,
   BackgroundGeolocationResponse,
 } from "@ionic-native/background-geolocation/ngx";
+import { CurrentUser } from "./home/interfaces/global.interfaces";
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   currentUser: any;
+  organizationName: string;
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -44,8 +46,12 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
 
-    this.authService.currentUser.subscribe(cu=>{
+    this.authService.currentUser.subscribe((cu: CurrentUser)=>{
+      if(!cu) {
+        return;
+      }
       this.currentUser = cu;
+      this.organizationName = cu.organization;
     });
   }
 

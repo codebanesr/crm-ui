@@ -14,6 +14,7 @@ export interface ILead {
   firstName: string;
   followUp: string | Date;
   lastName: string;
+  transactionCount?: number;
   leadStatus: string;
   mobilePhone: string;
   phoneNumberPrefix: string;

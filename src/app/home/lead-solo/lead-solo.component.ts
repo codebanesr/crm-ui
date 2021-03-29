@@ -571,6 +571,10 @@ export class LeadSoloComponent implements OnInit {
     }
   }
 
+  appendTimeZone() {
+    this.selectedLead.followUp = moment(this.selectedLead.followUp).toISOString();
+    console.log(this.selectedLead.followUp)
+  }
   fabTransition() {}
 
   resetAllActionHandlers() {

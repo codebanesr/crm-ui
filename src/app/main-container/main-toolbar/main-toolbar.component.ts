@@ -16,11 +16,16 @@ export class MainToolbarComponent implements OnChanges, OnInit {
   ) { }
 
   elem: any;
+  @Input() organizationName: any;
+
   ngOnInit() {
     this.elem = document.documentElement;
   }
 
-  ngOnChanges(changes: SimpleChanges) {}
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes)
+    this.organizationName = changes.organizationName.currentValue;
+  }
 
   openMenu() {
     this.menuController.open();

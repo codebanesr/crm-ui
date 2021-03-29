@@ -14,13 +14,16 @@
     (mapMousemove)="move($event)"
     (mapRightclick)="removeLastMarker()">
   <map-marker #marker="mapMarker"
-        *ngFor="let markerPosition of markerPositions"
-        [position]="markerPosition"
-        (mapClick)="openInfoWindow(marker, markerPosition.userId)"></map-marker>
+    *ngFor="let markerPosition of markerPositions"
+    [position]="markerPosition"
+    [options]="markerOptions"
+    (mapClick)="openInfoWindow(marker, markerPosition)">
+  </map-marker>
 
   <map-polyline [path]="vertices"></map-polyline>
   <map-info-window>
     <div style="margin-top: 10px;">
+      <p *ngIf="timestamp" style="font-weight: 700;">{{timestamp | date: 'short'}}</p>
       <p style="font-weight: 700;">{{selectedUser.fullName}} ({{selectedUser.roleType}})</p>
       <span style="font-weight: 300;">
         Battery ({{selectedUser.batLvl}}%) 

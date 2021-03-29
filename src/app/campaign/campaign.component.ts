@@ -1,11 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { MatPaginator } from "@angular/material/paginator";
 import { Router } from "@angular/router";
 import { LoadingController, ToastController } from "@ionic/angular";
 import { CampaignService } from "../home/campaign.service";
 import { CurrentUser } from "../home/interfaces/global.interfaces";
 import { PubsubService } from "../pubsub.service";
-import { ICampaign } from "./campaign.interface";
+import { ICampaign, IGetCampaigns } from "./campaign.interface";
+
 
 @Component({
   selector: "app-campaign",
@@ -82,20 +84,18 @@ export class CampaignComponent implements OnInit {
       );
   }
 
-  totalPage: number = 0;
+  total: number = 100;
+  loading = false;
+  onQueryParamsChange(paginator: MatPaginator): void {
+    this.perPage = paginator.pageSize;
+    this.page = this.page <= 0 ? 1 : this.page;
+    this.getCampaigns();
+  }
+
   quickStats: { campaign: string; followUp: number; overdue: number };
-  processData(result: {
-    data: ICampaign[];
-    interval: string[];
-    metadata: { total: number; page: number };
-    quickStatsAgg: {
-      campaign: string;
-      followUp: number;
-      overdue: number;
-    };
-  }) {
+  processData(result: IGetCampaigns) {
     this.page = result.metadata.page;
-    this.totalPage = result.metadata.total / this.perPage;
+    this.total = result.metadata.total;
     this.listOfData = [];
     this.quickStats = result.quickStatsAgg;
     for (let d of result.data) {
@@ -120,27 +120,6 @@ export class CampaignComponent implements OnInit {
     this.router.navigate(["home", "campaigns", "create"], {
       queryParams: { id: data._id },
     });
-  }
-
-  archiveCampaign(campaign: ICampaign) {
-    this.campaignService.archiveCampaign(campaign).subscribe(
-      async(data) => {
-        const toast = await this.toast.create({
-          message: 'Campaign archived successfully ..',
-          duration: 2000,
-          color: 'success'
-        });
-        toast.present();
-      },
-      async(error) => {
-        const toast = await this.toast.create({
-          message: 'Failed to archive campaign',
-          duration: 2000,
-          color: 'error'
-        });
-        toast.present();
-      }
-    );
   }
 
   toggleArchiveStatus(event: Event, campaign: ICampaign) {

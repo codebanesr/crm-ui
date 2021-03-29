@@ -43,7 +43,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     private dialogCtrl: MatDialog,
     private router: Router,
     private sock: WebsocketService,
-    private _snackBar: MatSnackBar,
+    private _snackBar: MatSnackBar
   ) {}
   campaignForm: FormGroup;
 
@@ -71,57 +71,61 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   fileList: NzUploadListComponent[] = [];
 
   attachments: any;
-  demoDispositionNodes: any[] = [{
-    title: "Add Dispositions",
-    key: "root",
-    children: [
-      {
-        title: 'Interested',
-        key: 'interested',
-        children: [
-          {
-            title: 'Hot',
-            key: 'hot',
-            isLeaf: true
-          },
-          {
-            title: 'warm',
-            key: 'warm',
-            isLeaf: true
-          },
-          {
-            title: 'cold',
-            key: 'cold',
-            isLeaf: true
-          },{
-            title: 'won',
-            key: 'won',
-            isLeaf: true
-          }
-        ]
-      },{
-        title: 'Not Interested',
-        key: 'NI',
-        children: [
-          {
-            title: 'Too Costly',
-            key: 'TC',
-            isLeaf: true
-          },
-          {
-            title: 'Already bought',
-            key: 'AB',
-            isLeaf: true
-          },
-          {
-            title: 'Using Another CRM',
-            key: 'uacrm',
-            isLeaf: true
-          }
-        ]
-      }
-    ]
-  }];
+  demoDispositionNodes: any[] = [
+    {
+      title: "Add Dispositions",
+      key: "root",
+      children: [
+        {
+          title: "Interested",
+          key: "interested",
+          children: [
+            {
+              title: "Hot",
+              key: "hot",
+              isLeaf: true,
+            },
+            {
+              title: "warm",
+              key: "warm",
+              isLeaf: true,
+            },
+            {
+              title: "cold",
+              key: "cold",
+              isLeaf: true,
+            },
+            {
+              title: "won",
+              key: "won",
+              isLeaf: true,
+            },
+          ],
+        },
+        {
+          title: "Not Interested",
+          key: "NI",
+          children: [
+            {
+              title: "Too Costly",
+              key: "TC",
+              isLeaf: true,
+            },
+            {
+              title: "Already bought",
+              key: "AB",
+              isLeaf: true,
+            },
+            {
+              title: "Using Another CRM",
+              key: "uacrm",
+              isLeaf: true,
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
   // campaignOptions: any = [];
   assignTo = [
@@ -149,7 +153,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     this.assigneeFilter = new FormControl();
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.subscribeToQueryParamChange();
 
     this.initEmailForm();
@@ -157,13 +161,11 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     // this.suggestCampaignNames();
     this.initUsersList();
 
-
-    this.sock.getAlerts().subscribe(text => {
+    this.sock.getAlerts().subscribe((text) => {
       console.log(text);
-      this._snackBar.open(text, 'cancel', {duration: 2000});
-    })
-    
-  }    
+      this._snackBar.open(text, "cancel", { duration: 2000 });
+    });
+  }
 
   campaignId: string;
   campaign: ICampaign;
@@ -193,11 +195,11 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   }
 
   routeToRules() {
-    this.router.navigate(['rules', 'list-rules'], {
+    this.router.navigate(["rules", "list-rules"], {
       queryParams: {
-        campaignId: this.campaign._id
-      }
-    })
+        campaignId: this.campaign._id,
+      },
+    });
   }
 
   autodialForm: FormGroup;
@@ -206,19 +208,21 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
       active: new FormControl(false), //active
       mfupd: new FormControl(2), // max followup per day
       cpts: new FormControl(), //call preview time in seconds
-      cdts: new FormControl() // call disposition time in seconds
-    })
+      cdts: new FormControl(), // call disposition time in seconds
+    });
   }
 
   getUploadedFiles() {
-    this.agentService.listAgentActions(0,  this.campaignId, "campaignSchema").subscribe(
-      (list: any) => {
-        this.recentUploads = list;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.agentService
+      .listAgentActions(0, this.campaignId, "campaignSchema")
+      .subscribe(
+        (list: any) => {
+          this.recentUploads = list;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     // this.campaignForm
     //   .get("type")
     //   .valueChanges.subscribe((data) => console.log(data));
@@ -237,7 +241,9 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
 
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
-        this.demoDispositionNodes = [{title: "Root", key: "root", children: data.options}];
+        this.demoDispositionNodes = [
+          { title: "Root", key: "root", children: data.options },
+        ];
       },
       (error) => {
         console.log("Error while calling initDispositionCore", error.message);
@@ -397,36 +403,53 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     console.log(this.campaignFiles);
   }
 
+  archiveCampaign() {
+    this.campaignService.archiveCampaign(this.campaign._id).subscribe(
+      (data) => {
+        console.log("Campaign has been archived");
+      },
+      (error) => {
+        console.log("An error occured while archiving campaign");
+      }
+    );
+  }
+
   handleCampaignConfigFileUpload() {
     if (!this.formModel) {
       this.msg.error("form model is undefined");
       return;
     }
 
-    const isNew = this.campaignId ? false: true;
+    const isNew = this.campaignId ? false : true;
     const formData = {
       isNew: isNew,
       campaignInfo: this.campaignForm.value,
       groups: this.groups,
       formModel: this.formModel,
       dispositionData: this.demoDispositionNodes[0].children,
-      advancedSettings: this.advancedSettings.filter((el) => el.checked).map((el) => el.value),
+      advancedSettings: this.advancedSettings
+        .filter((el) => el.checked)
+        .map((el) => el.value),
       assignTo: this.assignTo.filter((el) => el.checked).map((el) => el.value),
       uniqueCols: this.uniqueCols.filter((c) => c.checked).map((c) => c.value),
-      editableCols: this.editableCols.filter((c) => c.checked).map((c) => c.value),
-      browsableCols: this.browsableCols.filter((c) => c.checked).map((c) => c.value),
-      autodialSettings: this.autodialForm.value
+      editableCols: this.editableCols
+        .filter((c) => c.checked)
+        .map((c) => c.value),
+      browsableCols: this.browsableCols
+        .filter((c) => c.checked)
+        .map((c) => c.value),
+      autodialSettings: this.autodialForm.value,
     };
 
-    if(isNew) {
+    if (isNew) {
       // delete id of campaign being passed as null and also prevent null value being passed to backend
       delete formData.campaignInfo._id;
       this.groups.push({
-        label: 'contact',
-        value: ['customerEmail', 'mobilePhone']
-      })
+        label: "contact",
+        value: ["customerEmail", "mobilePhone"],
+      });
     }
-    
+
     this.campaignService.createCampaignAndDisposition(formData).subscribe(
       (response: any) => {
         this.uploading = false;
@@ -454,7 +477,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
       .uploadMultipleLeadFiles({
         files: result,
         campaignId: this.campaignForm.get("_id").value,
-        campaignName: this.campaignForm.get("campaignName").value
+        campaignName: this.campaignForm.get("campaignName").value,
       })
       .subscribe(
         (response: any) => {
@@ -553,11 +576,11 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
         this.filteredListOfUsers = this.listOfUser;
         this.usersCount = data[0]?.metadata?.total;
 
-        this.assigneeFilter.valueChanges.subscribe(change=>{
-          this.filteredListOfUsers = this.listOfUser.filter((user)=>{
-            return user.fullName.indexOf(change)> -1
-          })
-        })
+        this.assigneeFilter.valueChanges.subscribe((change) => {
+          this.filteredListOfUsers = this.listOfUser.filter((user) => {
+            return user.fullName.indexOf(change) > -1;
+          });
+        });
       },
       (error) => {
         console.log(error);
@@ -655,16 +678,15 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
 
   displayParamModal() {
     this.dialogCtrl.open(MappingComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: '100%',
-      width: '100%',
+      maxWidth: "100vw",
+      maxHeight: "100vh",
+      height: "100%",
+      width: "100%",
       data: {
-        campaign: this.campaign
-      }
-    })
+        campaign: this.campaign,
+      },
+    });
   }
-
 
   doRefresh(event) {
     setTimeout(() => {
@@ -674,22 +696,25 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   }
 
   cloneCampaign() {
-    this.campaignService.cloneCampaign(this.campaign._id).subscribe(data=>{
-      this._snackBar
-        .open("Campaign Successfully created", "Cancel", {
+    this.campaignService.cloneCampaign(this.campaign._id).subscribe(
+      (data) => {
+        this._snackBar
+          .open("Campaign Successfully created", "Cancel", {
+            duration: 3000,
+            verticalPosition: "top",
+          })
+          .afterDismissed()
+          .subscribe((d) => {
+            this.router.navigate(["home", "campaign", "list"]);
+          });
+      },
+      (error) => {
+        this._snackBar.open("Failed to copy campaign", "cancel", {
           duration: 3000,
           verticalPosition: "top",
-        })
-        .afterDismissed()
-        .subscribe((d) => {
-          this.router.navigate(["home", "campaign", "list"]);
         });
-    }, error=>{
-      this._snackBar.open('Failed to copy campaign', 'cancel', {
-        duration: 3000,
-        verticalPosition: 'top'
-      })
-    })
+      }
+    );
   }
 
   ngOnDestroy() {

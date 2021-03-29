@@ -21,6 +21,7 @@ export interface CurrentUser {
   fullName: string;
   refreshToken: string;
   roleType: string;
+  organization: string
 }
 
 export interface ITypeDict {
