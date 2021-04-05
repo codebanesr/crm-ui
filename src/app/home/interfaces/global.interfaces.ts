@@ -33,3 +33,13 @@ export interface ITypeDict {
     options: any[];
   };
 }
+
+
+export interface IChildren { 
+  key: string, 
+  title: string, 
+  children?: IChildren[], 
+  isLeaf: boolean,
+  level?: number,
+  selected: boolean
+}

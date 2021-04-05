@@ -81,7 +81,6 @@ export class LeadSoloComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UsersService,
     private activatedRoute: ActivatedRoute,
-    private toastController: ToastController,
     private callNumber: CallNumber,
     private contacts: Contacts,
     private uploadService: UploadService,
@@ -185,12 +184,12 @@ export class LeadSoloComponent implements OnInit {
     if (this.selectedLead && this.callTime) {
       const record: ICallRecord[] = await this.callLog.getCallLog([
         {
-          name: "date",
-          value: this.callTime,
-          operator: ">=",
+          name: "number",
+          value: this.selectedLead.mobilePhone,
+          operator: "==",
         },
       ]);
-
+      // console.log("CALL_RECORD_STATS_CAPTURED", this.selectedLead.mobilePhone, JSON.stringify(record[0]), JSON.stringify(record));
       this.callRecord = record[0];
     }
   }
@@ -372,13 +371,18 @@ export class LeadSoloComponent implements OnInit {
     // any condition that has to be validated before submitting the form goes into this;
     const preApproveResult = this.checkSubmissionStatus();
     if (!preApproveResult.status) {
-      const toast = await this.toastController.create({
-        message: preApproveResult.message,
-        duration: 1000,
-        position: 'middle'
-      });
+      // const toast = await this.toastController.create({
+      //   message: preApproveResult.message,
+      //   duration: 1000,
+      //   position: 'middle'
+      // });
 
-      toast.present();
+      // toast.present();
+      this._snackBar.open(preApproveResult.message, 'cancel', {
+        duration: 2000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      })
       return;
     }
 

@@ -80,12 +80,12 @@ export class LeadsService {
   }
 
   async getLeadMappings(
-    campaignName: string = null,
+    campaignId: string,
     preventFields: Partial<keyof ILead>[] = ['createdAt', '__v', 'campaignId', 'updatedAt', 'email']
   ): Promise<{ typeDict: { [x: string]: any }; mSchema: { paths: any[] } }> {
     return new Promise((resolve, reject) => {
       const showCols = [];
-      this.getAllLeadColumns(campaignName, preventFields).subscribe(
+      this.getAllLeadColumns(campaignId, preventFields).subscribe(
         (mSchema: { paths: ILeadColumn[] }) => {
           mSchema.paths.forEach((path: ILeadColumn) => {
             showCols.push({

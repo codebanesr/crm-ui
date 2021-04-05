@@ -202,29 +202,6 @@ export class LeadsComponent {
   dataLoaded: boolean = false;
   async getAllLeadColumns() {
     this.loading = true;
-    // this.leadsService.getAllLeadColumns(this.selectedCampaign._id).subscribe(
-    //   (mSchema: { paths: ILeadColumn[] }) => {
-    //     this.loading = false;
-    //     mSchema.paths.forEach((path: ILeadColumn) => {
-    //       this.showCols.push({
-    //         label: path.readableField,
-    //         value: path.internalField,
-    //         checked: path.checked,
-    //         type: path.type,
-    //       });
-    //     });
-
-    //     // for tables
-    //     this.typeDict = Object.assign(
-    //       {},
-    //       ...this.showCols.map((x) => ({ [x.value]: x }))
-    //     );
-    //   },
-    //   (error) => {
-    //     this.loading = false;
-    //   }
-    // );
-
     const result = await this.leadsService.getLeadMappings(this.selectedCampaign._id);
     this.typeDict = result.typeDict;
   }
@@ -436,10 +413,10 @@ export class LeadsComponent {
 
   async onSocialShareClick(event, data) {
     await Share.share({
-      title: "See cool stuff",
-      text: "Really awesome stuff ",
-      url: "https://thefosstech.com",
-      dialogTitle: "Share with buddies",
+      title: "Molecule CRM",
+      text: "Download Molecule crm from playstore",
+      url: "https://crm.moleculesystems.com",
+      dialogTitle: "Share with Friends",
     });
   }
 

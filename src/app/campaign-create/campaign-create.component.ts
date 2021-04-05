@@ -16,7 +16,7 @@ import { field } from "src/global.model";
 import { AgentService } from "../agent.service";
 import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
-import { ModelInterface } from "../home/interfaces/global.interfaces";
+import { IChildren, ModelInterface } from "../home/interfaces/global.interfaces";
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from "../home/users.service";
 import { MappingComponent } from "../mapping/mapping.component";
@@ -71,55 +71,68 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   fileList: NzUploadListComponent[] = [];
 
   attachments: any;
-  demoDispositionNodes: any[] = [
+  demoDispositionNodes: IChildren[] = [
     {
       title: "Add Dispositions",
       key: "root",
+      isLeaf: false,
+      selected: false,
       children: [
         {
           title: "Interested",
           key: "interested",
+          isLeaf: false,
+          selected: false,
           children: [
             {
               title: "Hot",
               key: "hot",
               isLeaf: true,
+              selected: false
             },
             {
               title: "warm",
               key: "warm",
               isLeaf: true,
+              selected: false
             },
             {
               title: "cold",
               key: "cold",
               isLeaf: true,
+              selected: false
             },
             {
               title: "won",
               key: "won",
               isLeaf: true,
+              selected:false
             },
           ],
         },
         {
           title: "Not Interested",
           key: "NI",
+          isLeaf: false,
+          selected: false,
           children: [
             {
               title: "Too Costly",
               key: "TC",
               isLeaf: true,
+              selected: false
             },
             {
               title: "Already bought",
               key: "AB",
               isLeaf: true,
+              selected: false
             },
             {
               title: "Using Another CRM",
               key: "uacrm",
               isLeaf: true,
+              selected: false
             },
           ],
         },
@@ -242,7 +255,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
         this.demoDispositionNodes = [
-          { title: "Root", key: "root", children: data.options },
+          { title: "Root", key: "root", children: data.options, selected: false, isLeaf: false },
         ];
       },
       (error) => {
@@ -414,7 +427,20 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     );
   }
 
+
+  postProcessDisposition(children: IChildren[]) {
+    if(!children) {
+      return;
+    }
+
+    children.forEach(child=>{
+      child.selected = false;
+      this.postProcessDisposition(child.children);
+    })
+  }
+
   handleCampaignConfigFileUpload() {
+    this.postProcessDisposition(this.demoDispositionNodes[0].children);
     if (!this.formModel) {
       this.msg.error("form model is undefined");
       return;
@@ -720,12 +746,4 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sock.disconnect();
   }
-}
-
-interface IChildren { 
-    key: string, 
-    title: string, 
-    children: IChildren[], 
-    isLeaf: boolean,
-    level: number
 }
