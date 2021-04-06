@@ -1,8 +1,7 @@
 <div *ngIf="formModel" style="max-width:500px;">
-  <nz-page-header class="site-page-header" nzBackIcon>
-    <nz-page-header-title>{{formModel.name}}</nz-page-header-title>
-    <!-- <nz-page-header-subtitle>{{formModel.description}}</nz-page-header-subtitle> -->
-    <nz-page-header-content>
+  <mat-card class="site-page-header" nzBackIcon>
+    <mat-card-header>{{formModel.name}}</mat-card-header>
+    <mat-card-content>
       <div class="content">
         <div>
           <ng-container *ngFor="let item of formModel.attributes">
@@ -106,6 +105,6 @@
           </ng-container>
         </div>
       </div>
-    </nz-page-header-content>
-  </nz-page-header>
+    </mat-card-content>
+  </mat-card>
 </div>
