@@ -71,13 +71,13 @@
       </div>
 
       <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
-      <nz-page-header class="site-page-header" *ngIf="selectedLead">
-        <nz-page-header-title style="width: 100vw;">
-          {{selectedLead.firstName}} {{selectedLead.lastName}}
-          <mat-chip color="primary" selected style="float: right;" *ngIf="selectedLead.transactionCount">{{selectedLead.transactionCount}}</mat-chip>
-        </nz-page-header-title>
+      <mat-card *ngIf="selectedLead">
+        <mat-card-header class="lsc_header">
+          <span class="fullname">{{selectedLead.firstName}} {{selectedLead.lastName}} </span>
+          <mat-chip class="chip" color="primary" selected *ngIf="selectedLead.transactionCount">{{selectedLead.transactionCount}}</mat-chip>
+        </mat-card-header>
         <!-- <nz-page-header-subtitle >{{selectedLead.lastName}}</nz-page-header-subtitle> -->
-        <nz-page-header-content>
+        <mat-card-content>
           <div class="content">
             <div class="main">
                 <mat-accordion>
@@ -352,8 +352,8 @@
               </ion-fab>
             </div>
           </div>
-        </nz-page-header-content>
-      </nz-page-header>
+        </mat-card-content>
+      </mat-card>
     </div>
 
     <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
