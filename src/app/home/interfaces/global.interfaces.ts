@@ -41,5 +41,6 @@ export interface IChildren {
   children?: IChildren[], 
   isLeaf: boolean,
   level?: number,
-  selected: boolean
+  selected: boolean,
+  expanded?: boolean
 }

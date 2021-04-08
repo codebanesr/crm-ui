@@ -75,7 +75,7 @@ export class LeadHistoryComponent implements OnInit {
       handler: this.handler,
       campaign: this.campaign,
       leadId: this.leadId
-    })
+    });
   }
 
   tempUserList: any;
@@ -151,7 +151,7 @@ export class LeadHistoryComponent implements OnInit {
 
   perPage = 20;
   handlePageChange(paginator: PageEvent) {
-    this.pagination.page = paginator.pageIndex;
+    this.pagination.page = paginator.pageIndex + 1;
     this.pagination.perPage = this.perPage;
     this.getTransactions();
   }

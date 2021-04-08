@@ -255,7 +255,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     this.campaignService.getDisposition(campaignId).subscribe(
       (data: any) => {
         this.demoDispositionNodes = [
-          { title: "Root", key: "root", children: data.options, selected: false, isLeaf: false },
+          { title: "Root", key: "root", children: data.options, selected: false, isLeaf: false, expanded: false },
         ];
       },
       (error) => {
@@ -435,6 +435,9 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
 
     children.forEach(child=>{
       child.selected = false;
+      // this control should be available to admin itself, whatever state he saves the dispositions whi dikhna chahiye
+      child.expanded = false;
+
       this.postProcessDisposition(child.children);
     })
   }

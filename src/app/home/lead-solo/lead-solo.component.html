@@ -73,8 +73,11 @@
       <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
       <mat-card *ngIf="selectedLead">
         <mat-card-header class="lsc_header">
-          <span class="fullname">{{selectedLead.firstName}} {{selectedLead.lastName}} </span>
-          <mat-chip class="chip" color="primary" selected *ngIf="selectedLead.transactionCount">{{selectedLead.transactionCount}}</mat-chip>
+          <span class="fullname">
+            <mat-chip class="chip" color="primary" selected *ngIf="selectedLead.transactionCount">{{selectedLead.transactionCount}}</mat-chip>
+            {{selectedLead.firstName}} {{selectedLead.lastName}} 
+          </span>
+          <mat-chip color="accent" selected>{{selectedCampaign.campaignName}}</mat-chip>
         </mat-card-header>
         <mat-card-content>
           <div class="content">
