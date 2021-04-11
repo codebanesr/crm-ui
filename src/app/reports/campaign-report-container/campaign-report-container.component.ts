@@ -19,7 +19,7 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
     private userService: UsersService
   ) { }
   
-  stackBarTitle = 'Category Wise Lead Count / Campaign';
+  stackBarTitle = 'Disposition Wise Lead Count / Campaign';
   XAxisLabel = 'Campaign Name';
   YAxisLabel = 'Total Leads';
   stackBarData = null;

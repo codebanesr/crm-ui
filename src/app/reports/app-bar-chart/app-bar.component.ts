@@ -81,7 +81,7 @@ export class BarChartComponent implements OnChanges {
         .text({
           position: [item.type, item.value],
           // content: (item.percent * 100).toFixed(0) + "%",
-          content: "percentage",
+          // content: "percentage",
           style: {
             textAlign: "center",
           },
