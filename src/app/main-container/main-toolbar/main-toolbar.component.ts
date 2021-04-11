@@ -16,7 +16,7 @@ export class MainToolbarComponent implements OnChanges, OnInit {
   ) { }
 
   elem: any;
-  @Input() organizationName: any;
+  @Input() organizationName: string = '';
 
   ngOnInit() {
     this.elem = document.documentElement;

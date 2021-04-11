@@ -6692,6 +6692,13 @@ ng-zorro-antd@^10.0.0:
     resize-observer-polyfill "^1.5.1"
     tslib "^2.0.0"
 
+ngx-bottom-nav@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-bottom-nav/-/ngx-bottom-nav-11.0.0.tgz#ff9a46b934c2e223b3ce9c5b5c4b77e0d38e4cf7"
+  integrity sha512-hpDV4/4jWxpnhuFRRakbmcmtsYqI/bi7FMpgCBExNOegBd0FXgDPocgGz/kiLdBXWYB0ygMF/mVpRQjSSzokLQ==
+  dependencies:
+    tslib "^2.0.0"
+
 ngx-countdown@^11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/ngx-countdown/-/ngx-countdown-11.0.1.tgz#fe4fe67221c56d4ba4fce6dbe9c3bf289c53a6f0"

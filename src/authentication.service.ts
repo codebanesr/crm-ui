@@ -57,11 +57,10 @@ export class AuthenticationService  {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+  
+    setTimeout(() => {
+      this.router.navigate(['']);  
+    }, 300)
     
-
-    // quick fix incorrect
-    setTimeout(()=>{
-      this.router.navigate(['/']);
-    }, 300);
   }
 }

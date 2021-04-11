@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     confirmPassword: false,
   };
 
+  
   submitForm(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
   }
 
   submitLoginForm(username: string, password: string) {
+
     this.authService.login(username, password).subscribe(
       (data: any) => {
         // this.msg.success("Successfully Logged In");

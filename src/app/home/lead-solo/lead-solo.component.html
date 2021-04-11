@@ -26,9 +26,7 @@
           <mat-expansion-panel>
             <mat-expansion-panel-header>Type of Leads</mat-expansion-panel-header>
             <div *ngIf="typeDict">
-              <mat-radio-group
-                aria-labelledby="example-radio-group-label"
-                class="example-radio-group"
+              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                 [(ngModel)]="nonKeyFilters.typeOfLead">
                 <mat-radio-button class="mat-always-full-width" value="fresh">
                   Fresh Leads
@@ -42,16 +40,12 @@
               </mat-radio-group>
             </div>
           </mat-expansion-panel>
-          <button mat-raised-button color="accent" (click)="fetchNextLead()" class="mat-always-full-width">Submit</button>
+          <button mat-raised-button color="accent" (click)="fetchNextLead()"
+            class="mat-always-full-width">Submit</button>
         </mat-accordion>
       </div>
-      <button 
-        mat-raised-button 
-        color="primary" 
-        style="margin-top: 20px;" 
-        class="mat-always-full-width"
-        (click)="onLeadCreate()"
-      >Create Another Lead</button>
+      <button mat-raised-button color="primary" style="margin-top: 20px;" class="mat-always-full-width"
+        (click)="onLeadCreate()">Create Another Lead</button>
     </mat-drawer>
 
     <div class="main contents">
@@ -73,287 +67,294 @@
       <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
       <mat-card *ngIf="selectedLead">
         <mat-card-header class="lsc_header">
-          <span class="fullname">
-            <mat-chip class="chip" color="primary" selected *ngIf="selectedLead.transactionCount">{{selectedLead.transactionCount}}</mat-chip>
-            {{selectedLead.firstName}} {{selectedLead.lastName}} 
-          </span>
+          <div class="fullname">
+            <div>
+              <mat-chip class="chip" color="primary" selected *ngIf="selectedLead.transactionCount">
+                {{selectedLead.transactionCount}}</mat-chip>
+            </div>
+            <div class="name">
+              {{selectedLead.firstName}} {{selectedLead.lastName}}
+            </div>
+        </div>
           <mat-chip color="accent" selected>{{selectedCampaign.campaignName}}</mat-chip>
         </mat-card-header>
         <mat-card-content>
-          <div class="content">
-            <div class="main">
-                <mat-accordion>
-                  <mat-expansion-panel hideToggle>
-                    <mat-expansion-panel-header>
-                      <mat-panel-title style="font-weight: 500; font-size: 1.1rem;">
-                        Lead Information
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
 
-                    <mat-tab-group>
-                      <mat-tab [label]="g.label | titlecase" *ngFor="let g of leadGroups">
-                        <div style="height: 10px;"></div>
-                        <div style="max-height: 250px;">
-                          <ng-container *ngFor="let leadKey of allLeadKeys" key="leadKey">
-                            <ng-container *ngIf="g.value.includes(leadKey)">
+          <mat-accordion>
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title style="font-weight: 500; font-size: 1.1rem;">
+                  Lead Information
+                </mat-panel-title>
+              </mat-expansion-panel-header>
 
-                              <mat-form-field appearance="outline" *ngIf="typeDict[leadKey].type === 'date'"
-                                class="mat-full-width">
-                                <mat-label>Choose a date</mat-label>
-                                <input matInput [matDatepicker]="picker">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                              </mat-form-field>
+              <mat-tab-group>
+                <mat-tab [label]="g.label | titlecase" *ngFor="let g of leadGroups">
+                  <div style="height: 10px;"></div>
+                  <div style="max-height: 250px;">
+                    <ng-container *ngFor="let leadKey of allLeadKeys" key="leadKey">
+                      <ng-container *ngIf="g.value.includes(leadKey)">
 
-                              <mat-form-field *ngIf="typeDict[leadKey].type === 'string'" appearance="outline"
-                                class="mat-full-width">
-                                <mat-label>{{typeDict[leadKey].label}}</mat-label>
-                                <input matInput type="text" [(ngModel)]="selectedLead[leadKey]"
-                                  [disabled]="isDisabled(leadKey)" />
-                              </mat-form-field>
+                        <mat-form-field appearance="outline" *ngIf="typeDict[leadKey].type === 'date'"
+                          class="mat-full-width">
+                          <mat-label>Choose a date</mat-label>
+                          <input matInput [matDatepicker]="picker">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
 
-                              <mat-form-field *ngIf="typeDict[leadKey].type === 'number'" appearance="outline"
-                                class="mat-full-width">
-                                <mat-label>{{typeDict[leadKey].label}}</mat-label>
-                                <input matInput type="number" [(ngModel)]="selectedLead[leadKey]"
-                                  [disabled]="isDisabled(leadKey)" />
-                              </mat-form-field>
+                        <mat-form-field *ngIf="typeDict[leadKey].type === 'string'" appearance="outline"
+                          class="mat-full-width">
+                          <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                          <input matInput type="text" [(ngModel)]="selectedLead[leadKey]"
+                            [disabled]="isDisabled(leadKey)" />
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="typeDict[leadKey].type === 'number'" appearance="outline"
+                          class="mat-full-width">
+                          <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                          <input matInput type="number" [(ngModel)]="selectedLead[leadKey]"
+                            [disabled]="isDisabled(leadKey)" />
+                        </mat-form-field>
 
 
-                              <mat-form-field *ngIf="typeDict[leadKey].type === 'tel'" appearance="outline"
-                                class="mat-full-width">
-                                <mat-label>{{typeDict[leadKey].label}}</mat-label>
-                                <input matInput type="tel" type="tel" [(ngModel)]="selectedLead[leadKey]"
-                                  [disabled]="isDisabled(leadKey)" />
-                              </mat-form-field>
+                        <mat-form-field *ngIf="typeDict[leadKey].type === 'tel'" appearance="outline"
+                          class="mat-full-width">
+                          <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                          <input matInput type="tel" type="tel" [(ngModel)]="selectedLead[leadKey]"
+                            [disabled]="isDisabled(leadKey)" />
+                        </mat-form-field>
 
-                              <mat-form-field *ngIf="typeDict[leadKey].type === 'select'" appearance="outline"
-                                class="mat-full-width">
-                                <mat-label>{{typeDict[leadKey].label}}</mat-label>
-                                <mat-select [(ngModel)]="selectedLead[leadKey]">
-                                  <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">
-                                    {{option}}
-                                  </mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                            </ng-container>
-                          </ng-container>
-                        </div>
+                        <mat-form-field *ngIf="typeDict[leadKey].type === 'select'" appearance="outline"
+                          class="mat-full-width">
+                          <mat-label>{{typeDict[leadKey].label}}</mat-label>
+                          <mat-select [(ngModel)]="selectedLead[leadKey]">
+                            <mat-option *ngFor="let option of typeDict[leadKey].options" [value]="option">
+                              {{option}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </ng-container>
+                    </ng-container>
+                  </div>
 
-                      </mat-tab>
-                    </mat-tab-group>
-                  </mat-expansion-panel>
-                </mat-accordion>
-                <mat-card>
-                  <ng-container *ngFor="let key of contactGroup?.value">
-                    <div *ngIf="isMobile(selectedLead[key])">
-                      <button style="margin-bottom: 2px; margin-right: 4px;" mat-button color="primary" mat-flat-button
-                        (click)="onPhoneClick(selectedLead[key])">
-                        <ion-icon name="call"></ion-icon>
-                        <i class="icon ion-ios-telephone"></i> &nbsp;
-                        {{selectedLead[key]}}
-                      </button>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-card>
+            <ng-container *ngFor="let key of contactGroup?.value">
+              <div *ngIf="isMobile(selectedLead[key])">
+                <button style="margin-bottom: 2px; margin-right: 4px;" mat-button color="primary" mat-flat-button
+                  (click)="onPhoneClick(selectedLead[key])">
+                  <ion-icon name="call"></ion-icon>
+                  <i class="icon ion-ios-telephone"></i> &nbsp;
+                  {{selectedLead[key]}}
+                </button>
 
-                      <a [href]="getSafeWhatsAppUrl(selectedLead[key])" mat-raised-button mat-icon-button>
-                        <!-- src="assets/whatsapp.svg" -->
-                        <ion-icon style="font-size: 1.3rem;font-weight: 800;" name="logo-whatsapp"></ion-icon>
-                      </a>
-                    </div>
-                    <!-- <div *ngIf="isEmail(selectedLead[key])">
+                <a [href]="getSafeWhatsAppUrl(selectedLead[key])" mat-raised-button mat-icon-button>
+                  <!-- src="assets/whatsapp.svg" -->
+                  <ion-icon style="font-size: 1.3rem;font-weight: 800;" name="logo-whatsapp"></ion-icon>
+                </a>
+              </div>
+              <!-- <div *ngIf="isEmail(selectedLead[key])">
                       <button mat-raised-button><ion-icon name="mail-outline"></ion-icon> {{selectedLead[key]}} </button>
                     </div> -->
-                  </ng-container>
-                </mat-card>
-                <mat-accordion #accordion="matAccordion" multi>
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>Dispositions</mat-expansion-panel-header>
-                  <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)"
-                    [nzTreeTemplate]="nzTreeTemplate" *ngIf="callDispositions">
-                  </nz-tree>
-                </mat-expansion-panel>
+            </ng-container>
+          </mat-card>
+          <mat-accordion #accordion="matAccordion" multi>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>Dispositions</mat-expansion-panel-header>
+              <nz-tree [nzData]="callDispositions" (nzClick)="handleDispositionTreeEvent($event)"
+                [nzTreeTemplate]="nzTreeTemplate" *ngIf="callDispositions">
+              </nz-tree>
+            </mat-expansion-panel>
 
-                <mat-form-field class="mat-always-full-width mtb" appearance="outline">
-                  <mat-label>Notes</mat-label>
-                  <textarea rows="5"  matInput #message maxlength="256" placeholder="Ex. I need help with..." [(ngModel)]="selectedLead.notes"></textarea>
-                  <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
-                  <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
-                </mat-form-field>
-          
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>Upload Documents</mat-expansion-panel-header>
-                  <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link}}</a>
-                  <a [href]="link" *ngFor="let link of uploadedDocsLink" style="display: block;">{{link}}</a>
-                  <!-- <img [src]="link" *ngFor="let link of selectedLead.documentLinks" style="height: 200px; width: 200px;"> -->
-                  <div class="clearfix">
-                    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-                      <input type="file" #fileInput (change)="handleDocumentUpload($event.target.files[0])"
-                        hidden="true" accept="image/*" />
-                      <ion-fab-button (click)="selectImageSource()">
-                        <ion-icon name="add"></ion-icon>
-                      </ion-fab-button>
-                    </ion-fab>
-                  </div>
+            <mat-form-field class="mat-always-full-width mtb" appearance="outline">
+              <mat-label>Notes</mat-label>
+              <textarea rows="5" matInput #message maxlength="256" placeholder="Ex. I need help with..."
+                [(ngModel)]="selectedLead.notes"></textarea>
+              <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
+              <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+            </mat-form-field>
 
-                </mat-expansion-panel>
-
-                <mat-expansion-panel *ngIf="actions.followUp">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Followup
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-
-                  <mat-form-field class="mat-full-width" appearance="fill">
-                    <mat-label>Choose an option</mat-label>
-                    <mat-select [(ngModel)]="selectedLead.nextAction">
-                      <mat-option value="followUp" *ngIf="actions.followUp">Follow Up</mat-option>
-                      <mat-option value="salesCall" *ngIf="actions.salesCall">Sales Call</mat-option>
-                      <mat-option value="appointment" *ngIf="actions.appointment">Appointment</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-
-                  <p style="font-weight: 700;">{{selectedLead.followUp | date: 'short'}}&nbsp;<i nz-icon
-                      nzType="down"></i>
-                  </p>
-                  <mat-form-field class="mat-full-width" appearance="fill">
-                    <mat-label>Follow Up</mat-label>
-                    <mat-select (selectionChange)="handleFollowUp($event)">
-                      <mat-option value="1">Now</mat-option>
-                      <mat-option value="2">After 10 minutes</mat-option>
-                      <mat-option value="3">After One Hour</mat-option>
-                      <mat-option value="4">Tomorrow</mat-option>
-                      <mat-option value="4" (click)="showFollowUpInput=true">Custom</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </mat-expansion-panel>
-
-
-                <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok"
-                  nzCancelText="cancel" (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
-
-                  <mat-form-field class="mat-full-width" appearance="outline">
-                    <input matInput type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp" (ngModelChange)="appendTimeZone()" placeholder="followUp" />
-                  </mat-form-field>
-                </nz-modal>
-
-              
-              
-                <mat-expansion-panel *ngIf="selectedLeadHistory?.length>0">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Lead History
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
-                    
-                    <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
-                      <ion-fab-button style="transform: scale(0.8);">
-                        <ion-icon [name]="historyLimit === 1 ? 'add-outline' : 'remove-outline'"></ion-icon>
-                      </ion-fab-button>
-                    </ion-fab>
-                    <nz-timeline>
-                      <nz-timeline-item nzColor="green"
-                        *ngFor="let h of selectedLeadHistory?.reverse().slice(0, historyLimit)">
-                        <p>
-                          Updated at {{h.createdAt | date:"medium"}}
-                        </p>
-                        <p *ngIf="h.duration">Call Duration: {{h.duration}}</p>
-                        <p *ngIf="h.leadStatus">
-                          Status: <button mat-icon-button color="basic">{{h.leadStatus}}</button>
-                        </p>
-                        <a (click)="openMap(h.geoLocation.coordinates)" *ngIf="h.geoLocation?.coordinates?.length > 0">Coordinates: {{h.geoLocation.coordinates[0] + ",
-                          "+
-                          h.geoLocation.coordinates[1]}}</a>
-                        <p style="width: 100%;">{{h.notes}}</p>
-                        <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">
-                          {{jsonStringify(el)}}
-                        </p>
-                      </nz-timeline-item>
-                      <nz-timeline-item>Lead Created At {{selectedLead.createdAt | date}}</nz-timeline-item>
-                    </nz-timeline>
-
-                    <button mat-flat-button color="accent" (click)="navigateToTransactions()">View All Logs</button>
-                  </div>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel *ngIf="actions.isInformationRequested">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
-                        nz-icon nzType="star" nzTheme="fill"></i>
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <app-dynamic-form-preview (formUpdate)="onCampaignFormUpdate($event)" [formModel]="formModel">
-                  </app-dynamic-form-preview>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Send Email
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-
-                  <form nz-form [formGroup]="emailForm" nzLayout="vertical">
-
-                    <mat-form-field class="mat-full-width" appearance="fill">
-                      <mat-label>Email</mat-label>
-                      <input type="email" placeholder="enter your email" matInput name="email" formControlName="overwriteEmail">
-                    </mat-form-field>
-
-                    <mat-form-field class="mat-full-width" appearance="fill">
-                      <mat-label>Select Email Template</mat-label>
-                      <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj" [ngModelOptions]="{standalone: true}">
-                        <mat-option [value]="et" *ngFor="let et of emailTemplates">{{ et.templateName }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  
-                    
-                    <mat-form-field class="mat-full-width">
-                      <mat-label>Subject</mat-label>
-                      <input matInput placeholder="Write the subject of email" formControlName="subject" />
-                    </mat-form-field>
-
-                    <mat-form-field class="mat-full-width">
-                      <mat-label>Body</mat-label>
-                      <textarea matInput placeholder="Controlled autosize" formControlName="content"></textarea>
-                    </mat-form-field>
-
-                    <mat-form-field class="mat-full-width" appearance="fill">
-                      <mat-label>Attachments</mat-label>
-                      <mat-select multiple formControlName="attachments">
-                        <mat-option [value]="attachment" *ngFor="let attachment of attachments">{{ attachment.fileName
-                          }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-
-                    <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
-                    </ng-template>
-
-                    <!-- </mat-form-field> -->
-                  </form>
-                </mat-expansion-panel>
-              </mat-accordion>
-
-
-              <div class="mat-button-group">
-                <button mat-raised-button (click)="openReassignmentDrawer()" color="warn">Reassign</button>
-                <button mat-raised-button (click)="handleLeadSubmission(selectedLead, false)"
-                  color="primary">Save</button>
-                <button mat-raised-button *ngIf="!browsableState" (click)="handleLeadSubmission(selectedLead, true);accordion.closeAll();"
-                  color="accent">Save & Next</button>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>Upload Documents</mat-expansion-panel-header>
+              <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link}}</a>
+              <a [href]="link" *ngFor="let link of uploadedDocsLink" style="display: block;">{{link}}</a>
+              <!-- <img [src]="link" *ngFor="let link of selectedLead.documentLinks" style="height: 200px; width: 200px;"> -->
+              <div class="clearfix">
+                <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+                  <input type="file" #fileInput (change)="handleDocumentUpload($event.target.files[0])" hidden="true"
+                    accept="image/*" />
+                  <ion-fab-button (click)="selectImageSource()">
+                    <ion-icon name="add"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
               </div>
 
+            </mat-expansion-panel>
 
-              <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="drawer.toggle()">
-                <ion-fab-button>
-                  <ion-icon name="filter"></ion-icon>
-                </ion-fab-button>
-              </ion-fab>
-            </div>
+            <mat-expansion-panel *ngIf="actions.followUp">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Followup
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <mat-form-field class="mat-full-width" appearance="fill">
+                <mat-label>Choose an option</mat-label>
+                <mat-select [(ngModel)]="selectedLead.nextAction">
+                  <mat-option value="followUp" *ngIf="actions.followUp">Follow Up</mat-option>
+                  <mat-option value="salesCall" *ngIf="actions.salesCall">Sales Call</mat-option>
+                  <mat-option value="appointment" *ngIf="actions.appointment">Appointment</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <p style="font-weight: 700;">{{selectedLead.followUp | date: 'short'}}&nbsp;<i nz-icon nzType="down"></i>
+              </p>
+              <mat-form-field class="mat-full-width" appearance="fill">
+                <mat-label>Follow Up</mat-label>
+                <mat-select (selectionChange)="handleFollowUp($event)">
+                  <mat-option value="1">Now</mat-option>
+                  <mat-option value="2">After 10 minutes</mat-option>
+                  <mat-option value="3">After One Hour</mat-option>
+                  <mat-option value="4">Tomorrow</mat-option>
+                  <mat-option value="4" (click)="showFollowUpInput=true">Custom</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-expansion-panel>
+
+
+            <nz-modal [(nzVisible)]="showFollowUpInput" nzTitle="Custom FollowUp" nzOkText="Ok" nzCancelText="cancel"
+              (nzOnOk)="showFollowUpInput = false" (nzOnCancel)="showFollowUpInput = false">
+
+              <mat-form-field class="mat-full-width" appearance="outline">
+                <input matInput type="datetime-local" id="followUp" [(ngModel)]="selectedLead.followUp"
+                  (ngModelChange)="appendTimeZone()" placeholder="followUp" />
+              </mat-form-field>
+            </nz-modal>
+
+
+
+            <mat-expansion-panel *ngIf="selectedLeadHistory?.length>0">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Lead History
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
+
+                <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
+                  <ion-fab-button style="transform: scale(0.8);">
+                    <ion-icon [name]="historyLimit === 1 ? 'add-outline' : 'remove-outline'"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
+                <nz-timeline>
+                  <nz-timeline-item nzColor="green"
+                    *ngFor="let h of selectedLeadHistory?.reverse().slice(0, historyLimit)">
+                    <p>
+                      Updated at {{h.createdAt | date:"medium"}}
+                    </p>
+                    <p *ngIf="h.duration">Call Duration: {{h.duration}}</p>
+                    <p *ngIf="h.leadStatus">
+                      Status: <button mat-icon-button color="basic">{{h.leadStatus}}</button>
+                    </p>
+                    <a (click)="openMap(h.geoLocation.coordinates)"
+                      *ngIf="h.geoLocation?.coordinates?.length > 0">Coordinates: {{h.geoLocation.coordinates[0] + ",
+                      "+
+                      h.geoLocation.coordinates[1]}}</a>
+                    <p style="width: 100%;">{{h.notes}}</p>
+                    <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">
+                      {{jsonStringify(el)}}
+                    </p>
+                  </nz-timeline-item>
+                  <nz-timeline-item>Lead Created At {{selectedLead.createdAt | date}}</nz-timeline-item>
+                </nz-timeline>
+
+                <button mat-flat-button color="accent" (click)="navigateToTransactions()">View All Logs</button>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel *ngIf="actions.isInformationRequested">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Requested Information &nbsp;<i *ngIf="actions.isInformationRequested" style="color: chocolate;"
+                    nz-icon nzType="star" nzTheme="fill"></i>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-dynamic-form-preview (formUpdate)="onCampaignFormUpdate($event)" [formModel]="formModel">
+              </app-dynamic-form-preview>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Send Email
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <form nz-form [formGroup]="emailForm" nzLayout="vertical">
+
+                <mat-form-field class="mat-full-width" appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input type="email" placeholder="enter your email" matInput name="email"
+                    formControlName="overwriteEmail">
+                </mat-form-field>
+
+                <mat-form-field class="mat-full-width" appearance="fill">
+                  <mat-label>Select Email Template</mat-label>
+                  <mat-select (ngModelChange)="populateEmailModal($event)" [(ngModel)]="tempObj"
+                    [ngModelOptions]="{standalone: true}">
+                    <mat-option [value]="et" *ngFor="let et of emailTemplates">{{ et.templateName }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="mat-full-width">
+                  <mat-label>Subject</mat-label>
+                  <input matInput placeholder="Write the subject of email" formControlName="subject" />
+                </mat-form-field>
+
+                <mat-form-field class="mat-full-width">
+                  <mat-label>Body</mat-label>
+                  <textarea matInput placeholder="Controlled autosize" formControlName="content"></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="mat-full-width" appearance="fill">
+                  <mat-label>Attachments</mat-label>
+                  <mat-select multiple formControlName="attachments">
+                    <mat-option [value]="attachment" *ngFor="let attachment of attachments">{{ attachment.fileName
+                      }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+
+                <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected
+                </ng-template>
+
+                <!-- </mat-form-field> -->
+              </form>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+
+          <div class="mat-button-group">
+            <button mat-raised-button (click)="openReassignmentDrawer()" color="warn">Reassign</button>
+            <button mat-raised-button (click)="handleLeadSubmission(selectedLead, false)" color="primary">Save</button>
+            <button mat-raised-button *ngIf="!browsableState"
+              (click)="handleLeadSubmission(selectedLead, true);accordion.closeAll();" color="accent">Save &
+              Next</button>
           </div>
+
+
+          <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="drawer.toggle()">
+            <ion-fab-button>
+              <ion-icon name="filter"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+
         </mat-card-content>
       </mat-card>
     </div>

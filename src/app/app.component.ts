@@ -47,11 +47,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     this.authService.currentUser.subscribe((cu: CurrentUser)=>{
-      if(!cu) {
-        return;
-      }
       this.currentUser = cu;
-      this.organizationName = cu.organization;
+      this.organizationName = cu?.organization;
     });
   }
 

@@ -40,11 +40,17 @@
 
   // lead solo card header
   .lsc_header {
-    height: 30px; display: flex; align-items: flex-end; margin-bottom: 10px;
+    margin-bottom: 10px;
+    display: flex;
     .fullname {
-      display: inline-block; flex: 1; font-weight: bolder; font-size: 1.3rem; margin-left: -30px;
+      font-weight: bolder; font-size: 1.1rem; margin-left: -30px; display: flex; flex: 1;
     }
 
+    .name {
+      flex: 1;
+      margin-top: 7px;
+      margin-left: 5px;
+    }
     .chip {
       display: inline-block;
     }

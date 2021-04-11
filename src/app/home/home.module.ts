@@ -43,7 +43,7 @@ import { ReassignmentDrawerSheetComponent } from "./lead-solo/reassignment-drawe
     IonicModule,
     HomePageRoutingModule,
     ModantdModule,
-    DemoMaterialModule
+    DemoMaterialModule,
   ],
   declarations: [
     ReassignmentDrawerSheetComponent,
