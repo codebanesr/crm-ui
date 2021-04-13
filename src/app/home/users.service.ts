@@ -93,4 +93,9 @@ export class UsersService {
     }
     return this.http.get(`${environment.apiUrl}/user/managers`, {params});
   }
+
+
+  getUserProfile() {
+    return this.http.get(`${environment.apiUrl}/user/profile`);
+  }
 }

@@ -1,4 +1,4 @@
-<ion-content fullscreen>
+<mat-card-content class="card-container">
   <button mat-flat-button (click)="drawer.toggle()">Open transaction filter</button>
   <button mat-button color="primary" (click)="downloadGraph()">Download</button>
 
@@ -65,4 +65,4 @@
     <app-stack-bar [data]="stackBarData" [XAxisLabel]="XAxisLabel" [YAxisLabel]="YAxisLabel" *ngIf="stackBarData?.length > 0"></app-stack-bar>
     <app-pie [data]="pieData" *ngIf="pieData?.length>0"></app-pie>
   </div>
-</ion-content>
+</mat-card-content>

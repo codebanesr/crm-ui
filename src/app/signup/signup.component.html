@@ -1,4 +1,4 @@
-<ion-content>
+<mat-card-content class="card-container">
   <mat-spinner *ngIf="loading"></mat-spinner>
   <form [formGroup]="signupForm" (ngSubmit)="submitForm()" style="height: 90vh; overflow-y: scroll; margin: 6px; padding: 6px;">
     <mat-form-field class="mat-full-width" appearance="outline">
@@ -68,6 +68,5 @@
       Register
     </button>
   </form>
-
-</ion-content>
+</mat-card-content>
   

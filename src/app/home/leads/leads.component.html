@@ -1,5 +1,5 @@
-<ion-content>
-  <ion-searchbar 
+<mat-card-content class="card-container">
+    <ion-searchbar 
     placeholder="Name, email, address, company ..." (change)="handleSearchTerm()" showCancelButton="focus"
     [(ngModel)]="leadOptions.searchTerm"
   ></ion-searchbar>
@@ -104,4 +104,4 @@
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
-</ion-content>
+</mat-card-content>

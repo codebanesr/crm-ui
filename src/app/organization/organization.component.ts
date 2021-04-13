@@ -87,14 +87,22 @@ export class OrganizationComponent implements OnInit {
       });
   };
 
+
+  today = new Date();
+  day = this.today.getDay()
+  month = this.today.getMonth();
+  year = this.today.getFullYear();
+
+
   organizationNameValidator = this.attributeValidator('name');
-
-
   organizationImage = new FormControl('/assets/icon/noimage.jpg');
   email = new FormControl(null, [Validators.required, Validators.email]);
   password= new FormControl([null], [Validators.required]);
   checkPassword= new FormControl([null], [Validators.required, this.confirmationValidator]);
   fullName= new FormControl([null], [Validators.required]);
+  startDate = new FormControl(new Date(this.year, this.month, this.day), [Validators.required]);
+  endDate = new FormControl(new Date(this.year, this.month, this.day+28), [Validators.required]);
+  size = new FormControl(3, [Validators.required])
   name= new FormControl([''],
     [
       Validators.required,
@@ -116,7 +124,10 @@ export class OrganizationComponent implements OnInit {
       phoneNumber: this.phoneNumber,
       // otp: this.otp,
       agree: this.agree,
-      organizationImage: this.organizationImage
+      organizationImage: this.organizationImage,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      size: this.size
     });
     this.initUsersList();
   }

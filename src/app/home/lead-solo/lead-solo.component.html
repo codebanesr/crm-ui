@@ -1,4 +1,4 @@
-<ion-content fullscreen>
+<mat-card-content class="card-container">
   <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
@@ -403,4 +403,4 @@
       </span>
     </ng-template>
   </mat-drawer-container>
-</ion-content>
+</mat-card-content>

@@ -35,7 +35,7 @@ export class SignupComponent implements OnInit {
         .subscribe(
           (data: any) => {
             this._snackBar.open("Profile updated for ", this.signupForm.get('fullName').value, {duration: 2000, politeness: 'assertive'});
-            this.router.navigate(['home', 'users']);
+            this.router.navigate(['home']);
           },
           (error) => {
             this._snackBar.open("Failed to update user", error);
@@ -48,7 +48,7 @@ export class SignupComponent implements OnInit {
           this.router.navigate(["home"]);
         },
         (e: any) => {
-          this._snackBar.open(e.error.message[0]);
+          this._snackBar.open(e.error.message);
         }
       );
     }

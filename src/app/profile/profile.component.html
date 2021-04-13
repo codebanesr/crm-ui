@@ -7,24 +7,16 @@
     <form [formGroup]="profileForm" (submit)="handleProfileSubmit()">
       <mat-form-field appearance="outline" class="mat-full-width">
         <mat-label>First Name</mat-label>
-        <input matInput placeholder="Placeholder" formControlName="firstName"/>
-        <mat-error *ngIf="firstName.hasError('minlength') && !firstName.hasError('required')">
+        <input matInput placeholder="Placeholder" formControlName="fullName"/>
+        <mat-error *ngIf="fullName.hasError('minlength') && !fullName.hasError('required')">
           First Name must be atleast three characters long
         </mat-error>
       </mat-form-field>
       
       <mat-form-field appearance="outline" class="mat-full-width">
-        <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Placeholder" formControlName="lastName"/>
-        <mat-error *ngIf="lastName.hasError('minlength') && !lastName.hasError('required')">
-          Last Name must be atleast three characters long
-        </mat-error>
-      </mat-form-field>
-      
-      <mat-form-field appearance="outline" class="mat-full-width">
         <mat-label>Mobile Number</mat-label>
-        <input matInput placeholder="Placeholder" formControlName="mobileNumber" type="number"/>
-        <mat-error *ngIf="mobileNumber.hasError('pattern') && !mobileNumber.hasError('required')">
+        <input matInput placeholder="Placeholder" formControlName="phoneNumber" type="number"/>
+        <mat-error *ngIf="phoneNumber.hasError('pattern') && !phoneNumber.hasError('required')">
           Please enter a valid mobile number
         </mat-error>
       </mat-form-field>
@@ -36,6 +28,22 @@
           Password cannot be empty
         </mat-error>
         <mat-hint>Enter your current password to make changes</mat-hint>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>New Password</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="newPassword" type="password"/>
+        <mat-hint>Leave empty to retain current password</mat-hint>
+      </mat-form-field>
+
+
+
+      <mat-form-field appearance="outline" class="mat-full-width">
+        <mat-label>Confirm New Password</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="confirmNewPassword" type="password" [errorStateMatcher]="matcher"/>
+        <mat-hint>Leave empty to retain current password</mat-hint>
+        <mat-error *ngIf="profileForm.hasError('notSame')">Passwords do not match</mat-error>  
       </mat-form-field>
   
       <button mat-raised-button style="float: right;" color="primary">Submit</button>
