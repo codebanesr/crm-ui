@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CurrentUser } from '../home/interfaces/global.interfaces';
 import { UsersService } from '../home/users.service';
 import { UploadService } from '../upload.service';
@@ -15,7 +16,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private uploadService: UploadService,
-    private userService: UsersService
+    private userService: UsersService,
+    private router: Router
   ) {}
 
 
@@ -78,7 +80,11 @@ export class ProfileComponent implements OnInit {
   }
 
   handleProfileSubmit() {
-    console.log(this.profileForm.value);
+    this.userService.updateUserProfile(this.profileForm.value).subscribe(data=>{
+      this.router.navigate(['']);
+    }, err=>{
+      console.log(err);
+    })
   }
 }
 

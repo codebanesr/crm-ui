@@ -98,4 +98,9 @@ export class UsersService {
   getUserProfile() {
     return this.http.get(`${environment.apiUrl}/user/profile`);
   }
+
+
+  updateUserProfile(profileObj) {
+    return this.http.post(`${environment.apiUrl}/user/profile`, profileObj);
+  }
 }
