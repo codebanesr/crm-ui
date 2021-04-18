@@ -15,7 +15,7 @@ export class WebsocketService {
   }
   
   createWSConnection() {
-    this.socket = connect(environment.alertsUrl); 
+    this.socket = connect(environment.alertsUrl, {secure: environment.production ? true: false});
     const currentUser:CurrentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     this.socket.on('connect', () => {

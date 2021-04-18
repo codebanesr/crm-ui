@@ -43,7 +43,8 @@
 
         <app-lead-filter [leadFilter]="leadOptions.filters" [typeDict]="typeDict"></app-lead-filter>
       </mat-expansion-panel>
-      <mat-expansion-panel>
+      
+      <mat-expansion-panel *ngIf="callDispositions && selectedCampaign?._id!=='all'">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Disposition Filter

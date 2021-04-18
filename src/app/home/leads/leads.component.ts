@@ -92,7 +92,8 @@ export class LeadsComponent {
       hint
     );
 
-    this.selectedCampaign = this.campaignList[this.campaignList.length - 1];
+    // select default campaign and disposition filter for that lead
+    this.selectedCampaign = this.campaignList[0];
     this.getDispositionForCampaign();
     this.rerenderCols();
     this.getAllLeadColumns();
@@ -109,6 +110,8 @@ export class LeadsComponent {
       );
       this.typeDict = result.typeDict;
     }
+
+    this.getDispositionForCampaign();
   }
 
   usersCount: number;
@@ -454,6 +457,9 @@ export class LeadsComponent {
 
   callDispositions;
   getDispositionForCampaign() {
+    if(this.selectedCampaign?._id === 'all') {
+      return;
+    }
     this.campaignService.getDisposition(this.selectedCampaign._id).subscribe(
       (data: any) => {
         this.callDispositions = data.options;

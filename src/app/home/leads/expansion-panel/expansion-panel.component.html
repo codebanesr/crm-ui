@@ -16,7 +16,7 @@
         <mat-checkbox (click)="$event.stopPropagation()" *ngIf="longPressed" [(ngModel)]="lead.selected"></mat-checkbox> &nbsp;&nbsp;&ngsp;
         <span (press)="onLongPress($event)">{{lead?.firstName}} {{lead?.lastName}}</span>
         <span class="example-spacer"></span>
-        <span style="font-weight: 500; color: #673ab7;">{{lead.leadStatus | titlecase}}</span>
+        <span style="font-weight: 500; color: #673ab7;">{{lead.leadStatus | titlecase | beforeSlash }}</span>
         
         <span mat-raised-button color="primary" style="position: absolute;"
             [matBadge]="lead.transactionCount" matBadgePosition="before" matBadgeColor="accent">

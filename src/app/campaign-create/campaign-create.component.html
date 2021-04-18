@@ -68,7 +68,7 @@
                 Disposition
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="false" nzBlockNode
+            <nz-tree [nzData]="demoDispositionNodes" [nzTreeTemplate]="nzTreeTemplate" [nzDraggable]="true" nzBlockNode
               [nzExpandedIcon]="multiExpandedIconTpl" (nzClick)="nzEvent($event); nodeActions($event);"
               [nzMultiple]="false">
             </nz-tree>
@@ -304,10 +304,10 @@
     <mat-menu #menu="matMenu">
       <mat-list>
         <button mat-menu-item (click)="deleteNode()">Delete This</button>
-        <li mat-menu-item (click)="addLeafNode(true)">Add Leaf</li>
-        <li mat-menu-item (click)="addLeafNode(false)">Add Branch</li>
+        <li mat-menu-item (click)="addLeafNode(true)">Add SubDisposition</li>
+        <li mat-menu-item (click)="addParentNode(false)">Add Disposition</li>
 
-        <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
+        <mat-form-field class="mat-always-full-width" appearance="fill" (click)="$event.stopPropagation()">
           <mat-label>Actions</mat-label>
           <mat-select multiple [(ngModel)]="selectedAction" (ngModelChange)="attachAction()">
             <mat-option value="showForm">Show Form</mat-option>
@@ -318,7 +318,7 @@
         </mat-form-field>
 
 
-        <mat-form-field class="mat-full-width" appearance="fill" (click)="$event.stopPropagation()">
+        <mat-form-field class="mat-always-full-width" appearance="fill" (click)="$event.stopPropagation()">
           <mat-label>Rename Node</mat-label>
           <input matInput placeholder="rename node" nzSize="default" [(ngModel)]="renameText" />
           <button matSuffix mat-flat-button (click)="rename()"> Rename </button>
@@ -329,18 +329,15 @@
     <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="bottom" nzTitle="Recently Uploaded Files"
       (nzOnClose)="close()" nzHeight="90vh">
       <ng-container>
-        <mat-list nzItemLayout="horizontal">
-          <mat-list-item *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect">
 
-            <a matLine style="cursor: pointer;">Uploaded <span style="color: cornflowerblue;">{{upload["label"]}}</span>
-              by
-              {{upload['email']}} at {{upload['createdAt']| date:'full'}} with action type
-              {{upload['actionType']}} ->
-              {{upload['filePath']}}
-            </a>
+          <div *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect">
 
-          </mat-list-item>
-        </mat-list>
+            <div matLine style="cursor: pointer; margin-bottom: 10px;"><span style="color: cornflowerblue;">{{upload["fileType"]}}</span>
+              {{upload['filePath']}} <br>
+              <span style="color: cornflowerblue;">{{upload['email']}}</span> at <span style="color: crimson;">{{upload['createdAt']| date:'short'}}</span>
+            </div>
+
+          </div>
         <nz-divider></nz-divider>
       </ng-container>
     </nz-drawer>

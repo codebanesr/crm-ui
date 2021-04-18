@@ -514,7 +514,7 @@ export class LeadSoloComponent implements OnInit {
     }
 
     if(node.parentNode === null && node.origin.title) {
-      return [node.origin.title];
+      links.push(node.origin.title);
     }
     return links;
   }

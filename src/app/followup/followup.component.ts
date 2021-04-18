@@ -35,8 +35,6 @@ export class FollowupComponent implements OnInit {
   today = new Date();
   month = this.today.getMonth();
   year = this.today.getFullYear();
-  // startDate = new FormControl(new Date(this.year, this.month-2, 1));
-  // endDate = new FormControl(new Date(this.year, this.month, 28));
   
   startDate = new Date(this.year, this.month-2, 1);
   endDate = new Date(this.year, this.month, 28);

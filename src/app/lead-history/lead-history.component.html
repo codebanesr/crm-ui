@@ -12,10 +12,11 @@
         </mat-toolbar-row>
       </mat-toolbar>
       <div class="contents">
-        <form [formGroup]="transactionForm" (submit)="getTransactions()">
+        <form [formGroup]="transactionForm" (submit)="getTransactions(); drawer.toggle()">
           <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Campaign</mat-label>
             <mat-select formControlName="campaign" placeholder="Campaign">
+              <mat-option value=null>All Campaigns</mat-option>
               <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
                 {{option.campaignName}}
               </mat-option>

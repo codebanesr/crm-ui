@@ -14,7 +14,7 @@
 
       <div class="contents">
         <form [formGroup]="filterForm" (submit)="getGraphData({refresh: true})">
-          <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Campaign</mat-label>
             <mat-select formControlName="campaign" placeholder="Campaign">
               <mat-option *ngFor="let option of listOfCampaigns" [value]="option._id">
@@ -23,13 +23,13 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Prospect Name</mat-label>
             <input placeholder="input here" matInput formControlName="prospectName" />
           </mat-form-field>
 
 
-          <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Enter start and end date</mat-label>
             <mat-date-range-input [rangePicker]="picker">
               <input matStartDate formControlName="startDate" placeholder="Start date">
@@ -40,7 +40,7 @@
           </mat-form-field>
 
 
-          <mat-form-field appearance="outline" class="mat-full-width">
+          <mat-form-field appearance="outline" class="mat-always-full-width">
             <mat-label>Assigned To</mat-label>
             <mat-select formControlName="handler" placeholder="Assignees" [multiple]="true">
               <mat-option>

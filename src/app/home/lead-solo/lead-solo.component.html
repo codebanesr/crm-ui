@@ -40,7 +40,7 @@
               </mat-radio-group>
             </div>
           </mat-expansion-panel>
-          <button mat-raised-button color="accent" (click)="fetchNextLead()"
+          <button mat-raised-button color="accent" (click)="fetchNextLead(); drawer.close()"
             class="mat-always-full-width">Submit</button>
         </mat-accordion>
       </div>
@@ -64,7 +64,7 @@
         </ng-container>
       </div>
 
-      <nz-empty *ngIf="isEmpty(selectedLead) && !loading"></nz-empty>
+      <nz-empty *ngIf="isEmpty(selectedLead) && !loading" style="margin-top: 45%;"></nz-empty>
       <mat-card *ngIf="selectedLead">
         <mat-card-header class="lsc_header">
           <div class="fullname">
@@ -153,8 +153,7 @@
                 </button>
 
                 <a [href]="getSafeWhatsAppUrl(selectedLead[key])" mat-raised-button mat-icon-button>
-                  <!-- src="assets/whatsapp.svg" -->
-                  <ion-icon style="font-size: 1.3rem;font-weight: 800;" name="logo-whatsapp"></ion-icon>
+                  <img src="assets/icon/iconfinder_13-whatsapp_4202050.png" alt="whatsapp">
                 </a>
               </div>
               <!-- <div *ngIf="isEmail(selectedLead[key])">
@@ -174,7 +173,7 @@
               <mat-label>Notes</mat-label>
               <textarea rows="5" matInput #message maxlength="256" placeholder="Ex. I need help with..."
                 [(ngModel)]="selectedLead.notes"></textarea>
-              <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
+              <!-- <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint> -->
               <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
             </mat-form-field>
 
@@ -183,15 +182,7 @@
               <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link}}</a>
               <a [href]="link" *ngFor="let link of uploadedDocsLink" style="display: block;">{{link}}</a>
               <!-- <img [src]="link" *ngFor="let link of selectedLead.documentLinks" style="height: 200px; width: 200px;"> -->
-              <div class="clearfix">
-                <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-                  <input type="file" #fileInput (change)="handleDocumentUpload($event.target.files[0])" hidden="true"
-                    accept="image/*" />
-                  <ion-fab-button (click)="selectImageSource()">
-                    <ion-icon name="add"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>
-              </div>
+              
 
             </mat-expansion-panel>
 
@@ -347,17 +338,17 @@
               (click)="handleLeadSubmission(selectedLead, true);accordion.closeAll();" color="accent">Save &
               Next</button>
           </div>
-
-
-          <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="drawer.toggle()">
-            <ion-fab-button>
-              <ion-icon name="filter"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-
         </mat-card-content>
       </mat-card>
     </div>
+
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="drawer.toggle()">
+      <ion-fab-button>
+        <ion-icon name="filter"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
 
     <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
       (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">

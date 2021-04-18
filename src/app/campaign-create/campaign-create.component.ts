@@ -348,19 +348,19 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   addLeafNode(isLeaf: boolean) {
     this.activeContext.node.addChildren([
       {
-        title: "New Leaf",
+        title: "<Subdisposition>",
         key: this.campaignService.getUniqueKey(),
         isLeaf,
       },
     ]);
   }
 
-  addParentNode() {
+  addParentNode(isLeaf = false) {
     this.activeContext.node.addChildren([
       {
-        title: "New Parent",
+        title: "<Disposition>",
         key: this.campaignService.getUniqueKey(),
-        isLeaf: false,
+        isLeaf,
       },
     ]);
   }

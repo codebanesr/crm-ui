@@ -28,7 +28,7 @@ export class LeadHistoryComponent implements OnInit {
   ) {}
 
   transactions: IHistory[] = [];
-  pagination = { sortBy: "updatedAt", sortOrder: "ASC", page: 1, perPage: 20 };
+  pagination = { sortBy: "createdAt", sortOrder: "ASC", page: 1, perPage: 20 };
   
   histories: any[] = [];
   objectKeys = Object.keys;
@@ -59,10 +59,17 @@ export class LeadHistoryComponent implements OnInit {
     })
   }
 
+  today = new Date();
+  month = this.today.getMonth();
+  year = this.today.getFullYear();
+  
+  startDateC = new Date(this.year, this.month-2, 1);
+  endDateC = new Date(this.year, this.month, 28);
+
   transactionForm: FormGroup;
   handlerFilter = new FormControl();
-  startDate = new FormControl();
-  endDate = new FormControl();
+  startDate = new FormControl(this.startDateC);
+  endDate = new FormControl(this.endDateC);
   prospectName = new FormControl();
   handler = new FormControl([]);
   campaign = new FormControl();
