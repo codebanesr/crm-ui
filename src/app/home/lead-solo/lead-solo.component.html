@@ -350,35 +350,7 @@
     </ion-fab>
 
 
-    <nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="hideContactDrawer()"
-      (nzOnOk)="isContactDrawerVisible = false;" [nzStyle]="{ top: '200px' }" [nzFooter]="contactModalFooter">
-      <form nz-form [formGroup]="contactForm">
-        <mat-form-field class="example-full-width">
-          <mat-label nzRequired nzFor="note">Name</mat-label>
-
-          <input id="label" type="text" matInput formControlName="label" />
-
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <mat-label nzRequired nzFor="note">Email / Mobile</mat-label>
-          <input id="value" type="text" matInput formControlName="value" />
-        </mat-form-field>
-
-        <mat-label>Type of Contact</mat-label>
-        <mat-select formControlName="category">
-          <mat-option value="mobile">Mobile</mat-option>
-          <mat-option value="email">Email</mat-option>
-        </mat-select>
-
-
-        <!-- </mat-form-field> -->
-      </form>
-      <ng-template #contactModalFooter>
-        <button mat-flat-button (click)="submitContactForm(false)">Save</button>
-        <button mat-flat-button (click)="submitContactForm(true)">Add Another</button>
-      </ng-template>
-    </nz-modal>
+    
 
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <span *ngIf="!node.isLeaf">

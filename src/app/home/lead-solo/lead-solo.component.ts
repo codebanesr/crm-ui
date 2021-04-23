@@ -89,7 +89,7 @@ export class LeadSoloComponent implements OnInit {
     private loadingCtrl: LoadingController,
     private router: Router,
     private _bottomSheet: MatBottomSheet,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
   ) {}
 
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef;
@@ -123,7 +123,6 @@ export class LeadSoloComponent implements OnInit {
     /** @Todo we dont have to fetch the entire list of campaigns here, only the campaign whose id was provided in the query params
      * coming from list campaigns page .....
      */
-    this.initContactForm();
     this.initEmailForm();
   }
 
@@ -189,15 +188,6 @@ export class LeadSoloComponent implements OnInit {
       // console.log("CALL_RECORD_STATS_CAPTURED", this.selectedLead.mobilePhone, JSON.stringify(record[0]), JSON.stringify(record));
       this.callRecord = record[0];
     }
-  }
-
-  contactForm: FormGroup;
-  initContactForm() {
-    this.contactForm = this.fb.group({
-      label: [null, [Validators.required]],
-      value: [null, [Validators.required]],
-      category: ["mobile", [Validators.required]],
-    });
   }
 
   callTime: string;
@@ -531,7 +521,9 @@ export class LeadSoloComponent implements OnInit {
   showFab = false;
   followUpAction = false;
   showFollowUpInput = false;
+  prevSelectedNode: NzTreeNode;
   handleDispositionTreeEvent(event) {
+    this.prevSelectedNode = event.node;
     // ["followUp", "appointment", "salesCall"]
     if (event.node.isLeaf) {
       const links = this.getLinks(event.node);
@@ -625,11 +617,18 @@ export class LeadSoloComponent implements OnInit {
           if (!this.selectedLead) {
             this.showAppliedFiltersOnNoResult = true;
           }
+
+          this.cleanPageState();
         },
         (error) => {
           this.loading = false;
         }
       );
+  }
+
+
+  cleanPageState() {
+    this.prevSelectedNode.isSelected = false;
   }
 
   selectedLeadHistory: ILeadHistory[] = [];
@@ -759,57 +758,6 @@ export class LeadSoloComponent implements OnInit {
   }
 
   hideContactDrawer() {
-    this.isContactDrawerVisible = false;
-  }
-
-  submitContactForm(addNext: boolean) {
-    for (const i in this.contactForm.controls) {
-      this.contactForm.controls[i].markAsDirty();
-      this.contactForm.controls[i].updateValueAndValidity();
-    }
-
-    /** @Todo validate form before submitting, also add backend validation */
-
-    // in case backend sends an empty array, should not happen but is possible sometimes
-    this.selectedLead.contact = this.selectedLead.contact || [];
-    this.selectedLead.contact.push(this.contactForm.value);
-
-    this.leadsService
-      .addContact(this.selectedLead._id, this.contactForm.value)
-      .subscribe(
-        (success) => {
-          let contact: Contact = this.contacts.create();
-
-          contact.name = new ContactName(
-            null,
-            this.contactForm.get("label").value,
-            ""
-          );
-          contact.phoneNumbers = [
-            new ContactField("mobile", this.contactForm.get("value").value),
-          ];
-          contact.save().then(
-            () => {
-              // this.toast.info("saved to phone")
-            },
-            (error: any) => {
-              // this.toast.info("Error saving contact to phone")
-            }
-          );
-
-          // this.toast.success("Updated contact information");
-        },
-        (error) => {
-          this.selectedLead.contact.pop();
-          // this.toast.fail("Failed to update contact information");
-        }
-      );
-
-    /** @Todo check for form errors */
-    if (addNext) {
-      return this.contactForm.reset();
-    }
-
     this.isContactDrawerVisible = false;
   }
 
