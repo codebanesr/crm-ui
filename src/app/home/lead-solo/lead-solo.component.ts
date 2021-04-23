@@ -33,7 +33,7 @@ import {
 } from "@ionic-native/contacts/ngx";
 import * as moment from "moment";
 
-import { difference, isEmpty, isString, takeRight, update } from "lodash";
+import { difference, isEmpty, isString, cloneDeep } from "lodash";
 import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import {
@@ -270,30 +270,34 @@ export class LeadSoloComponent implements OnInit {
   async getLeadMappings() {
     // preventing duplicate keys from coming up
     this.allLeadKeys = [];
-    const { typeDict, mSchema } = await this.leadsService.getLeadMappings(
+    const obj = await this.leadsService.getLeadMappings(
       this.selectedCampaignId
     );
 
-    mSchema.paths.forEach((p) => {
+    obj.mSchema.paths.forEach((p) => {
       this.allLeadKeys.push(p.internalField);
     });
 
-    const campaignObject = this.campaignList.filter(
+    this.typeDict = obj.typeDict;
+
+
+    /** modified on Apr24 please verify if it breaks anything */
+    this.selectedCampaign = this.campaignList.filter(
       (element) => element._id === this.selectedCampaignId
-    );
+    )[0];
+    this.recreatePageState();
+  }
 
-    /** modified on Dec 17 please verify if it breaks anything */
-    this.selectedCampaign = campaignObject[0];
-
+  recreatePageState() {
     this.leadGroups = this.selectedCampaign?.groups || [];
     this.contactGroup = this.leadGroups.filter((g) => g.label === "contact")[0];
-    this.formModel = campaignObject[0]?.formModel;
+    this.formModel = cloneDeep(this.selectedCampaign?.formModel);
 
-    this.enabledKeys = campaignObject[0]?.editableCols || [];
-    this.typeDict = typeDict;
+    this.enabledKeys = this.selectedCampaign?.editableCols || [];
     this.evaluateOtherData();
-    this.populateEmailTemplateDropdown(campaignObject[0]);
+    this.populateEmailTemplateDropdown(this.selectedCampaign);
   }
+
 
   populateEmailTemplateDropdown(campaignObj: ICampaign) {
     this.campaignService.getAllEmailTemplates(campaignObj._id).subscribe(
@@ -561,6 +565,7 @@ export class LeadSoloComponent implements OnInit {
   }
 
   today = new Date().toISOString();
+  followUpSelection: any;
   handleFollowUp(event) {
     if (event.value == 1) {
       this.selectedLead.followUp = moment().toDate();
@@ -628,7 +633,9 @@ export class LeadSoloComponent implements OnInit {
 
 
   cleanPageState() {
-    this.prevSelectedNode.isSelected = false;
+    this.prevSelectedNode && (this.prevSelectedNode.isSelected = false);
+    this.followUpSelection = null;
+    this.recreatePageState()
   }
 
   selectedLeadHistory: ILeadHistory[] = [];
@@ -782,19 +789,8 @@ export class LeadSoloComponent implements OnInit {
     return regex.test(m);
   }
 
-  showOtherData = false;
   otherData = [];
   evaluateOtherData() {
-    this.showOtherData = !this.showOtherData;
-
-    /** @Todo check what this was in use for, seems useless to me  */
-    // if (!this.showOtherData) {
-    //   this.selectedCampaign.groups = this.selectedCampaign.groups.filter(
-    //     (g) => g.label !== "More"
-    //   );
-    //   return;
-    // }
-
     let alreadyIncluded: string[] = [];
     this.selectedCampaign.groups.forEach((g) => {
       alreadyIncluded = alreadyIncluded.concat(g.value);
@@ -804,6 +800,12 @@ export class LeadSoloComponent implements OnInit {
       this.objectkeys(this.typeDict),
       alreadyIncluded
     );
+
+    // preventing duplicate more tabs
+    this.selectedCampaign.groups = this.selectedCampaign.groups.filter((g)=>{
+      return g.label!=="More"
+    });
+
 
     this.selectedCampaign.groups.push({
       label: "More",
