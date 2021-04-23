@@ -2,12 +2,10 @@
 // with them, use objectKeys(typedict) instead
 
 import {
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Inject,
   OnInit,
-  TemplateRef,
   ViewChild,
 } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
@@ -42,7 +40,6 @@ import {
   ActionSheetController,
   LoadingController,
   Platform,
-  ToastController,
 } from "@ionic/angular";
 import {
   MatDialog,
@@ -92,7 +89,7 @@ export class LeadSoloComponent implements OnInit {
     private loadingCtrl: LoadingController,
     private router: Router,
     private _bottomSheet: MatBottomSheet,
-    private _snackBar: MatSnackBar,
+    private _snackBar: MatSnackBar
   ) {}
 
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef;
@@ -281,6 +278,8 @@ export class LeadSoloComponent implements OnInit {
   leadGroups: { label: string; value: string[]; _id: string }[] = [];
   allLeadKeys: string[] = [];
   async getLeadMappings() {
+    // preventing duplicate keys from coming up
+    this.allLeadKeys = [];
     const { typeDict, mSchema } = await this.leadsService.getLeadMappings(
       this.selectedCampaignId
     );
@@ -326,7 +325,17 @@ export class LeadSoloComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
-    const geoLocation = await Geolocation.getCurrentPosition();
+    let geoLocation;
+    try {
+      geoLocation = await Geolocation.getCurrentPosition();
+    }catch(e) {
+      this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
+        duration: 2000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      })
+    }
+
 
     const updateObj = {
       lead,
@@ -699,6 +708,23 @@ export class LeadSoloComponent implements OnInit {
 
   reassignToUser: string;
   openReassignmentDrawer() {
+    if(!this.selectedLead.leadStatus) {
+      this._snackBar.open("You must select a disposition before reassigning", "cancel", { duration: 1000, verticalPosition:'top' });  
+      return;
+    }
+
+    
+    if(Object.values(this.actions).some(k=>k===true) && !this.selectedLead.nextAction) {
+      this._snackBar.open("To reassign you must first mark a followup", "cancel", { duration: 1000, verticalPosition:'top' });
+      return;
+    }
+
+    const requestedFormResult = this.checkSubmissionStatus();
+    if(requestedFormResult.status === false) {
+      this._snackBar.open(requestedFormResult.message, "cancel", { duration: 1000, verticalPosition:'top' });  
+      return;
+    }
+
     const rsref = this._bottomSheet.open(ReassignmentDrawerSheetComponent, {
       data: {
         usersForReassignment: this.usersForReassignment,
@@ -706,8 +732,12 @@ export class LeadSoloComponent implements OnInit {
       },
     });
 
-    rsref.afterDismissed().subscribe((user: Pick<User, 'email' | 'fullName' | '_id'>) => {
-      this.reassignToUser = user.email;
+    rsref.afterDismissed().subscribe((result: { user: Pick<User, 'email'>, status: boolean}) => {
+      this.reassignToUser = result.user?.email;
+      if(result.status) {
+        // call save and next cause this lead has been reassigned
+        this.handleLeadSubmission(this.selectedLead, true)
+      }
     });
   }
 

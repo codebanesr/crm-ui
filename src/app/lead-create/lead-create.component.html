@@ -2,10 +2,6 @@
   <div *ngIf="typeDict" style="margin: 4px; padding:4px;">    
       <h2>
         Contact Information
-        <button mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon"
-          (click)="isContactDrawerVisible = true">
-          <mat-icon>add_ic_call</mat-icon>
-        </button>
       </h2>
       <ng-container *ngFor="let contact of selectedLead.contact">
         <ion-button color="success" size="small" *ngIf="contact.category === 'mobile'">
@@ -84,38 +80,6 @@
       {{ this.showOtherData ? "Show Less" : "Show More" }}
     </button>
 
-    <ion-button expand="block" (click)="handleLeadSubmission(selectedLead)">Submit</ion-button>
+    <button mat-button mat-raised-button class="mat-full-width" color="primary" (click)="handleLeadSubmission(selectedLead)">Submit</button>
   </div>
 </ion-content>
-
-<nz-modal [(nzVisible)]="isContactDrawerVisible" nzTitle="Add Contact" (nzOnCancel)="isContactDrawerVisible = false"
-  (nzOnOk)="isContactDrawerVisible = false" [nzStyle]="{ top: '20px' }" [nzFooter]="contactModalFooter">
-  <form nz-form [formGroup]="contactForm">
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label nzRequired nzFor="note">Label</mat-label>
-
-      <input id="label" type="text" nz-input formControlName="label" matInput />
-    </mat-form-field>
-
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Value</mat-label>
-      <input id="value" type="text" nz-input formControlName="value" matInput />
-    </mat-form-field>
-
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>category</mat-label>
-      <mat-select id="category" formControlName="category" nzPlaceHolder="Select a option and change input text above">
-        <mat-option nzValue="mobile" nzLabel="Mobile"></mat-option>
-        <mat-option nzValue="email" nzLabel="Email"></mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
-  <ng-template #contactModalFooter>
-    <button nz-button nzType="default" (click)="submitContactForm(false)">
-      Save
-    </button>
-    <button nz-button nzType="primary" (click)="submitContactForm(true)">
-      Add Another
-    </button>
-  </ng-template>
-</nz-modal>

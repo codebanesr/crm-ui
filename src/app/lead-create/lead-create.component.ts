@@ -38,7 +38,6 @@ export class LeadCreateComponent implements OnInit {
   loadingCampaignList = false;
   campaignList: Pick<ICampaign, '_id' | 'campaignName'>[] = [];
   callDispositions;
-  isContactDrawerVisible = false;
   otherData = [];
   ngOnInit(): void {
     this.initContactForm();
@@ -184,53 +183,5 @@ export class LeadCreateComponent implements OnInit {
       value: [null, [Validators.required]],
       category: [null, [Validators.required]],
     });
-  }
-
-  submitContactForm(addNext: boolean) {
-    for (const i in this.contactForm.controls) {
-      this.contactForm.controls[i].markAsDirty();
-      this.contactForm.controls[i].updateValueAndValidity();
-    }
-
-    /** @Todo validate form before submitting, also add backend validation */
-    console.log(this.contactForm.value, this.selectedLead.contact);
-
-    // in case backend sends an empty array, should not happen but is possible sometimes
-    this.selectedLead.contact = this.selectedLead.contact || [];
-    this.selectedLead.contact.push(this.contactForm.value);
-
-    // this.leadsService
-    //   .addContact(this.selectedLead._id, this.contactForm.value)
-    //   .subscribe(
-    //     (success) => {
-    //       let contact: Contact = this.contacts.create();
-
-    //       contact.name = new ContactName(
-    //         null,
-    //         this.contactForm.get("label").value,
-    //         ""
-    //       );
-    //       contact.phoneNumbers = [
-    //         new ContactField("mobile", this.contactForm.get("value").value),
-    //       ];
-    //       contact.save().then(
-    //         () => this.toast.info("saved to phone"),
-    //         (error: any) => this.toast.info("Error saving contact to phone")
-    //       );
-
-    //       this.toastService.success("Updated contact information");
-    //     },
-    //     (error) => {
-    //       this.selectedLead.contact.pop();
-    //       this.toastService.fail("Failed to update contact information");
-    //     }
-    //   );
-
-    /** @Todo check for form errors */
-    if (addNext) {
-      return this.contactForm.reset();
-    }
-
-    this.isContactDrawerVisible = false;
   }
 }

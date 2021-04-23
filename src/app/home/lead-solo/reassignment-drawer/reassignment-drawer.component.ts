@@ -36,25 +36,34 @@ export class ReassignmentDrawerSheetComponent implements OnInit {
 
   assignTo(user: User) {
     if(!this.data.isBulkReassignment) {
-      // this.leadsService.reassignLead(this.data.selectedLead.email, user.email, this.data.selectedLead).subscribe(data=>{
-        
-      //   this._snackBar.open("Successfully reassigned lead to", user.email, {
-      //     duration: 2000,
-      //   });
-    
-      //   this._bottomSheetRef.dismiss(true);
-      // }, error=>{
+      // if(!this.data.leadStatus) {
+      //   this._snackBar.open("Please select lead status before", "cancel", { duration: 200 });
       //   this._bottomSheetRef.dismiss(false);
-      // });
+      //   return;
+      // }
+      this.leadsService.reassignLead(this.data.selectedLead.email, user.email, this.data.selectedLead).subscribe(data=>{
+        
+        this._snackBar.open("Successfully reassigned lead to", user.email, {
+          duration: 2000,
+        });
+    
+        this._bottomSheetRef.dismiss({user, status: true});
+      }, error=>{
+        this._bottomSheetRef.dismiss({user: null, status: false});
+      });
 
-      this._bottomSheetRef.dismiss(user);
+      this._bottomSheetRef.dismiss({user, status: true});
     }
 
     // i am aware that else if is not required
     else if(this.data.isBulkReassignment) {
       console.log("ids received", this.data.leadIds)
       this.leadsService.reassignBulkLeads(this.data.leadIds as string[], user.email).subscribe(data=>{
-        console.log(data);
+        this._bottomSheetRef.dismiss();
+        this._snackBar.open("Successfully reassigned leads", "cancel", {
+          duration: 3000,
+          verticalPosition: "top",
+        });
       }, error => {
         console.log(error);
       })

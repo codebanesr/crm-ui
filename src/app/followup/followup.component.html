@@ -20,7 +20,8 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
   
-    <mat-accordion hideToggle>
+    <nz-empty *ngIf="listOfUpcomingLeads.length === 0"></nz-empty>
+    <mat-accordion hideToggle *ngIf="listOfUpcomingLeads.length > 0">
       <mat-expansion-panel *ngFor="let lead of listOfUpcomingLeads">
         <mat-expansion-panel-header>
           {{lead.firstName}}
