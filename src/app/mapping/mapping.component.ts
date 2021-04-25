@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ICampaign } from '../campaign/campaign.interface';
 import { CampaignService } from '../home/campaign.service';
+import { CampaignConfigEntry } from '../home/interfaces/global.interfaces';
 import { LeadsService } from '../home/leads.service';
 import { SignupComponent } from '../signup/signup.component';
 
@@ -45,11 +46,13 @@ export class MappingComponent implements OnInit {
   }
 
 
-  onRemoveConfig(config: IConfig) {
-    const result = prompt(`Enter <${config?.readableField}> to permanently delete it from campaign`);
-    if(result === config.readableField) {
-      this.campaignService.removeConfig(config._id).subscribe(result => {
-        console.log(result);
+  onRemoveConfig(deleteConfig: IConfig) {
+    const result = prompt(`Enter <${deleteConfig?.readableField}> to permanently delete it from campaign`);
+    if(result === deleteConfig.readableField) {
+      this.campaignService.removeConfig(deleteConfig._id).subscribe(result => {
+        this.configs = this.configs.filter(
+          (c) => c.internalField !== deleteConfig.internalField
+        );
       }, error=>{
         console.log(error);
       });
@@ -70,19 +73,37 @@ export class MappingComponent implements OnInit {
   configType: string;
   openDialog(): void {
     const dialogRef = this.dialog.open(AddConfigComponent, {
-      width: '250px',
-      data: {configLabel: this.configLabel, configValue: this.configValue, elementTypes: this.elementTypes, configType: this.configType}
+      width: "250px",
+      data: {
+        configLabel: this.configLabel,
+        configValue: this.configValue,
+        elementTypes: this.elementTypes,
+        configType: this.configType,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      this.configs.push({readableField: result.configLabel, internalField: result.configLabel, type: result.configType})
-      this.handleConfigChange({readableField: result.configLabel, internalField: result.configLabel, type: result.configType});
+    dialogRef.afterClosed().subscribe((result: CampaignConfigEntry) => {
+      this.configs.push({
+        readableField: result.configLabel,
+        internalField: result.configValue,
+        type: result.configType,
+      });
+
+      this.handleConfigChange({
+        readableField: result.configLabel,
+        internalField: result.configValue,
+        type: result.configType,
+        isDirty: true
+      });
     });
   }
 
   
   handleConfigChange(e) {
+    if(!e.isDirty) {
+      return;
+    }
+
     this.campaignService.updateConfigs(e, this.campaignObj.campaign._id, this.campaignObj.campaign.campaignName).subscribe(data=>{
       console.log(data);
     }, error=>{
@@ -98,12 +119,6 @@ export class MappingComponent implements OnInit {
   }
 }
 
-
-export interface DialogData {
-  configLabel: string, configValue: string, elementTypes: any[], configType: string
-}
-
-
 @Component({
   selector: 'add-config',
   templateUrl: 'add-config.component.html',
@@ -112,7 +127,7 @@ export class AddConfigComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AddConfigComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public data: CampaignConfigEntry
   ) {}
 
   onNoClick(): void {

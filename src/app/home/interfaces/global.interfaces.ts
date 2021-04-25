@@ -44,3 +44,8 @@ export interface IChildren {
   selected: boolean,
   expanded?: boolean
 }
+
+
+export interface CampaignConfigEntry {
+  configLabel: string, configValue: string, elementTypes: any[], configType: string
+}

@@ -4,7 +4,7 @@
     <div style="display: flex; margin: 2px; padding: 2px;">
       <mat-form-field style="flex: 1;" class="mat-small-width" appearance="outline">
         <mat-label>{{e.internalField}}</mat-label>
-        <input matInput [value]="e.readableField" (blur)="handleConfigChange(e)">
+        <input matInput [(ngModel)]="e.readableField" (blur)="handleConfigChange(e)" (ngModelChange)="e.isDirty=true">
       </mat-form-field>
     
       

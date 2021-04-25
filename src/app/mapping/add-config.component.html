@@ -1,5 +1,11 @@
 <div mat-dialog-content>
   <mat-form-field class="mat-full-width" appearance="outline">
+    <mat-label>Internal Field</mat-label>
+    <input matInput [(ngModel)]="data.configValue">
+  </mat-form-field>
+
+
+  <mat-form-field class="mat-full-width" appearance="outline">
     <mat-label>Name On Excel</mat-label>
     <input matInput [(ngModel)]="data.configLabel">
   </mat-form-field>

@@ -101,8 +101,7 @@ export class LeadsComponent {
 
   async onCampaignSelect() {
     this.leadOptions.campaignId = this.selectedCampaign._id;
-    this.getData();
-
+    this.leadOptions.showCols = this.selectedCampaign.browsableCols;
     // if all campaigns option is selected do not call this api
     if(this.selectedCampaign._id !== 'all') {
       const result = await this.leadsService.getLeadMappings(
@@ -110,7 +109,7 @@ export class LeadsComponent {
       );
       this.typeDict = result.typeDict;
     }
-
+    this.getData();
     this.getDispositionForCampaign();
   }
 
