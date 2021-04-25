@@ -144,7 +144,7 @@
           </mat-accordion>
           <mat-card>
             <ng-container *ngFor="let key of contactGroup?.value">
-              <div *ngIf="isMobile(selectedLead[key])">
+              <div *ngIf="typeDict[key]?.type === 'tel'"> 
                 <button style="margin-bottom: 2px; margin-right: 4px;" mat-button color="primary" mat-flat-button
                   (click)="onPhoneClick(selectedLead[key])">
                   <ion-icon name="call"></ion-icon>

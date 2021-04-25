@@ -11,7 +11,7 @@
       &nbsp;&nbsp;
       <mat-form-field style="flex: 1" class="mat-small-width" appearance="outline">
         <mat-label>Type</mat-label>
-        <mat-select [(ngModel)]="e.type" (ngModelChange)="handleConfigChange(e)">
+        <mat-select [(ngModel)]="e.type" (ngModelChange)="e.isDirty = true; handleConfigChange(e);">
           <mat-option *ngFor="let type of elementTypes" [value]="type.value">{{type.label}}</mat-option>
         </mat-select>
       </mat-form-field>
