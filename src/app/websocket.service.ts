@@ -34,6 +34,6 @@ export class WebsocketService {
 
 
   disconnect() {
-    this.socket.disconnect();
+    this.socket.close();
   }
 }

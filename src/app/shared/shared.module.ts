@@ -16,6 +16,8 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { DynamicFormPreviewComponent } from './dynamic-form-preview/dynamic-form-preview.component';
 import { LeadFilterComponent } from '../lead-filter/lead-filter.component';
 import { BeforeSlashPipe } from '../before-slash.pipe';
+import { ExtractNamePipe } from '../extract-name.pipe';
+import { ReplaceUndefinedPipe } from '../replace-undefined.pipe';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import { BeforeSlashPipe } from '../before-slash.pipe';
     DynamicFormComponent,
     DynamicFormPreviewComponent,
     LeadFilterComponent,
-    BeforeSlashPipe
+    BeforeSlashPipe,
+    ExtractNamePipe,
+    ReplaceUndefinedPipe
   ],
   imports: [
     SharedRoutingModule,
@@ -45,7 +49,9 @@ import { BeforeSlashPipe } from '../before-slash.pipe';
     DynamicFormComponent,
     DynamicFormPreviewComponent,
     LeadFilterComponent,
-    BeforeSlashPipe
+    BeforeSlashPipe,
+    ExtractNamePipe,
+    ReplaceUndefinedPipe
   ]
 })
 export class SharedModule { }

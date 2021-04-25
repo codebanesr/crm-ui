@@ -114,7 +114,7 @@
             <mat-form-field class="mat-full-width">
               <mat-label>Group Name</mat-label>
               <input type="text" matInput [(ngModel)]="inputValue" [ngModelOptions]="{standalone: true}" />
-              <button matSuffix mat-stroked-button color="primary" (click)="handleGroupAdd($event)">Add</button>
+              <button matSuffix mat-stroked-button color="primary" [disabled]="!inputValue" (click)="handleGroupAdd($event)">Add</button>
             </mat-form-field>
 
             <ng-container *ngFor="let g of groups">

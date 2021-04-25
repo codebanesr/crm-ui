@@ -49,3 +49,15 @@ export interface IChildren {
 export interface CampaignConfigEntry {
   configLabel: string, configValue: string, elementTypes: any[], configType: string
 }
+
+
+export interface IConfig {
+  checked?: boolean;
+  internalField: string;
+  name?: string;
+  organization?: string;
+  readableField: string;
+  type: string;
+  _id?: string;
+  campaignId: string
+}

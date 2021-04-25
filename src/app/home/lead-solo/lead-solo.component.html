@@ -1,4 +1,7 @@
-<mat-card-content class="card-container">
+<ion-content fullscreen>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
@@ -144,7 +147,7 @@
           </mat-accordion>
           <mat-card>
             <ng-container *ngFor="let key of contactGroup?.value">
-              <div *ngIf="typeDict[key]?.type === 'tel'"> 
+              <div *ngIf="isMobile(selectedLead[key])"> 
                 <button style="margin-bottom: 2px; margin-right: 4px;" mat-button color="primary" mat-flat-button
                   (click)="onPhoneClick(selectedLead[key])">
                   <ion-icon name="call"></ion-icon>
@@ -370,4 +373,4 @@
       </span>
     </ng-template>
   </mat-drawer-container>
-</mat-card-content>
+</ion-content>

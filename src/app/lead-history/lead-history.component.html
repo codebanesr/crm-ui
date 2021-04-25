@@ -61,7 +61,7 @@
     <div class="main contents">
       <mat-accordion>
         <mat-expansion-panel *ngFor="let t of transactions">
-          <mat-expansion-panel-header>{{t.prospectName?.split(' ')[0]}}</mat-expansion-panel-header>
+          <mat-expansion-panel-header>{{t.prospectName | replaceUndefined}}</mat-expansion-panel-header>
           <button mat-flat-button style="float: right;" (click)="showLead(t.lead, t.campaign)">Edit</button>
           <mat-list>
             <ng-container *ngFor="let k of keysToDisplay">

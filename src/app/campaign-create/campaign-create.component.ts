@@ -696,7 +696,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
 
   handleGroupAdd(event) {
     this.groups.push({
-      label: this.inputValue,
+      label: this.inputValue || `Others-${this.groups.length+1}`,
       value: [],
     });
   }
@@ -706,7 +706,7 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
   }
 
   displayParamModal() {
-    this.dialogCtrl.open(MappingComponent, {
+    const mappingRef = this.dialogCtrl.open(MappingComponent, {
       maxWidth: "100vw",
       maxHeight: "100vh",
       height: "100%",
@@ -714,6 +714,14 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
       data: {
         campaign: this.campaign,
       },
+    });
+
+
+    mappingRef.afterClosed().subscribe(res=>{
+      // update any changes made to editable and browsable columns by fetching the campaign again
+      // whenever a config is created or deleted it will reflect in browsable and editable columns
+      // in the database
+      this.getAllLeadColumns();
     });
   }
 

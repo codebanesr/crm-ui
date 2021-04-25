@@ -33,13 +33,15 @@ import { MatSortModule } from "@angular/material/sort";
 import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-material-multilevel-menu';
+import { ReplaceUndefinedPipe } from './replace-undefined.pipe';
+import { ExtractNamePipe } from './extract-name.pipe';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MainSidebarComponent,
     MainTabsComponent,
-    MainToolbarComponent,
+    MainToolbarComponent
   ],
   entryComponents: [],
   imports: [

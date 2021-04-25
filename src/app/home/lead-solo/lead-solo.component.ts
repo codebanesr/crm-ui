@@ -415,7 +415,7 @@ export class LeadSoloComponent implements OnInit {
     );
   }
 
-  getSafeWhatsAppUrl(phoneNumber: string) {
+  getSafeWhatsAppUrl(phoneNumber = "") {
     if (phoneNumber.length < 10 && !phoneNumber.startsWith("+")) {
       phoneNumber = "+91";
     }
@@ -782,6 +782,15 @@ export class LeadSoloComponent implements OnInit {
   isEmail(s) {
     return isString(s) && s.indexOf("@") > 0;
   }
+
+  doRefresh(event) {
+    this.subscribeToQueryParamChange();
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
+  }
+
 
   isMobile(m) {
     if (!m) return false;

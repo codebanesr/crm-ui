@@ -2,20 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ICampaign } from '../campaign/campaign.interface';
 import { CampaignService } from '../home/campaign.service';
-import { CampaignConfigEntry } from '../home/interfaces/global.interfaces';
+import { CampaignConfigEntry, IConfig } from '../home/interfaces/global.interfaces';
 import { LeadsService } from '../home/leads.service';
 import { SignupComponent } from '../signup/signup.component';
-
-interface IConfig {
-  checked?: boolean;
-  internalField: string;
-  name?: string;
-  organization?: string;
-  readableField: string;
-  type: string;
-  _id?: string;
-}
-
 
 @Component({
   selector: 'app-mapping',
@@ -33,7 +22,7 @@ export class MappingComponent implements OnInit {
 
 
   elementTypes = [
-    {label: "String", value: "string"},
+    {label: "Text", value: "string"},
     {label: "Date", value: "date"},
     {label: "Select", value: "select"},
     {label: "Mobile", value: "tel"},
@@ -49,7 +38,7 @@ export class MappingComponent implements OnInit {
   onRemoveConfig(deleteConfig: IConfig) {
     const result = prompt(`Enter <${deleteConfig?.readableField}> to permanently delete it from campaign`);
     if(result === deleteConfig.readableField) {
-      this.campaignService.removeConfig(deleteConfig._id).subscribe(result => {
+      this.campaignService.removeConfig(deleteConfig).subscribe(result => {
         this.configs = this.configs.filter(
           (c) => c.internalField !== deleteConfig.internalField
         );
@@ -83,12 +72,6 @@ export class MappingComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result: CampaignConfigEntry) => {
-      this.configs.push({
-        readableField: result.configLabel,
-        internalField: result.configValue,
-        type: result.configType,
-      });
-
       this.handleConfigChange({
         readableField: result.configLabel,
         internalField: result.configValue,
@@ -104,14 +87,23 @@ export class MappingComponent implements OnInit {
       return;
     }
 
-    this.campaignService.updateConfigs(e, this.campaignObj.campaign._id, this.campaignObj.campaign.campaignName).subscribe(data=>{
-      console.log(data);
-    }, error=>{
-      this.configs = this.configs.filter(c=>{
-        return c.internalField!==e.internalField;
-      })
-      console.log(error)
-    });
+    this.campaignService
+      .updateConfigs(
+        e,
+        this.campaignObj.campaign._id,
+        this.campaignObj.campaign.campaignName
+      )
+      .subscribe(
+        (data: IConfig) => {
+          this.configs.push(data);
+        },
+        (error) => {
+          this.configs = this.configs.filter((c) => {
+            return c.internalField !== e.internalField;
+          });
+          console.log(error);
+        }
+      );
   }
 
   closeModal() {

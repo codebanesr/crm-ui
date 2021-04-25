@@ -8,6 +8,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { filter } from "rxjs/operators";
 import { IGetCampaigns } from "../campaign/campaign.interface";
+import { IConfig } from "./interfaces/global.interfaces";
 
 @Injectable({
   providedIn: "root",
@@ -29,7 +30,10 @@ export class CampaignService {
       sortField: sortField,
       sortOrder: sortOrder,
     };
-    return this.http.post<IGetCampaigns>(`${environment.apiUrl}/campaign/get`, body);
+    return this.http.post<IGetCampaigns>(
+      `${environment.apiUrl}/campaign/get`,
+      body
+    );
   }
 
   getHandlerEmailHints(partialEmail: string) {
@@ -130,7 +134,7 @@ export class CampaignService {
   //     `${environment.apiUrl}/campaign/disposition/campaignName/${campaignName}`
   //   );
   // }
-  
+
   getUniqueKey() {
     let uniqueId =
       Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -157,20 +161,28 @@ export class CampaignService {
   }
 
   archiveCampaign(campaignId: string) {
-    return this.http.delete(`${environment.apiUrl}/campaign/archive/${campaignId}`);
+    return this.http.delete(
+      `${environment.apiUrl}/campaign/archive/${campaignId}`
+    );
   }
-
 
   updateConfigs(configsToUpdate, campaignId: string, campaignName: string) {
-    return this.http.patch(`${environment.apiUrl}/campaign/addConfigs/${campaignId}/${campaignName}`, configsToUpdate);
+    return this.http.patch(
+      `${environment.apiUrl}/campaign/addConfigs/${campaignId}/${campaignName}`,
+      configsToUpdate
+    );
   }
 
-
-  removeConfig(configId: string) {
-    return this.http.delete(`${environment.apiUrl}/campaign/${configId}`);
+  removeConfig(deleteConfig: IConfig) {
+    return this.http.post(
+      `${environment.apiUrl}/campaign/delete/config`,
+      deleteConfig
+    );
   }
 
   cloneCampaign(campaignId: string) {
-    return this.http.post(`${environment.apiUrl}/campaign/clone`, {campaignId});
+    return this.http.post(`${environment.apiUrl}/campaign/clone`, {
+      campaignId,
+    });
   }
 }
