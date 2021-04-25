@@ -28,10 +28,16 @@
       *ngIf="objectkeys(leadOptions.filters).length > 0"
       style="margin-bottom: 10px;"
     >Clear all Filters</button>
-    <mat-select nzMode="default" [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()"
+    <mat-select [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()"
       style="width: 200px; margin: 10px;">
       <!-- <mat-option [value]='{_id: "all"}'>All Campaign</mat-option> -->
       <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
+    </mat-select>
+
+    <mat-select [(ngModel)]="leadOptions.filters.assigned" style="width: 200px; margin: 10px;" (ngModelChange)="getLeadsAndDisposition()">
+      <mat-option *ngFor="let option of [ {label: 'All Leads', value: 'all'}, {label: 'Assigned Leads', value: 'assigned'}, {label: 'Unassigned Leads', value: 'unassigned'}]" [value]="option.value">
+        {{option.label}}
+      </mat-option>
     </mat-select>
 
 
@@ -77,12 +83,6 @@
       <mat-checkbox 
         [(ngModel)]="leadOptions.filters.showClosed"
       >Show Closed</mat-checkbox>
-    </div>
-
-    <div style="padding: 5px; margin: 10px;">
-      <mat-checkbox 
-        [(ngModel)]="leadOptions.filters.assigned"
-      >Show Assigned</mat-checkbox>
     </div>
     
     <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"

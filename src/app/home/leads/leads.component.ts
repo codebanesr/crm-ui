@@ -109,9 +109,16 @@ export class LeadsComponent {
       );
       this.typeDict = result.typeDict;
     }
+
+    this.getLeadsAndDisposition();
+  }
+
+
+  getLeadsAndDisposition() {
     this.getData();
     this.getDispositionForCampaign();
   }
+  
 
   usersCount: number;
   initRightClickActions() {
@@ -140,7 +147,7 @@ export class LeadsComponent {
     page: this.page || 1,
     perPage: this.perPage || 1,
     searchTerm: "",
-    filters: { assigned: true },
+    filters: { assigned: 'all' },
     campaignId: 'all'
   };
   isEmpty: boolean;
