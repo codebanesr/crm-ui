@@ -2,6 +2,7 @@
 // with them, use objectKeys(typedict) instead
 
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -88,6 +89,7 @@ export class LeadSoloComponent implements OnInit {
     private router: Router,
     private _bottomSheet: MatBottomSheet,
     private _snackBar: MatSnackBar,
+    private ref: ChangeDetectorRef
   ) {}
 
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef;
@@ -104,13 +106,11 @@ export class LeadSoloComponent implements OnInit {
     attributes: this.modelFields,
   };
 
-  selectedCampaignId: string;
   selectedLead: ILead;
   typeDict: any;
   objectkeys = Object.keys;
   dateMode: string = "date";
   loadingCampaignList = false;
-  campaignList: ICampaign[] = [];
   callDispositions: any;
   isVisible = false;
   jsonStringify = JSON.stringify;
@@ -125,9 +125,13 @@ export class LeadSoloComponent implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.populateCampaignDropdown("");
     this.fetchUsersForReassignment();
-    this.initCallTrap();
+    this.subscribeToQueryParamChange();
+    try {
+      this.initCallTrap();
+    }catch(e) {
+      console.log("PhoneCallTrap error", e);
+    }
   }
 
   onLeadCreate() {
@@ -140,7 +144,7 @@ export class LeadSoloComponent implements OnInit {
 
   initCallTrap() {
     if (environment.platform !== "web") {
-      PhoneCallTrap.onCall((state) => {
+      PhoneCallTrap?.onCall((state) => {
         switch (state) {
           case "RINGING":
             break;
@@ -210,9 +214,10 @@ export class LeadSoloComponent implements OnInit {
       // .pipe(takeUntil(t), takeLast(1))
       .subscribe(
         async (data) => {
-          this.selectedCampaignId = data.campaignId;
+          this.selectedCampaign = await this.campaignService.getCampaignById(data.campaignId).toPromise();
           this.browsableState = data.isBrowsed ? true : false;
           await this.getLeadMappings();
+          this.initTabDetails();
           this.getDispositionForCampaign();
 
           // if leadId is sent from leads component ts then fetch that lead, also once lead is fetched clear the query params
@@ -233,25 +238,9 @@ export class LeadSoloComponent implements OnInit {
     });
   }
 
-  /** @Todo remove this, we are not populating list of campaigns */
-  populateCampaignDropdown(filter) {
-    this.loadingCampaignList = true;
-    this.loading = true;
-    this.campaignService.getCampaigns(1, 20, filter, "", "asc").subscribe(
-      (result: any) => {
-        this.loadingCampaignList = false;
-        this.campaignList = result.data;
-        this.subscribeToQueryParamChange();
-      },
-      (error) => {
-        this.loading = false;
-        this.loadingCampaignList = false;
-      }
-    );
-  }
 
   getDispositionForCampaign() {
-    this.campaignService.getDisposition(this.selectedCampaignId).subscribe(
+    this.campaignService.getDisposition(this.selectedCampaign._id).subscribe(
       (data: any) => {
         this.callDispositions = data.options;
       },
@@ -269,7 +258,7 @@ export class LeadSoloComponent implements OnInit {
     // preventing duplicate keys from coming up
     this.allLeadKeys = [];
     const obj = await this.leadsService.getLeadMappings(
-      this.selectedCampaignId
+      this.selectedCampaign._id
     );
 
     obj.mSchema.paths.forEach((p) => {
@@ -278,19 +267,17 @@ export class LeadSoloComponent implements OnInit {
 
     this.typeDict = obj.typeDict;
 
-
-    /** modified on Apr24 please verify if it breaks anything */
-    this.selectedCampaign = this.campaignList.filter(
-      (element) => element._id === this.selectedCampaignId
-    )[0];
     this.recreatePageState();
   }
 
   recreatePageState() {
-    this.leadGroups = this.selectedCampaign?.groups || [];
-    this.contactGroup = this.leadGroups.filter((g) => g.label === "contact")[0];
     this.formModel = cloneDeep(this.selectedCampaign?.formModel);
+  }
 
+
+  initTabDetails() {
+    // this.leadGroups = this.selectedCampaign.groups || [];
+    this.contactGroup = this.leadGroups.filter((g) => g.label === "contact")[0];
     this.enabledKeys = this.selectedCampaign?.editableCols || [];
     this.evaluateOtherData();
     this.populateEmailTemplateDropdown(this.selectedCampaign);
@@ -601,7 +588,7 @@ export class LeadSoloComponent implements OnInit {
     // const t = timer(500);
     this.leadsService
       .fetchNextLead(
-        this.selectedCampaignId,
+        this.selectedCampaign._id,
         this.typeDict,
         this.leadFilter,
         this.nonKeyFilters
@@ -791,22 +778,23 @@ export class LeadSoloComponent implements OnInit {
 
 
   isMobile(m) {
+    console.log(m, "ismobile")
     if (!m) return false;
     const regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
     return regex.test(m);
   }
 
   otherData = [];
+  check = false;
   evaluateOtherData() {
-    let alreadyIncluded: string[] = [];
+    let alreadyIncluded = new Set();
     this.selectedCampaign.groups.forEach((g) => {
-      alreadyIncluded = alreadyIncluded.concat(g.value);
+      alreadyIncluded = new Set([...alreadyIncluded, ...g.value])
     });
 
-    this.otherData = difference(
-      this.objectkeys(this.typeDict),
-      alreadyIncluded
-    );
+    // two groups can have the same value key which might cause an issue, so replacing it with
+    const allValues = this.objectkeys(this.typeDict);
+    this.otherData = allValues.filter(a=>!alreadyIncluded.has(a));
 
     // preventing duplicate more tabs
     this.selectedCampaign.groups = this.selectedCampaign.groups.filter((g)=>{
@@ -819,6 +807,8 @@ export class LeadSoloComponent implements OnInit {
       value: this.otherData,
       _id: "0",
     });
+
+    this.leadGroups = this.selectedCampaign.groups;
   }
 
   uploadedDocsLink = [];

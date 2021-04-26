@@ -18,6 +18,7 @@ import { LeadFilterComponent } from '../lead-filter/lead-filter.component';
 import { BeforeSlashPipe } from '../before-slash.pipe';
 import { ExtractNamePipe } from '../extract-name.pipe';
 import { ReplaceUndefinedPipe } from '../replace-undefined.pipe';
+import { FilterUniquePipe } from '../filter-unique.pipe';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { ReplaceUndefinedPipe } from '../replace-undefined.pipe';
     LeadFilterComponent,
     BeforeSlashPipe,
     ExtractNamePipe,
-    ReplaceUndefinedPipe
+    ReplaceUndefinedPipe,
+    FilterUniquePipe
   ],
   imports: [
     SharedRoutingModule,
@@ -51,7 +53,8 @@ import { ReplaceUndefinedPipe } from '../replace-undefined.pipe';
     LeadFilterComponent,
     BeforeSlashPipe,
     ExtractNamePipe,
-    ReplaceUndefinedPipe
+    ReplaceUndefinedPipe,
+    FilterUniquePipe
   ]
 })
 export class SharedModule { }
