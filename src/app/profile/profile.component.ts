@@ -27,6 +27,16 @@ export class ProfileComponent implements OnInit {
     this.initProfileForm();
   }
 
+  ionViewWillEnter() {
+    this.userService.getUserProfile().subscribe(
+      (info) => {
+        this.profileForm.patchValue(info);
+      },
+      (error) => {
+        alert("Failed to fetch user profile");
+      }
+    );
+  }
   /** @Todo add email field when mapping has been removed  */
   fullName = new FormControl("", [
     Validators.required,
@@ -59,15 +69,6 @@ export class ProfileComponent implements OnInit {
       newPassword: this.newPassword,
       confirmNewPassword: this.confirmNewPassword,
     }, { validators: this.checkPassword });
-
-    this.userService.getUserProfile().subscribe(
-      (info) => {
-        this.profileForm.patchValue(info);
-      },
-      (error) => {
-        alert("Failed to fetch user profile");
-      }
-    );
   }
 
   showProfileActions = false;

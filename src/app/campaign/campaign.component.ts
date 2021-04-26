@@ -35,7 +35,6 @@ export class CampaignComponent implements OnInit {
     this.page = 1;
     this.perPage = 20;
     this.campaignOpts = ["default"];
-
     this.getCampaigns();
   }
 

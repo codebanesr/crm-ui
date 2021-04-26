@@ -16,7 +16,8 @@ const TOKEN_HEADER_KEY = "Authorization";
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthenticationService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   getToken() {

@@ -24,7 +24,11 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     // private toast: ToastService,
     private router: Router
-  ) {}
+  ) {
+    if(authService.currentUserValue) {
+      this.router.navigate(['home']);
+    }
+  }
 
   formType = "login";
   fieldsToShow = {

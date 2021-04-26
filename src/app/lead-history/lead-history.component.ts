@@ -35,17 +35,20 @@ export class LeadHistoryComponent implements OnInit {
   listOfCampaigns: any;
   listOfHandlers: any;
 
+  ionViewWillEnter() {
+    this.checkForQueryParams();
+  }
+
   ngOnInit() {
     this.initTransactionFilters();
-    this.getTransactions();
     this.initCampaignList();
     this.initHandlerList();
-    this.checkForQueryParams();
   }
 
 
   checkForQueryParams() {
     this.leadId.setValue(this.activatedRoute.snapshot.queryParams.leadId);
+    this.getTransactions();
   }
 
   downloadTransactions() {
