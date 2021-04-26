@@ -3,7 +3,7 @@
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
     <mat-card-title>Welcome To Molecule</mat-card-title>
-    <mat-card-subtitle>Leader Choice</mat-card-subtitle>
+    <mat-card-subtitle>Mobile CRM</mat-card-subtitle>
   </mat-card-header>
   <ng-container [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
 
@@ -50,9 +50,9 @@
       </mat-grid-tile>
     </mat-grid-list>
   </ng-container>
-  <button style="margin-top: 10px;" (click)="submitForm()" mat-raised-button color="primary">{{buttonText}}</button>
-  <button (click)="this.onFormTypeChange(nextAction)" mat-flat-button> {{nextAction}} </button>
+  <button style="margin-top: 10px;" (click)="submitForm()" mat-raised-button color="accent">{{buttonText}}</button>
+  <!-- <button (click)="this.onFormTypeChange(nextAction)" mat-flat-button> {{nextAction}} </button> -->
 </mat-card>
 <ng-template #coverTemplate>
-  <img alt="example" src="assets/icon/transparent_logo.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>
+  <img alt="example" src="assets/icon/molecule.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>
 </ng-template>

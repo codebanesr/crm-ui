@@ -23,7 +23,6 @@ export class LeadHistoryComponent implements OnInit {
     private fb: FormBuilder,
     private campaignService: CampaignService,
     private userService: UsersService,
-    private loadingCtrl: LoadingController,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -103,22 +102,17 @@ export class LeadHistoryComponent implements OnInit {
 
 
   total = 50;
+  loading = false;
   async getTransactions() {
-    const loading = await this.loadingCtrl.create({
-      spinner: 'bubbles',
-      mode: 'md',
-      message: 'Loading transactions ...'
-    });
-
-    await loading.present();
+    this.loading = true;
     this.leadService
       .getTransactions(this.pagination, this.transactionForm?.value)
       .subscribe(({response, total} : {response: IHistory[], total: number}) => {
-        loading.dismiss();
+        this.loading = false;
         this.transactions = response;
         this.total = total;
       }, error => {
-        loading.dismiss();
+        this.loading = false;
       });
   }
 

@@ -38,7 +38,6 @@ import { UploadService } from "src/app/upload.service";
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import {
   ActionSheetController,
-  LoadingController,
   Platform,
 } from "@ionic/angular";
 import {
@@ -86,7 +85,6 @@ export class LeadSoloComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private callLog: CallLog,
     private platform: Platform,
-    private loadingCtrl: LoadingController,
     private router: Router,
     private _bottomSheet: MatBottomSheet,
     private _snackBar: MatSnackBar,
@@ -827,18 +825,13 @@ export class LeadSoloComponent implements OnInit {
   docsUploaded = false;
   uploading = false;
   async handleDocumentUpload(file: File): Promise<void> {
-    const loading = await this.loadingCtrl.create({
-      message: "Uploading your document ...",
-      spinner: "bubbles",
-      mode: "md",
-    });
-    await loading.present();
+    this.loading = true;
     const { Location } = await this.uploadService.uploadFile(
       "attachments",
       file
     );
 
-    await loading.dismiss();
+    this.loading = false;
     this.uploadedDocsLink.push(Location);
   }
 
@@ -850,16 +843,10 @@ export class LeadSoloComponent implements OnInit {
       source,
     });
 
-    const loader = await this.loadingCtrl.create({
-      mode: "md",
-      spinner: "bubbles",
-      message: "Uploading your image ...",
-    });
-
-    await loader.present();
+    this.loading = true;
     this.uploadService.getFileFromUri(image.webPath).subscribe(
       async (file) => {
-        loader.dismiss();
+        this.loading = false;
         const timestamp = new Date().getTime();
         const result: any = await this.uploadService.uploadArrayBuffer(
           file,
@@ -867,7 +854,7 @@ export class LeadSoloComponent implements OnInit {
         );
         this.uploadedDocsLink.push(result.Location);
       },
-      (error) => loader.dismiss()
+      (error) => {this.loading = false}
     );
   }
 

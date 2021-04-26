@@ -1,4 +1,5 @@
 <ion-content fullscreen>
+  <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
   <mat-list role="list">
     <mat-list-item role="listitem" *ngFor="let campaign of listOfData" style="height: 120px;">
       <a mat-line style="font-weight: 550;" (click)="routeToSoloLead(campaign)" style="padding-top: 12px;">

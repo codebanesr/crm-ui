@@ -13,7 +13,7 @@ import { UsersService } from "../users.service";
 import { Setting } from "./lead.interface";
 import { Plugins } from "@capacitor/core";
 import { ICampaign } from "src/app/campaign/campaign.interface";
-import { LoadingController, ToastController } from "@ionic/angular";
+import { ToastController } from "@ionic/angular";
 import { ITypeDict } from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 const { Share } = Plugins;
@@ -35,7 +35,6 @@ export class LeadsComponent {
     private campaignService: CampaignService,
     private pubsub: PubsubService,
     public toastController: ToastController,
-    public loadingCtrl: LoadingController,
     private _snackBar: MatSnackBar,
     private userService: UsersService
   ) {}
@@ -155,15 +154,9 @@ export class LeadsComponent {
     /** @Todo please prevent big typedict from being passed, look for an alternate route */
     this.leadOptions["typeDict"] = this.typeDict;
 
-    const loader = await this.loadingCtrl.create({
-      message: 'Fetching leads',
-      spinner: 'bubbles',
-      mode: 'md'
-    });
-
-    await loader.present();
+    this.loading = true;
     this.leadsService.getLeads(this.leadOptions).subscribe((response: {data: ILead[], total: number, page: number}) => {
-        loader.dismiss();
+        this.loading = false
         if (response.data.length === 0) {
           this.isEmpty = true;
         } else {
@@ -173,14 +166,9 @@ export class LeadsComponent {
           this.leadOptions.page = response.page;
         }
       },
-      async(error) => {
-        const toast = await this.toastController.create({
-          message: "Something went wrong ...",
-          duration: 2000,
-          color: "warning",
-        });
-
-        toast.present();
+      (error) => {
+        this.loading = false;
+        this._snackBar.open('Something went wrong', 'Cancel', {verticalPosition: 'top', duration: 1000})
       }
     );
   }

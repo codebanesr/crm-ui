@@ -3,6 +3,8 @@
     placeholder="Name, email, address, company ..." (change)="handleSearchTerm()" showCancelButton="focus"
     [(ngModel)]="leadOptions.searchTerm"
   ></ion-searchbar>
+
+  <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
   <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
     <app-expansion-panel 
       [leads]="leads" 
