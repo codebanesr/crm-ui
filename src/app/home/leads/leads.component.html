@@ -30,10 +30,10 @@
       *ngIf="objectkeys(leadOptions.filters).length > 0"
       style="margin-bottom: 10px;"
     >Clear all Filters</button>
-    <mat-select [(ngModel)]="selectedCampaign" (ngModelChange)="onCampaignSelect()"
+    <mat-select [(ngModel)]="selectedCampaignId" (ngModelChange)="onCampaignSelect()"
       style="width: 200px; margin: 10px;">
       <!-- <mat-option [value]='{_id: "all"}'>All Campaign</mat-option> -->
-      <mat-option *ngFor="let campaign of campaignList" [value]="campaign">{{campaign.campaignName}}</mat-option>
+      <mat-option *ngFor="let campaign of campaignList" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
     </mat-select>
 
     <mat-select [(ngModel)]="leadOptions.filters.assigned" style="width: 200px; margin: 10px;" (ngModelChange)="getLeadsAndDisposition()">

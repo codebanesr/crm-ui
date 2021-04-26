@@ -87,18 +87,23 @@ export class LeadsComponent {
   campaignList: any[];
   selectedCampaign: ICampaign;
   async populateCampaignDropdown(hint: string) {
-    this.campaignList = await this.campaignService.populateCampaignDropdown(
-      hint
-    );
+    this.campaignList = await this.campaignService.populateCampaignDropdown({
+      select: ["_id", "campaignName"],
+    });
 
-    // select default campaign and disposition filter for that lead
-    this.selectedCampaign = this.campaignList[0];
+    // extra state management between selectedCampaignId and selectedCampaign
+    this.selectedCampaign = await this.campaignService.getCampaignById(this.campaignList[0]._id).toPromise();
+    this.selectedCampaignId = this.selectedCampaign._id;
+
     this.getDispositionForCampaign();
     this.rerenderCols();
     this.getAllLeadColumns();
   }
 
+  // this.selectedCampaign._id is bound to state changes in the html, anytime _id changes this function gets called
+  selectedCampaignId: string;
   async onCampaignSelect() {
+    this.selectedCampaign = await this.campaignService.getCampaignById(this.selectedCampaignId).toPromise();
     this.leadOptions.campaignId = this.selectedCampaign._id;
     this.leadOptions.showCols = this.selectedCampaign.browsableCols;
     // if all campaigns option is selected do not call this api

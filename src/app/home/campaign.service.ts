@@ -7,7 +7,7 @@ import {
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { filter } from "rxjs/operators";
-import { IGetCampaigns } from "../campaign/campaign.interface";
+import { ICampaign, IGetCampaigns } from "../campaign/campaign.interface";
 import { IConfig } from "./interfaces/global.interfaces";
 
 @Injectable({
@@ -142,12 +142,12 @@ export class CampaignService {
   }
 
   getCampaignById(campaignId: string, identifier = undefined) {
-    return this.http.get(
+    return this.http.get<ICampaign>(
       `${environment.apiUrl}/campaign/${campaignId}?identifier=${identifier}`
     );
   }
 
-  async populateCampaignDropdown(filter): Promise<any[]> {
+  async populateCampaignDropdown(filter?: {select: (keyof ICampaign)[]}): Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.getCampaigns(1, 20, filter, "", "asc").subscribe(
         (result: any) => {

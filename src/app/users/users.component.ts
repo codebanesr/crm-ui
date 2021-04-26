@@ -85,9 +85,7 @@ export class UsersComponent implements OnInit {
 
   campaignList: ICampaign[];
   async populateCampaignDropdown(hint: string) {
-    this.campaignList = await this.campaignService.populateCampaignDropdown(
-      hint
-    );
+    this.campaignList = await this.campaignService.populateCampaignDropdown();
     console.log(this.campaignList);
   }
 

@@ -23,7 +23,7 @@ export class FollowupComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.populateCampaignDropdown("");
+    this.populateCampaignDropdown({});
   }
 
   onLeadSelectionChange(event) {
@@ -64,7 +64,7 @@ export class FollowupComponent implements OnInit {
   }
 
   campaignList: ICampaign[];
-  async populateCampaignDropdown(hint: string) {
+  async populateCampaignDropdown(hint) {
     this.campaignList = await this.campaignService.populateCampaignDropdown(
       hint
     );
