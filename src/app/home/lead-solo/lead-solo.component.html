@@ -76,7 +76,7 @@
                 {{selectedLead.transactionCount}}</mat-chip>
             </div>
             <div class="name">
-              {{selectedLead | extractName}}
+              {{selectedLead | extractName | replaceUndefined }}
             </div>
         </div>
           <mat-chip color="accent" selected>{{selectedCampaign.campaignName}}</mat-chip>

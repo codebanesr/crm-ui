@@ -276,8 +276,7 @@ export class LeadSoloComponent implements OnInit {
 
 
   initTabDetails() {
-    // this.leadGroups = this.selectedCampaign.groups || [];
-    this.contactGroup = this.leadGroups.filter((g) => g.label === "contact")[0];
+    this.contactGroup = this.selectedCampaign.groups.filter((g) => g.label === "contact")[0];
     this.enabledKeys = this.selectedCampaign?.editableCols || [];
     this.evaluateOtherData();
     this.populateEmailTemplateDropdown(this.selectedCampaign);
