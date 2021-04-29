@@ -40,6 +40,8 @@ export class LineChartComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Lead State Summary';
   @Input() data: {month: string, leadStatus: string, total: number}[] = [];
 
+  
+  max = 100
   install() {
     this.chart = new Chart({
       container: this.lineChart.nativeElement,

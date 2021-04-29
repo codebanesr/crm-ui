@@ -26,6 +26,7 @@ export class InteractionComponent implements OnChanges, OnDestroy {
   constructor(private ngZone: NgZone) {}
 
   @Input() data: Record<string, string>[];
+  @Input() message?: string;
 
   @ViewChild("interaction", { static: true }) interaction: ElementRef;
   private chart: Chart;

@@ -307,6 +307,7 @@ export class LeadSoloComponent implements OnInit {
     try {
       geoLocation = await Geolocation.getCurrentPosition();
     }catch(e) {
+      console.log("Location has been turned off by the user");
       this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
         duration: 2000,
         horizontalPosition: 'center',
@@ -597,8 +598,14 @@ export class LeadSoloComponent implements OnInit {
         (data: any) => {
           this.loading = false;
           this.selectedLead = data.lead;
-          this.overwriteEmail.setValue(this.selectedLead.customerEmail);
+
+          if(!this.selectedLead) {
+            this._snackBar.open("No leads found", 'cancel', {duration: 3000, verticalPosition: 'top'})
+            return;
+          }
+          this.overwriteEmail.setValue(this.selectedLead?.customerEmail);
           this.selectedLead.leadStatus = null;
+          this.selectedLeadHistory = data.leadHistory;
           /** Only start autodial if its there in settings */
           this.selectedLead &&
             this.selectedCampaign.autodialSettings.active &&

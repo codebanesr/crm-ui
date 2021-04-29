@@ -6,7 +6,7 @@ import { ILead } from './home/interfaces/leads.interface';
 })
 export class ExtractNamePipe implements PipeTransform {
 
-  transform(lead: ILead, ...args: unknown[]): unknown {
+  transform(lead: ILead, ...args: unknown[]): string {
     let name = "";
     if(lead.fullName) {
       return lead.fullName;

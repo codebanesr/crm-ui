@@ -105,12 +105,12 @@ export class MainSidebarComponent implements OnChanges, OnInit {
           icon: "phonelink",
           shortName: 'campaignReports'
         },
-        {
-          label: "Track Users",
-          link: "/reports/tracker",
-          icon: "timeline",
-          shortName: 'trackUsers'
-        },
+        // {
+        //   label: "Track Users",
+        //   link: "/reports/tracker",
+        //   icon: "timeline",
+        //   shortName: 'trackUsers'
+        // },
         {
           label: "Tele Reports",
           link: "/reports/graphs",

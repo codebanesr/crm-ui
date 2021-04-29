@@ -60,9 +60,22 @@
   </mat-drawer-container>
 
   <div style="margin: 4px; padding: 8px;" class="main contents">
-    <h2 style="margin: 0 auto; margin-bottom: 25px;">Telecaller Reports</h2>    
-    <app-bar [data]="barData" *ngIf="pieData?.length>0"></app-bar>
-    <app-stack-bar [data]="stackBarData" [XAxisLabel]="XAxisLabel" [YAxisLabel]="YAxisLabel" *ngIf="stackBarData?.length > 0"></app-stack-bar>
-    <app-pie [data]="pieData" *ngIf="pieData?.length>0"></app-pie>
+    <h2 style="margin: 0 auto; margin-bottom: 25px;">Telecaller Reports</h2>
+    
+    
+    <mat-button-toggle-group name="fontStyle" [(ngModel)]="showBar">
+      <mat-button-toggle [value]="true">Bar</mat-button-toggle>
+      <mat-button-toggle [value]="false">Pie</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <app-bar [data]="barData" *ngIf="showBar && pieData?.length>0"></app-bar>
+    <app-pie [data]="pieData" [message]="'(Admin count not included)'" *ngIf="!showBar && pieData?.length>0"></app-pie>
+    <app-stack-bar 
+      [data]="stackBarData" 
+      [XAxisLabel]="XAxisLabel" 
+      [YAxisLabel]="YAxisLabel" 
+      *ngIf="stackBarData?.length>0"
+      [max]="max"
+    ></app-stack-bar>
   </div>
 </mat-card-content>

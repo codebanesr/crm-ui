@@ -32,9 +32,18 @@ export class GraphsComponent implements OnInit {
 
   userList: string[] = [];
   filterForm: FormGroup;
+
+
+  today = new Date();
+  month = this.today.getMonth();
+  year = this.today.getFullYear();
+  
+  startDt = new Date(this.year, this.month-1, 1);
+  endDt = new Date(this.year, this.month+1, 28);
+
   handlerFilter = new FormControl();
-  startDate = new FormControl();
-  endDate = new FormControl();
+  startDate = new FormControl(this.startDt);
+  endDate = new FormControl(this.endDt);
   prospectName = new FormControl();
   handler = new FormControl([]);
   campaign = new FormControl()
@@ -42,15 +51,14 @@ export class GraphsComponent implements OnInit {
   
   ngOnInit() {
     this.initFilters();
-    this.getGraphData({});
     this.initCampaignList();
     this.initHandlerList();
   }
 
-  initCampaignList() {
-    this.campaignService.getCampaigns(1, 20, {}, '', '').subscribe((result: any) =>{
-      this.listOfCampaigns = result.data;
-    })
+  async initCampaignList() {
+    this.listOfCampaigns = await this.campaignService.populateCampaignDropdown({select: ['_id', 'campaignName']});
+    this.campaign.setValue(this.listOfCampaigns[0]._id);
+    this.getGraphData({});
   }
 
 
@@ -69,7 +77,7 @@ export class GraphsComponent implements OnInit {
     })
   }
 
-
+  showBar = false;
   getGraphData(options) {
     console.log(options);
     this.graphService.getGraphData(this.filterForm.value).subscribe((data: IGraphDataRes)=>{
@@ -99,6 +107,7 @@ export class GraphsComponent implements OnInit {
   }
 
   barData = [];
+  max = 10;
 
 
   XAxisLabel = 'month';
@@ -119,12 +128,7 @@ export class GraphsComponent implements OnInit {
   ];
 
 
-  pieData = [
-    // { type: "Connected", value: 0.19 },
-    // { type: "Not Connected", value: 0.21 },
-    // { type: "Interested", value: 0.27 },
-    // { type: "Not Interested", value: 0.33 },
-  ];
+  pieData = [];
 
 
   downloadGraph() {

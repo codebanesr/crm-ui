@@ -147,7 +147,7 @@ export class CampaignService {
     );
   }
 
-  async populateCampaignDropdown(filter?: {select: (keyof ICampaign)[]}): Promise<any[]> {
+  async populateCampaignDropdown(filter?: {select: (keyof ICampaign)[]}): Promise<ICampaign[]> {
     return new Promise((resolve, reject) => {
       this.getCampaigns(1, 20, filter, "", "asc").subscribe(
         (result: any) => {

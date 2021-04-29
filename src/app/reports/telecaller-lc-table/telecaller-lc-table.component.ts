@@ -28,7 +28,7 @@ export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-
+  totalLeads = 0;
   ngOnInit() {}
 
   ngAfterViewInit() {
@@ -50,7 +50,7 @@ export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
           this.resultsLength = data.total_count;
-
+          this.totalLeads = data.totalLeadsInOrg;
           console.log(data.items);
           return data.items;
         }),

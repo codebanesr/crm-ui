@@ -19,6 +19,7 @@ import { BeforeSlashPipe } from '../before-slash.pipe';
 import { ExtractNamePipe } from '../extract-name.pipe';
 import { ReplaceUndefinedPipe } from '../replace-undefined.pipe';
 import { FilterUniquePipe } from '../filter-unique.pipe';
+import { ObjectkeysPipe } from '../objectkeys.pipe';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FilterUniquePipe } from '../filter-unique.pipe';
     BeforeSlashPipe,
     ExtractNamePipe,
     ReplaceUndefinedPipe,
-    FilterUniquePipe
+    FilterUniquePipe,
+    ObjectkeysPipe
   ],
   imports: [
     SharedRoutingModule,
@@ -54,7 +56,8 @@ import { FilterUniquePipe } from '../filter-unique.pipe';
     BeforeSlashPipe,
     ExtractNamePipe,
     ReplaceUndefinedPipe,
-    FilterUniquePipe
+    FilterUniquePipe,
+    ObjectkeysPipe
   ]
 })
 export class SharedModule { }

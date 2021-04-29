@@ -8,11 +8,11 @@ import { LocationTrackerComponent } from "./location-tracker/location-tracker.co
 import { CampaignReportContainerComponent } from "./campaign-report-container/campaign-report-container.component";
 
 const routes: Routes = [
-  {
-    path: "tracker",
-    pathMatch: 'full',
-    component: LocationTrackerComponent
-  },
+  // {
+  //   path: "tracker",
+  //   pathMatch: 'full',
+  //   component: LocationTrackerComponent
+  // },
   {
     path: 'graphs',
     pathMatch: 'full',

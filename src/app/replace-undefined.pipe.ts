@@ -6,11 +6,11 @@ import { isString } from 'lodash';
 })
 export class ReplaceUndefinedPipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
+  transform(value: string, ...args: unknown[]): unknown {
     if(isString(value)) {
+      value = value.replace('Undefined', "");
       return value.replace("undefined", "");
     }
     return value;
   }
-
 }

@@ -1,3 +1,15 @@
-
+<!-- <h1>Lead Status</h1>
 <div #lineChart></div>
 <h3 style="text-align: center;">{{title}}</h3>
+ -->
+
+
+
+ <app-stack-bar 
+          [data]="data" 
+          [XAxisLabel]="'month'" 
+          [YAxisLabel]="'total'"
+          [title]="'Leads Per Month'"
+          [max] = "max"
+          *ngIf="data"
+        ></app-stack-bar>

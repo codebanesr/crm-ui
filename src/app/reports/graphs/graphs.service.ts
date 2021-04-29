@@ -20,7 +20,7 @@ export class GraphService {
 
 
     getOpenClosedLeadCount(active: string, direction: string, pageIndex: number) {
-      return this.http.get<{items: TelecallerLcTableItem[], total_count: number}>(`${environment.apiUrl}/lead-analytic/openClosedLeadCount`);
+      return this.http.get<{items: TelecallerLcTableItem[], total_count: number, totalLeadsInOrg: number}>(`${environment.apiUrl}/lead-analytic/openClosedLeadCount`);
     }
 
     // campaignWiseLeadCount

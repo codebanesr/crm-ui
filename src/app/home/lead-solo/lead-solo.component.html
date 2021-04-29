@@ -55,7 +55,7 @@
       <div class="top">
         <ng-container *ngIf="leadFilter">
           <mat-chip-list #chipList aria-label="Fruit selection">
-            <mat-chip *ngFor="let key of objectkeys(leadFilter);" [selectable]="true" [removable]="true"
+            <mat-chip *ngFor="let key of leadFilter | objectkeys;" [selectable]="true" [removable]="true"
               (removed)="handleTagRemoval(key)">
               {{typeDict[key].label}} :
               {{typeDict[key].type === 'date' ? ((leadFilter[key][0]|date)+" to "+(leadFilter[key][1]|date)):

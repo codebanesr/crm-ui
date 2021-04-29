@@ -70,13 +70,13 @@
 <nz-collapse [nzBordered]="true" *ngIf="listOfUpcomingLeads && typeDict" class="scrollable">
   <nz-collapse-panel [nzShowArrow]="false" *ngFor="let lead of listOfUpcomingLeads" [nzHeader]="accordianheader"
     [nzActive]="lead.active">
-    <p *ngFor="let key of objectkeys(lead)">
+    <p *ngFor="let key of lead | objectkeys">
       {{typeDict[key]?.label}} : {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
     </p>
 
     <ng-template #accordianheader>
       <nz-descriptions>
-        <ng-container *ngFor="let key of objectkeys(lead); let i = index">
+        <ng-container *ngFor="let key of lead | objectkeys; let i = index">
           <nz-descriptions-item [nzTitle]="typeDict[key]?.label" *ngIf="i<6 && typeDict[key]?.label">
             {{typeDict[key]?.type === 'date' ? (lead[key] | date) : (lead[key])}}
           </nz-descriptions-item>

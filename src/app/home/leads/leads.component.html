@@ -27,7 +27,7 @@
       class="mat-always-full-width" 
       color="accent"
       (click)="leadOptions.filters = {assigned: 'all'}"
-      *ngIf="objectkeys(leadOptions.filters).length > 0"
+      *ngIf="(leadOptions.filters | objectkeys).length > 0"
       style="margin-bottom: 10px;"
     >Clear all Filters</button>
     <mat-select [(ngModel)]="selectedCampaignId" (ngModelChange)="onCampaignSelect()"

@@ -39,7 +39,7 @@ import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-materi
     LoginComponent,
     MainSidebarComponent,
     MainTabsComponent,
-  MainToolbarComponent,
+    MainToolbarComponent,
   ],
   entryComponents: [],
   imports: [

@@ -5,7 +5,7 @@
         {{startCase(r.trigger)}}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <ng-container *ngFor="let k of objectKeys(r)">
+    <ng-container *ngFor="let k of r | objectkeys">
       <p *ngIf="r[k] && !['_id', 'campaign'].includes(k)">{{startCase(k)}} : {{ (k === 'createdAt' || k === 'updatedAt') ? (r[k] | date) : r[k]}}</p>
     </ng-container>
     <mat-action-row>

@@ -62,7 +62,7 @@
     <div class="main contents">
       <div style="margin: 20px; padding: 20px;">
         <app-telecaller-lc-table></app-telecaller-lc-table>
-        <app-line-chart></app-line-chart>
+        <!-- <app-line-chart></app-line-chart> -->
         <app-bar [data]="barData" [title]="'Campaign wise lead count'" *ngIf="barData"></app-bar>
         <app-bar [data]="talktimeData" [title]="'Telecallers Talktime'" *ngIf="talktimeData?.length > 0"></app-bar>
         <app-bar [data]="averageTalktimeData" [title]="'Average Talktime'" *ngIf="averageTalktimeData?.length > 0"></app-bar>

@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DemoMaterialModule } from '../material/material.module';
 import { IonicModule } from '@ionic/angular';
 import { ListRulesComponent } from './list-rules/list-rules.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -20,7 +21,8 @@ import { ListRulesComponent } from './list-rules/list-rules.component';
     RulesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    DemoMaterialModule
+    DemoMaterialModule,
+    SharedModule
   ]
 })
 export class RulesModule { }
