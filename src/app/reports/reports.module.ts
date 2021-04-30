@@ -15,6 +15,7 @@ import { StackBarChart } from './app-stack-bar/app-stack-bar.component';
 import { TelecallerLcTableComponent } from './telecaller-lc-table/telecaller-lc-table.component';
 import { GraphService } from './graphs/graphs.service';
 import { CampaignReportContainerComponent } from './campaign-report-container/campaign-report-container.component';
+import { TelecallerTalktimeComponent } from '../telecaller-talktime/telecaller-talktime.component';
 
 
 
@@ -35,6 +36,7 @@ import { CampaignReportContainerComponent } from './campaign-report-container/ca
     InteractionComponent,
     StackBarChart,
     GraphsComponent,
+    TelecallerTalktimeComponent,
     // LineChartComponent,
     TelecallerLcTableComponent,
     CampaignReportContainerComponent

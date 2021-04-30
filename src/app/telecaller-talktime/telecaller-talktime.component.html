@@ -1,0 +1,39 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef> Total </th>
+    <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="answered">
+    <th mat-header-cell *matHeaderCellDef> Answered </th>
+    <td mat-cell *matCellDef="let element"> {{element.answered}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="unAnswered">
+    <th mat-header-cell *matHeaderCellDef> Not Answered </th>
+    <td mat-cell *matCellDef="let element"> {{element.unAnswered}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="totalTalktime">
+    <th mat-header-cell *matHeaderCellDef> Total Talktime </th>
+    <td mat-cell *matCellDef="let element"> {{element.totalTalktime}} </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="averageTalktime">
+    <th mat-header-cell *matHeaderCellDef> Average Talktime </th>
+    <td mat-cell *matCellDef="let element"> {{element.totalTalktime / element.answered}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

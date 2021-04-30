@@ -3,12 +3,14 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MenuController } from '@ionic/angular';
 import { CampaignService } from 'src/app/home/campaign.service';
 import { UsersService } from 'src/app/home/users.service';
+import { TellecallerCallDetails } from 'src/app/telecaller-talktime/telecaller-talktime.interface';
 import { GraphService } from './graphs.service';
 
 
 interface IGraphDataRes {
   pieData: { type: string; value: number; }[],
   barData: { type: string; value: number; percent: number; }[],
+  callDetails: TellecallerCallDetails[]
   stackData: {
     [x: string]: string | number;
     type: string;
@@ -78,12 +80,14 @@ export class GraphsComponent implements OnInit {
   }
 
   showBar = false;
+  telecallerCallDetails: TellecallerCallDetails[];
   getGraphData(options) {
     console.log(options);
     this.graphService.getGraphData(this.filterForm.value).subscribe((data: IGraphDataRes)=>{
       this.barData = data.barData;
       this.pieData = data.pieData;
       this.stackBarData = data.stackData;
+      this.telecallerCallDetails = data.callDetails;
     }, error=>{
       console.log(error);
     });

@@ -45,6 +45,13 @@ export class ExceptionInterceptor implements HttpInterceptor {
                         }
                         break;
                     }
+
+                    default: {
+                        this._snackBar.open(error.error.message, 'Cancel', {
+                            duration: 2000,
+                            verticalPosition: 'top'
+                        });
+                    }
                 }
                 return throwError(error);
             }));
