@@ -4,6 +4,7 @@ import { ICampaign } from 'src/app/campaign/campaign.interface';
 import { CampaignService } from 'src/app/home/campaign.service';
 import { UsersService } from 'src/app/home/users.service';
 import { GraphService } from '../graphs/graphs.service';
+import { TelecallerLcTableItem } from '../telecaller-lc-table/telecallerLc.interface';
 
 @Component({
   selector: 'app-campaign-report-container',
@@ -27,33 +28,21 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
 
   barData: any[];
   listOfCampaigns: ICampaign[] = [];
+  telecallerLCData: TelecallerLcTableItem[] = [];
 
-  talktimeData = null;
-  averageTalktimeData = null;
+  // talktimeData = null;
+  // averageTalktimeData = null;
 
   ngOnInit(){
     this.initFilterForm();
-    this.initCampaignList();
     this.initHandlerList();
+    this.initCampaignList();
   }
 
 
-  ngAfterViewInit() {
-    this.fetchAllAnalyticsData();
-  }
+  ngAfterViewInit() {}
 
   fetchAllAnalyticsData() {
-    this.graphService.getUserTalktime(this.filterForm.value).subscribe(talktimeData=>{
-      this.talktimeData = talktimeData;
-
-      this.averageTalktimeData = this.talktimeData.map(d=>{
-        return {
-          type: d.type,
-          value: d.averageValue
-        }
-      })
-    });
-
     this.graphService.campaignWiseLeadCount(this.filterForm.value).subscribe(data=>{
       this.barData = data;
     });
@@ -65,13 +54,23 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
 
       this.max = data.max;
       this.stackBarData = data.stackBarData;
-    })
+    });
+
+
+    this.graphService.getOpenClosedLeadCount(
+      this.filterForm.value
+    ).subscribe(data=>{
+      this.telecallerLCData = data.items;
+    });
   }
 
-  initCampaignList() {
-    this.campaignService.getCampaigns(1, 20, {}, '', '').subscribe((result: any) =>{
-      this.listOfCampaigns = result.data;
-    })
+  async initCampaignList() {
+    this.listOfCampaigns = await this.campaignService.populateCampaignDropdown({
+      select: ["_id", "campaignName"],
+    });
+
+    this.campaign.setValue([this.listOfCampaigns[0]._id]);
+    this.fetchAllAnalyticsData();
   }
 
   listOfHandlers: any;
@@ -102,7 +101,7 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
   handlerFilter = new FormControl();
   prospectName = new FormControl();
   handler = new FormControl([]);
-  campaign = new FormControl();
+  campaign = new FormControl([]);
   leadId = new FormControl(null);
   initFilterForm() {
     this.filterForm = this.fb.group({

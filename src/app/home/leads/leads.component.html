@@ -5,113 +5,115 @@
   ></ion-searchbar>
 
   <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
-  <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
-    <app-expansion-panel 
-      [leads]="leads" 
-      [typeDict]="typeDict" 
-      [selectedCampaign]="selectedCampaign" 
-      (onReload)="getData()"
-      [campaignList]="campaignList"
-    ></app-expansion-panel>
-    <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
-      [pageSizeOptions]="[5, 10, 25, 100]">
-    </mat-paginator>
-  </mat-accordion>
-
-  <nz-empty *ngIf="isEmpty" class="center-spinner"></nz-empty>
-
-  <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
-    (nzOnClose)="closeFilterDrawer()">
-  <button 
-      mat-flat-button 
-      class="mat-always-full-width" 
-      color="accent"
-      (click)="leadOptions.filters = {assigned: 'all'}"
-      *ngIf="(leadOptions.filters | objectkeys).length > 0"
-      style="margin-bottom: 10px;"
-    >Clear all Filters</button>
-    <mat-select [(ngModel)]="selectedCampaignId" (ngModelChange)="onCampaignSelect()"
-      style="width: 200px; margin: 10px;">
-      <!-- <mat-option [value]='{_id: "all"}'>All Campaign</mat-option> -->
-      <mat-option *ngFor="let campaign of campaignList" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
-    </mat-select>
-
-    <mat-select [(ngModel)]="leadOptions.filters.assigned" style="width: 200px; margin: 10px;" (ngModelChange)="getLeadsAndDisposition()">
-      <mat-option *ngFor="let option of [ {label: 'All Leads', value: 'all'}, {label: 'Assigned Leads', value: 'assigned'}, {label: 'Unassigned Leads', value: 'unassigned'}]" [value]="option.value">
-        {{option.label}}
-      </mat-option>
-    </mat-select>
-
-
-    <mat-accordion>
-      <mat-expansion-panel *ngIf="typeDict">
-        <mat-expansion-panel-header>
-          Lead Filter
-        </mat-expansion-panel-header>
-
-        <app-lead-filter [leadFilter]="leadOptions.filters" [typeDict]="typeDict"></app-lead-filter>
-      </mat-expansion-panel>
-      
-      <mat-expansion-panel *ngIf="callDispositions && selectedCampaign?._id!=='all'">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Disposition Filter
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <!-- <mat-chip color="accent" selected>{{leadOptions.filters["dispositionFilter"]}}</mat-chip> -->
-        <nz-tree nzMultiple [nzData]="callDispositions" (nzClick)="nodeClickEvent($event)"
-          [nzSelectedKeys]="selectedKeys" class="pull-left"></nz-tree>
-      </mat-expansion-panel>
+  <ng-container *ngIf="!loading">
+    <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
+      <app-expansion-panel 
+        [leads]="leads" 
+        [typeDict]="typeDict" 
+        [selectedCampaign]="selectedCampaign" 
+        (onReload)="getData()"
+        [campaignList]="campaignList"
+      ></app-expansion-panel>
+      <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
+        [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
     </mat-accordion>
-    <mat-form-field appearance="outline" class="mat-always-full-width">
-      <mat-label>Assigned To</mat-label>
-      <mat-select [(ngModel)]="leadOptions.filters.handlers" placeholder="Assignees" [multiple]="true">
-        <mat-option>
-          <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe"
-            noEntriesFoundLabel="'no matching assignee found'">
-          </ngx-mat-select-search>
-        </mat-option>
-        <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
-          {{option.fullName}}
+  
+    <nz-empty *ngIf="isEmpty" class="center-spinner"></nz-empty>
+  
+    <nz-drawer [nzClosable]="true" [nzVisible]="showFilterDrawer" [nzPlacement]="'right'" nzTitle="Lead Filters"
+      (nzOnClose)="closeFilterDrawer()">
+    <button 
+        mat-flat-button 
+        class="mat-always-full-width" 
+        color="accent"
+        (click)="leadOptions.filters = {assigned: 'all'}"
+        *ngIf="(leadOptions.filters | objectkeys).length > 0"
+        style="margin-bottom: 10px;"
+      >Clear all Filters</button>
+      <mat-select [(ngModel)]="selectedCampaignId" (ngModelChange)="onCampaignSelect()"
+        style="width: 200px; margin: 10px;">
+        <!-- <mat-option [value]='{_id: "all"}'>All Campaign</mat-option> -->
+        <mat-option *ngFor="let campaign of campaignList" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
+      </mat-select>
+  
+      <mat-select [(ngModel)]="leadOptions.filters.assigned" style="width: 200px; margin: 10px;" (ngModelChange)="getLeadsAndDisposition()">
+        <mat-option *ngFor="let option of [ {label: 'All Leads', value: 'all'}, {label: 'Assigned Leads', value: 'assigned'}, {label: 'Unassigned Leads', value: 'unassigned'}]" [value]="option.value">
+          {{option.label}}
         </mat-option>
       </mat-select>
-    </mat-form-field>
-    <div style="padding: 5px; margin: 10px;">
-      <mat-checkbox 
-        [(ngModel)]="leadOptions.filters.showArchived"
-      >Show archived</mat-checkbox>
-    </div>
-    <div style="padding: 5px; margin: 10px;">
-      <mat-checkbox 
-        [(ngModel)]="leadOptions.filters.showClosed"
-      >Show Closed</mat-checkbox>
-    </div>
-    
-    <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"
-      style="margin-top: 4px;">Submit</button>
-  </nz-drawer>
-
-
-
-  <ng-template #empty>
-    <nz-empty></nz-empty>
-  </ng-template>
-
-
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="position: absolute; bottom: 70px;">
-    <ion-fab-button>
-      <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="handleCreateLead()">
-        <ion-icon name="add-outline"></ion-icon>
+  
+  
+      <mat-accordion>
+        <mat-expansion-panel *ngIf="typeDict">
+          <mat-expansion-panel-header>
+            Lead Filter
+          </mat-expansion-panel-header>
+  
+          <app-lead-filter [leadFilter]="leadOptions.filters" [typeDict]="typeDict"></app-lead-filter>
+        </mat-expansion-panel>
+        
+        <mat-expansion-panel *ngIf="callDispositions && selectedCampaign?._id!=='all'">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Disposition Filter
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <!-- <mat-chip color="accent" selected>{{leadOptions.filters["dispositionFilter"]}}</mat-chip> -->
+          <nz-tree nzMultiple [nzData]="callDispositions" (nzClick)="nodeClickEvent($event)"
+            [nzSelectedKeys]="selectedKeys" class="pull-left"></nz-tree>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-form-field appearance="outline" class="mat-always-full-width">
+        <mat-label>Assigned To</mat-label>
+        <mat-select [(ngModel)]="leadOptions.filters.handlers" placeholder="Assignees" [multiple]="true">
+          <mat-option>
+            <ngx-mat-select-search [formControl]="handlerFilter" placeholderLabel="Jon Doe"
+              noEntriesFoundLabel="'no matching assignee found'">
+            </ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let option of listOfHandlers" [value]="option.email">
+            {{option.fullName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div style="padding: 5px; margin: 10px;">
+        <mat-checkbox 
+          [(ngModel)]="leadOptions.filters.showArchived"
+        >Show archived</mat-checkbox>
+      </div>
+      <div style="padding: 5px; margin: 10px;">
+        <mat-checkbox 
+          [(ngModel)]="leadOptions.filters.showClosed"
+        >Show Closed</mat-checkbox>
+      </div>
+      
+      <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"
+        style="margin-top: 4px;">Submit</button>
+    </nz-drawer>
+  
+  
+  
+    <ng-template #empty>
+      <nz-empty></nz-empty>
+    </ng-template>
+  
+  
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" class="bottomright">
+      <ion-fab-button>
+        <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
       </ion-fab-button>
-      <!-- <ion-fab-button >
-        <ion-icon name="alarm-outline" disabled></ion-icon>
-      </ion-fab-button> -->
-      <ion-fab-button  (click)="showFilterDrawer = true">
-        <ion-icon name="filter"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
+      <ion-fab-list side="top">
+        <ion-fab-button (click)="handleCreateLead()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+        <!-- <ion-fab-button >
+          <ion-icon name="alarm-outline" disabled></ion-icon>
+        </ion-fab-button> -->
+        <ion-fab-button  (click)="showFilterDrawer = true">
+          <ion-icon name="filter"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+  </ng-container>
 </mat-card-content>

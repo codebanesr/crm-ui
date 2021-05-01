@@ -1,4 +1,5 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from "@angular/core";
+import { Component, ViewChild, AfterViewInit, OnInit, Input, OnChanges } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
@@ -12,7 +13,7 @@ import { TelecallerLcTableItem } from "./telecallerLc.interface";
   templateUrl: "./telecaller-lc-table.component.html",
   styleUrls: ["./telecaller-lc-table.component.css"],
 })
-export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
+export class TelecallerLcTableComponent implements OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<TelecallerLcTableItem>;
@@ -23,46 +24,12 @@ export class TelecallerLcTableComponent implements AfterViewInit, OnInit {
   displayedColumns = ["email", "totalOpen", "totalClosed"];
 
   // leadclosed
-  data: TelecallerLcTableComponent[] = [];
+  @Input() data: TelecallerLcTableItem[] = [];
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
   totalLeads = 0;
-  ngOnInit() {}
 
-  ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          return this.graphService.getOpenClosedLeadCount(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-          );
-        }),
-        map((data) => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.isRateLimitReached = false;
-          this.resultsLength = data.total_count;
-          this.totalLeads = data.totalLeadsInOrg;
-          console.log(data.items);
-          return data.items;
-        }),
-        catchError(() => {
-          console.log("Error occured");
-          this.isLoadingResults = false;
-          this.isRateLimitReached = true;
-          return observableOf([]);
-        })
-      )
-      .subscribe((data: any) => {
-        this.data = data;
-      });
-  }
+  ngOnChanges() {}
 }

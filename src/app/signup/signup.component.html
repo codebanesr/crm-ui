@@ -1,72 +1,74 @@
 <mat-card-content class="card-container">
-  <mat-spinner *ngIf="loading"></mat-spinner>
-  <form [formGroup]="signupForm" (ngSubmit)="submitForm()" style="height: 90vh; overflow-y: scroll; margin: 6px; padding: 6px;">
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Full Name</mat-label>
-      <input matInput formControlName="fullName" />
-    </mat-form-field>
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" />
-    </mat-form-field>
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password" />
-    </mat-form-field>
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Confirm Password</mat-label>
-      <input matInput type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()"
-        type="password" />
-      <mat-error *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
-        Two passwords that you enter is inconsistent!
-      </mat-error>
-    </mat-form-field>
-    
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Internal Roles</mat-label>
-      <mat-select formControlName="roleType">
-        <mat-option value="admin">Admin</mat-option>
-        <mat-option value="frontline">Frontline</mat-option>
-        <mat-option value="manager">Manager</mat-option>
-        <mat-option value="seniorManager">Senior Manager</mat-option>
-      </mat-select>
-    </mat-form-field>
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Reports To</mat-label>
-      <mat-select formControlName="reportsTo">
-        <mat-option *ngFor="let user of listOfSuperiors" [value]="user.email">{{user.fullName}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  
-  
-<!--   
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Ext. Roles</mat-label>
-      <mat-select formControlName="roles" multiple="true">
-        <mat-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</mat-option>
-      </mat-select>
-    </mat-form-field> -->
-<!--   
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Manages</mat-label>
-      <mat-select formControlName="manages" multiple="true">
-        <mat-option *ngFor="let user of listOfOption" [value]="user._id">{{user.fullName}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-   -->
-  
-    <mat-form-field class="mat-full-width" appearance="outline">
-      <mat-label>Mobile Number</mat-label>
-      <input matInput formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel" />
-    </mat-form-field>
-  
-    <button mat-raised-button color="primary">
-      Register
-    </button>
-  </form>
+  <mat-spinner *ngIf="loading" class="center-spinner"></mat-spinner>
+  <ng-container *ngIf="!loading">
+    <form [formGroup]="signupForm" (ngSubmit)="submitForm()"
+      style="height: 90vh; overflow-y: scroll; margin: 6px; padding: 6px;">
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" />
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" />
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" (ngModelChange)="updateConfirmValidator()" type="password" />
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="checkPassword" (ngModelChange)="updateConfirmValidator()"
+          type="password" />
+        <mat-error *ngIf="signupForm.controls.checkPassword.hasError('confirm')">
+          Two passwords that you enter is inconsistent!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Internal Roles</mat-label>
+        <mat-select formControlName="roleType">
+          <mat-option value="admin">Admin</mat-option>
+          <mat-option value="frontline">Frontline</mat-option>
+          <mat-option value="manager">Manager</mat-option>
+          <mat-option value="seniorManager">Senior Manager</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Reports To</mat-label>
+        <mat-select formControlName="reportsTo">
+          <mat-option *ngFor="let user of listOfSuperiors" [value]="user.email">{{user.fullName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <!--   
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Ext. Roles</mat-label>
+        <mat-select formControlName="roles" multiple="true">
+          <mat-option *ngFor="let role of rolesOptions" [value]="role.value">{{role.label}}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      <!--   
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Manages</mat-label>
+        <mat-select formControlName="manages" multiple="true">
+          <mat-option *ngFor="let user of listOfOption" [value]="user._id">{{user.fullName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+     -->
+
+      <mat-form-field class="mat-full-width" appearance="outline">
+        <mat-label>Mobile Number</mat-label>
+        <input matInput formControlName="phoneNumber" (ngModelChange)="updateConfirmValidator()" type="tel" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary">
+        Register
+      </button>
+    </form>
+  </ng-container>
 </mat-card-content>
-  

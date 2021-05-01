@@ -46,7 +46,7 @@ export class BarChartComponent implements OnChanges {
     this.chart = new Chart({
       container: this.g2MinBar.nativeElement,
       autoFit: true,
-      height: 500,
+      height: 350,
       padding: [50, 20, 50, 20],
     });
 

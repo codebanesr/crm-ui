@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { TelecallerLcTableItem } from "src/app/reports/telecaller-lc-table/telecallerLc.interface";
@@ -19,8 +19,12 @@ export class GraphService {
     }
 
 
-    getOpenClosedLeadCount(active: string, direction: string, pageIndex: number) {
-      return this.http.get<{items: TelecallerLcTableItem[], total_count: number, totalLeadsInOrg: number}>(`${environment.apiUrl}/lead-analytic/openClosedLeadCount`);
+    getOpenClosedLeadCount(filters) {
+      return this.http.post<{
+        items: TelecallerLcTableItem[];
+        total_count: number;
+        totalLeadsInOrg: number;
+      }>(`${environment.apiUrl}/lead-analytic/openClosedLeadCount?${filters}`, filters);
     }
 
     // campaignWiseLeadCount
@@ -36,8 +40,4 @@ export class GraphService {
       return this.http.post<{XAxisLabel: string,YAxisLabel: string, stackBarData: any[], max: number }>(`${environment.apiUrl}/lead-analytic/campaignWiseLeadCountPerCategory`, payload);
     }
 
-
-    getUserTalktime(payload) {
-      return this.http.post<{type: string, value: number, percent: number }>(`${environment.apiUrl}/lead-analytic/userTalktime`, payload);
-    }
 }

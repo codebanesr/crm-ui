@@ -45,7 +45,7 @@ export class StackBarChart implements OnDestroy, OnChanges {
     this.chart = new Chart({
       container: this.avgCallDuration.nativeElement,
       autoFit: true,
-      height: 500,
+      height: 350,
     });
     
     this.chart.data(this.data);
