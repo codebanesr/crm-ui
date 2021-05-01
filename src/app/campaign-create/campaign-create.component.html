@@ -3,14 +3,14 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div>
-    <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="getUploadedFiles(); open()"
+  <!-- <div>
+    <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="getUploadedFiles(); open();"
       style="transform: scale(0.7); position: absolute; top: -5px; right: -2px;">
       <ion-fab-button>
         <ion-icon name="cloud-download-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-  </div>
+  </div> -->
 
   <ng-container>
     <form nz-form [formGroup]="campaignForm" *ngIf="tabSelected === 'Lead Generation'">

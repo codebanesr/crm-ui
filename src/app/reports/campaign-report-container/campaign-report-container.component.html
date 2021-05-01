@@ -1,9 +1,9 @@
 <ion-content fullscreen style="overflow-y: hidden;">
-  <button mat-fab (click)="drawer.toggle()" class="bottomright">
+  <!-- <button mat-fab (click)="drawer.toggle()" class="bottomright">
     <span class="material-icons">
       filter_alt
       </span>
-  </button>
+  </button> -->
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
       <mat-toolbar class="header">
@@ -56,7 +56,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <button mat-flat-button type="submit">Submit</button>
+          <button mat-flat-button type="submit" color="accent" (click)="drawer.close()">Submit</button>
         </form>
       </div>
     </mat-drawer>

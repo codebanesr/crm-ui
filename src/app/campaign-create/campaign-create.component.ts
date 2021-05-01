@@ -12,6 +12,7 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { NzFormatEmitEvent, NzTreeNode, NzTreeService } from "ng-zorro-antd/tree";
 import { NzUploadListComponent } from "ng-zorro-antd/upload";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { HEADER_FILTERS } from "src/global.constants";
 import { field } from "src/global.model";
 import { AgentService } from "../agent.service";
 import { ICampaign } from "../campaign/campaign.interface";
@@ -43,7 +44,8 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     private dialogCtrl: MatDialog,
     private router: Router,
     private sock: WebsocketService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private pubsub: PubsubService
   ) {}
   campaignForm: FormGroup;
 
@@ -178,6 +180,18 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
       console.log(text);
       this._snackBar.open(text, "cancel", { duration: 2000 });
     });
+
+    
+    this.pubsub.$pub(HEADER_FILTERS, [
+      {
+        iconName: "cloud_download",
+        onIconClick: () => {
+          this.getUploadedFiles();
+          this.open();
+        }
+      }
+    ]);
+    
   }
 
   campaignId: string;

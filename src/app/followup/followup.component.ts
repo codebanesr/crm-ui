@@ -5,6 +5,8 @@ import { ILead } from "../home/interfaces/leads.interface";
 import { LeadsService } from "../home/leads.service";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import { PageEvent } from '@angular/material/paginator';
+import { PubsubService } from "../pubsub.service";
+import { HEADER_FILTERS } from "src/global.constants";
 
 @Component({
   selector: "app-followup",
@@ -19,13 +21,20 @@ export class FollowupComponent implements OnInit {
 
   constructor(
     private leadService: LeadsService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    private pubsub: PubsubService
   ) {}
 
   ngOnInit() {
     this.populateCampaignDropdown({});
   }
 
+
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, []);
+  }
+
+  
   onLeadSelectionChange(event) {
     this.getFollowUps();
   }

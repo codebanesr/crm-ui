@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Router } from "@angular/router";
+import { HEADER_FILTERS } from "src/global.constants";
 import { CampaignService } from "../home/campaign.service";
 import { CurrentUser } from "../home/interfaces/global.interfaces";
 import { PubsubService } from "../pubsub.service";
@@ -28,14 +29,22 @@ export class CampaignComponent implements OnInit {
   currentUserObj: CurrentUser;
   roleType: string;
   ngOnInit(): void {
-    this.pubsub.$pub("HEADING", { heading: "Campaigns" });
-
     this.currentUserObj = JSON.parse(localStorage.getItem("currentUser"));
     this.roleType = this.currentUserObj?.roleType;
     this.page = 1;
     this.perPage = 20;
     this.campaignOpts = ["default"];
     this.getCampaigns();
+  }
+
+
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, [{
+      iconName: "add",
+      onIconClick: () => {
+        this.router.navigate(["home", "campaigns", "create"])
+      }
+    }]);
   }
 
   listOfData: any[] = [];

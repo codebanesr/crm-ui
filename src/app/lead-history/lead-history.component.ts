@@ -1,12 +1,15 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSidenav } from "@angular/material/sidenav";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LoadingController, MenuController, ModalController } from "@ionic/angular";
+import { HEADER_FILTERS } from "src/global.constants";
 import { CampaignService } from '../home/campaign.service';
 import { ILeadHistory } from "../home/lead-solo/lead-history.interface";
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from '../home/users.service';
+import { PubsubService } from "../pubsub.service";
 import { IHistory } from "./history.interface";
 
 @Component({
@@ -23,7 +26,8 @@ export class LeadHistoryComponent implements OnInit {
     private fb: FormBuilder,
     private campaignService: CampaignService,
     private userService: UsersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private pubsub: PubsubService
   ) {}
 
   transactions: IHistory[] = [];
@@ -35,8 +39,20 @@ export class LeadHistoryComponent implements OnInit {
   listOfCampaigns: any;
   listOfHandlers: any;
 
+  @ViewChild('drawer') drawer: MatSidenav;
   ionViewWillEnter() {
     this.checkForQueryParams();
+    this.pubsub.$pub(HEADER_FILTERS, [{
+      iconName: 'filter_alt',
+      onIconClick: () => {
+        this.drawer.toggle();
+      }
+    }, {
+      iconName: 'download',
+      onIconClick: () => {
+        this.downloadTransactions();
+      }
+    }]);  
   }
 
   ngOnInit() {

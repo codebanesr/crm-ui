@@ -11,6 +11,8 @@ import { difference } from "lodash";
 import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { ReassignmentDrawerSheetComponent } from "../home/lead-solo/reassignment-drawer/reassignment-drawer.component";
 import { UsersService } from "../home/users.service";
+import { PubsubService } from "../pubsub.service";
+import { HEADER_FILTERS } from "src/global.constants";
 
 @Component({
   selector: "app-lead-create",
@@ -24,8 +26,8 @@ export class LeadCreateComponent implements OnInit {
     private router: Router,
     private activatedRouter: ActivatedRoute,
     private fb: FormBuilder,
-    private _bottomSheet: MatBottomSheet,
-    private userService: UsersService
+    private userService: UsersService,
+    private pubsub: PubsubService
   ) {}
 
   selectedCampaign: ICampaign;
@@ -44,6 +46,11 @@ export class LeadCreateComponent implements OnInit {
     this.subscribeToQueryParamChange();
     this.getCampaignNameAndId();
     this.fetchUsersForReassignment();
+  }
+
+
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, []);
   }
 
   usersForReassignment = [];

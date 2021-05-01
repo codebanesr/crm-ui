@@ -1,7 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import { CurrentUser } from 'src/app/home/interfaces/global.interfaces';
+import { PubsubService } from 'src/app/pubsub.service';
+import { HEADER_FILTERS } from 'src/global.constants';
+import { MenuElement } from './menu-element.interface';
 
 @Component({
   selector: 'app-main-toolbar',
@@ -11,19 +13,28 @@ import { CurrentUser } from 'src/app/home/interfaces/global.interfaces';
 })
 export class MainToolbarComponent implements OnChanges, OnInit {
   constructor(
+    private pubsub: PubsubService,
     private menuController: MenuController,
-    @Inject(DOCUMENT) private document: any
+    @Inject(DOCUMENT) private document: any,
+
+
+    private ref: ChangeDetectorRef
   ) { }
 
   elem: any;
   @Input() organizationName: string = '';
 
+
+  menuItems: MenuElement[] = []
   ngOnInit() {
     this.elem = document.documentElement;
+    this.pubsub.$sub(HEADER_FILTERS, (data: MenuElement[]) => {
+      this.menuItems = data;
+      this.ref.detectChanges(); // since we are using onPush strategy we have to do this manually
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
     this.organizationName = changes.organizationName.currentValue;
   }
 

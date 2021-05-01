@@ -3,21 +3,26 @@
     <span *ngIf="organizationName">{{organizationName}}</span>
     <span class="example-spacer"></span>
     <span class="main-tabs">
-      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      <!-- <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
         <mat-icon>notifications_active</mat-icon>
-      </button>
+      </button> -->
       <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
         <mat-icon>query_stats</mat-icon>
       </button> -->
     </span>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openFullscreen()" *ngIf="!isFullScreenEnabled">
+    <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openFullscreen()" *ngIf="!isFullScreenEnabled">
       <mat-icon>fullscreen</mat-icon>
     </button>
 
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="closeFullscreen()" *ngIf="isFullScreenEnabled">
       <mat-icon>close_fullscreen</mat-icon>
-    </button>
+    </button> -->
 
+    
+    <button mat-icon-button class="example-icon" (click)="menu.onIconClick()" *ngFor="let menu of menuItems">
+      <mat-icon>{{menu.iconName}}</mat-icon>
+    </button>
+  
 
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openMenu()">
       <mat-icon>menu</mat-icon>

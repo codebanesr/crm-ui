@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import {  Component } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
@@ -19,6 +19,7 @@ import { ILead } from "../interfaces/leads.interface";
 const { Share } = Plugins;
 import { List } from "immutable";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { HEADER_FILTERS } from "src/global.constants";
 
 @Component({
   selector: "app-leads",
@@ -36,7 +37,7 @@ export class LeadsComponent {
     private pubsub: PubsubService,
     public toastController: ToastController,
     private _snackBar: MatSnackBar,
-    private userService: UsersService
+    private userService: UsersService,
   ) {}
 
   page: number = 1;
@@ -57,12 +58,29 @@ export class LeadsComponent {
   listOfCurrentPageData: any[] = [];
 
   ionViewWillEnter() {
-    this.pubsub.$pub("HEADING", { heading: "Leads" });
+    this.initHeaderPanel();
     this.populateCampaignDropdown("");
     this.initSettingForm();
     this.initRightClickActions();
 
     this.initHandlerList();
+  }
+
+
+  initHeaderPanel() {
+    this.pubsub.$pub(HEADER_FILTERS, [
+      {
+        iconName: "filter_alt",
+        onIconClick: () => {
+          this.showFilterDrawer = true;
+        }
+      },{
+        iconName: "add",
+        onIconClick: () => {
+          this.handleCreateLead();
+        }
+      }
+    ]);
   }
 
   tempUserList: any;

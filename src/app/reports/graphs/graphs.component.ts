@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatSidenav } from '@angular/material/sidenav';
 import { MenuController } from '@ionic/angular';
 import { CampaignService } from 'src/app/home/campaign.service';
 import { UsersService } from 'src/app/home/users.service';
+import { PubsubService } from 'src/app/pubsub.service';
 import { TellecallerCallDetails } from 'src/app/telecaller-talktime/telecaller-talktime.interface';
+import { HEADER_FILTERS } from 'src/global.constants';
 import { GraphService } from './graphs.service';
 
 
@@ -29,7 +32,8 @@ export class GraphsComponent implements OnInit {
     private menu: MenuController,
     private fb: FormBuilder,
     private campaignService: CampaignService,
-    private userService: UsersService
+    private userService: UsersService,
+    private pubsub: PubsubService
   ) { }
 
   userList: string[] = [];
@@ -55,6 +59,18 @@ export class GraphsComponent implements OnInit {
     this.initFilters();
     this.initCampaignList();
     this.initHandlerList();
+  }
+
+  @ViewChild("drawer") drawer: MatSidenav;
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, [
+      {
+        iconName: "filter_alt",
+        onIconClick: () => {
+          this.drawer.toggle();
+        },
+      }
+    ]);
   }
 
   async initCampaignList() {

@@ -1,14 +1,14 @@
 <mat-card-content class="card-container">
   <ion-content fullscreen>
-    <div>
-      <mat-form-field class="mat-full-width">
-        <mat-label>Select Campaign</mat-label>
-        <mat-select placeHolder="Select Campaign" value="all" [(ngModel)]="selectedCampaignId" (ngModelChange)="onLeadSelectionChange($event)">
-          <mat-option value="all">All</mat-option>
-          <mat-option *ngFor="let campaign of campaignList" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    
+    <mat-form-field class="mat-full-width">
+      <mat-label>Select Campaign</mat-label>
+      <mat-select placeHolder="Select Campaign" value="all" [(ngModel)]="selectedCampaignId" (ngModelChange)="onLeadSelectionChange($event)">
+        <mat-option value="all">All</mat-option>
+        <mat-option *ngFor="let campaign of campaignList" [value]="campaign._id">{{campaign.campaignName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
   
     <mat-form-field appearance="outline" class="mat-full-width">
       <mat-label>Enter start and end date</mat-label>

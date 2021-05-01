@@ -2,11 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Router } from "@angular/router";
 import { NzTableQueryParams } from "ng-zorro-antd/table";
+import { HEADER_FILTERS } from "src/global.constants";
 import { ICampaign } from "../campaign/campaign.interface";
 import { CampaignService } from "../home/campaign.service";
 import { User } from "../home/interfaces/user";
 import { LeadsService } from "../home/leads.service";
 import { UsersService } from "../home/users.service";
+import { PubsubService } from "../pubsub.service";
 
 @Component({
   selector: "app-users",
@@ -19,6 +21,7 @@ export class UsersComponent implements OnInit {
     private leadService: LeadsService,
     private router: Router,
     private campaignService: CampaignService,
+    private pubsub: PubsubService
   ) {}
 
   total = 1;
@@ -57,11 +60,6 @@ export class UsersComponent implements OnInit {
     this.router.navigate(["home", "users", "signup"], { queryParams: { userid } });
   }
 
-
-  createNewUser() {
-    this.router.navigate(["home", "users","signup"]);
-  }
-
   onQueryParamsChange(paginator: PageEvent): void {
     this.pageIndex = paginator.pageIndex;
     this.pageSize = paginator.pageSize;
@@ -81,6 +79,16 @@ export class UsersComponent implements OnInit {
       }
     );
     this.populateCampaignDropdown("");
+  }
+
+
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, [{
+      iconName: 'add',
+      onIconClick: () => {
+        this.router.navigate(["home", "users", "signup"])
+      }
+    }]);
   }
 
   campaignList: ICampaign[];

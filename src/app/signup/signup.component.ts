@@ -9,6 +9,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from "src/authentication.service";
+import { HEADER_FILTERS } from "src/global.constants";
 import { User } from "../home/interfaces/user";
 import { UsersService } from "../home/users.service";
 import { PubsubService } from "../pubsub.service";
@@ -19,6 +20,11 @@ import { PubsubService } from "../pubsub.service";
   styleUrls: ["./signup.component.scss"],
 })
 export class SignupComponent implements OnInit {
+
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, []);
+  }
+
 
   signupForm!: FormGroup;
   // rolesOptions: any;

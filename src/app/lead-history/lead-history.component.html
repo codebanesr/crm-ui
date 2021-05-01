@@ -1,7 +1,7 @@
 <ion-content>
   <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
-  <button color="accent" mat-raised-button (click)="drawer.toggle()">Open transaction filter</button>
-  <button mat-button color="primary" (click)="downloadTransactions()">Download</button>
+  <!-- <button color="accent" mat-raised-button (click)="drawer.toggle()">Open transaction filter</button>
+  <button mat-button color="primary" (click)="downloadTransactions()">Download</button> -->
   <mat-drawer-container [class.drawer-opened]="drawer.opened" class="example-container">
     <mat-drawer #drawer class="drawer" mode="over" opened="false" position="end">
       <mat-toolbar class="header">

@@ -5,8 +5,8 @@
   ></ion-searchbar>
 
   <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
-  <ng-container *ngIf="!loading">
-    <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty">
+
+    <mat-accordion style="overflow-y: scroll;" *ngIf="!isEmpty && !loading">
       <app-expansion-panel 
         [leads]="leads" 
         [typeDict]="typeDict" 
@@ -88,7 +88,7 @@
         >Show Closed</mat-checkbox>
       </div>
       
-      <button mat-raised-button color="primary" (click)="getData()" class="mat-always-full-width"
+      <button mat-raised-button color="primary" (click)="getData(); showFilterDrawer=false;" class="mat-always-full-width"
         style="margin-top: 4px;">Submit</button>
     </nz-drawer>
   
@@ -99,7 +99,7 @@
     </ng-template>
   
   
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed" class="bottomright">
+    <!-- <ion-fab horizontal="end" vertical="bottom" slot="fixed" class="bottomright">
       <ion-fab-button>
         <ion-icon md="caret-up" ios="chevron-up-circle-outline"></ion-icon>
       </ion-fab-button>
@@ -107,13 +107,9 @@
         <ion-fab-button (click)="handleCreateLead()">
           <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>
-        <!-- <ion-fab-button >
-          <ion-icon name="alarm-outline" disabled></ion-icon>
-        </ion-fab-button> -->
         <ion-fab-button  (click)="showFilterDrawer = true">
           <ion-icon name="filter"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>
-    </ion-fab>
-  </ng-container>
+    </ion-fab> -->
 </mat-card-content>

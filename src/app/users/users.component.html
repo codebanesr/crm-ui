@@ -92,14 +92,5 @@
     <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="pageSize"
       [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
-
-
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
-      <button mat-fab (click)="createNewUser()" class="bottomright">
-        <span class="material-icons">
-          add
-        </span>
-      </button>
-    </ion-fab>
   </ng-container>
 </ion-content>
