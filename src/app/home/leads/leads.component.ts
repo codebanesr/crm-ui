@@ -20,6 +20,7 @@ const { Share } = Plugins;
 import { List } from "immutable";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HEADER_FILTERS } from "src/global.constants";
+import { AuthenticationService } from "src/authentication.service";
 
 @Component({
   selector: "app-leads",
@@ -38,6 +39,7 @@ export class LeadsComponent {
     public toastController: ToastController,
     private _snackBar: MatSnackBar,
     private userService: UsersService,
+    private authService: AuthenticationService
   ) {}
 
   page: number = 1;
@@ -227,7 +229,12 @@ export class LeadsComponent {
   }
 
   createLead() {
-    this.router.navigate(["welcome", "leads", "create"]);
+    this.router.navigate(["home", "lead-create"], {
+      queryParams: {
+        campaignId: this.selectedCampaign._id,
+        email: this.authService.currentUserValue._id
+      }
+    });
   }
 
   listOfSwitch = [
@@ -465,11 +472,7 @@ export class LeadsComponent {
       return;
     }
 
-    this.router.navigate(["home", "lead-create"], {
-      queryParams: {
-        campaignId: this.selectedCampaign._id,
-      },
-    });
+    this.createLead();
   }
 
   callDispositions;

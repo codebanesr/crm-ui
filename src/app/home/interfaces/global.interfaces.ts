@@ -16,6 +16,7 @@ export interface ModelInterface {
 }
 
 export interface CurrentUser {
+  _id: string;
   accessToken: string;
   email: string;
   fullName: string;

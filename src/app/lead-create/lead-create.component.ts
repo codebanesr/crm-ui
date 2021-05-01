@@ -63,7 +63,8 @@ export class LeadCreateComponent implements OnInit {
   async onSelectedCampaignChange() {
     this.router.navigate(['home', 'lead-create'], {
       queryParams: {
-        campaignId: this.selectedLead.campaignId
+        campaignId: this.selectedLead.campaignId,
+        email: this.selectedLead.email
       }
     })
   }
@@ -75,11 +76,11 @@ export class LeadCreateComponent implements OnInit {
   async populateCampaignData() {
     this.loadingCampaignList = true;
     this.campaignService
-      .getCampaignById(this.campaignId)
+      .getCampaignById(this.selectedLead.campaignId)
       .subscribe(async (campaign: ICampaign) => {
         this.selectedCampaign = campaign;
       });
-    this.getLeadMappings(this.campaignId);
+    this.getLeadMappings(this.selectedLead.campaignId);
   }
 
   showOtherData = false;
@@ -150,7 +151,7 @@ export class LeadCreateComponent implements OnInit {
           this.router.navigate(['home', 'solo'], {
             queryParams: {
               leadId: data._id,
-              campaignId: this.campaignId,
+              campaignId: this.selectedCampaign._id,
               isBrowsed: true
             }
           })
@@ -175,10 +176,10 @@ export class LeadCreateComponent implements OnInit {
   handleLeadStatusChange(event) {}
   handleDatePanelChange(event) {}
 
-  campaignId: string;
   async subscribeToQueryParamChange() {
     this.activatedRouter.queryParamMap.subscribe(data => {
-      this.campaignId = data.get('campaignId');
+      this.selectedLead.campaignId = data.get('campaignId');
+      this.selectedLead.email = data.get('email');
       this.populateCampaignData();
     });
   }
