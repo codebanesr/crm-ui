@@ -13,6 +13,7 @@ export class TelecallerTalktimeComponent implements OnChanges {
     "email",
     "answered",
     "unAnswered",
+    "totalCalls",
     "totalTalktime",
     "averageTalktime",
   ];

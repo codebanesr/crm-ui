@@ -2,9 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { Router } from "@angular/router";
+import { AuthenticationService } from "src/authentication.service";
 import { HEADER_FILTERS } from "src/global.constants";
 import { CampaignService } from "../home/campaign.service";
 import { CurrentUser } from "../home/interfaces/global.interfaces";
+import { MenuElement } from "../main-container/main-toolbar/menu-element.interface";
 import { PubsubService } from "../pubsub.service";
 import { ICampaign, IGetCampaigns } from "./campaign.interface";
 
@@ -18,7 +20,8 @@ export class CampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private router: Router,
-    private pubsub: PubsubService
+    private pubsub: PubsubService,
+    private authService: AuthenticationService
   ) {}
 
   campaignOpts: string[];
@@ -39,12 +42,17 @@ export class CampaignComponent implements OnInit {
 
 
   ionViewWillEnter() {
-    this.pubsub.$pub(HEADER_FILTERS, [{
-      iconName: "add",
-      onIconClick: () => {
-        this.router.navigate(["home", "campaigns", "create"])
-      }
-    }]);
+    const menuItems: MenuElement[] = [];
+    const user = this.authService.currentUserValue;
+    if(user.roleType === "admin") {
+      menuItems.push({
+        iconName: "add",
+        onIconClick: () => {
+          this.router.navigate(["home", "campaigns", "create"])
+        }
+      });
+    }
+    this.pubsub.$pub(HEADER_FILTERS, menuItems);
   }
 
   listOfData: any[] = [];

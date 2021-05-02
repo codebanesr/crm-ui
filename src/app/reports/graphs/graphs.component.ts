@@ -2,15 +2,23 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MenuController } from '@ionic/angular';
+import * as moment from 'moment';
 import { CampaignService } from 'src/app/home/campaign.service';
 import { UsersService } from 'src/app/home/users.service';
 import { PubsubService } from 'src/app/pubsub.service';
 import { TellecallerCallDetails } from 'src/app/telecaller-talktime/telecaller-talktime.interface';
 import { HEADER_FILTERS } from 'src/global.constants';
+import { UserCallDuration } from '../user-call-duration/user-call-duration.interface';
 import { GraphService } from './graphs.service';
 
 
 interface IGraphDataRes {
+  userCallDurationTransposed: {
+    callCount: number,
+    duration: number,
+    email: string,
+    _id: string
+  }[],
   pieData: { type: string; value: number; }[],
   barData: { type: string; value: number; percent: number; }[],
   callDetails: TellecallerCallDetails[]
@@ -44,8 +52,8 @@ export class GraphsComponent implements OnInit {
   month = this.today.getMonth();
   year = this.today.getFullYear();
   
-  startDt = new Date(this.year, this.month-1, 1);
-  endDt = new Date(this.year, this.month+1, 28);
+  startDt = moment(this.today).startOf('week').toDate();
+  endDt = moment(this.today).endOf('week').toDate();
 
   handlerFilter = new FormControl();
   startDate = new FormControl(this.startDt);
@@ -54,6 +62,9 @@ export class GraphsComponent implements OnInit {
   handler = new FormControl([]);
   campaign = new FormControl()
   listOfCampaigns: any;
+
+
+  userCallDurationData: UserCallDuration[] = []
   
   ngOnInit() {
     this.initFilters();
@@ -104,10 +115,27 @@ export class GraphsComponent implements OnInit {
       this.pieData = data.pieData;
       this.stackBarData = data.stackData;
       this.telecallerCallDetails = data.callDetails;
+      this.userCallDurationData = data.userCallDurationTransposed;
+
+
+      this.computeAvgUserCallDuration();
     }, error=>{
       console.log(error);
     });
   }
+
+
+  avgUserCallDurationData: UserCallDuration[];
+  computeAvgUserCallDuration(): UserCallDuration[] {
+    this.avgUserCallDurationData = this.userCallDurationData.map(d=>{
+      return {
+        duration: d.duration/d.callCount,
+        email: d.email
+      }
+    });
+
+    return this.avgUserCallDurationData;
+  } 
   
   listOfHandlers: any;
   tempUserList: any;

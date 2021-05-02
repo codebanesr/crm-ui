@@ -16,6 +16,7 @@ import { TelecallerLcTableComponent } from './telecaller-lc-table/telecaller-lc-
 import { GraphService } from './graphs/graphs.service';
 import { CampaignReportContainerComponent } from './campaign-report-container/campaign-report-container.component';
 import { TelecallerTalktimeComponent } from '../telecaller-talktime/telecaller-talktime.component';
+import { UserCallDurationComponent } from './user-call-duration/user-call-duration.component';
 
 
 
@@ -39,7 +40,8 @@ import { TelecallerTalktimeComponent } from '../telecaller-talktime/telecaller-t
     TelecallerTalktimeComponent,
     LineChartComponent,
     TelecallerLcTableComponent,
-    CampaignReportContainerComponent
+    CampaignReportContainerComponent,
+    UserCallDurationComponent
   ],
   providers: [GraphService]
 })

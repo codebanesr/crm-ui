@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Observer } from 'rxjs';
 import { AuthenticationService } from 'src/authentication.service';
+import { HEADER_FILTERS } from 'src/global.constants';
 import { UsersService } from '../home/users.service';
 import { OrganizationService } from '../organization.service';
 import { PubsubService } from '../pubsub.service';
@@ -65,6 +66,10 @@ export class OrganizationComponent implements OnInit {
     private pubsub: PubsubService,
     private uploadService: UploadService
   ) {}
+
+  ionViewWillEnter() {
+    this.pubsub.$pub(HEADER_FILTERS, []);
+  }
 
   attributeValidator = (label: string) => {
     return (control: FormControl) =>

@@ -60,14 +60,12 @@
   </mat-drawer-container>
 
   <div style="margin: 4px; padding: 8px;" class="main contents">
-    <h2 style="margin: 0 auto; margin-bottom: 25px;">Telecaller Reports</h2>
-    
+    <app-telecaller-talktime [dataSource]="telecallerCallDetails"></app-telecaller-talktime>
     
     <mat-button-toggle-group name="fontStyle" [(ngModel)]="showBar">
       <mat-button-toggle [value]="true">Bar</mat-button-toggle>
       <mat-button-toggle [value]="false">Pie</mat-button-toggle>
     </mat-button-toggle-group>
-
     <app-bar [data]="barData" *ngIf="showBar && pieData?.length>0"></app-bar>
     <app-pie [data]="pieData" [message]="'(Admin count not included)'" *ngIf="!showBar && pieData?.length>0"></app-pie>
     <app-stack-bar 
@@ -78,6 +76,16 @@
       [max]="max"
     ></app-stack-bar>
 
-    <app-telecaller-talktime [dataSource]="telecallerCallDetails"></app-telecaller-talktime>
+    <div style="height: 25px;"></div>
+    <app-user-call-duration 
+      [title]="'User wise call Duration'"
+      [data]="userCallDurationData"
+    ></app-user-call-duration>
+
+
+    <app-user-call-duration 
+      [title]="'Average call duration / User'"
+      [data]="avgUserCallDurationData"
+    ></app-user-call-duration>
   </div>
 </mat-card-content>

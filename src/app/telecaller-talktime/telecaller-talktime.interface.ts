@@ -3,6 +3,7 @@ export interface TellecallerCallDetails {
     total : number;
     answered : number;
     unAnswered : number;
+    totalCalls: number;
     totalTalktime: number;
     averageTalktime: number;
 }
