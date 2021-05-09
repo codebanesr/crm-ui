@@ -1,9 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { environment } from "src/environments/environment";
+import {
+  CreateOrderDto,
+  OrderCreated,
+  Organization,
+} from "./home/interfaces/global.interfaces";
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class OrganizationService {
   constructor(private http: HttpClient) {}
@@ -15,31 +19,32 @@ export class OrganizationService {
     );
   }
 
-  isAttributeValid(payload: {
-    label: string;
-    value: string;
-  }) {
+  isAttributeValid(payload: { label: string; value: string }) {
     return this.http.post(
       `${environment.apiUrl}/organization/isValid`,
       payload
     );
   }
 
-
-
   generateAndReceiveOtp(phoneNumber: string) {
     return this.http.post(`${environment.apiUrl}/organization/otp`, {
-      "mobileNumber": phoneNumber
+      mobileNumber: phoneNumber,
     });
   }
-  
 
   updateOrganizationQuota(quotaObj) {
     return this.http.post(`${environment.apiUrl}/organization/quota`, quotaObj);
   }
 
-
   getAllTransactions(organization: string) {
-    return this.http.get(`${environment.apiUrl}/organization/transactions?organization=${organization}`);
+    return this.http.get(
+      `${environment.apiUrl}/organization/transactions?organization=${organization}`
+    );
+  }
+
+  getCurrentOrganization() {
+    return this.http.get<Organization>(
+      `${environment.apiUrl}/organization/current`
+    );
   }
 }

@@ -1,44 +1,54 @@
-import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from 'src/login/login.component';
+import { NgModule } from "@angular/core";
+import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
+import { LoginComponent } from "src/login/login.component";
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: "login",
     component: LoginComponent,
-    pathMatch: 'full'
+    pathMatch: "full",
   },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: "orders",
+    loadChildren: () =>
+      import("./orders/orders.module").then((m) => m.OrdersModule),
   },
   {
-    path: 'reseller',
-    loadChildren: () => import('./reseller/reseller.module').then(m=>m.ResellerModule)
+    path: "home",
+    loadChildren: () =>
+      import("./home/home.module").then((m) => m.HomePageModule),
   },
   {
-    path: 'reports',
-    loadChildren: () => import('./reports/reports.module').then(m=>m.ReportsModule)
+    path: "reseller",
+    loadChildren: () =>
+      import("./reseller/reseller.module").then((m) => m.ResellerModule),
   },
   {
-    path: 'builder',
-    loadChildren: () => import('./shared/shared.module').then(m=>m.SharedModule)
+    path: "reports",
+    loadChildren: () =>
+      import("./reports/reports.module").then((m) => m.ReportsModule),
   },
   {
-    path: 'rules',
-    loadChildren: () => import('./rules/rules.module').then(m=>m.RulesModule)
+    path: "builder",
+    loadChildren: () =>
+      import("./shared/shared.module").then((m) => m.SharedModule),
   },
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    path: "rules",
+    loadChildren: () =>
+      import("./rules/rules.module").then((m) => m.RulesModule),
+  },
+  {
+    path: "",
+    redirectTo: "login",
+    pathMatch: "full",
   },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

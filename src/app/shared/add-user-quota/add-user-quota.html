@@ -1,31 +1,31 @@
 <h1 mat-dialog-title>Hi {{data.orgName}}</h1>
 <div mat-dialog-content>
   <form [formGroup]="activationForm" (submit)="handleActivationFormSubmit()">
-    <mat-form-field>
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Organization Id</mat-label>
       <input matInput formControlName="organization" />
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Base Price</mat-label>
       <input matInput formControlName="perUserRate" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Discount %</mat-label>
       <input matInput formControlName="discount" type="number" step="1"/>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Seats Required</mat-label>
       <input matInput formControlName="seats" type="number" step="1"/>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Months</mat-label>
       <input matInput formControlName="months" type="number" step="1"/>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Total</mat-label>
       <input matInput formControlName="total"/>
     </mat-form-field>

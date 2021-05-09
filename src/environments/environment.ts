@@ -6,10 +6,11 @@ export const environment = {
   production: false,
   apiUrl: "http://localhost:3000/api",
   // apiUrl: "https://moleculesystem.com/api",
-  accessKeyId:"AKIARGBOXP35BONONB4J",
+  accessKeyId: "AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
-  platform: 'web',
-  alertsUrl: "http://localhost:9999/alerts"
+  platform: "web",
+  alertsUrl: "http://localhost:9999/alerts",
+  razorPayKey: "rzp_test_OakZMZyF0KpCkj",
 };
 
 /*

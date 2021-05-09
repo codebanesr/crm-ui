@@ -1,17 +1,20 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AddUserQuotaDialog, ResellerOrganizationList, ResellerTransactionModal } from './reseller-organization-list/reseller-organization-list.component';
-import { CreateResellerComponent } from './create-reseller/create-reseller.component';
-import { DemoMaterialModule } from '../material/material.module';
-import { ResellerRoutingModule } from './reseller-routing.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import {
+  ResellerOrganizationList,
+  ResellerTransactionModal,
+} from "./reseller-organization-list/reseller-organization-list.component";
+import { CreateResellerComponent } from "./create-reseller/create-reseller.component";
+import { DemoMaterialModule } from "../material/material.module";
+import { ResellerRoutingModule } from "./reseller-routing.module";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
+import { SharedModule } from "../shared/shared.module";
 @NgModule({
   declarations: [
     ResellerOrganizationList,
     CreateResellerComponent,
-    AddUserQuotaDialog,
-    ResellerTransactionModal
+    ResellerTransactionModal,
   ],
   imports: [
     CommonModule,
@@ -19,7 +22,8 @@ import { IonicModule } from '@ionic/angular';
     FormsModule,
     ReactiveFormsModule,
     DemoMaterialModule,
-    ResellerRoutingModule
+    SharedModule,
+    ResellerRoutingModule,
   ],
 })
-export class ResellerModule { }
+export class ResellerModule {}

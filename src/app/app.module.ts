@@ -31,8 +31,12 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { ExceptionInterceptorProvider } from "./helpers/exception.interceptor";
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-material-multilevel-menu';
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+import {
+  NgMaterialMultilevelMenuModule,
+  MultilevelMenuService,
+} from "ng-material-multilevel-menu";
+import { OrdersModule } from "./orders/orders.module";
 
 @NgModule({
   declarations: [
@@ -45,6 +49,7 @@ import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-materi
   entryComponents: [],
   imports: [
     NgMaterialMultilevelMenuModule,
+    OrdersModule,
     ModantdModule,
     BrowserModule,
     FormsModule,
@@ -74,7 +79,7 @@ import { NgMaterialMultilevelMenuModule, MultilevelMenuService } from 'ng-materi
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: NZ_I18N, useValue: en_US },
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     authInterceptorProviders,
     ExceptionInterceptorProvider,
   ],
