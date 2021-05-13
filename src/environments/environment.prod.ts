@@ -8,7 +8,7 @@ export const environment = {
   accessKeyId: "AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
   platform: "mobile",
-  alertsUrl: "https://moleculesystem.com/alerts",
+  alertsUrl: "https://prod.moleculesystem.com/alerts",
   razorPayKey: "rzp_test_OakZMZyF0KpCkj",
 };
 

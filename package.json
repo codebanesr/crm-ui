@@ -5,6 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
+    "prebuild": "yarn run jetify",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
@@ -62,7 +63,7 @@
     "ngx-drag-drop": "^2.0.0",
     "ngx-mat-select-search": "^3.1.4",
     "rxjs": "~6.5.5",
-    "socket.io-client": "^2.4.1",
+    "socket.io-client": "^2.4.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
