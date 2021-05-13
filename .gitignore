@@ -30,3 +30,5 @@ npm-debug.log*
 /plugins
 /www
 android/*
+# Local Netlify folder
+.netlify
