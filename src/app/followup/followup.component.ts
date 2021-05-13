@@ -58,7 +58,7 @@ export class FollowupComponent implements OnInit {
       .getFollowUps({
         page: this.page,
         perPage: this.perPage,
-        interval: [this.startDate.toString(), this.endDate.toString()],
+        interval: [new Date(this.startDate).toISOString(), new Date(this.endDate).toISOString()],
         campaignId: this.selectedCampaignId || this.selectedCampaign._id
       })
       .subscribe(

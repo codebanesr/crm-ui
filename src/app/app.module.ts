@@ -49,7 +49,6 @@ import { OrdersModule } from "./orders/orders.module";
   entryComponents: [],
   imports: [
     NgMaterialMultilevelMenuModule,
-    OrdersModule,
     ModantdModule,
     BrowserModule,
     FormsModule,
