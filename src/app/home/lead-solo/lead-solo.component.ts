@@ -303,11 +303,13 @@ export class LeadSoloComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
+    this.loading = true;
     let geoLocation;
     try {
       geoLocation = await Geolocation.getCurrentPosition();
     }catch(e) {
       console.log("Location has been turned off by the user");
+      this.loading = false;
       this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
         duration: 2000,
         horizontalPosition: 'center',
@@ -359,13 +361,7 @@ export class LeadSoloComponent implements OnInit {
     // any condition that has to be validated before submitting the form goes into this;
     const preApproveResult = this.checkSubmissionStatus();
     if (!preApproveResult.status) {
-      // const toast = await this.toastController.create({
-      //   message: preApproveResult.message,
-      //   duration: 1000,
-      //   position: 'middle'
-      // });
-
-      // toast.present();
+      this.loading = false;
       this._snackBar.open(preApproveResult.message, 'cancel', {
         duration: 2000,
         horizontalPosition: 'center',
@@ -381,7 +377,6 @@ export class LeadSoloComponent implements OnInit {
     let documentLinks = this.uploadedDocsLink;
     updateObj.lead.documentLinks = documentLinks;
 
-    this.loading = true;
     this.leadsService.updateLead(lead._id, updateObj).subscribe(
       (data) => {
         this.loading = false;

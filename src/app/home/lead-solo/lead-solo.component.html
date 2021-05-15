@@ -240,8 +240,9 @@
                   Lead History
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <div style="max-height: 200px; height: 200px; overflow-y: scroll;">
-
+              <br>
+              <div style="height: 200px; overflow-y: scroll;">
+                <div style="height: 5px;"></div>
                 <ion-fab (click)="onShowMoreClick()" style="position: sticky; float: right; top: 10px;">
                   <ion-fab-button style="transform: scale(0.8);">
                     <ion-icon [name]="historyLimit === 1 ? 'add-outline' : 'remove-outline'"></ion-icon>
@@ -250,25 +251,30 @@
                 <nz-timeline>
                   <nz-timeline-item nzColor="green"
                     *ngFor="let h of selectedLeadHistory?.reverse().slice(0, historyLimit)">
-                    <p>
-                      Updated at {{h.createdAt | date:"medium"}}
-                    </p>
-                    <p *ngIf="h.duration">Call Duration: {{h.duration}}</p>
-                    <p *ngIf="h.leadStatus">
-                      Status: <button mat-icon-button color="basic">{{h.leadStatus}}</button>
-                    </p>
-                    <a (click)="openMap(h.geoLocation.coordinates)"
-                      *ngIf="h.geoLocation?.coordinates?.length > 0">Coordinates: {{h.geoLocation.coordinates[0] + ",
+                    <span>
+                      <!-- Called At  -->
+                      {{h.createdAt | date:"short"}}, <span *ngIf="h.duration">{{h.duration}} s</span>
+                      
+                      <!-- geolocation part down -->
+                      <a (click)="openMap(h.geoLocation.coordinates)"
+                      *ngIf="h.geoLocation?.coordinates?.length > 0">@{{h.geoLocation.coordinates[0] + ",
                       "+
                       h.geoLocation.coordinates[1]}}</a>
-                    <p style="width: 100%;">{{h.notes}}</p>
+                      &nbsp;
+                    </span>
+
+                    <span aria-label="Lead Status" *ngIf="h.leadStatus">
+                      <!-- Disposition -->
+                      <mat-chip color="accent" selected>{{h.leadStatus}}</mat-chip>
+                    </span>
+
+                    <p style="width: 100%;">Notes : {{h.notes}}</p>
                     <p *ngFor="let el of h.requestedInformation" style="background-color: azure;">
                       {{jsonStringify(el)}}
                     </p>
                   </nz-timeline-item>
                   <nz-timeline-item>Lead Created At {{selectedLead.createdAt | date}}</nz-timeline-item>
                 </nz-timeline>
-
                 <button mat-flat-button color="accent" (click)="navigateToTransactions()">View All Logs</button>
               </div>
             </mat-expansion-panel>
