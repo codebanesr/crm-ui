@@ -53,7 +53,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <button mat-flat-button type="submit">Submit</button>
+          <button mat-flat-button type="submit" (click)="drawer.toggle()">Submit</button>
         </form>
       </div>
     </mat-drawer>
@@ -77,10 +77,12 @@
     ></app-stack-bar>
 
     <div style="height: 25px;"></div>
-    <app-user-call-duration 
+
+    <!-- @Todo remove this computation from the backend -->
+    <!-- <app-user-call-duration 
       [title]="'User wise call Duration'"
       [data]="userCallDurationData"
-    ></app-user-call-duration>
+    ></app-user-call-duration> -->
 
 
     <app-user-call-duration 

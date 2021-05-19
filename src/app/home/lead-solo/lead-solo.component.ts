@@ -61,6 +61,10 @@ import { MatBottomSheet } from "@angular/material/bottom-sheet";
 import { ReassignmentDrawerSheetComponent } from "./reassignment-drawer/reassignment-drawer.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { User } from "../interfaces/user";
+import { PubsubService } from "src/app/pubsub.service";
+import { HEADER_FILTERS } from "src/global.constants";
+import { MatSidenav } from "@angular/material/sidenav";
+import { AuthenticationService } from "src/authentication.service";
 
 declare let PhoneCallTrap: any;
 
@@ -89,7 +93,8 @@ export class LeadSoloComponent implements OnInit {
     private router: Router,
     private _bottomSheet: MatBottomSheet,
     private _snackBar: MatSnackBar,
-    private ref: ChangeDetectorRef
+    private pubsub: PubsubService,
+    private authService: AuthenticationService
   ) {}
 
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef;
@@ -125,6 +130,7 @@ export class LeadSoloComponent implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.initHeaderPanel();
     this.fetchUsersForReassignment();
     this.subscribeToQueryParamChange();
     try {
@@ -133,6 +139,35 @@ export class LeadSoloComponent implements OnInit {
       console.log("PhoneCallTrap error", e);
     }
   }
+
+  @ViewChild('drawer') drawer: MatSidenav;
+
+  initHeaderPanel() {
+    this.pubsub.$pub(HEADER_FILTERS, [
+      {
+        iconName: "filter_alt",
+        onIconClick: () => {
+          this.drawer.toggle();
+        }
+      },{
+        iconName: "add",
+        onIconClick: () => {
+          this.createLead();
+        }
+      }
+    ]);
+  }
+
+  createLead() {
+    this.router.navigate(["home", "lead-create"], {
+      queryParams: {
+        campaignId: this.selectedCampaign._id,
+        email: this.authService.currentUserValue._id
+      }
+    });
+  }
+  
+
 
   onLeadCreate() {
     this.router.navigate(["home", "lead-create"], {

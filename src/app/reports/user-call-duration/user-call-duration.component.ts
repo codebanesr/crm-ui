@@ -25,6 +25,13 @@ export class UserCallDurationComponent implements OnChanges {
 
   @ViewChild("userCallDuration", { static: true }) interaction: ElementRef;
   install() {
+    let maxDuration = 0;
+    this.data.forEach(d => {
+      if (d.duration > maxDuration) {
+        maxDuration = d.duration;
+      }
+    });
+
     this.chart = new Chart({
       container: this.interaction.nativeElement,
       autoFit: true,
@@ -40,7 +47,30 @@ export class UserCallDurationComponent implements OnChanges {
 
     this.chart.interaction('active-region');
 
-    this.chart.interval().position('email*duration');
+    // this.chart.interval().position('email*duration');
+
+
+    this.chart.interval().adjust('stack').position('email*duration');
+      // .color('interval')
+    this.chart.axis('duration', {
+      label: {
+        formatter: (val) => {
+          // return (new Date(+val * 1000).toISOString().substr(11, 8))
+          return val;
+        }
+      }
+    });
+
+    this.data.forEach(item=>{
+      this.chart.annotation()
+        .text({
+          position: [item.email, item.duration],
+          content: item.duration + "s",
+          style: {
+            textAlign: 'center'
+          },
+        })
+    })
     this.chart.render();
   }
 

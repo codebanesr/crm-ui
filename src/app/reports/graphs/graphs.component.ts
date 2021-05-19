@@ -129,7 +129,7 @@ export class GraphsComponent implements OnInit {
   computeAvgUserCallDuration(): UserCallDuration[] {
     this.avgUserCallDurationData = this.userCallDurationData.map(d=>{
       return {
-        duration: d.duration/d.callCount,
+        duration: d.duration / d.callCount,
         email: d.email
       }
     });
