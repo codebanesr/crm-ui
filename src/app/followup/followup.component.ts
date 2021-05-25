@@ -45,8 +45,8 @@ export class FollowupComponent implements OnInit {
   month = this.today.getMonth();
   year = this.today.getFullYear();
   
-  startDate = new Date(this.year, this.month-2, 1);
-  endDate = new Date(this.year, this.month, 28);
+  startDate = new Date(this.year, this.month, this.today.getDate());
+  endDate = new Date(this.year, this.month, this.today.getDate()+2);
   selectedCampaignId = 'all';
 
   getFollowUps() {
