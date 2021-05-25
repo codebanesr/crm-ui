@@ -9,8 +9,19 @@
       </mat-select>
     </mat-form-field>
   
-  
-    <mat-form-field appearance="outline" class="mat-full-width">
+    <mat-form-field appearance="outline" class="mat-full-width"  *ngIf="!customSelectorMode">
+      <mat-label>Enter start and end date</mat-label>
+        <mat-select [(ngModel)]="dateDropdownSelector" (ngModelChange)="onSelectionChange()">
+          <mat-option value="thisWeek">This Week</mat-option>
+          <mat-option value="thisMonth">This Month</mat-option>
+          <mat-option value="lastThreeMonths">Last three Months</mat-option>
+          <mat-option value="lastSixMonths">Last six Months</mat-option>
+          <mat-option value="custom" (click)="customSelectorMode = true">Custom</mat-option>
+        </mat-select>      
+    </mat-form-field>
+
+
+    <mat-form-field class="mat-full-width" *ngIf="customSelectorMode">
       <mat-label>Enter start and end date</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Start date" [(ngModel)]="startDate">

@@ -7,6 +7,7 @@ import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import { PageEvent } from '@angular/material/paginator';
 import { PubsubService } from "../pubsub.service";
 import { HEADER_FILTERS } from "src/global.constants";
+import * as moment from "moment";
 
 @Component({
   selector: "app-followup",
@@ -48,6 +49,28 @@ export class FollowupComponent implements OnInit {
   startDate = new Date(this.year, this.month, this.today.getDate());
   endDate = new Date(this.year, this.month, this.today.getDate()+2);
   selectedCampaignId = 'all';
+
+  dateDropdownSelector: string;
+  customSelectorMode = false;
+
+  onSelectionChange() {
+    if(this.dateDropdownSelector === 'thisWeek') {
+      this.startDate = moment().startOf('week').toDate();
+      this.endDate = moment().endOf('week').toDate();
+    }else if(this.dateDropdownSelector === 'thisMonth') {
+      this.startDate = moment().startOf('month').toDate();
+      this.endDate = moment().endOf('month').toDate();
+    }else if(this.dateDropdownSelector === 'lastThreeMonths') {
+      this.startDate = moment().subtract(3, 'month').toDate();
+      this.endDate = moment().toDate();
+    }else if(this.dateDropdownSelector === 'lastSixMonths') {
+      this.startDate = moment().subtract(6, 'month').toDate();
+      this.endDate = moment().toDate();
+    }
+
+
+    this.getFollowUps();
+  }
 
   getFollowUps() {
     // a^b; if either startDate or endDate is undefined return, if none is defined fetch all leads irrespective of campaign
