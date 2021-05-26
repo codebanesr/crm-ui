@@ -55,6 +55,25 @@ export class GraphsComponent implements OnInit {
   startDt = moment(this.today).startOf('week').toDate();
   endDt = moment(this.today).endOf('week').toDate();
 
+
+  customSelectorMode = false;
+  dateDropdownSelector: string;
+  onSelectionChange() {
+    if(this.dateDropdownSelector === 'thisWeek') {
+      this.startDate.setValue(moment().startOf('week').toISOString());
+      this.endDate.setValue(moment().endOf('week').toISOString());
+    }else if(this.dateDropdownSelector === 'thisMonth') {
+      this.startDate.setValue(moment().startOf('month').toISOString());
+      this.endDate.setValue(moment().endOf('month').toISOString());
+    }else if(this.dateDropdownSelector === 'lastThreeMonths') {
+      this.startDate.setValue(moment().subtract(3, 'month').toISOString());
+      this.endDate.setValue(moment().toISOString());
+    }else if(this.dateDropdownSelector === 'lastSixMonths') {
+      this.startDate.setValue(moment().subtract(6, 'month').toISOString());
+      this.endDate.setValue(moment().toISOString());
+    }
+  }
+
   handlerFilter = new FormControl();
   startDate = new FormControl(this.startDt);
   endDate = new FormControl(this.endDt);
