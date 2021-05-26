@@ -1,7 +1,7 @@
 <mat-card-content class="card-container">
   <ion-content fullscreen>
     
-    <mat-form-field class="mat-full-width">
+    <mat-form-field class="mat-full-width" appearance="outline">
       <mat-label>Select Campaign</mat-label>
       <mat-select placeHolder="Select Campaign" value="all" [(ngModel)]="selectedCampaignId" (ngModelChange)="onLeadSelectionChange($event)">
         <mat-option value="all">All</mat-option>
@@ -9,8 +9,8 @@
       </mat-select>
     </mat-form-field>
   
-    <mat-form-field appearance="outline" class="mat-full-width"  *ngIf="!customSelectorMode">
-      <mat-label>Enter start and end date</mat-label>
+    <mat-form-field appearance="outline" class="mat-full-width"  *ngIf="!customSelectorMode" appearance="outline">
+      <mat-label>{{startDate|date: 'shortDate'}} - {{endDate|date:'shortDate'}}</mat-label>
         <mat-select [(ngModel)]="dateDropdownSelector" (ngModelChange)="onSelectionChange()">
           <mat-option value="thisWeek">This Week</mat-option>
           <mat-option value="thisMonth">This Month</mat-option>
@@ -21,7 +21,7 @@
     </mat-form-field>
 
 
-    <mat-form-field class="mat-full-width" *ngIf="customSelectorMode">
+    <mat-form-field class="mat-full-width" *ngIf="customSelectorMode" appearance="outline">
       <mat-label>Enter start and end date</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Start date" [(ngModel)]="startDate">

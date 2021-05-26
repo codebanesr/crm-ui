@@ -5,8 +5,8 @@
 export const environment = {
   production: true,
   apiUrl: "https://prod.moleculesystem.com/api",
-  accessKeyId: "AKIARGBOXP35BONONB4J",
-  secretAccessKey: "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",
+  accessKeyId: "AKIASJF5UAUY46FOA5GB",
+  secretAccessKey: "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",
   platform: "mobile",
   alertsUrl: "https://prod.moleculesystem.com/alerts",
   razorPayKey: "rzp_test_OakZMZyF0KpCkj",

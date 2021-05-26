@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { MatSidenav } from "@angular/material/sidenav";
+import * as moment from "moment";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { CampaignService } from "src/app/home/campaign.service";
 import { UsersService } from "src/app/home/users.service";
@@ -35,7 +36,6 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
 
   // talktimeData = null;
   // averageTalktimeData = null;
-
   ngOnInit() {
     this.initFilterForm();
     this.initHandlerList();
@@ -133,5 +133,24 @@ export class CampaignReportContainerComponent implements AfterViewInit, OnInit {
       campaign: this.campaign,
       leadId: this.leadId,
     });
+  }
+
+
+  customSelectorMode = false;
+  dateDropdownSelector: string;
+  onSelectionChange() {
+    if(this.dateDropdownSelector === 'thisWeek') {
+      this.startDate.setValue(moment().startOf('week').toISOString());
+      this.endDate.setValue(moment().endOf('week').toISOString());
+    }else if(this.dateDropdownSelector === 'thisMonth') {
+      this.startDate.setValue(moment().startOf('month').toISOString());
+      this.endDate.setValue(moment().endOf('month').toISOString());
+    }else if(this.dateDropdownSelector === 'lastThreeMonths') {
+      this.startDate.setValue(moment().subtract(3, 'month').toISOString());
+      this.endDate.setValue(moment().toISOString());
+    }else if(this.dateDropdownSelector === 'lastSixMonths') {
+      this.startDate.setValue(moment().subtract(6, 'month').toISOString());
+      this.endDate.setValue(moment().toISOString());
+    }
   }
 }
