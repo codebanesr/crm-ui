@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { RoleType } from "./interfaces/global.interfaces";
 import { User } from "./interfaces/user";
 
 @Injectable({
@@ -46,6 +47,12 @@ export class UsersService {
   getManagersForReassignment() {
     return this.http.get(`${environment.apiUrl}/user/managersForReassignment`);
   }
+
+
+  getManagersForRoleType(roleType: RoleType) {
+    return this.http.get<User[]>(`${environment.apiUrl}/user/managersForRoleType/${roleType}`);
+  }
+
 
   assignManager(newManager, user) {
     return this.http.post(`${environment.apiUrl}/user/assignManager`, {

@@ -90,7 +90,17 @@ export class SignupComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
 
+  roleType = new FormControl(null, [Validators.required]);
   ngOnInit(): void {
+    this.roleType.valueChanges.subscribe(v=>{
+      this.usersService.getManagersForRoleType(this.roleType.value).subscribe(users=>{
+        this.listOfSuperiors = users;
+      }, error=>{
+        console.log(error);
+      })
+    });
+
+
     this.pubsub.$pub("HEADING", { heading: "Add User" });
     this.signupForm = this.fb.group({
       email: [null, [Validators.email, Validators.required]],
@@ -99,7 +109,7 @@ export class SignupComponent implements OnInit {
       fullName: [null, [Validators.required]],
       phoneNumberPrefix: ["+91"],
       phoneNumber: [null, [Validators.required]],
-      roleType: [null, Validators.required],
+      roleType: this.roleType,
       // manages: [[], Validators.required],
       // roles: [[], Validators.required],
       reportsTo: [null],
