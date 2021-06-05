@@ -4,11 +4,11 @@
 
 export const environment = {
   production: true,
-  apiUrl: "https://prod.moleculesystem.com/api",
+  apiUrl: "https://moleculesystem.com/api",
   accessKeyId: "AKIASJF5UAUY46FOA5GB",
   secretAccessKey: "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",
   platform: "mobile",
-  alertsUrl: "https://prod.moleculesystem.com/alerts",
+  alertsUrl: "https://moleculesystem.com/alerts",
   razorPayKey: "rzp_test_OakZMZyF0KpCkj",
 };
 
