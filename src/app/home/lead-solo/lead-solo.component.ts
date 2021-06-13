@@ -340,25 +340,14 @@ export class LeadSoloComponent implements OnInit {
   async handleLeadSubmission(lead: ILead, fetchNextLead: boolean) {
     this.loading = true;
     let geoLocation;
-    try {
-      geoLocation = await Geolocation.getCurrentPosition();
-    }catch(e) {
-      console.log("Location has been turned off by the user");
-      this.loading = false;
-      this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
-        duration: 2000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      })
-    }
 
 
-    const updateObj = {
+    let updateObj = {
       lead,
       geoLocation: {
         coordinates: [
-          geoLocation.coords.latitude,
-          geoLocation.coords.longitude,
+          0,
+          0,
         ],
       },
       requestedInformation: this.formModel.attributes.map((fld) => {
@@ -368,6 +357,35 @@ export class LeadSoloComponent implements OnInit {
       }),
       campaignId: this.selectedCampaign._id,
     };
+
+
+
+    try {
+      geoLocation = await Geolocation.getCurrentPosition();
+      updateObj = {
+        lead,
+        geoLocation: {
+          coordinates: [
+            geoLocation.coords.latitude,
+            geoLocation.coords.longitude,
+          ],
+        },
+        requestedInformation: this.formModel.attributes.map((fld) => {
+          return {
+            [fld.label]: fld.value,
+          };
+        }),
+        campaignId: this.selectedCampaign._id,
+      };
+    }catch(e) {
+      console.log("Location has been turned off by the user");
+      // this.loading = false;
+      // this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
+      //   duration: 2000,
+      //   horizontalPosition: 'center',
+      //   verticalPosition: 'top'
+      // })
+    }
 
 
     if(this.reassignToUser) {

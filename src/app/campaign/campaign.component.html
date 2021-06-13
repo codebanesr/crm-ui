@@ -1,24 +1,36 @@
 <ion-content fullscreen>
   <mat-spinner color="primary" *ngIf="loading" class="center-spinner"></mat-spinner>
+
+  <button 
+    mat-flat-button 
+    color="warn" 
+    *ngIf="filters.archived"
+    class="mat-always-full-width"
+  >Showing archived campaigns</button>
+
   <mat-list role="list">
     <mat-list-item role="listitem" *ngFor="let campaign of listOfData" style="height: 120px;">
       <a mat-line style="font-weight: 550;" (click)="routeToSoloLead(campaign)" style="padding-top: 12px;">
-        {{campaign.campaignName | uppercase}} 
-        <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0 + quickStats[campaign.campaignName]?.followUp || 0" matBadgeColor="accent" matBadgeOverlap="false"></span>
+        {{campaign.campaignName | uppercase}}
+        <span
+          [matBadge]="quickStats[campaign.campaignName]?.overdue || 0 + quickStats[campaign.campaignName]?.followUp || 0"
+          matBadgeColor="accent" matBadgeOverlap="false"></span>
         <!-- <span [matBadge]="quickStats[campaign.campaignName]?.total" matBadgeColor="accent" matBadgeOverlap="false"></span> -->
       </a>
-  
-  
+
+
       <div mat-line style="padding-top: 10px;">
         <span [matBadge]="quickStats[campaign.campaignName]?.followUp || 0" matBadgeOverlap="false">Follow Ups</span>
       </div>
-  
+
       <div mat-line style="padding-top: 10px;">
-        <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0" matBadgeColor="warn" matBadgeOverlap="false">Overdue</span>
+        <span [matBadge]="quickStats[campaign.campaignName]?.overdue || 0" matBadgeColor="warn"
+          matBadgeOverlap="false">Overdue</span>
       </div>
-  
+
       <mat-action-list>
-        <button class="custom-btn" mat-raised-button color="primary" (click)="gotoDetailedView(campaign)" *ngIf="roleType === 'admin'">Edit</button> &nbsp;
+        <button class="custom-btn" mat-raised-button color="primary" (click)="gotoDetailedView(campaign)"
+          *ngIf="roleType === 'admin'">Edit</button> &nbsp;
         <button class="custom-btn" mat-raised-button color="accent" (click)="routeToSoloLead(campaign)">Browse</button>
       </mat-action-list>
     </mat-list-item>

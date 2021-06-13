@@ -28,7 +28,7 @@ export class CampaignComponent implements OnInit {
   handlerEmailOpts: string[] = ["santa", "banta"];
   page: number;
   perPage: number;
-  filters: any = { select: ["campaignName", "_id"] };
+  filters: any = { select: ["campaignName", "_id"], archived: false };
   currentUserObj: CurrentUser;
   roleType: string;
   ngOnInit(): void {
@@ -44,6 +44,15 @@ export class CampaignComponent implements OnInit {
   ionViewWillEnter() {
     const menuItems: MenuElement[] = [];
     const user = this.authService.currentUserValue;
+
+    menuItems.push({
+      iconName: "delete",
+      onIconClick: () => {
+        this.filters.archived = !this.filters.archived;
+        this.getCampaigns();
+      }
+    });
+
     if(user.roleType === "admin") {
       menuItems.push({
         iconName: "add",
