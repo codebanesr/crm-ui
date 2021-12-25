@@ -440,8 +440,8 @@ export class LeadsComponent {
 
   async onSocialShareClick(event, data) {
     await Share.share({
-      title: "Molecule CRM",
-      text: "Download Molecule crm from playstore",
+      title: "AppleSauce CRM",
+      text: "Download AppleSauce crm from playstore",
       url: "https://crm.moleculesystems.com",
       dialogTitle: "Share with Friends",
     });

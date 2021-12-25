@@ -10,3 +10,8 @@ Just add this to your strings.xml file:
 
 
 [![Contact me on Codementor](https://www.codementor.io/m-badges/shanurrahman/book-session.svg)](https://www.codementor.io/@shanurrahman?refer=badge)
+
+
+Change the name of this app
+Create a youtube playlist on how to use this app
+Enable Login with google/facebook/microsoft

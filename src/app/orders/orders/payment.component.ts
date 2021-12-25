@@ -44,7 +44,7 @@ export class PaymentComponent implements OnInit {
       prefill: {
         email: "shanur@moleculesystem.com",
         contact: "+919199946568",
-        name: "Molecule Systems",
+        name: "AppleSauce Systems",
       },
     };
 

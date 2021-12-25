@@ -60,7 +60,7 @@ export class DbService {
 
 
   private async downloadDatabase(update = false) {
-        this.dbName = 'molecule';
+        this.dbName = 'appleSauce';
         await Storage.set({ key: DB_NAME_KEY, value: this.dbName });
         await Storage.set({ key: DB_SETUP_KEY, value: '1' });
  
