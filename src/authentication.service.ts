@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CurrentUser } from './app/home/interfaces/global.interfaces';
 import { User } from './app/home/interfaces/user';
@@ -34,6 +34,10 @@ export class AuthenticationService  {
       }));
   }
 
+
+  loginWithSocialAuthToken({email, authToken, provider}) {
+    return of({email, authToken, provider});
+  }
 
   forgotPassword(email: string) {
     return this.http.post<any>(`${environment.apiUrl}/user/forgot-password`, { email })

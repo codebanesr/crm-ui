@@ -52,6 +52,8 @@
   </ng-container>
   <button style="margin-top: 10px;" (click)="submitForm()" mat-raised-button color="accent">{{buttonText}}</button>
   <!-- <button (click)="this.onFormTypeChange(nextAction)" mat-flat-button> {{nextAction}} </button> -->
+  <br>
+  <a (click)="googleLogin()" style="float: right; padding-right: 2vw;">Login with google</a>
 </mat-card>
 <ng-template #coverTemplate>
   <img alt="example" src="assets/icon/appleSauce.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { GoogleLoginProvider, SocialAuthService } from "angularx-social-login";
 import { AuthenticationService } from "../authentication.service";
 
 @Component({
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
+    private socialAuth: SocialAuthService,
     // private toast: ToastService,
     private router: Router
   ) {
@@ -57,7 +59,6 @@ export class LoginComponent implements OnInit {
   }
 
   submitLoginForm(username: string, password: string) {
-
     this.authService.login(username, password).subscribe(
       (data: any) => {
         // this.msg.success("Successfully Logged In");
@@ -93,7 +94,17 @@ export class LoginComponent implements OnInit {
     );
   }
 
+
+  user: any;
+  loggedIn: any;
   ngOnInit(): void {
+    this.socialAuth.authState.subscribe((user) => {
+      this.user = user;
+      this.loggedIn = (user != null);
+
+
+      this.authService.loginWithSocialAuthToken({email: user.email, authToken: user.authToken, provider: user.provider})
+    });
     this.nextAction = this.formView.signup;
     this.validateForm = this.fb.group({
       username: [null, [Validators.required, Validators.email]],
@@ -124,5 +135,11 @@ export class LoginComponent implements OnInit {
         this.fieldsToShow.confirmPassword = false;
         break;
     }
+  }
+
+
+
+  googleLogin() {
+    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 }

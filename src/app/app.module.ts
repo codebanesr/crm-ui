@@ -36,7 +36,11 @@ import {
   NgMaterialMultilevelMenuModule,
   MultilevelMenuService,
 } from "ng-material-multilevel-menu";
-import { OrdersModule } from "./orders/orders.module";
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -65,6 +69,7 @@ import { OrdersModule } from "./orders/orders.module";
     MatPaginatorModule,
     MatSortModule,
     HammerModule,
+    SocialLoginModule
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
@@ -81,6 +86,20 @@ import { OrdersModule } from "./orders/orders.module";
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     authInterceptorProviders,
     ExceptionInterceptorProvider,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              'clientId'
+            )
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
   ],
   bootstrap: [AppComponent],
 })
