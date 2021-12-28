@@ -5,6 +5,11 @@
 export const environment = {
   production: false,
   apiUrl: "http://localhost:3000/api",
+  oauth: {
+    google: {
+      clientId: "342494603612-7q28jpn04b40npk2nnso4geicb02p7s3.apps.googleusercontent.com"
+    }
+  },
   // apiUrl: "https://moleculesystem.com/api",
   accessKeyId: "AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
