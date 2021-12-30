@@ -94,7 +94,7 @@ import {
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              'clientId'
+              environment.oauth.google.clientId
             )
           }
         ]

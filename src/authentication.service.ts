@@ -39,8 +39,8 @@ export class AuthenticationService  {
   }
 
 
-  loginWithSocialAuthToken({email, authToken, provider}) {
-    return this.http.post<any>(`${environment.apiUrl}/user/oauth/login`, { email, authToken, provider })
+  loginWithSocialAuthToken({email, idToken, provider}) {
+    return this.http.post<any>(`${environment.apiUrl}/user/oauth/login`, { email, idToken, provider })
       .pipe(map(user => {
         return this.storeUserInfo(user);
       }));
