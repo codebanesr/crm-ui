@@ -7,7 +7,7 @@ export const environment = {
   apiUrl: "http://localhost:3000/api",
   oauth: {
     google: {
-      clientId: "342494603612-7q28jpn04b40npk2nnso4geicb02p7s3.apps.googleusercontent.com"
+      clientId: "342494603612-q6vfmrrm9eou65u3gfgo7krsn7vro053.apps.googleusercontent.com"
     }
   },
   // apiUrl: "https://moleculesystem.com/api",
