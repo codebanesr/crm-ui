@@ -24,19 +24,26 @@ export class AuthenticationService  {
   }
 
 
+  storeUserInfo(user) {
+    // store user details and jwt token in local storage to keep user logged in between page refreshes
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+    return user;
+  }
+
   login(email: string, password: string) {
     return this.http.post<any>(`${environment.apiUrl}/user/login`, { email, password })
       .pipe(map(user => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
+        return this.storeUserInfo(user);
       }));
   }
 
 
   loginWithSocialAuthToken({email, authToken, provider}) {
-    return of({email, authToken, provider});
+    return this.http.post<any>(`${environment.apiUrl}/user/oauth/login`, { email, authToken, provider })
+      .pipe(map(user => {
+        return this.storeUserInfo(user);
+      }));
   }
 
   forgotPassword(email: string) {
