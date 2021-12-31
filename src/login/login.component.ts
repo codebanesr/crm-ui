@@ -102,10 +102,13 @@ export class LoginComponent implements OnInit {
       this.user = user;
       this.loggedIn = (user != null);
 
-
-      this.authService.loginWithSocialAuthToken({email: user.email, idToken: user.idToken, provider: user.provider}).subscribe(data => {
+      if(this.loggedIn && !!localStorage.getItem('currentUser')) {
         this.router.navigate(['home']);
-      })
+      } else {
+        this.authService.loginWithSocialAuthToken({email: user.email, idToken: user.idToken, provider: user.provider}).subscribe(data => {
+          this.router.navigate(['home']);
+        })
+      }
     });
     this.nextAction = this.formView.signup;
     this.validateForm = this.fb.group({

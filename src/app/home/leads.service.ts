@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import * as saveAs from "file-saver";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { ICampaign } from "../campaign/campaign.interface";
@@ -13,7 +14,7 @@ export enum INTERVAL {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class LeadsService {
   constructor(private http: HttpClient) {}
