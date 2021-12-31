@@ -38,8 +38,7 @@ import {
 } from "ng-material-multilevel-menu";
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import {
-  GoogleLoginProvider,
-  FacebookLoginProvider
+  GoogleLoginProvider
 } from 'angularx-social-login';
 
 @NgModule({

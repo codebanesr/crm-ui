@@ -38,8 +38,9 @@
 
             <mat-form-field class="mat-full-width" appearance="outline" *ngSwitchCase="'date'">
               <mat-label> {{typeDict[leadKey].label | titlecase}} </mat-label>
-              <input matInput [(ngModel)]="selectedLead[leadKey]" [disabled]="isDisabled(leadKey)"
-                type="datetime-local" />
+              <input matInput [matDatepicker]="picker" [(ngModel)]="selectedLead[leadKey]">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
 
