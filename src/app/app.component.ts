@@ -98,7 +98,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    
     this.subz.unsubscribe();
     this.batteryStatusSubz.unsubscribe();
   }

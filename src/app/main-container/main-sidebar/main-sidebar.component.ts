@@ -61,7 +61,10 @@ export class MainSidebarComponent implements OnChanges, OnInit {
     this.appitems.push({
       label: 'Logout',
       icon: 'logout',
-      onSelected: () => this.authService.logout()
+      onSelected: async () => {
+        await this.menuController.close('first');
+        this.authService.logout()
+      }
     })
   }
 
