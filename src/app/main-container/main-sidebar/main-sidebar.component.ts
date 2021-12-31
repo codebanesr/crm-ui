@@ -15,7 +15,7 @@ import { CurrentUser } from "../../home/interfaces/global.interfaces";
   selector: "app-main-sidebar",
   templateUrl: "./main-sidebar.component.html",
   styleUrls: ["./main-sidebar.component.scss"],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainSidebarComponent implements OnChanges, OnInit {
   constructor(
