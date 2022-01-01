@@ -10,6 +10,8 @@ Just add this to your strings.xml file:
 
 <!-- To fix cannot resolve symbol issues do the following -->
 1. https://stackoverflow.com/questions/40493418/cannot-resolve-symbol-webview-on-android-studio
+    a) Build -> Rebuild
+    b) File -> Invalidate cache and restart
 
 2. use npx jetify to migrate dependencies and then npx cap sync, to copy these changes from 
 www to android folder
