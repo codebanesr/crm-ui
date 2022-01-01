@@ -18,14 +18,15 @@ import {
 } from "../interfaces/global.interfaces";
 import { ILead } from "../interfaces/leads.interface";
 import { LeadsService } from "../leads.service";
-import { Plugins, CameraResultType, CameraSource } from "@capacitor/core";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Geolocation } from "@capacitor/geolocation";
+
 import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
 import { field } from "src/global.model";
 import { NzTreeNode } from "ng-zorro-antd/tree";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CallNumber } from "@ionic-native/call-number/ngx";
-const { Geolocation, Camera } = Plugins;
 import {
   Contacts,
   Contact,

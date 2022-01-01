@@ -14,7 +14,7 @@ import { RazorpayWrapper } from "../rzpWrapper";
 @Component({
   selector: "app-orders",
   template: '',
-  styles: ['']
+  styles: []
 })
 export class PaymentComponent implements OnInit {
   constructor(
