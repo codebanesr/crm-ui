@@ -1,6 +1,6 @@
 {
-  "appId": "com.moleculesystem.crm",
-  "appName": "appleSauce-ionic",
+  "appId": "com.applesaucecrm.crm",
+  "appName": "applesauce-crm",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

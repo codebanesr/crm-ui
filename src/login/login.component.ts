@@ -145,6 +145,7 @@ export class LoginComponent implements OnInit {
 
 
   googleLogin() {
+    // check if the device is mobile or web
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 }
