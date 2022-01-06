@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { fromEvent, Observable } from 'rxjs';
 import { Socket, connect } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
@@ -9,7 +10,7 @@ import { CurrentUser } from './home/interfaces/global.interfaces';
 })
 export class WebsocketService {
 
-  socket: typeof Socket;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
   constructor() {
     this.createWSConnection();
   }

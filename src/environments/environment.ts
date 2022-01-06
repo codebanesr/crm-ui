@@ -10,7 +10,7 @@ export const environment = {
       clientId: "342494603612-q6vfmrrm9eou65u3gfgo7krsn7vro053.apps.googleusercontent.com"
     }
   },
-  // apiUrl: "https://moleculesystem.com/api",
+  // apiUrl: "https://applesaucesystem.com/api",
   accessKeyId: "AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
   platform: "web",

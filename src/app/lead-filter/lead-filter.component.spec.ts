@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { LeadFilterComponent } from './lead-filter.component';
@@ -7,7 +7,7 @@ describe('LeadFilterComponent', () => {
   let component: LeadFilterComponent;
   let fixture: ComponentFixture<LeadFilterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LeadFilterComponent ],
       imports: [IonicModule.forRoot()]

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { UserCallDurationComponent } from './user-call-duration.component';
@@ -7,7 +7,7 @@ describe('UserCallDurationComponent', () => {
   let component: UserCallDurationComponent;
   let fixture: ComponentFixture<UserCallDurationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ UserCallDurationComponent ],
       imports: [IonicModule.forRoot()]
