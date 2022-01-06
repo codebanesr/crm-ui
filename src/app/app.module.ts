@@ -40,6 +40,7 @@ import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-logi
 import {
   GoogleLoginProvider
 } from 'angularx-social-login';
+import { GooglePlus } from "@awesome-cordova-plugins/google-plus/ngx";
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import {
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     authInterceptorProviders,
     ExceptionInterceptorProvider,
+    GooglePlus,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

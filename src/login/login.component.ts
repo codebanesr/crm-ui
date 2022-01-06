@@ -2,7 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { GoogleLoginProvider, SocialAuthService } from "angularx-social-login";
+import { environment } from "src/environments/environment";
 import { AuthenticationService } from "../authentication.service";
+import { GooglePlus } from '@awesome-cordova-plugins/google-plus/ngx';
 
 @Component({
   selector: "app-login",
@@ -24,7 +26,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthenticationService,
     private socialAuth: SocialAuthService,
-    // private toast: ToastService,
+    private googlePlus: GooglePlus,
     private router: Router
   ) {
     if(authService.currentUserValue) {
@@ -146,6 +148,12 @@ export class LoginComponent implements OnInit {
 
   googleLogin() {
     // check if the device is mobile or web
-    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
+    if(environment.platform == 'web') {
+      this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
+    }else if(environment.platform == 'mobile') {
+      this.googlePlus.login({})
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
+    }
   }
 }

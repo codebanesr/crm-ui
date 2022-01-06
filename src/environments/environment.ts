@@ -13,7 +13,7 @@ export const environment = {
   // apiUrl: "https://applesaucesystem.com/api",
   accessKeyId: "AKIARGBOXP35BONONB4J",
   secretAccessKey: "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",
-  platform: "web",
+  platform: "mobile",
   alertsUrl: "http://localhost:9999/alerts",
   razorPayKey: "rzp_test_OakZMZyF0KpCkj",
 };
