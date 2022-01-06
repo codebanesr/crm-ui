@@ -442,7 +442,7 @@ export class LeadsComponent {
     await Share.share({
       title: "AppleSauce CRM",
       text: "Download AppleSauce crm from playstore",
-      url: "https://crm.moleculesystems.com",
+      url: "https://crm.applesaucesystems.com",
       dialogTitle: "Share with Friends",
     });
   }
