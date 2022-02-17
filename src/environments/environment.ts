@@ -11,8 +11,8 @@ export const environment = {
     }
   },
   // apiUrl: "https://applesaucesystem.com/api",
-  accessKeyId: "AKIARGBOXP35BONONB4J",
-  secretAccessKey: "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",
+  accessKeyId: "AKIASJF5UAUY2RFFYPC3",
+  secretAccessKey: "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",
   platform: "mobile",
   alertsUrl: "http://localhost:9999/alerts",
   razorPayKey: "rzp_test_OakZMZyF0KpCkj",

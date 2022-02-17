@@ -146,15 +146,14 @@
           </mat-accordion>
           <mat-card>
             <ng-container *ngFor="let key of contactGroup?.value | filterUnique">
-              <div *ngIf="isMobile(selectedLead[key])"> 
-                <button style="margin-bottom: 2px; margin-right: 4px;" mat-button color="primary" mat-flat-button
-                  (click)="onPhoneClick(selectedLead[key])">
-                  <ion-icon name="call"></ion-icon>
+              <div *ngIf="isMobile(selectedLead[key])">
+                <a mat-button color="primary" mat-flat-button href="tel:{{selectedLead[key]}}" (click)="onPhoneClick(selectedLead[key])">
                   <i class="icon ion-ios-telephone"></i> &nbsp;
+                  <ion-icon name="call"></ion-icon>
                   {{selectedLead[key] | replaceUndefined }}
-                </button>
+                </a>
 
-                <a [href]="getSafeWhatsAppUrl(selectedLead[key])" mat-raised-button mat-icon-button>
+                <a [href]="getSafeWhatsAppUrl(selectedLead[key])" mat-raised-button mat-icon-button method="get" target="_blank">
                   <img src="assets/icon/iconfinder_13-whatsapp_4202050.png" alt="whatsapp">
                 </a>
               </div>
@@ -181,15 +180,11 @@
               <a [href]="link" *ngFor="let link of selectedLead.documentLinks" style="display: block;">{{link}}</a>
               <a [href]="link" *ngFor="let link of uploadedDocsLink" style="display: block;">{{link}}</a>
               <!-- <img [src]="link" *ngFor="let link of selectedLead.documentLinks" style="height: 200px; width: 200px;"> -->
-              <div class="clearfix">
-                <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-                  <input type="file" #fileInput (change)="handleDocumentUpload($event.target.files[0])" hidden="true"
-                    accept="image/*" />
-                  <ion-fab-button (click)="selectImageSource()">
-                    <ion-icon name="add"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>
-              </div>
+      
+              <img [src]="previewImg" alt="preview image">
+              <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+              <input hidden type="file" #fileInput (change)="handleDocumentUpload($event.target.files[0])" accept="image/*" value="Upload">
+
             </mat-expansion-panel>
 
             <mat-expansion-panel *ngIf="actions.followUp">

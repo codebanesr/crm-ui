@@ -14,6 +14,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "sourceMap": true,
+            "optimization": false,
             "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -79,22 +81,42 @@
             },
             "ci": {
               "progress": false
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "outputHashing": "none",
+              "vendorChunk": true,
+              "extractLicenses": false
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "app:build"
+            
           },
           "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
+            "next": {
+              "browserTarget": "app:build:next"
+            },
+            "rc": {
+              "browserTarget": "app:build:rc"
+            },
+            "stable": {
+              "browserTarget": "app:build:stable"
+            },
+            "archive": {
+              "browserTarget": "app:build:archive"
             },
             "ci": {
-              "progress": false
+              "browserTarget": "app:build:ci"
+            },
+            "development": {
+              "browserTarget": "app:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

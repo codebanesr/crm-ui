@@ -22,7 +22,7 @@ export class UploadService {
 
   async uploadFile(key: string, file: any): Promise<{Location: string}> {
     const params = {
-      Bucket: "appleSauce.uploads",
+      Bucket: "applesaucecrm",
       Key: key + file.name,
       Body: file,
     };
@@ -39,7 +39,7 @@ export class UploadService {
 
   async uploadArrayBuffer(buffer, name) {
     const params = {
-      Bucket: "appleSauce.uploads",
+      Bucket: "applesaucecrm",
       Key: name,
       Body: buffer,
     };
