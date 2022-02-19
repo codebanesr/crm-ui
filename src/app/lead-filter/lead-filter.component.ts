@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class LeadFilterComponent implements OnChanges {
   constructor() {}
 
   leadKeys: string[] = [];
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.typeDict) {
       this.leadKeys = Object.keys(this.typeDict);
     }
