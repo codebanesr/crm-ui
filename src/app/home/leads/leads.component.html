@@ -15,7 +15,7 @@
         [campaignList]="campaignList"
       ></app-expansion-panel>
       <mat-paginator [length]="total" (page)="onQueryParamsChange($event)" [pageSize]="perPage"
-        [pageSizeOptions]="[5, 10, 25, 100]">
+        [pageSizeOptions]="[5, 10, 25, 100]" [pageIndex]="leadOptions.page">
       </mat-paginator>
     </mat-accordion>
   
