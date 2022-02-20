@@ -162,7 +162,7 @@ export class LeadsService {
     );
   }
 
-  downloadAllTransactions( pagination: {
+  downloadAllTransactions(pagination: {
       page: number;
       perPage: number;
       sortBy: string;
@@ -170,10 +170,14 @@ export class LeadsService {
     },
     filters: any
   ) {
-    const url = `${environment.apiUrl}/lead/transactions?isStreamable=true`;
-    this.http.post(url, {pagination, filters},{responseType: 'arraybuffer'}).subscribe(data=>{
-      const blob = new Blob([data], {type: 'application/octet-stream'});
-      saveAs(blob, "transactions.xlsx");
+    const filterAndPagination = {...pagination, ...filters, isStreamable: true};
+    // const qs = Object.keys(filterAndPagination)
+    // .map(key => `${key}=${filterAndPagination[key]}`)
+    // .join('&');
+    const url = `${environment.apiUrl}/lead/transactions`;
+    
+    this.http.post(url, filterAndPagination).subscribe((data: any)=>{
+      window.open(data.Location);
     })
   }
 
@@ -187,10 +191,9 @@ export class LeadsService {
     },
     filters: any
   ) {
-    return this.http.post(`${environment.apiUrl}/lead/transactions`, {
-      pagination,
-      filters,
-    });
+    const filterAndPagination = {...pagination, ...filters, isStreamable: false};
+
+    return this.http.post(`${environment.apiUrl}/lead/transactions`, filterAndPagination)
   }
 
   archiveLead(leadId: string) {

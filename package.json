@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "prebuild": "yarn run jetify",
-    "start": "ng serve",
+    "start": "ng serve --host=0.0.0.0",
     "build": "ng build --prod --source-map=false",
     "test": "ng test",
     "lint": "ng lint",
