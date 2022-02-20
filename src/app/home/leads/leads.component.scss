@@ -6,8 +6,16 @@
     overflow-x: hidden;
 }
 
-  
 
+
+.drawer {
+  position: fixed;
+  padding: 4px;
+  margin-bottom: 100px;
+  height: 100%;
+  width: 230px;
+}
+  
 .lead-edit-btn {
     height: 30px; line-height: 30px; margin-right: 20px; margin-bottom: 10px;
   }

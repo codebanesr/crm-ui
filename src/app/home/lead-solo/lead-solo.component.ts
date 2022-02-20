@@ -236,11 +236,12 @@ export class LeadSoloComponent implements OnInit {
       number = number.toString().trim();
     }
 
-    this.callTime = new Date().getTime().toString();
-    this.callNumber
-      .callNumber(number, true)
-      .then((res) => {})
-      .catch((err) => {});
+    // we are now doing it from the pwa
+    // this.callTime = new Date().getTime().toString();
+    // this.callNumber
+    //   .callNumber(number, true)
+    //   .then((res) => {})
+    //   .catch((err) => {});
   }
 
   selectedCampaign: ICampaign;
@@ -450,11 +451,14 @@ export class LeadSoloComponent implements OnInit {
   }
 
   getSafeWhatsAppUrl(phoneNumber = "") {
-    if (phoneNumber.length < 10 && !phoneNumber.startsWith("+")) {
-      phoneNumber = "+91";
+    // if (phoneNumber.length < 10 && !phoneNumber.startsWith("+")) {
+    //   phoneNumber = "+91";
+    // }
+    if(phoneNumber.startsWith("+91")) {
+      phoneNumber = phoneNumber.substring(3);
     }
     return this._sanitizer.bypassSecurityTrustUrl(
-      `whatsapp://send?phone=${phoneNumber}`
+      `https://api.whatsapp.com/send?phone=${phoneNumber}&text=Hi!`
     );
   }
 
@@ -869,15 +873,30 @@ export class LeadSoloComponent implements OnInit {
   uploadedDocsLink = [];
   docsUploaded = false;
   uploading = false;
+  previewImg;
   async handleDocumentUpload(file: File): Promise<void> {
     this.loading = true;
-    const { Location } = await this.uploadService.uploadFile(
-      "attachments",
-      file
-    );
+    this.previewImg = this._sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file));
+    
+    try {
+      const { Location } = await this.uploadService.uploadFile(
+        "attachments",
+        file
+      );
+      this.uploadedDocsLink.push(Location);
+    } catch(e) {
+      this._snackBar.open("Error uploading file", "cancel", { duration: 1000, verticalPosition:'top' });  
+    } finally {
+      this.loading = false;
+    }
+    
+  }
 
-    this.loading = false;
-    this.uploadedDocsLink.push(Location);
+  async getCameraAccessAndUpload() {
+    const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
+    const image = stream.getVideoTracks()[0];
+
+    // set this image back to a variable for preview or upload from here
   }
 
   async addImage(source: CameraSource) {

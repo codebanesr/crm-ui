@@ -1,4 +1,4 @@
-import {  Component } from "@angular/core";
+import {  Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
@@ -21,6 +21,7 @@ import { List } from "immutable";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { HEADER_FILTERS } from "src/global.constants";
 import { AuthenticationService } from "src/authentication.service";
+import { MatSidenav } from "@angular/material/sidenav";
 
 @Component({
   selector: "app-leads",
@@ -69,12 +70,13 @@ export class LeadsComponent {
   }
 
 
+  @ViewChild('drawer') drawer: MatSidenav;
   initHeaderPanel() {
     this.pubsub.$pub(HEADER_FILTERS, [
       {
         iconName: "filter_alt",
         onIconClick: () => {
-          this.showFilterDrawer = true;
+          this.toggleDrawer();
         }
       },{
         iconName: "add",
@@ -447,8 +449,8 @@ export class LeadsComponent {
     });
   }
 
-  closeFilterDrawer() {
-    this.showFilterDrawer = false;
+  toggleDrawer() {
+    this.drawer.toggle();
   }
 
   handleLeadEdit(lead) {
