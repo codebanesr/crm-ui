@@ -41,6 +41,7 @@ import {
   GoogleLoginProvider
 } from 'angularx-social-login';
 import { GooglePlus } from "@awesome-cordova-plugins/google-plus/ngx";
+import 'hammerjs';
 
 @NgModule({
   declarations: [
