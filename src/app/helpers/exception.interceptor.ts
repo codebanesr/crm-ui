@@ -16,6 +16,7 @@ export class ExceptionInterceptor implements HttpInterceptor {
 
     }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
         return next.handle(req).pipe(
             map((event: HttpEvent<any>) => {
                 // do something if you want to otherwise just return the event

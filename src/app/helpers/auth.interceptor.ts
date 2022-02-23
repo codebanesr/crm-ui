@@ -42,11 +42,7 @@ export class AuthInterceptor implements HttpInterceptor {
             if (err.status !== 401) {
               return;
             }
-
-            this._snackBar.open('Wrong username or password', 'Cancel', {
-              duration: 2000,
-              verticalPosition: 'top'
-            });
+            
             return this.authService.logout();
           }
         }

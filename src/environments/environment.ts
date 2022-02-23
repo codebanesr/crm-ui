@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://192.168.186.182:3000/api",
+  apiUrl: "http://192.168.29.130:3000/api",
   oauth: {
     google: {
       clientId: "342494603612-q6vfmrrm9eou65u3gfgo7krsn7vro053.apps.googleusercontent.com"
