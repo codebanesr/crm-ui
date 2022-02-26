@@ -67,7 +67,10 @@
         </ng-container>
       </div>
 
-      <nz-empty *ngIf="isEmpty(selectedLead) && !loading" style="margin-top: 45%;"></nz-empty>
+      <div *ngIf="isLeadEmpty && !loading" style="margin: 20px; padding: 20px;">
+        <h4 style="background-color:cornsilk;">Only leads assigned to you or your subordinates will be visible here, go to leads and assign some leads</h4>
+        <nz-empty></nz-empty>
+      </div>
       <mat-card *ngIf="selectedLead">
         <mat-card-header class="lsc_header">
           <div class="fullname">

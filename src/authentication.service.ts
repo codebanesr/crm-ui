@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CurrentUser } from './app/home/interfaces/global.interfaces';
@@ -14,7 +15,7 @@ export class AuthenticationService  {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<CurrentUser>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private menuController: MenuController) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -66,7 +67,13 @@ export class AuthenticationService  {
     }));
   }
 
-  logout() {
+  async logout() {
+    await this.menuController.close();
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(1)
+      }, 300)
+    })
     localStorage.clear();
     this.currentUserSubject.next(null);
 

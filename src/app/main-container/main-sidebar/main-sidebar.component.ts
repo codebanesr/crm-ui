@@ -3,6 +3,7 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from "@angular/core";
@@ -62,8 +63,7 @@ export class MainSidebarComponent implements OnChanges, OnInit {
       label: 'Logout',
       icon: 'logout',
       onSelected: async () => {
-        await this.menuController.close('first');
-        this.authService.logout()
+        await this.authService.logout()
       }
     })
   }

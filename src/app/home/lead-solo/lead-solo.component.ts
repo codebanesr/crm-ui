@@ -100,7 +100,7 @@ export class LeadSoloComponent implements OnInit {
 
   @ViewChild("fileInput", { static: false }) fileInput: ElementRef;
   modelFields: Array<field> = [];
-  isEmpty = isEmpty;
+  isLeadEmpty = false;
   formModel: ModelInterface = {
     name: "App name...",
     description: "App Description...",
@@ -651,6 +651,9 @@ export class LeadSoloComponent implements OnInit {
         (data: any) => {
           this.loading = false;
           this.selectedLead = data.lead;
+          if(isEmpty(this.selectedLead)) {
+            this.isLeadEmpty = true;
+          }
 
           if(!this.selectedLead) {
             this._snackBar.open("No leads found", 'cancel', {duration: 3000, verticalPosition: 'top'})
