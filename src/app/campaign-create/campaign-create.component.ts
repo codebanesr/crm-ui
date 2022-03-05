@@ -23,7 +23,6 @@ import { UsersService } from "../home/users.service";
 import { MappingComponent } from "../mapping/mapping.component";
 import { PubsubService } from "../pubsub.service";
 import { UploadService } from "../upload.service";
-import { WebsocketService } from "../websocket.service";
 
 @Component({
   selector: "app-campaign-create",
@@ -43,7 +42,6 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
     private uploadService: UploadService,
     private dialogCtrl: MatDialog,
     private router: Router,
-    private sock: WebsocketService,
     private _snackBar: MatSnackBar,
     private pubsub: PubsubService
   ) {}
@@ -175,12 +173,6 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
 
     // this.suggestCampaignNames();
     this.initUsersList();
-
-    this.sock.getAlerts().subscribe((text) => {
-      console.log(text);
-      this._snackBar.open(text, "cancel", { duration: 2000 });
-    });
-
     
     this.pubsub.$pub(HEADER_FILTERS, [
       {
