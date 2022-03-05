@@ -19,7 +19,6 @@ import {
 import { ILead } from "../interfaces/leads.interface";
 import { LeadsService } from "../leads.service";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { Geolocation } from "@capacitor/geolocation";
 
 import { UsersService } from "../users.service";
 import { ICampaign } from "src/app/campaign/campaign.interface";
@@ -362,32 +361,32 @@ export class LeadSoloComponent implements OnInit {
 
 
 
-    try {
-      geoLocation = await Geolocation.getCurrentPosition();
-      updateObj = {
-        lead,
-        geoLocation: {
-          coordinates: [
-            geoLocation.coords.latitude,
-            geoLocation.coords.longitude,
-          ],
-        },
-        requestedInformation: this.formModel.attributes.map((fld) => {
-          return {
-            [fld.label]: fld.value,
-          };
-        }),
-        campaignId: this.selectedCampaign._id,
-      };
-    }catch(e) {
-      console.log("Location has been turned off by the user");
-      // this.loading = false;
-      // this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
-      //   duration: 2000,
-      //   horizontalPosition: 'center',
-      //   verticalPosition: 'top'
-      // })
-    }
+    // try {
+    //   geoLocation = await window.getCurrentPosition();
+    //   updateObj = {
+    //     lead,
+    //     geoLocation: {
+    //       coordinates: [
+    //         geoLocation.coords.latitude,
+    //         geoLocation.coords.longitude,
+    //       ],
+    //     },
+    //     requestedInformation: this.formModel.attributes.map((fld) => {
+    //       return {
+    //         [fld.label]: fld.value,
+    //       };
+    //     }),
+    //     campaignId: this.selectedCampaign._id,
+    //   };
+    // }catch(e) {
+    //   console.log("Location has been turned off by the user");
+    //   // this.loading = false;
+    //   // this._snackBar.open('Please enable GPS to save lead!', 'cancel', {
+    //   //   duration: 2000,
+    //   //   horizontalPosition: 'center',
+    //   //   verticalPosition: 'top'
+    //   // })
+    // }
 
 
     if(this.reassignToUser) {

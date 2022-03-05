@@ -328,10 +328,9 @@
 
     <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="bottom" nzTitle="Recently Uploaded Files"
       (nzOnClose)="close()" nzHeight="90vh">
-      <ng-container>
-
+  
+      <ng-container *nzDrawerContent>
           <div *ngFor="let upload of recentUploads" (click)="handleClick(upload)" class="hover-effect">
-
             <div matLine style="cursor: pointer; margin-bottom: 10px;"><span style="color: cornflowerblue;">{{upload["fileType"]}}</span>
               {{upload['filePath']}} <br>
               <span style="color: cornflowerblue;">{{upload['email']}}</span> at <span style="color: crimson;">{{upload['createdAt']| date:'short'}}</span>
