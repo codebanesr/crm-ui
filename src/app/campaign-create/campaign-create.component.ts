@@ -29,7 +29,7 @@ import { UploadService } from "../upload.service";
   templateUrl: "./campaign-create.component.html",
   styleUrls: ["./campaign-create.component.scss"],
 })
-export class CampaignCreateComponent implements OnInit, OnDestroy {
+export class CampaignCreateComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     private leadsService: LeadsService,
@@ -758,9 +758,5 @@ export class CampaignCreateComponent implements OnInit, OnDestroy {
         });
       }
     );
-  }
-
-  ngOnDestroy() {
-    this.sock.disconnect();
   }
 }

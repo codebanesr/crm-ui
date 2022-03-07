@@ -42,11 +42,13 @@ import {
 } from 'angularx-social-login';
 import { GooglePlus } from "@awesome-cordova-plugins/google-plus/ngx";
 import 'hammerjs';
+import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    ForgotPasswordComponent,
     MainSidebarComponent,
     MainTabsComponent,
     MainToolbarComponent,

@@ -48,13 +48,7 @@ export class AuthenticationService  {
   }
 
   forgotPassword(email: string) {
-    return this.http.post<any>(`${environment.apiUrl}/user/forgot-password`, { email })
-    .pipe(map(user => {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      this.currentUserSubject.next(user);
-      return user;
-    }));
+    return this.http.post<any>(`${environment.apiUrl}/user/forgot-password`, { email });
   }
 
   signup(signupObj) {
@@ -78,5 +72,15 @@ export class AuthenticationService  {
     this.currentUserSubject.next(null);
 
     this.router.navigate(['login']);  
+  }
+
+
+  resetPassword(forgotPasswordResetDto: any) {
+    return this.http.post(`${environment.apiUrl}/user/reset-password`, forgotPasswordResetDto);
+  }
+
+
+  forgotPasswordVerify(verifyDto: {verification: string}) {
+    return this.http.post(`${environment.apiUrl}/user/forgot-password-verify`, verifyDto);
   }
 }

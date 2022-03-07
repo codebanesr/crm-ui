@@ -36,7 +36,9 @@
     <mat-grid-list cols="8">
       <mat-grid-tile
           [colspan]="5"
-          [rowspan]="1">
+          [rowspan]="1"
+          *ngIf="formType!=formView.forgotPassword"
+        >
           <section class="example-section" style="flex: 1 1 auto">
             <mat-radio-group formControlName="remember">
               <mat-radio-button  value="before">Remember Me</mat-radio-button>
@@ -45,15 +47,18 @@
       </mat-grid-tile>
       <mat-grid-tile
           [colspan]="3"
-          [rowspan]="1">
-          <a (click)="this.onFormTypeChange(formView.reset)" class="login-form-forgot">Forgot password</a>
+          [rowspan]="1"
+          *ngIf="formType!=formView.forgotPassword">
+          <a (click)="onFormTypeChange(formView.forgotPassword)" class="login-form-forgot">Forgot password</a>
       </mat-grid-tile>
     </mat-grid-list>
   </ng-container>
   <button style="margin-top: 10px;" (click)="submitForm()" mat-raised-button color="accent">{{buttonText}}</button>
   <!-- <button (click)="this.onFormTypeChange(nextAction)" mat-flat-button> {{nextAction}} </button> -->
   <br>
-  <a (click)="googleLogin()" style="float: right; padding-right: 2vw;">Login with google</a>
+  <a (click)="googleLogin()" style="float: right; padding-right: 2vw;"
+    *ngIf="formType!=formView.forgotPassword"
+  >Login with google</a>
 </mat-card>
 <ng-template #coverTemplate>
   <img alt="example" src="assets/icon/appleSauce.png" style="width:75px; padding-top: 5vh; margin: 0 auto;"/>

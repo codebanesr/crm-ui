@@ -1,11 +1,17 @@
 import { NgModule } from "@angular/core";
 import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
 import { LoginComponent } from "src/login/login.component";
+import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 
 const routes: Routes = [
   {
     path: "login",
     component: LoginComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "forgot-password/:uuid",
+    component: ForgotPasswordComponent,
     pathMatch: "full",
   },
   {

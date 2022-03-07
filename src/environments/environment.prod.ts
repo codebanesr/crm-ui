@@ -4,15 +4,14 @@
 
 export const environment = {
   production: true,
-  // apiUrl: "https://applesaucesystem.com/api",
-  apiUrl: "http://192.46.230.183/api",
+  apiUrl: "https://backend.applesauce.co.in/api",
   oauth: {
     google: {
       clientId: "342494603612-q6vfmrrm9eou65u3gfgo7krsn7vro053.apps.googleusercontent.com"
     }
   },
-  accessKeyId: "AKIASJF5UAUY46FOA5GB",
-  secretAccessKey: "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",
+  accessKeyId: "AKIASJF5UAUY2RFFYPC3",
+  secretAccessKey: "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",
   platform: "mobile",
   alertsUrl: "https://applesaucesystem.com/alerts",
   razorPayKey: "rzp_test_OakZMZyF0KpCkj",

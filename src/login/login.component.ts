@@ -5,6 +5,7 @@ import { GoogleLoginProvider, SocialAuthService } from "angularx-social-login";
 import { environment } from "src/environments/environment";
 import { AuthenticationService } from "../authentication.service";
 import { GooglePlus } from '@awesome-cordova-plugins/google-plus/ngx';
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-login",
@@ -16,8 +17,7 @@ export class LoginComponent implements OnInit {
   validateForm: FormGroup;
   formView = {
     login: "login",
-    signup: "signup",
-    reset: "reset",
+    forgotPassword: "forgot",
   };
   buttonText: string = "Log in";
   nextAction: string;
@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private socialAuth: SocialAuthService,
     private googlePlus: GooglePlus,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     if(authService.currentUserValue) {
       this.router.navigate(['home']);
@@ -54,8 +55,8 @@ export class LoginComponent implements OnInit {
         this.submitLoginForm(username, password);
         break;
 
-      case this.formView.reset:
-        this.submitResetForm(username);
+      case this.formView.forgotPassword:
+        this.submitForgotPassword(username);
         break;
     }
   }
@@ -81,17 +82,24 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  submitResetForm(username: string) {
+  submitForgotPassword(username: string) {
     this.authService.forgotPassword(username).subscribe(
       (data: any) => {
-        // this.toast.success(
-        //   "A link to reset your account has been sent to your email"
-        // );
+        this.snackBar.open("We have sent an email with instructions to reset your password", "cancel", {
+          duration: 2000,
+          verticalPosition: 'top'
+        });
+
+        this.formType = this.formView.login;
+        this.fieldsToShow.confirmPassword = true;
+        this.buttonText = "Login";
       },
       (error: Error) => {
-        // message from the backend server to be shown here
+        this.snackBar.open(error.message, "cancel", {
+          duration: 2000,
+          verticalPosition: 'top'
+        });
         this.onFormTypeChange(this.formView.login);
-        // this.toast.fail("Something went wrong");
       }
     );
   }
@@ -112,7 +120,7 @@ export class LoginComponent implements OnInit {
         })
       }
     });
-    this.nextAction = this.formView.signup;
+    this.nextAction = this.formView.forgotPassword;
     this.validateForm = this.fb.group({
       username: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required]],
@@ -122,24 +130,21 @@ export class LoginComponent implements OnInit {
   }
 
   onFormTypeChange(formType) {
-    this.formType = formType;
+    this.formType = formType || this.formType;
     Object.keys(this.fieldsToShow).forEach((key: string) => {
       this.fieldsToShow[key] = true;
     });
     switch (this.formType) {
-      case this.formView.signup:
-        this.buttonText = "register";
-        this.fieldsToShow.confirmPassword = true;
+      case this.formView.forgotPassword:
+        this.buttonText = "Get reset link";
+        this.fieldsToShow.confirmPassword = false;
+        this.fieldsToShow.password = false;
         this.nextAction = this.formView.login;
         break;
       case this.formView.login:
         this.buttonText = "Log in";
         this.fieldsToShow.confirmPassword = false;
-        this.nextAction = this.formView.signup;
-        break;
-      case this.formView.reset:
-        this.fieldsToShow.password = false;
-        this.fieldsToShow.confirmPassword = false;
+        this.nextAction = this.formView.login;
         break;
     }
   }
