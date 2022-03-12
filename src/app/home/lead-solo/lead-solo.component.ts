@@ -453,7 +453,7 @@ export class LeadSoloComponent implements OnInit {
     // if (phoneNumber.length < 10 && !phoneNumber.startsWith("+")) {
     //   phoneNumber = "+91";
     // }
-    if(phoneNumber.startsWith("+91")) {
+    if(phoneNumber.toString().startsWith("+91")) {
       phoneNumber = phoneNumber.substring(3);
     }
     return this._sanitizer.bypassSecurityTrustUrl(
@@ -839,7 +839,6 @@ export class LeadSoloComponent implements OnInit {
 
 
   isMobile(m) {
-    console.log(m, "ismobile")
     if (!m) return false;
     const regex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
     return regex.test(m);
