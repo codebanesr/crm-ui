@@ -66,7 +66,7 @@ export class DbService {
  
         // Your potential logic to detect offline changes later
         if (!update) {
-          await CapacitorSQLite.createSyncTable();
+          await CapacitorSQLite.createSyncTable({database: 'sqlite'});
         } else {
           await CapacitorSQLite.setSyncDate({ syncdate: '' + new Date().getTime() })
         }
